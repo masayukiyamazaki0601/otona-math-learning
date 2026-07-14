@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>比例と反比例のグラフ化 | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第3章 中学校数学の基礎固め &gt; 単元33
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 03 / Unit 33</span>
+                <h2 class="lesson-title">比例と反比例のグラフ化</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>なぜグラフを使うのか</h4>
+                    <p>数式は数量の関係を厳密に表せますが、数字の並びだけでは「数量がどのように急激に増えるのか」「どのように緩やかに減るのか」といった変化の勢いを直感的に掴むことは困難です。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 500px;">
+                        <span class="lesson-callout-title">視覚情報でパターンを認識する</span>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 0;">
+                            そこで用いられるのが<strong>グラフ</strong>です。数式の関係を2次元平面上にプロットして線で結ぶことで、規則性や変化のトレンドが一目で理解できるようになります。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>グラフと座標の基礎</h4>
+                    <p>グラフを描く舞台となるのが「座標平面（ざひょうへいめん）」です。横方向の数直線を <strong>$x$ 軸</strong>、縦方向の数直線を <strong>$y$ 軸</strong>と呼び、この2つの交点を基準点である <strong>原点（$O$）</strong> と呼びます。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 500px; background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">点の位置の表し方</span>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 0;">
+                            平面上の位置は、 $(x座標, y座標)$ のペアで表現します。<br>
+                            例えば、点 $(2, 4)$ は「原点から右に $2$、上に $4$ 進んだ位置」を指し示します。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>比例のグラフ：原点を通る一直線</h4>
+                    <p>比例の式 $y = ax$ に対応する点の集合を結ぶと、必ず**「原点を通る美しい一直線」**になります。</p>
+                    <p>比例定数 $a$ が正なら右上がり、負なら右下がりの直線になります。</p>
+
+                    <div class="lesson-callout" style="max-width: 600px;">
+                        <span class="lesson-callout-title">【プロット例】 $y = 2x$ のグラフ</span>
+                        
+                        <table style="width: 100%; border-collapse: collapse; margin-top: 10px; margin-bottom: 20px; font-size: 14px;">
+                            <thead>
+                                <tr style="border-bottom: 2px solid var(--color-paper-line);">
+                                    <th style="padding: 6px; text-align: left;">$x$</th>
+                                    <th style="padding: 6px; text-align: right;">-2</th>
+                                    <th style="padding: 6px; text-align: right;">-1</th>
+                                    <th style="padding: 6px; text-align: right;">0</th>
+                                    <th style="padding: 6px; text-align: right;">1</th>
+                                    <th style="padding: 6px; text-align: right;">2</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border-bottom: 1px solid var(--color-paper-line);">
+                                    <td style="padding: 6px; text-align: left; font-weight: bold;">$y$</td>
+                                    <td style="padding: 6px; text-align: right; color: var(--color-brass);">-4</td>
+                                    <td style="padding: 6px; text-align: right; color: var(--color-brass);">-2</td>
+                                    <td style="padding: 6px; text-align: right; color: var(--color-brass);">0</td>
+                                    <td style="padding: 6px; text-align: right; color: var(--color-brass);">2</td>
+                                    <td style="padding: 6px; text-align: right; color: var(--color-brass);">4</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- SVG Graph for y = 2x -->
+                        <div style="text-align: center; margin: 20px 0;">
+                            <svg width="220" height="220" viewBox="0 0 220 220" style="background-color: var(--color-surface); border: 1px solid var(--color-paper-line); border-radius: 6px;">
+                                <!-- Grid Lines -->
+                                <line x1="110" y1="0" x2="110" y2="220" stroke="var(--color-paper-line)" stroke-width="2"/>
+                                <line x1="0" y1="110" x2="220" y2="110" stroke="var(--color-paper-line)" stroke-width="2"/>
+                                <line x1="30" y1="0" x2="30" y2="220" stroke="#eaeaea" stroke-width="1"/>
+                                <line x1="70" y1="0" x2="70" y2="220" stroke="#eaeaea" stroke-width="1"/>
+                                <line x1="150" y1="0" x2="150" y2="220" stroke="#eaeaea" stroke-width="1"/>
+                                <line x1="190" y1="0" x2="190" y2="220" stroke="#eaeaea" stroke-width="1"/>
+                                <line x1="0" y1="30" x2="220" y2="30" stroke="#eaeaea" stroke-width="1"/>
+                                <line x1="0" y1="70" x2="220" y2="70" stroke="#eaeaea" stroke-width="1"/>
+                                <line x1="0" y1="150" x2="220" y2="150" stroke="#eaeaea" stroke-width="1"/>
+                                <line x1="0" y1="190" x2="220" y2="190" stroke="#eaeaea" stroke-width="1"/>
+
+                                <!-- Trend Line y = 2x -->
+                                <line x1="20" y1="200" x2="200" y2="20" stroke="var(--color-brass)" stroke-width="3"/>
+
+                                <!-- Dots -->
+                                <circle cx="30" cy="190" r="5" fill="var(--color-red)"/>
+                                <circle cx="70" cy="150" r="5" fill="var(--color-red)"/>
+                                <circle cx="110" cy="110" r="5" fill="var(--color-red)"/>
+                                <circle cx="150" cy="70" r="5" fill="var(--color-red)"/>
+                                <circle cx="190" cy="30" r="5" fill="var(--color-red)"/>
+
+                                <!-- Axis Labels -->
+                                <text x="210" y="125" font-size="12" fill="var(--color-ink-soft)" font-family="var(--font-mono)">x</text>
+                                <text x="118" y="15" font-size="12" fill="var(--color-ink-soft)" font-family="var(--font-mono)">y</text>
+                                <text x="98" y="125" font-size="12" fill="var(--color-ink-soft)" font-family="var(--font-mono)">O</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>反比例のグラフ：原点を通らない双曲線</h4>
+                    <p>反比例の式 $y = \frac{a}{x}$ に対応する点を結ぶと、原点を挟んで対称に向かい合う**「一対の曲線（双曲線）」**になります。</p>
+                    <p>※ $x = 0$ のときは分母がゼロになり式が成り立たないため、原点を通ることは絶対にありません。また、なめらかな曲線で結ぶことがポイントです。</p>
+
+                    <div class="lesson-callout" style="max-width: 600px;">
+                        <span class="lesson-callout-title">【プロット例】 $y = \frac{6}{x}$ のグラフ</span>
+                        
+                        <table style="width: 100%; border-collapse: collapse; margin-top: 10px; margin-bottom: 20px; font-size: 13px;">
+                            <thead>
+                                <tr style="border-bottom: 2px solid var(--color-paper-line);">
+                                    <th style="padding: 6px; text-align: left;">$x$</th>
+                                    <th style="padding: 6px; text-align: right;">-6</th>
+                                    <th style="padding: 6px; text-align: right;">-3</th>
+                                    <th style="padding: 6px; text-align: right;">-2</th>
+                                    <th style="padding: 6px; text-align: right;">-1</th>
+                                    <th style="padding: 6px; text-align: right;">1</th>
+                                    <th style="padding: 6px; text-align: right;">2</th>
+                                    <th style="padding: 6px; text-align: right;">3</th>
+                                    <th style="padding: 6px; text-align: right;">6</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border-bottom: 1px solid var(--color-paper-line);">
+                                    <td style="padding: 6px; text-align: left; font-weight: bold;">$y$</td>
+                                    <td style="padding: 6px; text-align: right; color: var(--color-red);">-1</td>
+                                    <td style="padding: 6px; text-align: right; color: var(--color-red);">-2</td>
+                                    <td style="padding: 6px; text-align: right; color: var(--color-red);">-3</td>
+                                    <td style="padding: 6px; text-align: right; color: var(--color-red);">-6</td>
+                                    <td style="padding: 6px; text-align: right; color: var(--color-red);">6</td>
+                                    <td style="padding: 6px; text-align: right; color: var(--color-red);">3</td>
+                                    <td style="padding: 6px; text-align: right; color: var(--color-red);">2</td>
+                                    <td style="padding: 6px; text-align: right; color: var(--color-red);">1</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- SVG Graph for y = 6/x -->
+                        <div style="text-align: center; margin: 20px 0;">
+                            <svg width="220" height="220" viewBox="0 0 220 220" style="background-color: var(--color-surface); border: 1px solid var(--color-paper-line); border-radius: 6px;">
+                                <!-- Grid Lines -->
+                                <line x1="110" y1="0" x2="110" y2="220" stroke="var(--color-paper-line)" stroke-width="2"/>
+                                <line x1="0" y1="110" x2="220" y2="110" stroke="var(--color-paper-line)" stroke-width="2"/>
+                                <line x1="20" y1="0" x2="20" y2="220" stroke="#eaeaea" stroke-width="1"/>
+                                <line x1="50" y1="0" x2="50" y2="220" stroke="#eaeaea" stroke-width="1"/>
+                                <line x1="80" y1="0" x2="80" y2="220" stroke="#eaeaea" stroke-width="1"/>
+                                <line x1="140" y1="0" x2="140" y2="220" stroke="#eaeaea" stroke-width="1"/>
+                                <line x1="170" y1="0" x2="170" y2="220" stroke="#eaeaea" stroke-width="1"/>
+                                <line x1="200" y1="0" x2="200" y2="220" stroke="#eaeaea" stroke-width="1"/>
+                                <line x1="0" y1="20" x2="220" y2="20" stroke="#eaeaea" stroke-width="1"/>
+                                <line x1="0" y1="50" x2="220" y2="50" stroke="#eaeaea" stroke-width="1"/>
+                                <line x1="0" y1="80" x2="220" y2="80" stroke="#eaeaea" stroke-width="1"/>
+                                <line x1="0" y1="140" x2="220" y2="140" stroke="#eaeaea" stroke-width="1"/>
+                                <line x1="0" y1="170" x2="220" y2="170" stroke="#eaeaea" stroke-width="1"/>
+                                <line x1="0" y1="200" x2="220" y2="200" stroke="#eaeaea" stroke-width="1"/>
+
+                                <!-- Trend Curves y = 6/x -->
+                                <!-- Positive curve -->
+                                <path d="M 120 20 Q 128 92 200 100" fill="none" stroke="var(--color-red)" stroke-width="3"/>
+                                <!-- Negative curve -->
+                                <path d="M 100 200 Q 92 128 20 120" fill="none" stroke="var(--color-red)" stroke-width="3"/>
+
+                                <!-- Dots -->
+                                <circle cx="20" cy="120" r="4.5" fill="var(--color-brass)"/>
+                                <circle cx="50" cy="130" r="4.5" fill="var(--color-brass)"/>
+                                <circle cx="80" cy="140" r="4.5" fill="var(--color-brass)"/>
+                                <circle cx="100" cy="170" r="4.5" fill="var(--color-brass)"/>
+                                <circle cx="120" cy="50" r="4.5" fill="var(--color-brass)"/>
+                                <circle cx="140" cy="80" r="4.5" fill="var(--color-brass)"/>
+                                <circle cx="170" cy="90" r="4.5" fill="var(--color-brass)"/>
+                                <circle cx="200" cy="100" r="4.5" fill="var(--color-brass)"/>
+
+                                <!-- Axis Labels -->
+                                <text x="210" y="125" font-size="12" fill="var(--color-ink-soft)" font-family="var(--font-mono)">x</text>
+                                <text x="118" y="15" font-size="12" fill="var(--color-ink-soft)" font-family="var(--font-mono)">y</text>
+                                <text x="98" y="125" font-size="12" fill="var(--color-ink-soft)" font-family="var(--font-mono)">O</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>比例と反比例のグラフ比較</h4>
+                    <div class="lesson-callout" style="max-width: 550px;">
+                        <span class="lesson-callout-title">視覚的差異の対比</span>
+                        <div class="lesson-callout-grid">
+                            <div class="grid-cell" style="background-color: var(--color-surface); border-color: var(--color-paper-line);">
+                                <span class="label" style="color: var(--color-brass);">比例のグラフ</span>
+                                <span class="value" style="font-size: 14px; line-height: 1.7; text-align: left; display: block;">
+                                    ・式： $y = ax$<br>
+                                    ・形状： **直線**<br>
+                                    ・特徴： **原点を通る**
+                                </span>
+                            </div>
+                            <div class="grid-cell" style="background-color: var(--color-surface); border-color: var(--color-paper-line);">
+                                <span class="label" style="color: var(--color-red);">反比例のグラフ</span>
+                                <span class="value" style="font-size: 14px; line-height: 1.7; text-align: left; display: block;">
+                                    ・式： $y = \frac{a}{x}$<br>
+                                    ・形状： **曲線（双曲線）**<br>
+                                    &bull; 特徴： **原点を通らない**
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 6 -->
+                <div class="lesson-step success">
+                    <span class="lesson-step-meta">Step 06</span>
+                    <h4>まとめ</h4>
+                    <ul>
+                        <li>グラフは、2つの変数が連動して変化する勢いや関係性を視覚化したもの。</li>
+                        <li>比例のグラフは、原点 $(0, 0)$ を通り、突き抜けて伸びる**「一直線」**である。</li>
+                        <li>反比例のグラフは、原点を中心に対称に配置された**「一対の曲線（双曲線）」**であり、軸と原点に近づくだけで絶対に交わらない。</li>
+                    </ul>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】データサイエンスとの繋がり：データの相関とトレンドを見抜く「回帰直線」</h4>
+                    <p>データサイエンスにおいて、この比例のグラフ（直線の描画）は、最も基本的な予測ビジュアルツールである**「回帰直線（Regression Line）」**としてすべての基礎になっています。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">散布図に「最もフィットする直線」を引く</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            例えば、住宅の「面積 $x$」と「家賃 $y$」のデータを何百件分も集め、座標平面上に点としてプロットします（これを**散布図（Scatter Plot）**と呼びます）。
+                        </p>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            データ分析者は、このバラバラに散らばった点の間を縫うように、全体のトレンドを示す**「一本の直線」**を引きます。これが回帰直線であり、そのベースは比例の式である $y = ax + b$ です。
+                        </p>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            この直線の傾き $a$ が正（右上がり）であれば「面積が広くなるほど家賃が高くなる（正の相関）」と判定でき、傾き $a$ の数値そのものが「面積が $1\text{m}^2$ 増えるごとの家賃の上昇ペース（影響度）」を表します。機械学習モデルが大量のデータから関係性を視覚化し、未知のデータを予測できるのは、このように散らばった点に直線（比例モデル）をフィッティングする技術が土台にあるからなのです。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="lesson-footer-nav">
+                <a href="32.html" class="btn-secondary">&larr; 前の単元へ</a>
+                <a href="index.html" class="btn-secondary">目次に戻る</a>
+                <a href="#" class="btn btn-primary">次の単元へ</a>
+            </footer>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>
