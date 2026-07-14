@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>一次方程式の解法（移項の処理） | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第3章 中学校数学の基礎固め &gt; 単元29
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 03 / Unit 29</span>
+                <h2 class="lesson-title">一次方程式の解法（移項の処理）</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>なぜ移項をするのか</h4>
+                    <p>方程式を解くゴールは「未知数 $x$ はいくつか」を突き止めることです。しかし、与えられた初期の数式では、左辺と右辺に文字と数字が散らばっていて、$x$ の正体がすぐには見えません。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 500px;">
+                        <span class="lesson-callout-title">文字と数字を「整理・隔離」する</span>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 0;">
+                            例えば $x + 5 = 12$ という式から $x$ の正体を知るには、<strong>「文字（変数）を左辺に、数字（定数）を右辺に集める」</strong>という整理を行う必要があります。この整理作業を劇的にスピードアップさせるテクニックが<strong>移項（いこう）</strong>です。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>一次方程式と移項</h4>
+                    <div class="lesson-callout" style="max-width: 550px; background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">数学の用語解説</span>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 0;">
+                            ・<strong>一次方程式（いちじほうていしき）</strong>：文字の次数（右上のべき乗）が $1$ である方程式。 $x^2$ や $x^3$ を含まず、直線的な関係を表す。<br>
+                            ・<strong>移項（いこう）</strong>：等式の片方の辺にある項を、<strong>符号を反転させて</strong>もう片方の辺へ移動させる操作。
+                        </p>
+                    </div>
+                    <p>例えば、$x + 5 = 12$、$3x - 4 = 8$、$2x + 7 = 5x - 2$ などはすべて一次方程式です。これらは、等式の性質をショートカットした「移項のルール」を使って解いていきます。</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>移項の正体と符号反転のルール</h4>
+                    <p>移項を行うときの唯一にして絶対のルールは、<strong>「境界線（＝）を越えるときに、符号をプラス・マイナス反対にする」</strong>ということです。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 550px;">
+                        <span class="lesson-callout-title">符号反転の対比カード</span>
+                        <div class="lesson-callout-grid">
+                            <div class="grid-cell" style="background-color: var(--color-surface);">
+                                <span class="label" style="color: var(--color-brass);">左辺から右辺へ</span>
+                                <span class="value" style="font-size: 15px; line-height: 1.6; display: block; text-align: left; font-family: var(--font-mono);">
+                                    ・$+5$ を移項 &rarr; <strong style="color: var(--color-red);">-5</strong><br>
+                                    ・$-7$ を移項 &rarr; <strong style="color: var(--color-red);">+7</strong>
+                                </span>
+                            </div>
+                            <div class="grid-cell" style="background-color: var(--color-surface);">
+                                <span class="label" style="color: var(--color-brass);">右辺から左辺へ</span>
+                                <span class="value" style="font-size: 15px; line-height: 1.6; display: block; text-align: left; font-family: var(--font-mono);">
+                                    ・$+4x$ を移項 &rarr; <strong style="color: var(--color-red);">-4x</strong><br>
+                                    ・$-2x$ を移項 &rarr; <strong style="color: var(--color-red);">+2x</strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lesson-callout" style="max-width: 550px; background-color: var(--color-surface);">
+                        <span class="lesson-callout-title">【解説】なぜ符号が変わるのか？</span>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 0;">
+                            これは手品ではなく、前単元で学んだ「等式の両辺から同じ数を引く」という操作をショートカットしたものです。<br>
+                            $x + 5 = 12$ の両辺から $5$ を引くと、<br>
+                            $x + 5 \textcolor{#B4432F}{- 5} = 12 \textcolor{#B4432F}{- 5}$ となり、<br>
+                            左辺の $5 - 5$ が消えて結果的に $x = 12 - 5$ が残ります。この「中間のステップ」を省略して、あたかも $5$ が符号を変えてワープしたように見せているのが移項の正体です。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>一次方程式を解く4つの手順と検証</h4>
+                    <p>どんなに複雑な一次方程式でも、以下の4つの手順を踏めば必ず解くことができます。</p>
+                    
+                    <div class="lesson-callout">
+                        <span class="lesson-callout-title">解法の4ステップ</span>
+                        <ul style="font-size: 14px; line-height: 1.7; margin-bottom: 20px; padding-left: 20px; list-style: decimal;">
+                            <li>文字（変数項）をすべて<strong>左辺</strong>に集める（移項）。</li>
+                            <li>数字（定数項）をすべて<strong>右辺</strong>に集める（移項）。</li>
+                            <li>両辺それぞれで<strong>同類項を整理</strong>する。</li>
+                            <li>文字の係数（$x$ の前にある数字）で<strong>両辺を割る</strong>。</li>
+                        </ul>
+
+                        <h5 style="margin-top: 20px;">計算例： $2x + 6 = x + 10$</h5>
+                        <div class="math-formula" style="background-color: var(--color-surface); text-align: left; padding: 20px; font-size: 15px; margin-bottom: 20px;">
+                            1. 右辺の $x$ を左辺に移項する：<br>
+                            $\quad 2x \textcolor{#B4432F}{- x} + 6 = 10$<br><br>
+                            2. 左辺の $6$ を右辺に移項する：<br>
+                            $\quad 2x - x = 10 \textcolor{#B4432F}{- 6}$<br><br>
+                            3. 両辺を整理する：<br>
+                            $\quad x = 4 \quad \text{（解：4）}$
+                        </div>
+
+                        <h5>解が正しいか確かめる（検証）</h5>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 10px;">
+                            求めた解 $x = 4$ を元の式（$2x + 6 = x + 10$）の左辺と右辺にそれぞれ代入し、天秤が釣り合うか検証します。
+                        </p>
+                        <div class="math-formula" style="background-color: var(--color-surface); text-align: left; padding: 15px; font-size: 14px;">
+                            ・左辺： $2 \times 4 + 6 = 14$<br>
+                            ・右辺： $4 + 10 = 14$<br>
+                            両辺が等しく $14$ となるため、この解は絶対に正しいと証明されます。
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="lesson-step success">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>まとめ</h4>
+                    <ul>
+                        <li>一次方程式を解く基本は、<strong>「左辺に文字、右辺に数字」</strong>を集めて整理すること。</li>
+                        <li>等号「$=$」をまたいで項を移動させる<strong>「移項」</strong>では、<strong>プラスとマイナスの符号が反転する</strong>。</li>
+                        <li>移項の正体は、等式の両辺に同じ数を足し引きする操作のショートカットである。</li>
+                        <li>求めた解を元の式に代入することで、計算ミスがないかを確実に検算できる。</li>
+                    </ul>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】データサイエンスとの繋がり：決定境界（Decision Boundary）を描く数式変形</h4>
+                    <p>機械学習の「分類」タスクにおいて、移項による数式変形は決定的な役割を果たしています。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">AIが引く境界線の方程式</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            AIが「犬か猫か」「スパムメールかそうでないか」を判定する際、2つの特徴量（データ項目 $x_1, x_2$）の間に境界線を引きます。この線を**決定境界（Decision Boundary）**と呼び、以下の方程式で表されます：
+                        </p>
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 16px; font-weight: bold; margin-bottom: 12px;">
+                            $$w_1 x_1 + w_2 x_2 + b = 0$$
+                        </div>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            このままだとグラフ上に線を描くことができません。そこで、縦軸を $x_2$、横軸を $x_1$ として、見慣れた一次関数（直線）の式に変換するため、文字式を<strong>移項</strong>します。
+                        </p>
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 15px; text-align: left; margin-bottom: 12px; font-family: var(--font-mono);">
+                            1. $w_1 x_1$ と $b$ を右辺へ移項する（符号がマイナスに反転する）：<br>
+                            $\quad w_2 x_2 = -w_1 x_1 - b$<br><br>
+                            2. 両辺を $w_2$ で割る：<br>
+                            $\quad x_2 = \left( -\frac{w_1}{w_2} \right) x_1 - \frac{b}{w_2}$
+                        </div>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            この変形により、傾きが $-\frac{w_1}{w_2}$、切片が $-\frac{b}{w_2}$ の直線であることが分かり、プログラムでグラフ上に境界線を綺麗に描画できるようになります。中学で学ぶ移項は、AIモデルの判断軸をビジュアル化するための必須技術なのです。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="lesson-footer-nav">
+                <a href="28.html" class="btn-secondary">&larr; 前の単元へ</a>
+                <a href="index.html" class="btn-secondary">目次に戻る</a>
+                <a href="#" class="btn btn-primary">次の単元へ</a>
+            </footer>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>
