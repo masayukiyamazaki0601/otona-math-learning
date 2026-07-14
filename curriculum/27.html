@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>同類項の整理と多項式の計算 | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第3章 中学校数学の基礎固め &gt; 単元27
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 03 / Unit 27</span>
+                <h2 class="lesson-title">同類項の整理と多項式の計算</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>なぜ同類項を整理するのか</h4>
+                    <p>文字式の計算が進むと、1つの式の中に複数の文字や数字が複雑に並ぶようになります。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 500px;">
+                        <span class="lesson-callout-title">式を整理して「見える化」する</span>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 0;">
+                            例えば、次の式は未整理の状態です：<br>
+                            <span class="math-highlight">$$3x + 5 + 2x - 1$$</span>
+                            このままでも間違いではありませんが、同じ仲間の数字が散らばっていて意味が読み取りにくいため、<strong>「同じ仲間同士をまとめて簡潔にする（同類項の整理）」</strong>というステップが必要になります。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>項と同類項・多項式</h4>
+                    <div class="lesson-callout" style="max-width: 550px; background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">数学の用語解説</span>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 0;">
+                            ・<strong>項（こう）</strong>：式を「$+$」や「$-$」で区切った一つひとつのパーツ。例： $3x + 5 - 2y$ の項は $3x$、 $5$、 $-2y$。<br>
+                            ・<strong>同類項（どうるいこう）</strong>：文字の種類と、文字についている指数（累乗）が全く同じ項のこと。<br>
+                            ・<strong>多項式（たこうしき）</strong>：複数の項を $+$ や $-$ でつなぎ合わせた式（例： $2x + 3$）。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>同類項の整理（計算方法）</h4>
+                    <p>同類項をまとめるときは、<strong>文字の部分はそのまま残し、数字の部分（係数）だけを足し引き</strong>します。</p>
+                    
+                    <div class="lesson-callout">
+                        <span class="lesson-callout-title">計算例</span>
+                        <div class="math-formula" style="background-color: var(--color-surface); text-align: left; padding: 20px; font-size: 15px; margin-bottom: 0;">
+                            ・<strong>$3x + 2x = (3+2)x = 5x$</strong><br>
+                            ・<strong>$7a - 4a = (7-4)a = 3a$</strong><br><br>
+                            数字だけの項（定数項）も同じ仲間なので、Step 01の式は以下のようにまとめられます：<br>
+                            <strong>$3x + 5 + 2x - 1 = (3+2)x + (5-1) = 5x + 4$</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>多項式の加法と減法（マイナスの引き算に注意！）</h4>
+                    <p>多項式同士を計算するときは、まずかっこを取り外します。特に<strong>「引き算（減法）」の時は、かっこ内の全ての項の符号が反転する</strong>点に厳重注意が必要です。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-red); background-color: #fdfaf9;">
+                        <span class="lesson-callout-title" style="color: var(--color-red);">引き算での符号ミス多発地帯</span>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 10px;">
+                            <strong>例題： $(6a - 2) - (3a + 5)$</strong>
+                        </p>
+                        <div class="lesson-callout-grid">
+                            <div class="grid-cell" style="background-color: var(--color-surface);">
+                                <span class="label" style="color: var(--color-red);">【NG】 後ろの項の符号変え忘れ</span>
+                                <span class="value" style="color: var(--color-red); font-size: 15px; line-height: 1.6; display: block; text-align: left; font-family: var(--font-mono);">
+                                    $6a - 2 - 3a + 5$<br>
+                                    <span style="font-size: 11px; color: var(--color-ink-soft); font-family: var(--font-body);">※マイナスが $3a$ にしか掛かっておらず、$5$ の符号がプラスのままになっています。</span>
+                                </span>
+                            </div>
+                            <div class="grid-cell" style="background-color: var(--color-surface); border-color: var(--color-brass);">
+                                <span class="label" style="color: var(--color-brass);">【OK】 全ての項の符号を反転</span>
+                                <span class="value" style="color: var(--color-brass); font-size: 15px; line-height: 1.6; display: block; text-align: left; font-family: var(--font-mono);">
+                                    $6a - 2 - 3a - 5$<br>
+                                    $= 3a - 7$
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>計算するときの注意点（まとまる境界線）</h4>
+                    <p>同類項は「文字の種類」と「指数（右上の小さな数字）」の<strong>両方が完全に一致しているものだけ</strong>が対象です。</p>
+                    
+                    <div class="lesson-callout">
+                        <span class="lesson-callout-title">計算できる例とできない例</span>
+                        <div class="lesson-callout-grid">
+                            <div class="grid-cell" style="background-color: var(--color-surface); border-color: var(--color-brass);">
+                                <span class="label" style="color: var(--color-brass);">〇 計算できる（同類項）</span>
+                                <span class="value" style="font-size: 14px; line-height: 1.6; display: block; text-align: left; font-family: var(--font-mono);">
+                                    ・$4x^2 - x^2 = 3x^2$<br>
+                                    ・$-2a + 7a = 5a$
+                                </span>
+                            </div>
+                            <div class="grid-cell" style="background-color: var(--color-surface); border-color: var(--color-red);">
+                                <span class="label" style="color: var(--color-red);">&times; これ以上計算できない（異類項）</span>
+                                <span class="value" style="font-size: 14px; line-height: 1.6; display: block; text-align: left; font-family: var(--font-mono);">
+                                    ・$3x + 2x^2$ （指数が違う）<br>
+                                    ・$4a + 3b$ （文字が違う）
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 6 -->
+                <div class="lesson-step success">
+                    <span class="lesson-step-meta">Step 06</span>
+                    <h4>まとめ</h4>
+                    <ul>
+                        <li>項を整理するときは、<strong>「文字の種類」と「指数」が完全に一致した同類項</strong>を見つける。</li>
+                        <li>同類項の計算は、文字部分は一切いじらずに<strong>係数（数字）だけを足し引き</strong>する。</li>
+                        <li>多項式の引き算では、<strong>かっこの中のすべての符号を反転</strong>させてからまとめる。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <footer class="lesson-footer-nav">
+                <a href="26.html" class="btn-secondary">&larr; 前の単元へ</a>
+                <a href="index.html" class="btn-secondary">目次に戻る</a>
+                <a href="#" class="btn btn-primary">次の単元へ</a>
+            </footer>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>
