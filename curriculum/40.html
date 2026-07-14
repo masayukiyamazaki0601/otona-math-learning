@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>空間図形の基礎（表面積・体積計算） | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第3章 中学校数学の基礎固め &gt; 単元40
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 03 / Unit 40</span>
+                <h2 class="lesson-title">空間図形の基礎（表面積・体積計算）</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>「表面積」と「体積」は何が違うの？</h4>
+                    <p>空間図形を学ぶとき、最初につまずきがちなのが「表面積」と「体積」の混同です。どちらも立体に関する計算ですが、求めているものは根本的に異なります。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 500px;">
+                        <span class="lesson-callout-title">ラッピング（外側）か、中身（容量）か</span>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 0;">
+                            大切な人へのプレゼントを箱に入れてラッピングする場面を思い浮かべてみてください。必要な包装紙のサイズを知りたいなら、求めるのは箱の<strong>「外側全体の広さ（表面積）」</strong>です。対して、その箱にどれだけの品物を詰め込めるかを知りたいなら、考えるべきは<strong>「中に入る容量（体積）」</strong>になります。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>空間図形とは</h4>
+                    <p><strong>空間図形（くうかんずけい）</strong>とは、縦・横・高さの3つの広がりを持つ立体のことです。紙の上に描かれた平らな「平面図形」に対して、現実の空間に存在する「立体」を扱うのがこの分野の特徴です。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 500px; background-color: var(--color-surface); border-color: var(--color-paper-line);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">代表的な空間図形</span>
+                        <ul style="font-size: 14px; line-height: 1.7; margin-bottom: 0; padding-left: 20px; list-style: disc;">
+                            <li>直方体・立方体（箱型）</li>
+                            <li>円柱（水筒や缶のような形）</li>
+                            <li>円すい・角すい（メガホンのような尖った形）</li>
+                            <li>球（ボールのような形）</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>表面積の考え方と計算</h4>
+                    <p><strong>表面積（ひょうめんせき）</strong>とは、立体を囲むすべての面の面積を合計したものです。「立体をハサミで切り開き、展開図にして平らにしたときの全体の面積」と捉えてみてください。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 600px; background-color: var(--color-surface); border-color: var(--color-paper-line);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">立方体の表面積（一辺 4cm の例）</span>
+                        <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 10px; align-items: center;">
+                            <svg width="150" height="120" viewBox="0 0 150 120" style="background-color: var(--color-paper); border-radius: 6px; border: 1px solid var(--color-paper-line);">
+                                <polygon points="40,40 80,20 120,40 80,60" fill="none" stroke="var(--color-brass)" stroke-width="2.5" stroke-linejoin="round"/>
+                                <polygon points="40,40 80,60 80,100 40,80" fill="none" stroke="var(--color-brass)" stroke-width="2.5" stroke-linejoin="round"/>
+                                <polygon points="120,40 80,60 80,100 120,80" fill="none" stroke="var(--color-brass)" stroke-width="2.5" stroke-linejoin="round"/>
+                                <text x="24" y="65" font-size="11" fill="var(--color-red)">4cm</text>
+                                <text x="100" y="95" font-size="11" fill="var(--color-red)">4cm</text>
+                                <text x="56" y="95" font-size="11" fill="var(--color-ink-soft)">1面 = 16㎠</text>
+                            </svg>
+                            <div style="flex: 1; min-width: 200px; font-size: 14px; line-height: 1.7;">
+                                <p style="margin-bottom: 8px;">
+                                    立方体は、同じ大きさの正方形が6枚でできています。<br>
+                                    1面の面積： <span style="white-space: nowrap;">$4 \times 4 = 16\text{ ㎠}$</span>
+                                </p>
+                                <p style="margin-bottom: 0;">
+                                    これが6面あるため、全体の表面積は：<br>
+                                    <span style="white-space: nowrap;">$\mathbf{16 \times 6 = 96\text{ ㎠}}$</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>体積の考え方と計算</h4>
+                    <p><strong>体積（たいせき）**とは、その立体が空間の中でどれだけの場所を占めているかを表す量です。水槽に入る水の量などを測る際に用います。単位には立方センチメートル（ $\text{㎤}$ ）などが使われます。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 600px;">
+                        <span class="lesson-callout-title">基本的な体積の公式と図解</span>
+                        <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 15px; justify-content: center;">
+                            <!-- Rect Cuboid -->
+                            <div style="text-align: center; background-color: var(--color-surface); padding: 10px; border-radius: 6px; border: 1px solid var(--color-paper-line); width: 170px; display: flex; flex-direction: column; align-items: center;">
+                                <svg width="140" height="110" viewBox="0 0 140 110">
+                                    <polygon points="30,45 75,25 120,45 75,65" fill="none" stroke="var(--color-brass)" stroke-width="2.5" stroke-linejoin="round"/>
+                                    <polygon points="30,45 75,65 75,95 30,75" fill="none" stroke="var(--color-brass)" stroke-width="2.5" stroke-linejoin="round"/>
+                                    <polygon points="120,45 75,65 75,95 120,75" fill="none" stroke="var(--color-brass)" stroke-width="2.5" stroke-linejoin="round"/>
+                                    <!-- Height -->
+                                    <line x1="126" y1="45" x2="126" y2="75" stroke="var(--color-red)" stroke-width="1.5"/>
+                                    <polygon points="126,45 123,50 129,50" fill="var(--color-red)"/>
+                                    <polygon points="126,75 123,70 129,70" fill="var(--color-red)"/>
+                                    <text x="130" y="64" font-size="9" fill="var(--color-red)">高さ</text>
+                                    <!-- Width -->
+                                    <text x="100" y="86" font-size="9" fill="var(--color-red)">横</text>
+                                    <!-- Length -->
+                                    <text x="45" y="86" font-size="9" fill="var(--color-red)">縦</text>
+                                </svg>
+                                <span style="font-size: 13px; font-weight: bold; margin-top: 5px;">直方体</span>
+                                <span style="font-size: 11px; font-family: var(--font-mono); color: var(--color-ink-soft);">縦 &times; 横 &times; 高さ</span>
+                            </div>
+
+                            <!-- Cylinder -->
+                            <div style="text-align: center; background-color: var(--color-surface); padding: 10px; border-radius: 6px; border: 1px solid var(--color-paper-line); width: 170px; display: flex; flex-direction: column; align-items: center;">
+                                <svg width="140" height="110" viewBox="0 0 140 110">
+                                    <ellipse cx="70" cy="25" rx="35" ry="12" fill="none" stroke="var(--color-brass)" stroke-width="2.5"/>
+                                    <path d="M 35 80 A 35 12 0 0 0 105 80" fill="none" stroke="var(--color-brass)" stroke-width="2.5"/>
+                                    <path d="M 35 80 A 35 12 0 0 1 105 80" fill="none" stroke="var(--color-brass)" stroke-width="1.5" stroke-dasharray="3,3"/>
+                                    <line x1="35" y1="25" x2="35" y2="80" stroke="var(--color-brass)" stroke-width="2.5"/>
+                                    <line x1="105" y1="25" x2="105" y2="80" stroke="var(--color-brass)" stroke-width="2.5"/>
+                                    <!-- Height -->
+                                    <line x1="113" y1="25" x2="113" y2="80" stroke="var(--color-red)" stroke-width="1.5"/>
+                                    <polygon points="113,25 110,30 116,30" fill="var(--color-red)"/>
+                                    <polygon points="113,80 110,75 116,75" fill="var(--color-red)"/>
+                                    <text x="117" y="56" font-size="9" fill="var(--color-red)">高さ</text>
+                                    <text x="70" y="88" font-size="9" fill="var(--color-red)" text-anchor="middle">底面積</text>
+                                </svg>
+                                <span style="font-size: 13px; font-weight: bold; margin-top: 5px;">円柱</span>
+                                <span style="font-size: 11px; font-family: var(--font-mono); color: var(--color-ink-soft);">底面積 &times; 高さ</span>
+                            </div>
+                        </div>
+                        <p style="font-size: 13px; color: var(--color-ink-soft); margin-top: 10px; line-height: 1.5;">例：底面の面積が $50\text{ ㎠}$、高さが $8\text{ cm}$ の円柱であれば、体積は <span style="white-space: nowrap;">$50 \times 8 = 400\text{ ㎤}$</span> となります。</p>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>表面積と体積を見分けるコツと注意点</h4>
+                    <p>計算を始める前に、「何を求めたいか」を現実のイメージと結びつけましょう。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 500px; background-color: var(--color-surface); border-color: var(--color-paper-line);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">イメージの置き換え</span>
+                        <ul style="font-size: 14px; line-height: 1.7; margin-bottom: 0; padding-left: 20px; list-style: disc;">
+                            <li><strong>表面積（ ㎠ ）をつかう場合</strong>：包装紙の広さ、外壁にペンキを塗る面積など（外側の皮一枚）</li>
+                            <li><strong>体積（ ㎤ ）をつかう場合</strong>：コップに入る水の量、箱の中に収納できる容量など（内部の詰まり具合）</li>
+                        </ul>
+                    </div>
+                    <p style="margin-top: 15px;">表面積の計算では、「見えない裏側や底面」の数え忘れに注意してください。展開図を頭に描くのが最も確実です。また、体積では斜めの辺を高さと勘違いしないように確認しましょう。</p>
+                </div>
+
+                <!-- Step 6 -->
+                <div class="lesson-step success">
+                    <span class="lesson-step-meta">Step 06</span>
+                    <h4>まとめ</h4>
+                    <ul>
+                        <li>表面積は「立体の外側の広さ（皮一枚）」を表し、すべての面の面積を合計して求める。</li>
+                        <li>体積は「立体が占める空間の大きさ（中身）」を表し、柱状の立体は**底面積 &times; 高さ**で求める。</li>
+                        <li>計算ミスを防ぐために、面積は **$\text{㎠}$**、体積は **$\text{㎤}$** という単位の違いを最後に必ず確認する。</li>
+                    </ul>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】身近なAIとの繋がり：宅配便や配送トラックで活躍する「荷物サイズ測定・箱詰めAI」</h4>
+                    <p>荷物を発送するとき、コンビニのレジや配送窓口で店員さんが定規を当ててサイズを測る光景はおなじみです。しかし最近では、カメラで荷物を映すだけで一瞬にしてサイズを判定する「サイズ自動計測AI」の導入が進んでいます。この技術の土台にあるのが、立体の「体積」や「サイズ」を測る空間図形の考え方です。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">荷物の「外枠の直方体」をカメラが瞬時に見抜く</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            配送用のカメラAIは、荷物の形状を撮影すると、それを3次元のデジタルデータ（点群データ）に変換します。そして、荷物をすっぽり包み込む「最小の直方体」の形をバーチャルで組み立てます。
+                        </p>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            AIは、その直方体の「縦・横・高さ」の長さをミリ単位で検出し、それらを足し合わせて「60サイズ」「80サイズ」といった運賃区分を瞬時に判定しています。さらに、ネット通販の巨大な倉庫や配送トラックの現場では、集まった大量の荷物を「限られたコンテナの体積」の中に無駄なく隙間なく積み込むための「箱詰め最適化AI」も活躍しています。それぞれの荷物の体積や向きを計算し、パズルのように最も効率の良い組み合わせを弾き出すこのシステムは、物流業界のトラック運転手不足やCO2削減を解決する鍵となっています。私たちが日常で手にする荷物がスピーディかつ安価に届く裏には、立体のサイズを正しく捉える空間図形の知恵がフルに活かされているのです。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="lesson-footer-nav">
+                <a href="39.html" class="btn-secondary">&larr; 前の単元へ</a>
+                <a href="index.html" class="btn-secondary">目次に戻る</a>
+                <a href="#" class="btn btn-primary">次の単元へ</a>
+            </footer>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>
