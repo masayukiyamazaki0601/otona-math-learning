@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>連立方程式の文章題への応用 | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第3章 中学校数学の基礎固め &gt; 単元38
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 03 / Unit 38</span>
+                <h2 class="lesson-title">連立方程式の文章題への応用</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>なぜ文章題で連立方程式を使うのか</h4>
+                    <p>連立方程式を学ぶ究極の目的は、計算力を高めることではなく、**現実社会にある「正体が2つ以上わからない複雑な課題」を解決すること**にあります。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 500px;">
+                        <span class="lesson-callout-title">実社会の「不確定要素」をクリアする</span>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 0;">
+                            「仕入れた2つの商品の個数」「大人と子どもの入場者数」「移動スピードの違う2人の追いかけっこ」など、ビジネスや私生活における決定問題の多くは、2つの条件のバランスを同時に解くことで、唯一の正解にたどり着くことができます。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>文章題を解く5つのゴールデンルール</h4>
+                    <p>連立方程式の文章題で迷わないための、標準的な思考プロセスは以下の通りです。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 500px; background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">解法手順の整理</span>
+                        <ol style="font-size: 14px; line-height: 1.7; margin-bottom: 0; padding-left: 20px; list-style: decimal;">
+                            <li>求めたい2つの未知の数を、文字 $x$ と $y$ で表す。</li>
+                            <li>問題文に隠れている「2つの切り口（条件）」を見つける。</li>
+                            <li>それぞれの切り口から方程式を2本立てる。</li>
+                            <li>加減法または代入法を用いて、連立方程式を解く。</li>
+                            <li>求めた値が、現実の状況（人数がマイナスになっていないか、など）に合っているか確認する。</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>【例題】実際の問題に当てはめる</h4>
+                    <p>具体的な問題で立式と検証のプロセスを追ってみましょう。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 550px; background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">問題：りんごとみかんの個数の特定</span>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 12px;">
+                            <strong>「りんごとみかんを合わせて10個買い、代金の合計は1,300円だった。りんごは1個150円、みかんは1個100円のとき、それぞれ何個買ったか」</strong>
+                        </p>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 0;">
+                            <strong>① 文字の設定</strong>：りんごを $x$ 個、みかんを $y$ 個とおく。<br>
+                            <strong>② 1つ目の切り口（個数）</strong>： $x + y = 10 \quad \cdots \text{①}$<br>
+                            <strong>③ 2つ目の切り口（代金）</strong>： $150x + 100y = 1300 \quad \cdots \text{②}$<br><br>
+                            この連立方程式を解きます。①より $y = 10 - x$ と変形して②に代入します（代入法）：<br>
+                            &emsp;&emsp;$150x + 100(10 - x) = 1300$<br>
+                            &emsp;&emsp;$50x + 1000 = 1300$<br>
+                            &emsp;&emsp;$50x = 300 &rarr; \mathbf{x = 6}$<br><br>
+                            $x = 6$ を①に代入して、 $6 + y = 10 &rarr; \mathbf{y = 4}$ と求まります。<br>
+                            答えは、<strong>りんご6個、みかん4個</strong>です。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>解の検証（検算）の大切さ</h4>
+                    <p>答えを求めたら、それが本当に両方の条件を満たしているか、元の文章の状況に代入して確認する習慣（検算）をつけましょう。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 500px;">
+                        <span class="lesson-callout-title">検証プロセス</span>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 0;">
+                            ・条件①：個数の合計 &rarr; $6 + 4 = 10$ 個（一致！）<br>
+                            ・条件②：代金の合計 &rarr; $150 \times 6 + 100 \times 4 = 900 + 400 = 1300$ 円（一致！）<br><br>
+                            どちらの制限（イコール）も綺麗にクリアしているため、この解は絶対に正しいことが確認できます。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="lesson-step success">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>まとめ</h4>
+                    <ul>
+                        <li>文章題では、求めたい対象が2つあるため、それらを $x$ と $y$ の文字でおく。</li>
+                        <li>「個数の和」と「価格の和」のように、**異なる2つの切り口でそれぞれ等式を立てる**。</li>
+                        <li>計算した結果は、必ず元の文章のルールに当てはめて、両方の条件を満たすか検算を行う。</li>
+                    </ul>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】身近なAIとの繋がり：ネット通販の「送料無料にするための商品おすすめAI」</h4>
+                    <p>Amazonや楽天市場などのECサイトで、カートの決済画面に進んだ際、「あと350円分お買い上げで送料無料になります。こちらの商品はいかがですか？」と、あなたの好みに合う安い商品を提案してくれるAIがあります。この裏側でも、連立方程式の応用が動いています。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">「送料無料の基準」と「配送重量の上限」を同時に満たす</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            ネットショップの裏側にある推薦AIは、あなたに対して以下の2つの条件を同時に満たす「追加商品」の組み合わせを探します。
+                        </p>
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 14px; text-align: left; margin-bottom: 12px; font-family: var(--font-mono);">
+                            ・価格の条件式： カートの合計額が $\mathbf{5,000}$ 円以上になる<br>
+                            ・配送の条件式： 同一梱包の制限重量である $\mathbf{2\text{kg}}$ （2,000g）以下に抑える
+                        </div>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            AIは、何万点ものデータベースの中から、追加する商品の「価格」と「重さ」を変数として捉え、この2つの数式をクリアする商品の組み合わせ（解）を瞬時に計算します。もし重すぎて送料がかさむ商品を提案したり、価格が足りない商品を提案したりすればユーザーの満足度は下がってしまいます。私たちのネットショッピングを快適でお得にするマッチング機能の裏では、このように複数の制約をクリアする比率や立式の最適化計算が高速で行われているのです。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="lesson-footer-nav">
+                <a href="37.html" class="btn-secondary">&larr; 前の単元へ</a>
+                <a href="index.html" class="btn-secondary">目次に戻る</a>
+                <a href="#" class="btn btn-primary">次の単元へ</a>
+            </footer>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>
