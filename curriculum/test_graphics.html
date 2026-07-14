@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>グラフィック表現の比較（SVG vs Canvas） | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .compare-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        .compare-card {
+            flex: 1;
+            min-width: 300px;
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .compare-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--color-brass);
+        }
+        .graphic-area {
+            width: 300px;
+            height: 250px;
+            background-color: var(--color-paper);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .instruction-tag {
+            margin-top: 15px;
+            font-size: 13px;
+            color: var(--color-ink-soft);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+        </div>
+    </header>
+
+    <main class="container" style="padding-top: 40px; padding-bottom: 60px;">
+        <h2 style="font-family: 'Shippori Mincho', serif; font-size: 28px; margin-bottom: 10px;">グラフィック表現の比較デモ</h2>
+        <p style="color: var(--color-ink-soft); margin-bottom: 30px;">「1. インラインSVG（静的ベクトル図）」と「2. HTML5 Canvas（インタラクティブ動的描画）」の見え方と操作性の違いをご確認ください。</p>
+
+        <div class="compare-container">
+            <!-- 1. Inline SVG -->
+            <div class="compare-card">
+                <span class="compare-title">1. インラインSVG (静的描画)</span>
+                <div class="graphic-area">
+                    <svg width="220" height="180" viewBox="0 0 220 180">
+                        <polygon points="50,70 110,40 170,70 110,100" fill="none" stroke="var(--color-brass)" stroke-width="2.5" stroke-linejoin="round"/>
+                        <polygon points="50,70 110,100 110,150 50,120" fill="none" stroke="var(--color-brass)" stroke-width="2.5" stroke-linejoin="round"/>
+                        <polygon points="170,70 110,100 110,150 170,120" fill="none" stroke="var(--color-brass)" stroke-width="2.5" stroke-linejoin="round"/>
+                        <line x1="50" y1="70" x2="110" y2="150" stroke="var(--color-red)" stroke-width="1.5" stroke-dasharray="3,3"/>
+                        <text x="110" y="25" font-size="12" font-weight="bold" fill="var(--color-ink)" text-anchor="middle">直方体 (静的モデル)</text>
+                    </svg>
+                </div>
+                <div class="instruction-tag">
+                    <strong>特徴:</strong> 画質が最も綺麗で軽量。<br>
+                    拡大・縮小しても輪郭が絶対にぼやけません。<br>
+                    （※ドラッグ操作等はできません）
+                </div>
+            </div>
+
+            <!-- 2. HTML5 Canvas -->
+            <div class="compare-card">
+                <span class="compare-title">2. HTML5 Canvas (インタラクティブ)</span>
+                <div class="graphic-area">
+                    <canvas id="interactiveCanvas" width="300" height="250" style="cursor: grab;"></canvas>
+                </div>
+                <div class="instruction-tag">
+                    <strong>特徴:</strong> マウスやタッチ操作でドラッグ可能。<br>
+                    <strong>【操作方法】</strong>枠内をドラッグすると、<br>
+                    3Dの直方体が追従して自由に回転します。
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 40px; text-align: center;">
+            <a href="40.html" class="btn btn-primary">単元40へ戻る</a>
+        </div>
+    </main>
+
+    <!-- Canvas 3D Rendering Script -->
+    <script>
+        const canvas = document.getElementById('interactiveCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // 3D vertices of a cuboid
+        let vertices = [
+            {x: -50, y: -35, z: -35},
+            {x: 50, y: -35, z: -35},
+            {x: 50, y: 35, z: -35},
+            {x: -50, y: 35, z: -35},
+            {x: -50, y: -35, z: 35},
+            {x: 50, y: -35, z: 35},
+            {x: 50, y: 35, z: 35},
+            {x: -50, y: 35, z: 35}
+        ];
+
+        // Wireframe edges connecting the vertices
+        const edges = [
+            [0, 1], [1, 2], [2, 3], [3, 0], // Back face
+            [4, 5], [5, 6], [6, 7], [7, 4], // Front face
+            [0, 4], [1, 5], [2, 6], [3, 7]  // Connecting edges
+        ];
+
+        // Angles of rotation (Euler angles)
+        let angleX = 0.5;
+        let angleY = 0.5;
+
+        // Mouse drag controls
+        let isDragging = false;
+        let previousMousePosition = { x: 0, y: 0 };
+
+        canvas.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            canvas.style.cursor = 'grabbing';
+            previousMousePosition = { x: e.clientX, y: e.clientY };
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDragging = false;
+            canvas.style.cursor = 'grab';
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            const deltaX = e.clientX - previousMousePosition.x;
+            const deltaY = e.clientY - previousMousePosition.y;
+
+            angleY += deltaX * 0.01;
+            angleX += deltaY * 0.01;
+
+            previousMousePosition = { x: e.clientX, y: e.clientY };
+            draw();
+        });
+
+        // Touch support
+        canvas.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                isDragging = true;
+                previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+            }
+        });
+
+        window.addEventListener('touchend', () => {
+            isDragging = false;
+        });
+
+        canvas.addEventListener('touchmove', (e) => {
+            if (!isDragging || e.touches.length !== 1) return;
+            const deltaX = e.touches[0].clientX - previousMousePosition.x;
+            const deltaY = e.touches[0].clientY - previousMousePosition.y;
+
+            angleY += deltaX * 0.01;
+            angleX += deltaY * 0.01;
+
+            previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+            draw();
+        });
+
+        // Project 3D points to 2D screen
+        function project(x, y, z) {
+            // Perspective factors
+            const fov = 300;
+            const distance = 200;
+            
+            // Apply rotation around Y axis
+            let cosY = Math.cos(angleY), sinY = Math.sin(angleY);
+            let x1 = x * cosY - z * sinY;
+            let z1 = x * sinY + z * cosY;
+
+            // Apply rotation around X axis
+            let cosX = Math.cos(angleX), sinX = Math.sin(angleX);
+            let y2 = y * cosX - z1 * sinX;
+            let z2 = y * sinX + z1 * cosX;
+
+            const scale = fov / (distance + z2);
+            return {
+                x: canvas.width / 2 + x1 * scale,
+                y: canvas.height / 2 + y2 * scale
+            };
+        }
+
+        // Draw loop
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Fetch CSS variable colors
+            const style = getComputedStyle(document.body);
+            const strokeColor = style.getPropertyValue('--color-brass').trim() || '#a88f5d';
+            
+            ctx.strokeStyle = strokeColor;
+            ctx.lineWidth = 2.5;
+            ctx.lineJoin = 'round';
+
+            // Draw edges
+            edges.forEach(edge => {
+                const p1 = project(vertices[edge[0]].x, vertices[edge[0]].y, vertices[edge[0]].z);
+                const p2 = project(vertices[edge[1]].x, vertices[edge[1]].y, vertices[edge[1]].z);
+
+                ctx.beginPath();
+                ctx.moveTo(p1.x, p1.y);
+                ctx.lineTo(p2.x, p2.y);
+                ctx.stroke();
+            });
+
+            // Draw vertices as small points
+            ctx.fillStyle = '#c84b31';
+            vertices.forEach(v => {
+                const p = project(v.x, v.y, v.z);
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+                ctx.fill();
+            });
+        }
+
+        // Idle animation if not dragging
+        function animate() {
+            if (!isDragging) {
+                angleY += 0.005;
+                angleX += 0.003;
+                draw();
+            }
+            requestAnimationFrame(animate);
+        }
+
+        // Initial paint & start animation
+        animate();
+    </script>
+</body>
+</html>
