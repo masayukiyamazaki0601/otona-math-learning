@@ -640,3 +640,121 @@ ul { list-style: none; }
     padding-top: 30px;
     margin-top: 60px;
 }
+
+/* Lesson Content Decorations */
+.lesson-flow {
+    position: relative;
+    padding-left: 35px;
+    border-left: 2px solid var(--color-paper-line);
+    margin-left: 15px;
+    margin-top: 30px;
+}
+
+.lesson-step {
+    position: relative;
+    margin-bottom: 50px;
+}
+
+.lesson-step::before {
+    content: '';
+    position: absolute;
+    left: -42px;
+    top: 5px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: var(--color-paper);
+    border: 3px solid var(--color-brass);
+}
+
+.lesson-step.alert::before {
+    border-color: var(--color-red);
+}
+
+.lesson-step.success::before {
+    border-color: var(--color-ink);
+    background-color: var(--color-ink);
+}
+
+.lesson-step h4 {
+    font-size: 20px;
+    margin-bottom: 12px;
+    font-family: var(--font-heading);
+}
+
+.lesson-step-meta {
+    font-family: var(--font-mono);
+    color: var(--color-brass);
+    font-size: 13px;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.lesson-step.alert .lesson-step-meta {
+    color: var(--color-red);
+}
+
+.lesson-step.success .lesson-step-meta {
+    color: var(--color-ink);
+}
+
+/* Callout Cards */
+.lesson-callout {
+    background-color: var(--color-paper);
+    border: 1px solid var(--color-paper-line);
+    border-radius: 6px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.lesson-callout-title {
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--color-ink);
+}
+
+.lesson-callout-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.grid-cell {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-paper-line);
+    padding: 16px;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.grid-cell .label {
+    font-size: 11px;
+    color: var(--color-ink-soft);
+    display: block;
+    margin-bottom: 4px;
+}
+
+.grid-cell .value {
+    font-family: var(--font-mono);
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.math-highlight {
+    font-family: var(--font-mono);
+    color: var(--color-red);
+    font-weight: 700;
+}
+
+.text-highlight {
+    border-bottom: 2px dotted var(--color-brass);
+    font-weight: 500;
+}
+
+.text-highlight-red {
+    border-bottom: 2px dotted var(--color-red);
+    font-weight: 500;
+}
