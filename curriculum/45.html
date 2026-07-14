@@ -147,17 +147,25 @@
                     <h4>立体の対角線への応用</h4>
                     <p>三平方の定理は、3次元の立体でも同様に活躍します。直方体の内部を対角線で切り裂くとき、直角三角形が2段階に組み合わさっていると考えることができます。</p>
                     
-                    <div class="lesson-callout" style="max-width: 500px; background-color: var(--color-surface); border-color: var(--color-paper-line);">
-                        <span class="lesson-callout-title" style="color: var(--color-brass);">直方体の対角線公式の仕組み</span>
-                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
-                            縦 $a$、横 $b$、高さ $c$ の直方体において、空間を斜めに突き抜ける最大の対角線の長さ $L$ は、以下の「3次元版・三平方の定理」で求められます。
-                        </p>
-                        <div style="font-size: 16px; text-align: center; margin: 12px 0; font-family: var(--font-mono); font-weight: bold; color: var(--color-teal);">
-                            <span style="white-space: nowrap;">$L = \sqrt{a^2 + b^2 + c^2}$</span>
+                    <div class="lesson-callout" style="max-width: 600px; background-color: var(--color-surface); border-color: var(--color-paper-line);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">立体対角線の可視化（ドラッグで3D回転可能）</span>
+                        <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 15px; align-items: center; justify-content: center;">
+                            <div style="position: relative; width: 180px; height: 140px; background-color: var(--color-paper); border-radius: 6px; border: 1px solid var(--color-paper-line); display: flex; justify-content: center; align-items: center; overflow: hidden;">
+                                <canvas id="spaceDiagonalCanvas" width="180" height="140" style="cursor: grab; display: block;"></canvas>
+                                <span style="position: absolute; bottom: 5px; right: 8px; font-size: 8px; color: var(--color-ink-soft); pointer-events: none;">ドラッグで回転</span>
+                            </div>
+                            <div style="flex: 1; min-width: 200px; font-size: 14px; line-height: 1.7;">
+                                <p style="margin-bottom: 8px;">
+                                    縦 $a$、横 $b$、高さ $c$ の直方体において、空間を斜めに突き抜ける対角線の長さ $L$ は以下の公式で求められます。
+                                </p>
+                                <div style="font-size: 16px; text-align: center; margin: 10px 0; font-family: var(--font-mono); font-weight: bold; color: var(--color-teal);">
+                                    <span style="white-space: nowrap;">$L = \sqrt{a^2 + b^2 + c^2}$</span>
+                                </div>
+                                <p style="font-size: 13px; line-height: 1.6; color: var(--color-ink-soft); margin-bottom: 0;">
+                                    底面の対角線（ <span style="color: #e67e22; font-weight: bold;">オレンジの線</span> ）を一度求め、その長さと高さ（ <span style="color: var(--color-brass); font-weight: bold;">真鍮色の線</span> ）で作る直角三角形に、もう一度定理をあてることで空間対角線（ <span style="color: #c84b31; font-weight: bold;">赤の線</span> ）が求まります。
+                                </p>
+                            </div>
                         </div>
-                        <p style="font-size: 13px; line-height: 1.6; color: var(--color-ink-soft); margin-bottom: 0;">
-                            底面の対角線（ $a^2 + b^2$ ）を一度求め、その長さと「高さ $c$ 」を用いてもう一度三平方の定理を適用することで、この美しい公式が導かれます。
-                        </p>
                     </div>
                 </div>
 
@@ -210,6 +218,170 @@
         </div>
     </footer>
     
+    <!-- Interactive Cuboid Space Diagonal Script -->
+    <script>
+        (function() {
+            const canvas = document.getElementById('spaceDiagonalCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            let angleX = 0.5;
+            let angleY = 0.6;
+            let isDragging = false;
+            let previousMousePosition = { x: 0, y: 0 };
+
+            canvas.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                canvas.style.cursor = 'grabbing';
+                previousMousePosition = { x: e.clientX, y: e.clientY };
+            });
+
+            window.addEventListener('mouseup', () => {
+                isDragging = false;
+                canvas.style.cursor = 'grab';
+            });
+
+            canvas.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                const deltaX = e.clientX - previousMousePosition.x;
+                const deltaY = e.clientY - previousMousePosition.y;
+                angleY += deltaX * 0.01;
+                angleX += deltaY * 0.01;
+                previousMousePosition = { x: e.clientX, y: e.clientY };
+                draw();
+            });
+
+            // Touch support
+            canvas.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 1) {
+                    isDragging = true;
+                    previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+                }
+            });
+
+            window.addEventListener('touchend', () => {
+                isDragging = false;
+            });
+
+            canvas.addEventListener('touchmove', (e) => {
+                if (!isDragging || e.touches.length !== 1) return;
+                const deltaX = e.touches[0].clientX - previousMousePosition.x;
+                const deltaY = e.touches[0].clientY - previousMousePosition.y;
+                angleY += deltaX * 0.01;
+                angleX += deltaY * 0.01;
+                previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+                draw();
+            });
+
+            function project(x, y, z) {
+                const fov = 200;
+                const distance = 160;
+                
+                let cosY = Math.cos(angleY), sinY = Math.sin(angleY);
+                let x1 = x * cosY - z * sinY;
+                let z1 = x * sinY + z * cosY;
+
+                let cosX = Math.cos(angleX), sinX = Math.sin(angleX);
+                let y2 = y * cosX - z1 * sinX;
+                let z2 = y * sinX + z1 * cosX;
+
+                const scale = fov / (distance + z2);
+                return {
+                    x: canvas.width / 2 + x1 * scale,
+                    y: canvas.height / 2 + y2 * scale
+                };
+            }
+
+            // Cuboid vertices (a=50, b=35, c=45)
+            const vertices = [
+                {x: -25, y: 22.5, z: -17.5}, // V0: Bottom-back-left
+                {x: 25, y: 22.5, z: -17.5},  // V1: Bottom-back-right
+                {x: 25, y: 22.5, z: 17.5},   // V2: Bottom-front-right
+                {x: -25, y: 22.5, z: 17.5},  // V3: Bottom-front-left
+                {x: -25, y: -22.5, z: -17.5},// V4: Top-back-left
+                {x: 25, y: -22.5, z: -17.5}, // V5: Top-back-right
+                {x: 25, y: -22.5, z: 17.5},  // V6: Top-front-right
+                {x: -25, y: -22.5, z: 17.5}  // V7: Top-front-left
+            ];
+
+            const normalEdges = [
+                [0, 1], [1, 2], [2, 3], [3, 0], // Bottom
+                [4, 5], [5, 6], [6, 7], [7, 4], // Top
+                [0, 4], [2, 6], [3, 7]  // Vertical side lines (excluding V1-V5 which is the height helper)
+            ];
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                const style = getComputedStyle(document.body);
+                const strokeColor = style.getPropertyValue('--color-brass').trim() || '#a88f5d';
+                
+                // Draw normal wireframe edges (thin and soft ink color)
+                ctx.strokeStyle = '#cccccc';
+                ctx.lineWidth = 1.2;
+                ctx.lineJoin = 'round';
+                normalEdges.forEach(edge => {
+                    const p1 = project(vertices[edge[0]].x, vertices[edge[0]].y, vertices[edge[0]].z);
+                    const p2 = project(vertices[edge[1]].x, vertices[edge[1]].y, vertices[edge[1]].z);
+                    ctx.beginPath();
+                    ctx.moveTo(p1.x, p1.y);
+                    ctx.lineTo(p2.x, p2.y);
+                    ctx.stroke();
+                });
+
+                // Project key vertices
+                const v3 = project(vertices[3].x, vertices[3].y, vertices[3].z); // Front-left-bottom
+                const v1 = project(vertices[1].x, vertices[1].y, vertices[1].z); // Back-right-bottom
+                const v5 = project(vertices[5].x, vertices[5].y, vertices[5].z); // Back-right-top
+
+                // 1. Draw Base Diagonal (Orange line, from V3 to V1)
+                ctx.strokeStyle = '#e67e22';
+                ctx.lineWidth = 2.2;
+                ctx.setLineDash([4, 3]);
+                ctx.beginPath();
+                ctx.moveTo(v3.x, v3.y);
+                ctx.lineTo(v1.x, v1.y);
+                ctx.stroke();
+                ctx.setLineDash([]); // Reset dash
+
+                // 2. Draw Height edge (Brass line, from V1 to V5)
+                ctx.strokeStyle = strokeColor;
+                ctx.lineWidth = 2.5;
+                ctx.beginPath();
+                ctx.moveTo(v1.x, v1.y);
+                ctx.lineTo(v5.x, v5.y);
+                ctx.stroke();
+
+                // 3. Draw Space Diagonal (Red line, from V3 to V5)
+                ctx.strokeStyle = '#c84b31';
+                ctx.lineWidth = 3.0;
+                ctx.beginPath();
+                ctx.moveTo(v3.x, v3.y);
+                ctx.lineTo(v5.x, v5.y);
+                ctx.stroke();
+
+                // Draw points on vertices V3, V1, V5 to highlight the right triangle
+                ctx.fillStyle = '#c84b31';
+                [v3, v1, v5].forEach(v => {
+                    ctx.beginPath();
+                    ctx.arc(v.x, v.y, 3.5, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+            }
+
+            function animate() {
+                if (!isDragging) {
+                    angleY += 0.005;
+                    angleX += 0.003;
+                    draw();
+                }
+                requestAnimationFrame(animate);
+            }
+
+            // Initial render
+            animate();
+        })();
+    </script>
+
     <!-- KaTeX for Math Rendering -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
