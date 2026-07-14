@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文字式の計算ルールと式の値 | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第3章 中学校数学の基礎固め &gt; 単元26
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 03 / Unit 26</span>
+                <h2 class="lesson-title">文字式の計算ルールと式の値</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>文字式のおさらいと更なるルール</h4>
+                    <p>前単元で学んだ「$\times$の省略」や「数字を前に書く」という基本ルールに加え、計算を簡潔にするための大切なルールがもう一つあります。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 500px;">
+                        <span class="lesson-callout-title">同じ文字の掛け算は「指数」を使う</span>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 0;">
+                            同じ文字を何回も掛けるときは、累乗（べき乗）の指数を使って表します。<br>
+                            ・$a \times a = a^2$ （$a$ の2乗）<br>
+                            ・$x \times x \times x = x^3$ （$x$ の3乗）
+                        </p>
+                    </div>
+                    <p>これにより、どれだけ文字の掛け算が連続しても、式を短くシンプルに保つことができます。</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>式の値とは</h4>
+                    <div class="lesson-callout" style="max-width: 550px; background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">数学の用語解説</span>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 0;">
+                            ・<strong>代入（だいにゅう）</strong>：文字式の文字（変数）の部分を、具体的な数値に置き換えること。<br>
+                            ・<strong>式の値（しきのあたい）</strong>：代入を行い、計算して得られた最終的な結果の数値のこと。
+                        </p>
+                    </div>
+                    <p>文字は「値を一時的に保管する箱」でした。箱の中身（変数 $x$ 等）に具体的な数字を当てはめて現実の計算結果を取り出す操作が「代入」であり、その答えが「式の値」です。</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>式の値を求める基本手順</h4>
+                    <p>式の値を求める計算は、以下の3つのステップに沿って正しく丁寧に行います。</p>
+                    
+                    <div class="lesson-callout">
+                        <span class="lesson-callout-title">計算プロセス</span>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 10px;">
+                            <strong>例題①： $3x + 2$ （$x = 4$ のとき）</strong>
+                        </p>
+                        <div class="math-formula" style="background-color: var(--color-surface); padding: 12px; margin-bottom: 20px; font-size: 15px; text-align: left;">
+                            1. 文字 $x$ を数字 $4$ に置き換える（このとき省略されていた $\times$ を復活させる）<br>
+                            2. 式： $3 \times 4 + 2$<br>
+                            3. 計算： $12 + 2 = 14 \quad \text{（式の値：14）}$
+                        </div>
+
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 10px;">
+                            <strong>例題②： $2a - 5$ （$a = 8$ のとき）</strong>
+                        </p>
+                        <div class="math-formula" style="background-color: var(--color-surface); padding: 12px; font-size: 15px; text-align: left;">
+                            1. 文字 $a$ を数字 $8$ に置き換える<br>
+                            2. 式： $2 \times 8 - 5$<br>
+                            3. 計算： $16 - 5 = 11 \quad \text{（式の値：11）}$
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>つまずきポイント：負の数を代入するとき</h4>
+                    <p>代入計算で最もミスが起きやすいのは、<strong>負の数（マイナスの数）を代入する場合</strong>です。符号のミスを防ぐため、<span class="text-highlight-red">負の数を代入するときは必ず「かっこ（ ）」で囲んで置き換える</span>ようにしてください。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-red); background-color: #fdfaf9;">
+                        <span class="lesson-callout-title" style="color: var(--color-red);">NG例とOK例の比較</span>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 10px;">
+                            <strong>例題： $5x - 3$ （$x = -2$ のとき）</strong>
+                        </p>
+                        <div class="lesson-callout-grid">
+                            <div class="grid-cell" style="background-color: var(--color-surface);">
+                                <span class="label" style="color: var(--color-red);">【NG】 かっこなし（ミスしやすい）</span>
+                                <span class="value" style="color: var(--color-red); font-size: 15px; line-height: 1.6; display: block; text-align: left; font-family: var(--font-mono);">
+                                    $5 \times -2 - 3$<br>
+                                    <span style="font-size: 11px; color: var(--color-ink-soft); font-family: var(--font-body);">※「掛ける」と「引く」の記号が連続してしまい、計算ミスや解釈ミスを誘発します。</span>
+                                </span>
+                            </div>
+                            <div class="grid-cell" style="background-color: var(--color-surface); border-color: var(--color-brass);">
+                                <span class="label" style="color: var(--color-brass);">【OK】 かっこ付き（安全・確実）</span>
+                                <span class="value" style="color: var(--color-brass); font-size: 15px; line-height: 1.6; display: block; text-align: left; font-family: var(--font-mono);">
+                                    $5 \times (-2) - 3$<br>
+                                    $= -10 - 3$<br>
+                                    $= -13$
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="lesson-step success">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>まとめ</h4>
+                    <ul>
+                        <li>同じ文字の掛け算は、指数を用いて表す（例: $a \times a = a^2$）。</li>
+                        <li>文字に具体的な数値を当てはめることを<strong>「代入」</strong>、その計算結果を<strong>「式の値」</strong>と呼ぶ。</li>
+                        <li>負の数（マイナス）を代入する場合は、符号ミスを防ぐために<strong>必ずかっこで囲む（ $x \to (-2)$ ）</strong>。</li>
+                    </ul>
+                    <p style="margin-top: 16px;">この代入操作と計算手順をマスターすることで、文字式で立てた数理モデルに実際のデータを流し込み、結果を算出する能力の土台が整います。</p>
+                </div>
+            </div>
+
+            <footer class="lesson-footer-nav">
+                <a href="25.html" class="btn-secondary">&larr; 前の単元へ</a>
+                <a href="index.html" class="btn-secondary">目次に戻る</a>
+                <a href="#" class="btn btn-primary">次の単元へ</a>
+            </footer>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>
