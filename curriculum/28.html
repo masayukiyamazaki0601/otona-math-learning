@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>等式の性質と方程式の概念 | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第3章 中学校数学の基礎固め &gt; 単元28
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 03 / Unit 28</span>
+                <h2 class="lesson-title">等式の性質と方程式の概念</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>なぜ方程式を学ぶのか</h4>
+                    <p>これまでの計算は、与えられた数式をルール通りに進めて「答え（右辺の値）」を求めるものでした。しかし、現実のビジネスや科学では、<strong>「結果（答え）から逆算して、原因である『分からない数（未知数）』を特定したい」</strong>という場面に数多く直面します。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 500px;">
+                        <span class="lesson-callout-title">逆算の必要性</span>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 0;">
+                            「ある数に $5$ を足すと $12$ になる」という問題で、知りたいのはその「ある数」です。このように、結果から逆算して正体を暴くためのツールが<strong>方程式（ほうていしき）</strong>です。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>等式・方程式とは</h4>
+                    <div class="lesson-callout" style="max-width: 550px; background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">数学の用語解説</span>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 0;">
+                            ・<strong>等式（とうしき）</strong>：「$=$」（等号）を使って、2つの式や数値が等しいことを表した式。<br>
+                            ・<strong>左辺・右辺・両辺</strong>：等式の左側を<strong>左辺（さへん）</strong>、右側を<strong>右辺（うへん）</strong>、両方を合わせて<strong>両辺（りょうへん）</strong>と呼ぶ。<br>
+                            ・<strong>方程式</strong>：文字（変数）を含み、その文字の値によって成り立ったり成り立たなかったりする等式。<br>
+                            ・<strong>解（かい）</strong>：方程式を成り立たせる文字の値のこと。解を求める操作を「方程式を<strong>解く</strong>」という。
+                        </p>
+                    </div>
+                    <p>例えば、$x + 5 = 12$ は等式かつ方程式です。この式は $x = 7$ のときだけ成り立ち、それ以外（例: $x = 3$）では成り立ちません。このときの $x = 7$ がこの方程式の「解」になります。</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>等式の性質：天秤（てんびん）のイメージ</h4>
+                    <p>方程式を解いて解を暴き出すとき、ベースとなるのが<strong>等式の性質</strong>です。等式は、左右の重さが釣り合っている「天秤（てんびん）」に例えられます。</p>
+                    
+                    <div style="display: flex; flex-direction: column; align-items: center; margin: 24px 0; padding: 20px; background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px;">
+                        <span style="font-size: 14px; font-weight: bold; margin-bottom: 12px; color: var(--color-ink);">天秤のバランスモデル</span>
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 30px; width: 100%; max-width: 400px; border-bottom: 3px solid var(--color-ink); padding-bottom: 10px; position: relative;">
+                            <!-- Left Plate -->
+                            <div style="background-color: var(--color-surface); border: 2px solid var(--color-paper-line); padding: 10px 20px; border-radius: 4px; font-family: var(--font-mono); font-weight: bold; font-size: 16px;">
+                                左辺
+                            </div>
+                            <!-- Pivot -->
+                            <div style="font-size: 24px; font-weight: bold; color: var(--color-red); position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);">
+                                ▲
+                            </div>
+                            <!-- Right Plate -->
+                            <div style="background-color: var(--color-surface); border: 2px solid var(--color-paper-line); padding: 10px 20px; border-radius: 4px; font-family: var(--font-mono); font-weight: bold; font-size: 16px;">
+                                右辺
+                            </div>
+                        </div>
+                        <span style="font-size: 12px; color: var(--color-ink-soft); margin-top: 15px;">釣り合い（＝）を保つ限り、両辺にどんな操作をしても等しさは維持されます。</span>
+                    </div>
+
+                    <p>釣り合っている天秤の左右に、<strong>「同じ操作」</strong>をする限りバランスは崩れません。これが等式の持つ4つの黄金律です。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 550px;">
+                        <span class="lesson-callout-title">等式における4つのルール</span>
+                        <ul style="font-size: 14px; line-height: 1.7; margin-bottom: 0; padding-left: 20px; list-style: decimal;">
+                            <li>両辺に<strong>同じ数を足しても</strong>、等式は成り立つ。 ($A = B \implies A + C = B + C$)</li>
+                            <li>両辺から<strong>同じ数を引いても</strong>、等式は成り立つ。 ($A = B \implies A - C = B - C$)</li>
+                            <li>両辺に<strong>同じ数を掛けても</strong>、等式は成り立つ。 ($A = B \implies A \times C = B \times C$)</li>
+                            <li>両辺を<strong>同じ数（0以外）で割っても</strong>、等式は成り立つ。 ($A = B \implies A \div C = B \div C$)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>等式の性質を使った計算例</h4>
+                    <p>方程式を解くゴールは、天秤を整理して<strong>「 $x = \text{数値}$ （文字だけを片側に残す）」</strong>の形にすることです。等式の性質を駆使して邪魔な数字を消去していきます。</p>
+                    
+                    <div class="lesson-callout">
+                        <span class="lesson-callout-title">解法プロセス</span>
+                        
+                        <h5 style="margin-top: 10px;">例題①： $x + 4 = 10$</h5>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 5px;">
+                            左辺の「$+ 4$」を消去したいため、<strong>両辺から $4$ を引きます</strong>。
+                        </p>
+                        <div class="math-formula" style="background-color: var(--color-surface); padding: 12px; margin-bottom: 20px; font-size: 15px;">
+                            $$x + 4 - 4 = 10 - 4$$
+                            $$x = 6$$
+                        </div>
+
+                        <h5>例題②： $3x = 15$</h5>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 5px;">
+                            左辺の「掛ける $3$」を消去したいため、<strong>両辺を $3$ で割ります</strong>。
+                        </p>
+                        <div class="math-formula" style="background-color: var(--color-surface); padding: 12px; font-size: 15px;">
+                            $$\frac{3x}{3} = \frac{15}{3}$$
+                            $$x = 5$$
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>データサイエンスとの繋がり：AIの学習とは方程式を解くこと</h4>
+                    <p>現代のAIや機械学習の根幹は、実はこの<strong>「方程式を解いて解（パラメータ）を特定する」</strong>というプロセスそのものです。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">機械学習（単回帰分析）での方程式の応用</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            例えば、住宅の「広さ $x$」から「価格 $y$」を予測する単純なAIモデルは、以下の方程式で表されます：
+                        </p>
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 16px; font-weight: bold; margin-bottom: 12px;">
+                            $$y = w \cdot x + b$$
+                        </div>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            この式において、過去の取引データから「広さ $x$」と「実際の価格 $y$」が大量に与えられます。AIの役割は、すべてのデータに対してこの等式が最もきれいに成り立つような**未知数 $w$ （影響度）と $b$ （基本価格）の値を逆算して求める（方程式を解く）**ことなのです。
+                        </p>
+                    </div>
+                    <p style="margin-top: 16px;">機械学習モデルを最適化する「学習」という作業は、等式の釣り合いを保ちながら最適な解を探索する計算の超大規模な応用版にほかなりません。</p>
+                </div>
+
+                <!-- Step 6 -->
+                <div class="lesson-step success">
+                    <span class="lesson-step-meta">Step 06</span>
+                    <h4>まとめ</h4>
+                    <ul>
+                        <li>等式とは、等号「$=$」を用いて左右が等しいことを表した式である。</li>
+                        <li>方程式とは、特定の文字の値（解）のときだけ成り立つ等式であり、解を特定する操作を「解く」という。</li>
+                        <li>方程式を解く際は、<strong>天秤の釣り合いを保つように「両辺に全く同じ操作」を行う</strong>等式の性質を利用する。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <footer class="lesson-footer-nav">
+                <a href="27.html" class="btn-secondary">&larr; 前の単元へ</a>
+                <a href="index.html" class="btn-secondary">目次に戻る</a>
+                <a href="#" class="btn btn-primary">次の単元へ</a>
+            </footer>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>
