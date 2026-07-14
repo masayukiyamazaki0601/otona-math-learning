@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>平面図形の基礎（角度・面積計算） | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第3章 中学校数学の基礎固め &gt; 単元39
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 03 / Unit 39</span>
+                <h2 class="lesson-title">平面図形の基礎（角度・面積計算）</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>なぜ平面図形を学ぶのか</h4>
+                    <p>私たちの身の回りの空間は、三角形、四角形、円などの基本的な「形（平面図形）」で埋め尽くされています。土地の広さを測る、床にカーペットを敷く、家具の配置を考えるなど、広さや角度を扱うすべての場面で図形の知識が使われています。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 500px;">
+                        <span class="lesson-callout-title">空間を数字で切り取る</span>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 0;">
+                            図形のルール（角度や面積の公式）を学ぶことで、私たちは感覚的な「広い・狭い」ではなく、数字を使って正確に空間を設計し、伝えることができるようになります。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>角度の基本と基準角</h4>
+                    <p>「角（かく）」とは、1本の点から分かれて伸びる2本の直線の間の「開きの大きさ」です。角度は **度（ $\circ$ ）** を単位として測り、以下の3つの角度がすべての計算の基準になります。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 550px;">
+                        <span class="lesson-callout-title">基準となる角度</span>
+                        <div class="lesson-callout-grid">
+                            <div class="grid-cell" style="background-color: var(--color-surface); border-color: var(--color-paper-line);">
+                                <span class="label" style="color: var(--color-brass);">① 直角（ $90^\circ$ ）</span>
+                                <span class="value" style="font-size: 14px; line-height: 1.6; text-align: left; display: block;">
+                                    L字型の開き。垂直に交わる最も身近な角度。
+                                </span>
+                            </div>
+                            <div class="grid-cell" style="background-color: var(--color-surface); border-color: var(--color-paper-line);">
+                                <span class="label" style="color: var(--color-brass);">② 平角（ $180^\circ$ ）</span>
+                                <span class="value" style="font-size: 14px; line-height: 1.6; text-align: left; display: block;">
+                                    真横に伸びる一直線。角度計算で非常によく使う基準。
+                                </span>
+                            </div>
+                            <div class="grid-cell" style="background-color: var(--color-surface); border-color: var(--color-paper-line);">
+                                <span class="label" style="color: var(--color-brass);">③ 一回転（ $360^\circ$ ）</span>
+                                <span class="value" style="font-size: 14px; line-height: 1.6; text-align: left; display: block;">
+                                    ぐるりと元の向きに戻る全周の角度。
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>三角形と四角形の内角の和</h4>
+                    <p>図形の内側の角度の合計（内角の和）には、絶対に変わらない不変のルールがあります。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 500px; background-color: var(--color-surface); border-color: var(--color-paper-line);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">内角の和ルール</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 10px;">
+                            ・<strong>三角形の内角の和 ＝ $180^\circ$</strong><br>
+                            &emsp;どんなに細長い三角形でも、3つの角を足すと必ず $180^\circ$ になります。<br>
+                            &emsp;（例：2つの角が $50^\circ, 70^\circ$ なら、残りは $180 - 50 - 70 = 60^\circ$ ）
+                        </p>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            ・<strong>四角形の内角の和 ＝ $360^\circ$</strong><br>
+                            &emsp;四角形は対角線で2つの三角形に分けられるため、 $180 \times 2 = 360^\circ$ になります。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>基本的な面積の公式</h4>
+                    <p>「面積（めんせき）」とは、図形が占める平らな「広さ」の量です。図形の形に合わせて、以下の公式を使い分けます。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 550px;">
+                        <span class="lesson-callout-title">面積公式リスト</span>
+                        <table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px;">
+                            <thead>
+                                <tr style="border-bottom: 2px solid var(--color-paper-line); background-color: var(--color-surface);">
+                                    <th style="padding: 8px; text-align: left;">図形</th>
+                                    <th style="padding: 8px; text-align: left;">公式</th>
+                                    <th style="padding: 8px; text-align: left;">注意点</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border-bottom: 1px solid var(--color-paper-line);">
+                                    <td style="padding: 8px; text-align: left; font-weight: bold;">長方形・正方形</td>
+                                    <td style="padding: 8px; text-align: left; font-family: var(--font-mono); font-weight: bold;">縦 &times; 横</td>
+                                    <td style="padding: 8px; text-align: left;">隣り合う辺を掛けるだけ。</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--color-paper-line);">
+                                    <td style="padding: 8px; text-align: left; font-weight: bold;">三角形</td>
+                                    <td style="padding: 8px; text-align: left; font-family: var(--font-mono); font-weight: bold;">(底辺 &times; 高さ) &divide; 2</td>
+                                    <td style="padding: 8px; text-align: left;">最後に「2で割る」のを忘れない。</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--color-paper-line);">
+                                    <td style="padding: 8px; text-align: left; font-weight: bold;">平行四辺形</td>
+                                    <td style="padding: 8px; text-align: left; font-family: var(--font-mono); font-weight: bold;">底辺 &times; 高さ</td>
+                                    <td style="padding: 8px; text-align: left;">「高さ」は斜めの辺ではない。</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p style="font-size: 13px; color: var(--color-ink-soft); margin-top: 10px;">※重要：図形における「高さ」とは、**底辺に対して「垂直（ $90^\circ$ ）」に交わる長さ**を指します。斜めの辺を高さと勘違いしないよう注意しましょう。</p>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="lesson-step success">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>まとめ</h4>
+                    <ul>
+                        <li>角度は $90^\circ$ （直角）や $180^\circ$ （直線）を基準に逆算して求める。</li>
+                        <li>三角形の内角の和は $180^\circ$、四角形の内角の和は $360^\circ$ で常に固定である。</li>
+                        <li>面積計算では、斜めの辺に惑わされず、**底辺に対して垂直に伸びる「本当の高さ」を見極めて**公式に代入する。</li>
+                    </ul>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】身近なAIとの繋がり：ロボット掃除機（ルンバ）が部屋を隅々まで賢く掃除する仕組み</h4>
+                    <p>スイッチを入れると、部屋の中を自動で走り回って綺麗にしてくれるロボット掃除機。家具を避けながら、同じ場所を何度も通らずに最も効率よく部屋を巡回する裏側には、まさに「平面図形の角度と面積」のルールが使われています。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">部屋を「図形の集まり」としてマッピングする</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            ロボット掃除機は、内蔵のセンサーやレーザーを使って、あなたの部屋の形を「四角形や多角形の組み合わせ（平面図形）」としてリアルタイムに計測（マッピング）しています。
+                        </p>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            AIは、部屋全体の「面積（広さ）」を計算してバッテリー残量から掃除に必要な時間を逆算します。さらに、掃除機が壁や障害物に突き当たったとき、内蔵AIは「角度（ $90^\circ$ や $180^\circ$ ）」を計算して綺麗に向きを変え、床全体の面積を残さず塗りつぶすようにルートをコントロールしています。ロボット掃除機が賢く部屋を巡回できるのは、私たちの部屋を図形としてデジタルデータ化し、幾何学の計算を行っているからなのです。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="lesson-footer-nav">
+                <a href="38.html" class="btn-secondary">&larr; 前の単元へ</a>
+                <a href="index.html" class="btn-secondary">目次に戻る</a>
+                <a href="#" class="btn btn-primary">次の単元へ</a>
+            </footer>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>
