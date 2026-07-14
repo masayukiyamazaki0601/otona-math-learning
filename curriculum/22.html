@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>絶対値の意味と距離としての解釈 | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第3章 中学校数学の基礎固め &gt; 単元22
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 03 / Unit 22</span>
+                <h2 class="lesson-title">絶対値の意味と距離としての解釈</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>なぜ絶対値が必要になったのか</h4>
+                    <p>日常生活では、「どれくらい離れているか」を知りたい場面がよくあります。例えば、気温が<span class="text-highlight">$5$</span>℃の日と<span class="text-highlight-red">$-5$</span>℃の日では気温そのものは異なりますが、<span class="text-highlight">0℃からどれだけ離れているか</span>を考えると、どちらも<span class="text-highlight">5℃分</span>離れています。</p>
+                    <p>数学でも同じように、「正か負か」という方向ではなく、「どれだけ離れているか（大きさ）」だけを表したい場面があります。しかし、普通に数を使うと、$5$ と $-5$ は全く別の値として扱われてしまいます。そこで考えられたのが<span class="text-highlight">絶対値</span>です。絶対値を使えば、数の向きを無視して、大きさや距離だけを取り出すことができます。</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>絶対値とは</h4>
+                    <p>絶対値とは、<span class="text-highlight">数直線上で0からその数までの距離</span>のことです。距離には「逆方向」などの向きがないため、絶対値は必ず<span class="text-highlight">0以上</span>になります。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 450px;">
+                        <span class="lesson-callout-title">絶対値の記法（$|\ |$）と具体例</span>
+                        <div class="lesson-callout-grid">
+                            <div class="grid-cell">
+                                <span class="label">正の数の絶対値</span>
+                                <span class="value" style="color: var(--color-ink); font-size: 18px;">$|5| = 5$</span>
+                            </div>
+                            <div class="grid-cell">
+                                <span class="label">負の数の絶対値</span>
+                                <span class="value" style="color: var(--color-ink); font-size: 18px;">$|-5| = 5$</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p>$5$ も $-5$ も、数直線においては0から同じ「$5$」だけ離れた位置にあるため、絶対値はどちらも同じになります。</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>数直線で考えてみよう</h4>
+                    <p>この関係を視覚的な数直線（0からの距離）で表現すると、次のようになります。</p>
+                    
+                    <div class="number-line-container">
+                        <div class="number-line">
+                            <!-- Arch from -5 to 0 -->
+                            <div class="number-line-arch" style="left: 20%; width: 30%;">
+                                <span>距離: 5</span>
+                            </div>
+                            <!-- Arch from 0 to 5 -->
+                            <div class="number-line-arch" style="left: 50%; width: 30%;">
+                                <span>距離: 5</span>
+                            </div>
+                            <!-- Axis line -->
+                            <div class="number-line-axis"></div>
+                            <!-- Points -->
+                            <div class="number-line-point" style="left: 20%;">
+                                <span>-5</span>
+                            </div>
+                            <div class="number-line-point origin" style="left: 50%;">
+                                <span>0</span>
+                            </div>
+                            <div class="number-line-point" style="left: 80%;">
+                                <span>5</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p>$0$ から $-5$ までの距離も、$0$ から $5$ までの距離も等しく「$5$」です。この「$0$ からの距離」こそが絶対値の本質です。</p>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="lesson-step success">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>2つの数の距離も表せる</h4>
+                    <p>絶対値は、「$0$ からの距離」だけではありません。<span class="text-highlight">2つの数の間の距離</span>を表す際にも応用できます。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 500px;">
+                        <span class="lesson-callout-title">2数間の距離</span>
+                        <div class="lesson-callout-grid">
+                            <div class="grid-cell">
+                                <span class="label">7 から 3 までの距離</span>
+                                <span class="value" style="color: var(--color-brass); font-size: 18px;">$|7 - 3| = 4$</span>
+                            </div>
+                            <div class="grid-cell">
+                                <span class="label">3 から 7 までの距離</span>
+                                <span class="value" style="color: var(--color-brass); font-size: 18px;">$|3 - 7| = 4$</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p>計算順序を逆にしても、絶対値の中身は $4$ と $-4$ になり、その絶対値はどちらも同じ $4$ になります。一般に、任意の数 $a$ と $b$ の間の距離は、次の式で表すことができます。</p>
+                    <div class="math-formula">
+                        $$|a - b|$$
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="lesson-step success">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>まとめ</h4>
+                    <p>絶対値は、数の正負（方向）ではなく<span class="text-highlight">純粋な距離</span>を表すために考えられた概念です。</p>
+                    <p>単に「符号を取り去るもの」と暗記するのではなく、常に「数直線上の距離である」というイメージで理解しておくことで、今後の学習で登場する「絶対値を含む方程式・不等式」なども直感的に理解しやすくなります。</p>
+                </div>
+            </div>
+
+            <footer class="lesson-footer-nav">
+                <a href="21.html" class="btn-secondary">&larr; 前の単元へ</a>
+                <a href="index.html" class="btn-secondary">目次に戻る</a>
+                <a href="#" class="btn btn-primary">次の単元へ</a>
+            </footer>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>
