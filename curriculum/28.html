@@ -119,27 +119,51 @@
                 <div class="lesson-step">
                     <span class="lesson-step-meta">Step 04</span>
                     <h4>等式の性質を使った計算例</h4>
-                    <p>方程式を解くゴールは、天秤を整理して<strong>「 $x = \text{数値}$ （文字だけを片側に残す）」</strong>の形にすることです。等式の性質を駆使して邪魔な数字を消去していきます。</p>
+                    <p>方程式を解くゴールは、天秤を整理して<strong>「 $x = \text{数値}$ （文字だけを片側に残す）」</strong>の形にすることです。等式の性質を駆使して、4つの演算パターンそれぞれで邪魔な数字を打ち消していきます。</p>
                     
                     <div class="lesson-callout">
-                        <span class="lesson-callout-title">解法プロセス</span>
-                        
-                        <h5 style="margin-top: 10px;">例題①： $x + 4 = 10$</h5>
-                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 5px;">
-                            左辺の「$+ 4$」を消去したいため、<strong>両辺から $4$ を引きます</strong>。
-                        </p>
-                        <div class="math-formula" style="background-color: var(--color-surface); padding: 12px; margin-bottom: 20px; font-size: 15px;">
-                            $$x + 4 - 4 = 10 - 4$$
-                            $$x = 6$$
-                        </div>
-
-                        <h5>例題②： $3x = 15$</h5>
-                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 5px;">
-                            左辺の「掛ける $3$」を消去したいため、<strong>両辺を $3$ で割ります</strong>。
-                        </p>
-                        <div class="math-formula" style="background-color: var(--color-surface); padding: 12px; font-size: 15px;">
-                            $$\frac{3x}{3} = \frac{15}{3}$$
-                            $$x = 5$$
+                        <span class="lesson-callout-title">4つの消去パターン</span>
+                        <div class="lesson-callout-grid" style="grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <!-- Pattern 1: Add -->
+                            <div class="grid-cell" style="text-align: left; background-color: var(--color-surface); border-color: var(--color-paper-line);">
+                                <span class="label" style="color: var(--color-brass);">① 引き算を足し算で消す</span>
+                                <span class="value" style="font-size: 14px; line-height: 1.6; display: block; font-family: var(--font-mono);">
+                                    $x - 3 = 7$<br>
+                                    両辺に $3$ を足す：<br>
+                                    $x - 3 \textcolor{#B4432F}{+ 3} = 7 \textcolor{#B4432F}{+ 3}$<br>
+                                    <strong>$x = 10$</strong>
+                                </span>
+                            </div>
+                            <!-- Pattern 2: Subtract -->
+                            <div class="grid-cell" style="text-align: left; background-color: var(--color-surface); border-color: var(--color-paper-line);">
+                                <span class="label" style="color: var(--color-brass);">② 足し算を引き算で消す</span>
+                                <span class="value" style="font-size: 14px; line-height: 1.6; display: block; font-family: var(--font-mono);">
+                                    $x + 4 = 10$<br>
+                                    両辺から $4$ を引く：<br>
+                                    $x + 4 \textcolor{#B4432F}{- 4} = 10 \textcolor{#B4432F}{- 4}$<br>
+                                    <strong>$x = 6$</strong>
+                                </span>
+                            </div>
+                            <!-- Pattern 3: Multiply -->
+                            <div class="grid-cell" style="text-align: left; background-color: var(--color-surface); border-color: var(--color-paper-line);">
+                                <span class="label" style="color: var(--color-brass);">③ 割り算を掛け算で消す</span>
+                                <span class="value" style="font-size: 14px; line-height: 1.6; display: block; font-family: var(--font-mono);">
+                                    $\frac{x}{2} = 8$<br>
+                                    両辺に $2$ を掛ける：<br>
+                                    $\frac{x}{2} \textcolor{#B4432F}{\times 2} = 8 \textcolor{#B4432F}{\times 2}$<br>
+                                    <strong>$x = 16$</strong>
+                                </span>
+                            </div>
+                            <!-- Pattern 4: Divide -->
+                            <div class="grid-cell" style="text-align: left; background-color: var(--color-surface); border-color: var(--color-paper-line);">
+                                <span class="label" style="color: var(--color-brass);">④ 掛け算を割り算で消す</span>
+                                <span class="value" style="font-size: 14px; line-height: 1.6; display: block; font-family: var(--font-mono);">
+                                    $3x = 15$<br>
+                                    両辺を $3$ で割る：<br>
+                                    $\frac{3x}{\textcolor{#B4432F}{3}} = \frac{15}{\textcolor{#B4432F}{3}}$<br>
+                                    <strong>$x = 5$</strong>
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
