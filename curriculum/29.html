@@ -151,30 +151,25 @@
                 <!-- Column -->
                 <div class="lesson-step alert">
                     <span class="lesson-step-meta">番外編 (Column)</span>
-                    <h4>【番外編】データサイエンスとの繋がり：決定境界（Decision Boundary）を描く数式変形</h4>
-                    <p>機械学習の「分類」タスクにおいて、移項による数式変形は決定的な役割を果たしています。</p>
+                    <h4>【番外編】身近なAIとの繋がり：スパムメール仕分けAIの「判定基準」の変形</h4>
+                    <p>スマートフォンのメールアプリには、怪しい迷惑メールを検知して自動的に「迷惑メールフォルダ」へ放り込んでくれるAIフィルター（スパムフィルター）が備わっています。このAIが境界線を決める計算の中で、「移項」と同じルールが使われています。</p>
                     
                     <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
-                        <span class="lesson-callout-title" style="color: var(--color-brass);">AIが引く境界線の方程式</span>
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">「判定ルール」を移項で整理して実行する</span>
                         <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
-                            AIが「犬か猫か」「スパムメールかそうでないか」を判定する際、2つの特徴量（データ項目 $x_1, x_2$）の間に境界線を引きます。この線を**決定境界（Decision Boundary）**と呼び、以下の方程式で表されます：
+                            AIは、メールに含まれる「怪しい言葉の数（$x$）」と、それが迷惑メールである「判定基準値」を数式で持っています。
                         </p>
-                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 16px; font-weight: bold; margin-bottom: 12px;">
-                            $$w_1 x_1 + w_2 x_2 + b = 0$$
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 14px; text-align: left; margin-bottom: 12px; font-family: var(--font-mono);">
+                            ・初期の判定条件： $\mathbf{x - 10 > 0}$ （怪しい言葉から基準10を引いて0より大きければスパム）
                         </div>
                         <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
-                            このままだとグラフ上に線を描くことができません。そこで、縦軸を $x_2$、横軸を $x_1$ として、見慣れた一次関数（直線）の式に変換するため、文字式を<strong>移項</strong>します。
+                            このままだと、メールが届くたびに毎回引き算をして判定しなければならず非効率です。そこで、AIは判定ロジックを整理するために $-10$ を右辺に**移項**します：
                         </p>
-                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 15px; text-align: left; margin-bottom: 12px; font-family: var(--font-mono);">
-                            1. $w_1 x_1$ と $b$ を右辺へ移項する（符号がマイナスに反転する）：<br>
-                            $\quad w_2 x_2 = -w_1 x_1 - b$<br><br>
-                            2. 両辺を $w_2$ で割る：<br>
-                            $\quad x_2 = \left( -\frac{w_1}{w_2} \right) x_1 - \frac{b}{w_2}$
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 14px; text-align: left; margin-bottom: 0; font-family: var(--font-mono);">
+                            ・変形後： $\mathbf{x > 10}$ （怪しい言葉が10個より多ければスパム）
                         </div>
-                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
-                            この変形により、傾きが $-\frac{w_1}{w_2}$、切片が $-\frac{b}{w_2}$ の直線であることが分かり、プログラムでグラフ上に境界線を綺麗に描画できるようになります。中学で学ぶ移項は、AIモデルの判断軸をビジュアル化するための必須技術なのです。
-                        </p>
                     </div>
+                    <p style="margin-top: 16px;">このように、条件式の「 $-10$ 」を移項して「 $+10$ 」に反転させておくことで、AIは『怪しいワード数が10を超えているか？』というシンプルな比較処理だけで迷惑メールを一瞬で判定できるようになります。移項による数式の整理は、AIを高速かつシンプルに動かすための重要なステップなのです。</p>
                 </div>
             </div>
 

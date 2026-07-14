@@ -162,21 +162,20 @@
                 <!-- Column -->
                 <div class="lesson-step alert">
                     <span class="lesson-step-meta">番外編 (Column)</span>
-                    <h4>【番外編】データサイエンスとの繋がり：プログラミングの「変数」とAIの「特徴量」</h4>
-                    <p>プログラミング学習やAI開発において、「変数」という言葉を聞かない日はありません。数学の「文字 $x$ 」こそが、まさにプログラミングにおける変数そのものです。</p>
+                    <h4>【番外編】身近なAIとの繋がり：レシピ自動調整AIで人数を文字 $x$ で表す仕組み</h4>
+                    <p>料理のレシピアプリで、「2人前」のレシピを「5人前」や「10人前」にワンタップで自動切り替えする機能があります。この裏側では、材料の分量を「文字を使った式」で表すルールが動いています。</p>
                     
                     <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
-                        <span class="lesson-callout-title" style="color: var(--color-brass);">数学の文字 ＝ プログラムの変数 ＝ AIの特徴量</span>
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">「人数」を文字 $x$ とおいて万能な計算式にする</span>
                         <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
-                            Pythonなどのプログラミング言語では、数値を代入するために文字（変数）を使用します。
+                            例えば、あるカレーのレシピで「1人あたり肉が $150\text{ g}$ 必要」だとします。
                         </p>
-                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 14px; text-align: left; margin-bottom: 12px; font-family: var(--font-mono); font-weight: bold;">
-                            # Pythonでの代入<br>
-                            x = 5<br>
-                            price = 120 * x
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 14px; text-align: left; margin-bottom: 12px; font-family: var(--font-mono);">
+                            ・人数を文字 $\mathbf{x}$ 人とおく<br>
+                            ・必要な肉の量 ＝ $\mathbf{150x}$ グラム
                         </div>
                         <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
-                            さらにデータサイエンスの世界では、この変数（$x$）をデータの項目名として捉え、**「特徴量（Feature）」**と呼びます。例えば、住宅価格を予測するAIにとって、「広さ」「築年数」「駅からの距離」などがそれぞれ $x_1, x_2, x_3$ という文字変数（特徴量）に対応します。数式を文字で一般化して表す力は、データをコンピュータに処理させるための根本の設計思想なのです。
+                            このように文字式を作っておけば、ユーザーが何人前を指定しようとも、アプリ内のAIは「 $x$ にその人数を代入するだけ」で一瞬で全員分の材料リストを作成してくれます。もし人数ごとに「1人前は150、2人前は300、3人前は450…」と個別にデータを書き並べていたら、アプリの動作は重くなってしまいます。どんな人数にも対応できる「魔法の汎用公式」を作るために、文字式はなくてはならない技術なのです。
                         </p>
                     </div>
                 </div>

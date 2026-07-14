@@ -139,22 +139,20 @@
                 <!-- Column -->
                 <div class="lesson-step alert">
                     <span class="lesson-step-meta">番外編 (Column)</span>
-                    <h4>【番外編】データサイエンスとの繋がり：ビジネス課題を数式化する「数理定式化」のスキル</h4>
-                    <p>データサイエンスやAIの業務において、この「文章題を方程式に変形する」というスキルは、最も高単価で価値の高い職能である**「数理定式化（Formulation）」**そのものです。</p>
+                    <h4>【番外編】身近なAIとの繋がり：乗り換え案内アプリが「最良ルート」を解く仕組み</h4>
+                    <p>乗り換え案内や旅行予約アプリで、「料金が最も安いルート」や「最も早く着くルート」をAIが一瞬で提示してくれる機能があります。この裏で動いているのが、「文章題の条件から式を作り、未知数を解く」という考え方です。</p>
                     
                     <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
-                        <span class="lesson-callout-title" style="color: var(--color-brass);">数理最適化（広告予算配分の例）</span>
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">「制約条件」を式にしてコンピュータに解かせる</span>
                         <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
-                            例えば、ある企業が広告予算100万円を使って、ネット広告（出稿量 $x_1$）とSNS広告（出稿量 $x_2$）の配分を決定し、最大の効果を得たいとします。データサイエンティストは、このビジネス上の要望をコンピュータが計算できるように以下のように定式化します：
+                            例えば、あなたがアプリに「予算は3万円以内（$x \le 30000$）」「夜20時までに到着したい（時間 $y \le 20$）」という条件を入力したとします。
                         </p>
-                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 15px; text-align: left; margin-bottom: 12px; font-family: var(--font-mono);">
-                            ・<strong>最大化したい目的（目的関数）</strong>：<br>
-                            $\quad \text{広告効果} = 3 x_1 + 5 x_2$<br><br>
-                            ・<strong>予算の限界（制約条件）</strong>：<br>
-                            $\quad 100 x_1 + 150 x_2 \le 1,000,000$ （1,000,000円以下）
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 14px; text-align: left; margin-bottom: 12px; font-family: var(--font-mono);">
+                            ・ユーザーの要望（文章） &rarr; コンピュータが計算できる「条件式」に自動変換<br>
+                            ・AIの処理： 路線ネットワークの何千通りもの組み合わせから、条件式をすべてクリアするルート（方程式の解）を算出する
                         </div>
                         <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
-                            このように、ビジネスのルール（文章・条件）を数学的な制約式と目的関数に変形する能力は、中学数学の「文章題の立式」の延長線上にあります。どれだけ計算ライブラリが進化しても、この「定式化」のステップだけは人間の論理的思考力が不可欠であり、だからこそデータサイエンスの現場で極めて高く評価されるのです。
+                            どれだけAIやスマートフォンの性能が上がっても、「現実世界の要望（文章）を、計算できる数式に変換する（定式化する）」という基本がなければ、AIはルートを計算することができません。文章題で磨く『問題文の条件を数式にする力』は、私たちの移動を最適化するAIテクノロジーの出発点なのです。
                         </p>
                     </div>
                 </div>

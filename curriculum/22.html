@@ -134,25 +134,25 @@
                 <!-- Column -->
                 <div class="lesson-step alert">
                     <span class="lesson-step-meta">番外編 (Column)</span>
-                    <h4>【番外編】データサイエンスとの繋がり：AIの予測誤差を測る「MAE（平均絶対誤差）」</h4>
-                    <p>機械学習モデル（AI）を作った際、「そのAIがどれだけ正確に予測できているか（精度）」を評価するために、絶対値が極めて重要な役割を果たします。その代表例が**MAE（Mean Absolute Error：平均絶対誤差）**です。</p>
+                    <h4>【番外編】身近なAIとの繋がり：AIアシスタント（Siri）の聞き取りエラーを判定する「絶対値」</h4>
+                    <p>スマートフォンの音声アシスタントに向かって「明日の天気を教えて」と話しかけた際、AIはあなたの声の音程やタイミングと、あらかじめ登録された標準的な音声パターンを比較して聞き取りを行います。</p>
                     
                     <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
-                        <span class="lesson-callout-title" style="color: var(--color-brass);">予測値と実測値の「ズレ（距離）」を正しく測る</span>
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">「高すぎ」も「低すぎ」も、すべて同じ「ズレ（絶対値）」</span>
                         <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
-                            例えば、家賃を予測するAIモデルが、2つの物件について以下のような予測と実測のズレ（誤差）を出したとします。
+                            AIが音程のズレ（ブレ）を評価するとき、単に引き算をすると問題が発生します。
                         </p>
                         <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 14px; text-align: left; margin-bottom: 12px; font-family: var(--font-mono);">
-                            ・物件A： 予測値が実測値より $+5$ 万円ズレた（過大予測）<br>
-                            ・物件B： 予測値が実測値より $-5$ 万円ズレた（過小予測）
+                            ・Aさんの声： 標準より $+5$ ヘルツ高い（過大）<br>
+                            ・Bさんの声： 標準より $-5$ ヘルツ低い（過小）
                         </div>
                         <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
-                            このとき、単純に平均をとると $(+5) + (-5) = 0$ となり、「誤差ゼロの完璧なAI」という誤った評価になってしまいます。
+                            これらを単純に足し算すると $(+5) + (-5) = 0$ になり、AIは「全員が完璧に標準通りの音程で話した（誤差ゼロ）」と勘違いしてしまいます。
                         </p>
                         <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
-                            これを防ぐため、それぞれの誤差を**絶対値**でくくり、方向を無視した「ズレの大きさ（距離）」として計算します：
-                            $$| +5 | + | -5 | = 5 + 5 = 10 \text{ 万円}$$
-                            この絶対値誤差の平均をとる指標が **MAE** であり、不動産の価格予測から売上予測まで、AIの性能評価で世界中で使われています。また、データ分析においてこの絶対値による距離は**「L1距離」**や**「マンハッタン距離」**とも呼ばれ、クラスタリング（データを似た者同士で分ける処理）の基準としても活躍します。
+                            これを防ぐため、AIはそれぞれの誤差を**絶対値記号**に入れて計算します。
+                            $$|+5| = 5 \quad \text{および} \quad |-5| = 5$$
+                            高すぎるズレも低すぎるズレも、等しく「 $5$ ヘルツ分のブレ（距離）」として取り出し、その平均値をもとに音声認識の正確さを評価しています。AIが私たちの微妙な訛りや発音のブレを正しく判定して学習できるのは、この「向きを無視して距離だけを取り出す」絶対値の仕組みのおかげです。
                         </p>
                     </div>
                 </div>

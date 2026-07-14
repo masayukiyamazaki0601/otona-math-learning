@@ -192,23 +192,20 @@
                 <!-- Column -->
                 <div class="lesson-step alert">
                     <span class="lesson-step-meta">番外編 (Column)</span>
-                    <h4>【番外編】データサイエンスとの繋がり：AIモデルと「学習率の反比例減衰（Decay）」</h4>
-                    <p>データサイエンスにおいて、比例関係（ $y = ax$ ）は「最もシンプルな線形予測モデル」として活用されますが、一方で反比例関係（ $y = \frac{a}{x}$ ）も、高度なディープラーニングの訓練プロセスで大活躍しています。それが**「学習率の反比例減衰（Learning Rate Decay）」**です。</p>
+                    <h4>【番外編】身近なAIとの繋がり：エアコンの「省エネAI運転」と風量の反比例コントロール</h4>
+                    <p>最近のエアコンには、部屋を急激に冷やしたあと、自動で電気代のかからない微風運転に切り替える「AI省エネモード」がついています。この風量のコントロールに、反比例の考え方が使われています。</p>
                     
                     <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
-                        <span class="lesson-callout-title" style="color: var(--color-brass);">学習の終盤にかけて一歩の幅を縮める</span>
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">「設定温度との差」に反比例して風量を抑える</span>
                         <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
-                            AIモデルを更新するスピードを「学習率 $\eta$」と呼びます。学習の初期段階では、素早く正解に近づくために大きな学習率が適していますが、学習の終盤（ステップ数 $t$ が大きいとき）は、正解を行き過ぎてしまわないよう、学習率を細かく縮めて調整する必要があります。
+                            エアコンのAIは、「設定温度に近づく（残りの温度差 $x$ が小さくなる）」ほど、「風量や電力 $y$」をどのように調整すれば効率的かを計算しています。
                         </p>
-                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
-                            このため、ステップ数 $t$ （分母）に対して、学習率 $\eta_t$ （分子）が反比例するように減少するアルゴリズムが頻繁に使用されます：
-                        </p>
-                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 16px; font-weight: bold; margin-bottom: 12px;">
-                            $$\eta_t = \frac{\eta_0}{t}$$
-                            （※ $\eta_0$：初期学習率、 $t$：学習ステップ数）
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 14px; text-align: left; margin-bottom: 12px; font-family: var(--font-mono);">
+                            ・部屋が暑いとき（温度差 $x$ が大きい） &rarr; 最大パワーで運転<br>
+                            ・設定温度に近づいたとき（温度差 $x$ が極めて小さい） &rarr; 反比例の式 $y = \frac{a}{x}$ に従ってパワー $y$ を最小に落とす
                         </div>
                         <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
-                            このモデルでは、ステップ数 $t$ が $1 \to 10 \to 100$ と増えるに従って、学習スピード（更新幅）が反比例して $\frac{1}{1} \to \frac{1}{10} \to \frac{1}{100}$ と自動で小さくなります。この反比例を用いたパラメータ調整のおかげで、画像認識や自然言語処理のAIモデルは過学習や発散を起こすことなく、安定して最も高い知能へと収束できるのです。
+                            温度差が $0$ に近くなるにつれて、必要な電力や風量を反比例で滑らかに落としていくことで、部屋の温度を一定に保ちつつ無駄な電気代を抑えることができます。もし比例（温度差が縮まると風量が一定ペースで減るだけ）だと、設定温度に達した途端に急停止と急発進を繰り返すことになり、電力を大量に消費してしまいます。エアコンのスマートな節電は、反比例の数式による滑らかな引き算のおかげなのです。
                         </p>
                     </div>
                 </div>

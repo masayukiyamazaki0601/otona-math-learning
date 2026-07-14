@@ -182,22 +182,22 @@
                 <!-- Column -->
                 <div class="lesson-step alert">
                     <span class="lesson-step-meta">番外編 (Column)</span>
-                    <h4>【番外編】データサイエンスとの繋がり：AIの学習とは方程式を解くこと</h4>
-                    <p>現代のAIや機械学習の根幹は、実はこの<strong>「方程式を解いて解（パラメータ）を特定する」</strong>というプロセスそのものです。</p>
+                    <h4>【番外編】身近なAIとの繋がり：フリマアプリの「価格査定AI」が適正価格を逆算する仕組み</h4>
+                    <p>メルカリなどのフリマアプリで、売りたい商品の写真を撮ると「この商品は $3,500$ 円〜 $4,200$ 円で売れる可能性が高いです」とAIが査定してくれる機能があります。この裏側では、方程式を解く考え方が応用されています。</p>
                     
                     <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
-                        <span class="lesson-callout-title" style="color: var(--color-brass);">機械学習（単回帰分析）での方程式の応用</span>
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">「売りたい価格」と「買いたい需要」のバランスを解く</span>
                         <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
-                            例えば、住宅の「広さ $x$」から「価格 $y$」を予測する単純なAIモデルは、以下の方程式で表されます：
+                            査定AIは、過去に売れた数万件のデータを分析し、売り手と買い手が納得して取引が成立する（＝釣り合う）ための関係式を作っています。
                         </p>
-                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 16px; font-weight: bold; margin-bottom: 12px;">
-                            $$y = w \cdot x + b$$
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 14px; text-align: left; margin-bottom: 12px; font-family: var(--font-mono);">
+                            ・方程式のターゲット（未知数 $x$）： 取引が成立する「適正価格」<br>
+                            ・AIの仕事： 「市場の需要」と「商品の状態」を天秤にかけ、等式が成り立つ $x$ を逆算する
                         </div>
                         <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
-                            この式において、過去の取引データから「広さ $x$」と「実際の価格 $y$」が大量に与えられます。AIの役割は、すべてのデータに対してこの等式が最もきれいに成り立つような**未知数 $w$ （影響度）と $b$ （基本価格）の値を逆算して求める（方程式を解く）**ことなのです。
+                            「この商品の傷の度合いやブランド価値だと、いくら（$x$）に設定すれば等式のバランスが取れるか」をAIが自動で逆算して、解（おすすめ価格）を求めているのです。このように、釣り合った状態から未知の数値 $x$ を特定する方程式の考え方は、私たちの日常のスマートな売買を支えるAI査定のベースになっています。
                         </p>
                     </div>
-                    <p style="margin-top: 16px;">機械学習モデルを最適化する「学習」という作業は、等式の釣り合いを保ちながら最適な解を探索する計算の超大規模な応用版にほかなりません。</p>
                 </div>
             </div>
 

@@ -114,20 +114,20 @@
                 <!-- Column -->
                 <div class="lesson-step alert">
                     <span class="lesson-step-meta">番外編 (Column)</span>
-                    <h4>【番外編】データサイエンスとの繋がり：データの基準を揃える「中心化」</h4>
-                    <p>データ分析や機械学習の現場では、解析の前にデータを扱いやすく処理する「前処理」を行います。その中で最も頻繁に使われる技術の一つが、データを平均値が $0$ になるようにスライドさせる**「中心化（センタリング）」**です。</p>
+                    <h4>【番外編】身近なAIとの繋がり：天気予報や売上の「前日比（プラスとマイナス）」を処理するAI</h4>
+                    <p>スマートフォンの天気アプリで「昨日より $-3$ ℃」という表示を見たり、ニュースで「株価が前日比 $+150$ 円」というニュースを聞いたりすることがあります。この「正負の数」は、日常のAIサービスでも頻繁に使われています。</p>
                     
                     <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
-                        <span class="lesson-callout-title" style="color: var(--color-brass);">基準（平均）からのズレを正負で表す</span>
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">「基準からの変化」をAIが読み解く</span>
                         <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
-                            例えば、顧客の「年収データ」の平均が $500$ 万円だったとします。このデータをそのまま使う代わりに、各顧客の年収から平均の $500$ 万円を引き算します。
+                            例えば、スマートフォンの家計簿アプリや売上分析AIは、日々のお金や売上の増減を「正負の数」として処理しています。
                         </p>
                         <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 14px; text-align: left; margin-bottom: 12px; font-family: var(--font-mono);">
-                            ・年収 $650$ 万円の顧客 &rarr; $650 - 500 = \mathbf{+150}$ 万円 （平均より高い）<br>
-                            ・年収 $400$ 万円の顧客 &rarr; $400 - 500 = \mathbf{-100}$ 万円 （平均より低い）
+                            ・月曜日の売上増減 &rarr; $\mathbf{+5}$ 万円 （目標より高い）<br>
+                            ・火曜日の売上増減 &rarr; $\mathbf{-3}$ 万円 （目標より低い）
                         </div>
                         <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
-                            この操作を行うことで、データの基準点が $0$ （平均）になり、プラスとマイナスの符号を見るだけで「平均より高いか・低いか」が直感的に判別できるようになります。機械学習モデル（特に重回帰分析や主成分分析など）にデータを学習させる際、この「正負の数を用いた中心化」は予測精度を高めるための必須の処理となっています。
+                            AIは、元の売上金額がいくらであろうと、この「 $+5$ や $-3$ などのプラスとマイナスの増減幅」だけを追いかけることで、「最近、売り上げが急激に下がっている異常事態（マイナスの連続）」を自動で検知し、店舗オーナーに通知を送ります。このように、「基準とのズレ」を正負の数でシンプルに表すルールは、AIが賢く変化を察知するための基礎になっています。
                         </p>
                     </div>
                 </div>

@@ -123,25 +123,23 @@
                 <!-- Column -->
                 <div class="lesson-step alert">
                     <span class="lesson-step-meta">番外編 (Column)</span>
-                    <h4>【番外編】データサイエンスとの繋がり：画像認識AI（コンピュータビジョン）の座標変換</h4>
-                    <p>自動運転や監視カメラの映像から「物体（人や車）」を検出する画像認識AI（YOLOなど）の技術において、比例式はなくてはならない重要な役割を果たしています。</p>
+                    <h4>【番外編】身近なAIとの繋がり：スマホカメラの「自動ズーム」と美肌フィルターの追従</h4>
+                    <p>スマホのカメラでポートレート（背景ぼかし）撮影や美肌フィルターを使うとき、ズーム（拡大・縮小）をしてもフィルターの位置がズレずに、顔にぴったり張り付いたまま動きます。ここでも「比例式」の計算が活躍しています。</p>
                     
                     <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
-                        <span class="lesson-callout-title" style="color: var(--color-brass);">画像サイズ縮小とバウンディングボックスの再配置</span>
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">ズーム倍率に合わせてフィルターの大きさを自動スケーリングする</span>
                         <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
-                            AIが検出したターゲットの座標（バウンディングボックスの中心位置 $x$）が、元画像（横幅 $1920\text{px}$）において左から $1500\text{px}$ の位置にあったとします。
+                            スマホ内の画像処理AIは、元の画面サイズでの「顔の大きさ（幅 $150\text{px}$）」と「画面全体の幅（$1920\text{px}$）」の比を計算しています。
                         </p>
                         <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
-                            この画像を、AIが処理しやすい小さい画像（横幅 $640\text{px}$）に**比のバランス（アスペクト比）を崩さずに縮小（リサイズ）**して表示したい場合、新しい画像上での中心座標 $x'$ は比例式を用いて以下のように計算されます：
+                            ズームして画面全体の表示が小さくなった（例えば幅 $640\text{px}$ にトリミングした）場合、新しい画面での「顔の大きさ $x$」を、以下の比例式で計算して求めます：
                         </p>
                         <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 15px; text-align: left; margin-bottom: 12px; font-family: var(--font-mono);">
-                            $$x' : 1500 = 640 : 1920$$
-                            $$1920 \cdot x' = 1500 \cdot 640$$
-                            $$1920 \cdot x' = 960,000$$
-                            $$x' = 500 \text{ px}$$
+                            $$x : 150 = 640 : 1920$$
+                            （※内側の積＝外側の積を使って解くと、 $x = 50\text{ px}$ ）
                         </div>
                         <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
-                            この計算により、リサイズ後の画像でも、車や人の位置が正確に左から $500\text{px}$ の位置に自動再配置されます。コンピュータビジョンの領域において、画像の拡大・縮小に伴う各種物体データ（マスクやキーポイント）の座標変換は、すべてこの比例式に基づいた比率計算によって行われています。
+                            この計算により、AIは拡大された顔に合わせて、美肌フィルターのサイズを自動で $50\text{px}$ 分に縮小し、違和感のないように重ね合わせます。スマホのカメラが高精度に私たちの顔や被写体を追いかけて加工できるのは、この比率の計算が毎秒数十回も一瞬で実行されているからなのです。
                         </p>
                     </div>
                 </div>
