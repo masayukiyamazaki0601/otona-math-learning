@@ -70,23 +70,36 @@
                     <h4>等式の性質：天秤（てんびん）のイメージ</h4>
                     <p>方程式を解いて解を暴き出すとき、ベースとなるのが<strong>等式の性質</strong>です。等式は、左右の重さが釣り合っている「天秤（てんびん）」に例えられます。</p>
                     
-                    <div style="display: flex; flex-direction: column; align-items: center; margin: 24px 0; padding: 20px; background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px;">
-                        <span style="font-size: 14px; font-weight: bold; margin-bottom: 12px; color: var(--color-ink);">天秤のバランスモデル</span>
-                        <div style="display: flex; align-items: center; justify-content: center; gap: 30px; width: 100%; max-width: 400px; border-bottom: 3px solid var(--color-ink); padding-bottom: 10px; position: relative;">
-                            <!-- Left Plate -->
-                            <div style="background-color: var(--color-surface); border: 2px solid var(--color-paper-line); padding: 10px 20px; border-radius: 4px; font-family: var(--font-mono); font-weight: bold; font-size: 16px;">
-                                左辺
-                            </div>
-                            <!-- Pivot -->
-                            <div style="font-size: 24px; font-weight: bold; color: var(--color-red); position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);">
-                                ▲
-                            </div>
-                            <!-- Right Plate -->
-                            <div style="background-color: var(--color-surface); border: 2px solid var(--color-paper-line); padding: 10px 20px; border-radius: 4px; font-family: var(--font-mono); font-weight: bold; font-size: 16px;">
-                                右辺
+                    <div class="balance-steps-container">
+                        <!-- Step A -->
+                        <div class="balance-step-item">
+                            <span class="balance-step-label">ステップ 1：初期状態（左右が釣り合っている）</span>
+                            <div class="balance-scale-draw">
+                                <div class="balance-plate">$x + 4$</div>
+                                <span class="balance-pivot">▲</span>
+                                <div class="balance-plate">$10$</div>
                             </div>
                         </div>
-                        <span style="font-size: 12px; color: var(--color-ink-soft); margin-top: 15px;">釣り合い（＝）を保つ限り、両辺にどんな操作をしても等しさは維持されます。</span>
+
+                        <!-- Step B -->
+                        <div class="balance-step-item">
+                            <span class="balance-step-label">ステップ 2：両辺から同じ数「4」を引く（釣り合いをキープ）</span>
+                            <div class="balance-scale-draw">
+                                <div class="balance-plate highlight-red">$x + 4 <span style="color: var(--color-red);">- 4</span>$</div>
+                                <span class="balance-pivot">▲</span>
+                                <div class="balance-plate highlight-red">$10 <span style="color: var(--color-red);">- 4</span>$</div>
+                            </div>
+                        </div>
+
+                        <!-- Step C -->
+                        <div class="balance-step-item">
+                            <span class="balance-step-label">ステップ 3：整理して「解」が求まる</span>
+                            <div class="balance-scale-draw">
+                                <div class="balance-plate highlight-brass">$x$</div>
+                                <span class="balance-pivot">▲</span>
+                                <div class="balance-plate highlight-brass">$6$</div>
+                            </div>
+                        </div>
                     </div>
 
                     <p>釣り合っている天秤の左右に、<strong>「同じ操作」</strong>をする限りバランスは崩れません。これが等式の持つ4つの黄金律です。</p>

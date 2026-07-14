@@ -932,3 +932,73 @@ ul { list-style: none; }
     color: var(--color-ink-soft);
     margin-top: 6px;
 }
+
+/* Balance Scale Steps Component */
+.balance-steps-container {
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+    margin: 30px 0;
+    padding: 28px;
+    background-color: var(--color-paper);
+    border: 1px solid var(--color-paper-line);
+    border-radius: 6px;
+    align-items: center;
+}
+
+.balance-step-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 450px;
+}
+
+.balance-step-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-brass);
+    margin-bottom: 12px;
+    font-family: var(--font-heading);
+}
+
+.balance-scale-draw {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 40px;
+    width: 100%;
+    border-bottom: 3px solid var(--color-ink);
+    padding-bottom: 12px;
+    position: relative;
+}
+
+.balance-plate {
+    background-color: var(--color-surface);
+    border: 2px solid var(--color-paper-line);
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-weight: bold;
+    font-size: 18px;
+    min-width: 125px;
+    text-align: center;
+    box-shadow: 2px 2px 0 rgba(28, 43, 57, 0.05);
+}
+
+.balance-plate.highlight-red {
+    border-color: var(--color-red);
+}
+
+.balance-plate.highlight-brass {
+    border-color: var(--color-brass);
+}
+
+.balance-pivot {
+    font-size: 24px;
+    color: var(--color-red);
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+}
