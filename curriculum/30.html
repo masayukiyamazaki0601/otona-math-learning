@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>一次方程式の文章題への応用 | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第3章 中学校数学の基礎固め &gt; 単元30
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 03 / Unit 30</span>
+                <h2 class="lesson-title">一次方程式の文章題への応用</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>なぜ文章題を解くのか</h4>
+                    <p>これまでの学習では、すでにきれいに用意されている方程式を「解くテクニック」を学んできました。しかし当然ながら、実際の仕事や生活の中で、最初から数式の形でお題が配られることはありません。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 500px;">
+                        <span class="lesson-callout-title">「数式を解く人」から「数式を作る人」へ</span>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 0;">
+                            「予算内でどれだけの資材を買えるか」「目標利益を出すには何個販売すべきか」。現実の課題はすべて、曖昧な「日本語の文章や状況」の中に眠っています。この日本語を数学の言語（方程式）に翻訳し、解決可能な形に変形する力こそが、本当に役立つ数学的思考力です。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>文章題を解く5つのロードマップ</h4>
+                    <p>複雑な問題文に出会ったときは、以下の5つのステップに沿って思考を整理していくと、迷わずに方程式を作ることができます。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 550px;">
+                        <span class="lesson-callout-title">解答のロードマップ</span>
+                        <ul style="font-size: 14px; line-height: 1.8; margin-bottom: 0; padding-left: 20px; list-style: decimal;">
+                            <li><strong>求めるものを文字 $x$ で表す</strong>（まず主役を決める）。</li>
+                            <li>問題文の条件やわかっている数値を整理する。</li>
+                            <li>条件をもとに<strong>方程式を作る</strong>（日本語から数式への翻訳）。</li>
+                            <li>方程式を解く（等式の性質・移項を利用）。</li>
+                            <li><strong>答えが問題の現実に合っているか確かめる</strong>（検算と現実性チェック）。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>言葉から数式への翻訳辞書</h4>
+                    <p>日本語で書かれた条件を数式にする際、頻出するフレーズと数学の四則演算との対応関係を覚えておくと、式作りが驚くほどスムーズになります。</p>
+                    
+                    <div class="lesson-callout">
+                        <span class="lesson-callout-title">翻訳の対応テーブル</span>
+                        <div class="lesson-callout-grid">
+                            <div class="grid-cell" style="background-color: var(--color-surface); border-color: var(--color-paper-line);">
+                                <span class="label" style="color: var(--color-brass);">日本語のフレーズ</span>
+                                <span class="value" style="font-size: 14px; line-height: 1.8; display: block; text-align: left;">
+                                    ・「合わせて」「合計で」<br>
+                                    ・「～の差」「違い」<br>
+                                    ・「1個 $A$ 円のものを $x$ 個」<br>
+                                    ・「等しく分ける」「〇等分」
+                                </span>
+                            </div>
+                            <div class="grid-cell" style="background-color: var(--color-surface); border-color: var(--color-paper-line);">
+                                <span class="label" style="color: var(--color-brass);">対応する計算記号</span>
+                                <span class="value" style="font-size: 14px; line-height: 1.8; display: block; text-align: left; font-family: var(--font-mono); font-weight: bold;">
+                                    &rarr; 加法（ $+$ ）<br>
+                                    &rarr; 減法（ $-$ ）<br>
+                                    &rarr; 乗法（ $\times$ ）※記号は省略<br>
+                                    &rarr; 除法（ $\div$ または分数）
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>具体例で考える方程式の構築</h4>
+                    <p>実際に2つのシンプルな例題を通して、文章から方程式を組み立てるプロセスを確認しましょう。</p>
+                    
+                    <div class="lesson-callout">
+                        <h5 style="margin-top: 5px;">例題①：ある数に $8$ を足すと $25$ になる。ある数はいくつか？</h5>
+                        <div class="math-formula" style="background-color: var(--color-surface); text-align: left; padding: 15px; font-size: 14px; margin-bottom: 20px;">
+                            1. ある数を $x$ とする。<br>
+                            2. 式を組み立てる： $x + 8 = 25$<br>
+                            3. 両辺から $8$ を引く： $x = 17 \quad \text{（答え：17）}$
+                        </div>
+
+                        <h5>例題②：1本 $120$ 円のジュースを何本か買ったら、代金は $600$ 円でした。何本買ったか？</h5>
+                        <div class="math-formula" style="background-color: var(--color-surface); text-align: left; padding: 15px; font-size: 14px;">
+                            1. 買った本数を $x$ 本とする。<br>
+                            2. 式を組み立てる： $120x = 600$<br>
+                            3. 両辺を $120$ で割る： $x = 5 \quad \text{（答え：5本）}$
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="lesson-step success">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>まとめ</h4>
+                    <ul>
+                        <li>文章題の本質は、<strong>「曖昧な言葉の関係性を、明確な方程式へと翻訳する（定式化）」</strong>ことにある。</li>
+                        <li>最初に<strong>「何を文字 $x$ で表すか」</strong>を明確に宣言することが、式作りの第一歩。</li>
+                        <li>「合計（$+$）」「差（$-$）」「個数（$\times$）」といった言葉の変換ルールを身につける。</li>
+                        <li>解を求めたら、それが元の文章の条件（自然数か、正の数かなど）に合致しているか検証する。</li>
+                    </ul>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】データサイエンスとの繋がり：ビジネス課題を数式化する「数理定式化」のスキル</h4>
+                    <p>データサイエンスやAIの業務において、この「文章題を方程式に変形する」というスキルは、最も高単価で価値の高い職能である**「数理定式化（Formulation）」**そのものです。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">数理最適化（広告予算配分の例）</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            例えば、ある企業が広告予算100万円を使って、ネット広告（出稿量 $x_1$）とSNS広告（出稿量 $x_2$）の配分を決定し、最大の効果を得たいとします。データサイエンティストは、このビジネス上の要望をコンピュータが計算できるように以下のように定式化します：
+                        </p>
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 15px; text-align: left; margin-bottom: 12px; font-family: var(--font-mono);">
+                            ・<strong>最大化したい目的（目的関数）</strong>：<br>
+                            $\quad \text{広告効果} = 3 x_1 + 5 x_2$<br><br>
+                            ・<strong>予算の限界（制約条件）</strong>：<br>
+                            $\quad 100 x_1 + 150 x_2 \le 1,000,000$ （1,000,000円以下）
+                        </div>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            このように、ビジネスのルール（文章・条件）を数学的な制約式と目的関数に変形する能力は、中学数学の「文章題の立式」の延長線上にあります。どれだけ計算ライブラリが進化しても、この「定式化」のステップだけは人間の論理的思考力が不可欠であり、だからこそデータサイエンスの現場で極めて高く評価されるのです。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="lesson-footer-nav">
+                <a href="29.html" class="btn-secondary">&larr; 前の単元へ</a>
+                <a href="index.html" class="btn-secondary">目次に戻る</a>
+                <a href="#" class="btn btn-primary">次の単元へ</a>
+            </footer>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>
