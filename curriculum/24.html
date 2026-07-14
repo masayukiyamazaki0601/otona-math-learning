@@ -160,6 +160,35 @@
                         </p>
                     </div>
                 </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】データサイエンスとの繋がり：AIが「坂を下る」ための 負 &times; 負 ＝ 正</h4>
+                    <p>機械学習のモデルがデータからパターンを自律的に学習するアルゴリズムを**「勾配降下法（Gradient Descent）」**と呼びます。この学習プロセスにおいて、正負の数の掛け算、特に「負 &times; 負 ＝ 正」というルールが極めて美しく機能しています。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">パラメータ更新における符号の乗法</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            AIモデルのパラメータ（重み $w$）を最適な値にアップデートする式は以下の通りです：
+                        </p>
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 16px; font-weight: bold; margin-bottom: 12px;">
+                            $$w_{\text{新しい重み}} = w_{\text{古い重み}} - \eta \cdot g$$
+                        </div>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            ここで、$\eta$ （学習率）は必ず**正の数**（例: $+0.01$）です。$g$ （勾配）はエラーの坂道の傾きを表す**正負の数**です。アップデート項は「$- \eta \cdot g$」という乗法になっています。
+                        </p>
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 14px; text-align: left; margin-bottom: 12px; font-family: var(--font-mono);">
+                            ・<strong>傾き $g$ が正のとき（$g > 0$）</strong>：<br>
+                            $\quad (-0.01) \times (\text{正}) = \mathbf{\text{負}}$（重みを減少させる方向へ前進）<br><br>
+                            ・<strong>傾き $g$ が負のとき（$g < 0$）</strong>：<br>
+                            $\quad (-0.01) \times (\text{負}) = \mathbf{\text{正}}$（重みを増加させる方向へ前進）
+                        </div>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            この「$- \eta$（負の数）」と「傾き $g$（負の数）」の乗法によって、結果が**正の数**（プラス）になり、自動的にパラメータを増やすべき方向へと軌道修正できます。「負 &times; 負 ＝ 正」というルールがあるからこそ、AIモデルはエラーが最小になる「谷底」に向かって迷わずに坂を下り続けることができるのです。
+                        </p>
+                    </div>
+                </div>
             </div>
 
             <footer class="lesson-footer-nav">

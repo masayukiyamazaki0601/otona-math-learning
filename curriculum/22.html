@@ -130,6 +130,32 @@
                     <p>絶対値は、数の正負（方向）ではなく<span class="text-highlight">純粋な距離</span>を表すために考えられた概念です。</p>
                     <p>単に「符号を取り去るもの」と暗記するのではなく、常に「数直線上の距離である」というイメージで理解しておくことで、今後の学習で登場する「絶対値を含む方程式・不等式」なども直感的に理解しやすくなります。</p>
                 </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】データサイエンスとの繋がり：AIの予測誤差を測る「MAE（平均絶対誤差）」</h4>
+                    <p>機械学習モデル（AI）を作った際、「そのAIがどれだけ正確に予測できているか（精度）」を評価するために、絶対値が極めて重要な役割を果たします。その代表例が**MAE（Mean Absolute Error：平均絶対誤差）**です。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">予測値と実測値の「ズレ（距離）」を正しく測る</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            例えば、家賃を予測するAIモデルが、2つの物件について以下のような予測と実測のズレ（誤差）を出したとします。
+                        </p>
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 14px; text-align: left; margin-bottom: 12px; font-family: var(--font-mono);">
+                            ・物件A： 予測値が実測値より $+5$ 万円ズレた（過大予測）<br>
+                            ・物件B： 予測値が実測値より $-5$ 万円ズレた（過小予測）
+                        </div>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            このとき、単純に平均をとると $(+5) + (-5) = 0$ となり、「誤差ゼロの完璧なAI」という誤った評価になってしまいます。
+                        </p>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            これを防ぐため、それぞれの誤差を**絶対値**でくくり、方向を無視した「ズレの大きさ（距離）」として計算します：
+                            $$| +5 | + | -5 | = 5 + 5 = 10 \text{ 万円}$$
+                            この絶対値誤差の平均をとる指標が **MAE** であり、不動産の価格予測から売上予測まで、AIの性能評価で世界中で使われています。また、データ分析においてこの絶対値による距離は**「L1距離」**や**「マンハッタン距離」**とも呼ばれ、クラスタリング（データを似た者同士で分ける処理）の基準としても活躍します。
+                        </p>
+                    </div>
+                </div>
             </div>
 
             <footer class="lesson-footer-nav">

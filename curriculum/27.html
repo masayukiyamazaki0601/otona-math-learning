@@ -148,6 +148,37 @@
                         <li>多項式の引き算では、<strong>かっこの中のすべての符号を反転</strong>させてからまとめる。</li>
                     </ul>
                 </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】データサイエンスとの繋がり：同類項の整理と「ベクトル演算（NumPy）」</h4>
+                    <p>多項式の足し算・引き算で「文字の種類ごとにまとめて計算する」という行為は、データサイエンスや線形代数における**「ベクトル（次元）の加減算」**そのものです。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">要素ごとの加算と多次元空間</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            例えば、りんごの数 $x$ とバナナの数 $y$ を管理する2つのカート（多項式）を合算します。
+                        </p>
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 14px; text-align: left; margin-bottom: 12px; font-family: var(--font-mono);">
+                            ・カートA： $3x + 5y$<br>
+                            ・カートB： $2x + y$<br>
+                            ・合計： $(3x + 5y) + (2x + y) = \mathbf{5x + 6y}$
+                        </div>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            データ分析では、これを以下のような**ベクトル（数値のリスト）**の足し算としてプログラム（PythonのNumPyライブラリ）で一括計算します。
+                        </p>
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 14px; text-align: left; margin-bottom: 12px; font-family: var(--font-mono); font-weight: bold;">
+                            import numpy as np<br>
+                            A = np.array([3, 5]) # xが3、yが5<br>
+                            B = np.array([2, 1]) # xが2、yが1<br>
+                            print(A + B) # 出力: [5, 6] (5x + 6y に対応)
+                        </div>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            このとき、「 $x$ と $y$ はまとめられない（ $3x + 2y$ は $5xy$ にはならない）」という中学校のルールは、ベクトル空間における**「異なる次元（直交する軸）の成分同士は混ざらない」**というルールに完全に一致します。同類項の整理をマスターすることは、何万次元ものデータを扱うデータサイエンスの「多次元ベクトル計算」の感覚を直感的に掴むための最初の一歩なのです。
+                        </p>
+                    </div>
+                </div>
             </div>
 
             <footer class="lesson-footer-nav">

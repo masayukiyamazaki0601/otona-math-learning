@@ -110,6 +110,27 @@
                     <h4>結果として得たもの</h4>
                     <p>単に物を数える道具としては正の数だけで十分でしたが、数量の増減や基準との差を表すには力不足でした。負の数が加わったことで、私たちは「<span class="text-highlight">数直線</span>」という一本の直線のうえに、増える方向と減る方向を同時に美しくマッピングし、自在に演算できる高度な数体系を手に入れたのです。</p>
                 </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】データサイエンスとの繋がり：データの基準を揃える「中心化」</h4>
+                    <p>データ分析や機械学習の現場では、解析の前にデータを扱いやすく処理する「前処理」を行います。その中で最も頻繁に使われる技術の一つが、データを平均値が $0$ になるようにスライドさせる**「中心化（センタリング）」**です。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">基準（平均）からのズレを正負で表す</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            例えば、顧客の「年収データ」の平均が $500$ 万円だったとします。このデータをそのまま使う代わりに、各顧客の年収から平均の $500$ 万円を引き算します。
+                        </p>
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 14px; text-align: left; margin-bottom: 12px; font-family: var(--font-mono);">
+                            ・年収 $650$ 万円の顧客 &rarr; $650 - 500 = \mathbf{+150}$ 万円 （平均より高い）<br>
+                            ・年収 $400$ 万円の顧客 &rarr; $400 - 500 = \mathbf{-100}$ 万円 （平均より低い）
+                        </div>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            この操作を行うことで、データの基準点が $0$ （平均）になり、プラスとマイナスの符号を見るだけで「平均より高いか・低いか」が直感的に判別できるようになります。機械学習モデル（特に重回帰分析や主成分分析など）にデータを学習させる際、この「正負の数を用いた中心化」は予測精度を高めるための必須の処理となっています。
+                        </p>
+                    </div>
+                </div>
             </div>
 
             <footer class="lesson-footer-nav">

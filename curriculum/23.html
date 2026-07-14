@@ -141,6 +141,35 @@
                     </ul>
                     <p style="margin-top: 16px;">この3点さえマスターすれば、正負の数の四則演算の土台がしっかりと固まります。</p>
                 </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】データサイエンスとの繋がり：ビジネスKPIの「変化率（増減）」の累積</h4>
+                    <p>データ分析の実務において、最も頻繁に正負の足し算・引き算を使う場面の一つが、売上やウェブサイトのPV数、株価などの**「日々の日次変化率（リターン）の合計計算」**です。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">プラスの変化とマイナスの変化を統合する</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            例えば、ある製品の週間売上の前日比が以下のように推移したとします。
+                        </p>
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 14px; text-align: left; margin-bottom: 12px; font-family: var(--font-mono);">
+                            ・月曜日： $+5\%$ （売上増）<br>
+                            ・火曜日： $-8\%$ （売上減）<br>
+                            ・水曜日： $+12\%$ （売上増）<br>
+                            ・木曜日： $-3\%$ （売上減）
+                        </div>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            この週全体のネット（純）変化率を計算するには、これらの正負の数をすべて加算します：
+                            $$(+5) + (-8) + (+12) + (-3)$$
+                            この計算の際、Step 04で紹介した「同符号ごとにまとめる」テクニックが非常に有効です。<br>
+                            ・プラスグループ： $(+5) + (+12) = +17$<br>
+                            ・マイナスグループ： $(-8) + (-3) = -11$<br>
+                            ・最終合計： $(+17) + (-11) = +6\%$ （週間で6%の純増）<br><br>
+                            時系列データの分析において、このようにプラスとマイナスの変動を足し合わせて全体のトレンド（方向性）を掴む計算は、日常業務からデータ分析モデルの構築まで幅広く使用されています。
+                        </p>
+                    </div>
+                </div>
             </div>
 
             <footer class="lesson-footer-nav">

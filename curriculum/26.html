@@ -135,6 +135,33 @@
                     </ul>
                     <p style="margin-top: 16px;">この代入操作と計算手順をマスターすることで、文字式で立てた数理モデルに実際のデータを流し込み、結果を算出する能力の土台が整います。</p>
                 </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】データサイエンスとの繋がり：AIモデルの「推論（予測）」の正体はただの代入</h4>
+                    <p>機械学習の世界において、完成したAIモデルを使って新しいデータを予測する処理を**「推論（Inference）」**や**「予測（Prediction）」**と呼びます。この推論処理の正体は、中学校数学で習う「式の値の計算（代入）」そのものです。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">予測値を求める代入のプロセス</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            例えば、過去のデータから学習を終えた「中古マンションの価格予測モデル（文字式）」が以下のように完成したとします：
+                        </p>
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 15px; font-weight: bold; margin-bottom: 12px;">
+                            $$\text{予測価格} = 50 \cdot x_1 - 10 \cdot x_2 + 200$$
+                            （※ $x_1$：専有面積[$\text{m}^2$]、 $x_2$：築年数[年]、 単位：万円）
+                        </div>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            このAIモデルを使って「専有面積が $80\text{m}^2$ （$x_1 = 80$）で、築年数が $5$ 年（$x_2 = 5$）のマンション」の価格を予測したい場合、プログラムは数式に対してこれらの値を**代入**して計算します：
+                        </p>
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 14px; text-align: left; margin-bottom: 0; font-family: var(--font-mono);">
+                            $\text{予測価格} = 50 \times 80 - 10 \times 5 + 200$<br>
+                            $\quad = 4000 - 50 + 200$<br>
+                            $\quad = 4150 \text{ 万円}$
+                        </div>
+                    </div>
+                    <p style="margin-top: 16px;">AIが行う複雑な価格予測や売上シミュレーションも、元を辿ればこのように「完成した数式にユーザーが指定した値を代入して式の値を求める」という四則演算の高速繰り返しに過ぎないのです。</p>
+                </div>
             </div>
 
             <footer class="lesson-footer-nav">
