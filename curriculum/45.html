@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>三平方の定理の図形問題への応用 | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第3章 中学校数学の基礎固め &gt; 単元45
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 03 / Unit 45</span>
+                <h2 class="lesson-title">三平方の定理の図形問題への応用</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>三平方の定理は「次の計算」への手掛かり</h4>
+                    <p>三平方の定理を学ぶと、単なる「辺の長さを計算するだけの公式」と捉えがちです。しかし、実際の図形問題において、辺の長さを出して終わるケースはほとんどありません。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 500px;">
+                        <span class="lesson-callout-title">次のステップに進むためのツール</span>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 0;">
+                            辺の長さを求めたあと、その結果を利用して「全体の面積」を算出したり、さらに「別の未知の長さ」を求めたりします。三平方の定理は、最終ゴールではなく、次の計算へ切り込むための武器になるのです。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>図形の中から直角三角形を見つけ出す</h4>
+                    <p>一見すると直角三角形が見当たらない複雑な多角形や立体であっても、**「補助線」を引く**ことによって、内部に直角三角形を作り出すことができます。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 500px; background-color: var(--color-surface); border-color: var(--color-paper-line);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">図形問題突破の第一歩</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            「この図のどこに直角三角形が隠れているか、あるいはどこに垂線（直角に交わる線）を引けば作れるか」を常に意識して図面を観察することが、応用問題を解く鍵となります。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>応用例①：三角形の「高さ」を求めて面積を出す</h4>
+                    <p>2等辺三角形の面積を求める実例です。高さが不明な状態から、補助線（垂線）を引くことで高さを割り出します。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 600px; background-color: var(--color-surface); border-color: var(--color-paper-line);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">高さを求める計算フロー</span>
+                        <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 15px; align-items: center; justify-content: center;">
+                            <svg width="160" height="120" viewBox="0 0 160 120" style="background-color: var(--color-paper); border-radius: 6px;">
+                                <!-- Left side (5) -->
+                                <line x1="80" y1="20" x2="20" y2="100" stroke="var(--color-brass)" stroke-width="2"/>
+                                <text x="44" y="58" font-size="9" fill="var(--color-ink)">5</text>
+                                
+                                <!-- Right side (5) -->
+                                <line x1="80" y1="20" x2="140" y2="100" stroke="var(--color-brass)" stroke-width="2"/>
+                                <text x="112" y="58" font-size="9" fill="var(--color-ink)">5</text>
+                                
+                                <!-- Base (8) -->
+                                <line x1="20" y1="100" x2="140" y2="100" stroke="var(--color-brass)" stroke-width="2"/>
+                                <text x="80" y="114" font-size="9" fill="var(--color-ink)" text-anchor="middle">底辺 8</text>
+                                
+                                <!-- Auxiliary line (Height h = 3) -->
+                                <line x1="80" y1="20" x2="80" y2="100" stroke="var(--color-red)" stroke-width="1.5" stroke-dasharray="3,3"/>
+                                <text x="85" y="60" font-size="9" fill="var(--color-red)">h = 3</text>
+                                
+                                <!-- Bottom split labels -->
+                                <text x="50" y="93" font-size="8" fill="var(--color-ink-soft)" text-anchor="middle">4</text>
+                                <text x="110" y="93" font-size="8" fill="var(--color-ink-soft)" text-anchor="middle">4</text>
+                                
+                                <!-- Right angle indicator -->
+                                <rect x="80" y="94" width="6" height="6" fill="none" stroke="var(--color-red)" stroke-width="1"/>
+                            </svg>
+                            <div style="flex: 1; min-width: 200px; font-size: 14px; line-height: 1.7;">
+                                <p style="margin-bottom: 0;">
+                                    底辺が $8\text{ cm}$ 、左右の辺が $5\text{ cm}$ の二等辺三角形において、頂点から垂線 $h$ を下ろすと、底辺を2等分（ $4\text{ cm}$ ずつ）する直角三角形が生まれます。<br>
+                                    三平方の定理より：<br>
+                                    &emsp;$4^2 + h^2 = 5^2$<br>
+                                    &emsp;$16 + h^2 = 25 \quad \rightarrow \quad h^2 = 9$<br>
+                                    高さ $\mathbf{h = 3\text{ cm}}$ と求まるため、面積は：<br>
+                                    &emsp;<span style="white-space: nowrap;">$\mathbf{8 \times 3 \div 2 = 12\text{ ㎠}}$</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>応用例②：四角形の対角線を求める</h4>
+                    <p>長方形や正方形に対角線を1本引くだけで、そこには直角をはさむ直角三角形が自動的に出現します。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 600px; background-color: var(--color-surface); border-color: var(--color-paper-line);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">対角線の計算フロー</span>
+                        <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 15px; align-items: center; justify-content: center;">
+                            <svg width="160" height="110" viewBox="0 0 160 110" style="background-color: var(--color-paper); border-radius: 6px;">
+                                <rect x="25" y="15" width="110" height="80" fill="none" stroke="var(--color-brass)" stroke-width="2"/>
+                                <!-- Diagonal (x = 10) -->
+                                <line x1="25" y1="95" x2="135" y2="15" stroke="var(--color-red)" stroke-width="1.8" stroke-dasharray="3,3"/>
+                                <text x="80" y="50" font-size="9" fill="var(--color-red)" text-anchor="middle" transform="rotate(-18 80 50)">x = 10</text>
+                                
+                                <!-- Labels -->
+                                <text x="15" y="58" font-size="9" fill="var(--color-ink)">縦 6</text>
+                                <text x="80" y="105" font-size="9" fill="var(--color-ink)" text-anchor="middle">横 8</text>
+                            </svg>
+                            <div style="flex: 1; min-width: 200px; font-size: 14px; line-height: 1.7;">
+                                <p style="margin-bottom: 0;">
+                                    縦が $6\text{ cm}$ 、横が $8\text{ cm}$ の長方形の対角線 $x$ は、直角三角形の斜辺に該当します。<br>
+                                    公式に当てはめると：<br>
+                                    &emsp;$6^2 + 8^2 = x^2$<br>
+                                    &emsp;$36 + 64 = x^2 \quad \rightarrow \quad x^2 = 100$<br>
+                                    対角線の長さは <span style="white-space: nowrap;">$\mathbf{x = 10\text{ cm}}$</span> と計算できます。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>立体の対角線への応用</h4>
+                    <p>三平方の定理は、3次元の立体でも同様に活躍します。直方体の内部を対角線で切り裂くとき、直角三角形が2段階に組み合わさっていると考えることができます。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 500px; background-color: var(--color-surface); border-color: var(--color-paper-line);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">直方体の対角線公式の仕組み</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            縦 $a$、横 $b$、高さ $c$ の直方体において、空間を斜めに突き抜ける最大の対角線の長さ $L$ は、以下の「3次元版・三平方の定理」で求められます。
+                        </p>
+                        <div style="font-size: 16px; text-align: center; margin: 12px 0; font-family: var(--font-mono); font-weight: bold; color: var(--color-teal);">
+                            <span style="white-space: nowrap;">$L = \sqrt{a^2 + b^2 + c^2}$</span>
+                        </div>
+                        <p style="font-size: 13px; line-height: 1.6; color: var(--color-ink-soft); margin-bottom: 0;">
+                            底面の対角線（ $a^2 + b^2$ ）を一度求め、その長さと「高さ $c$ 」を用いてもう一度三平方の定理を適用することで、この美しい公式が導かれます。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 6 -->
+                <div class="lesson-step success">
+                    <span class="lesson-step-meta">Step 06</span>
+                    <h4>まとめ</h4>
+                    <ul>
+                        <li>複雑な図形問題では、補助線（垂線など）を引いて**「直角三角形を作り出す」**。</li>
+                        <li>三角形の面積計算では、三平方の定理で高さを求めてから公式を適用する。</li>
+                        <li>直方体などの立体問題も、平面の直角三角形に分解することで、同様の計算手順で解決できる。</li>
+                    </ul>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】身近なAIとの繋がり：自動運転車やドローンが衝突を防ぐ「3次元自己位置推定と障害物距離測定（SLAM）」</h4>
+                    <p>周囲の状況を把握しながら自分でルートを決めて走る自動運転車や、空を舞う宅配ドローン。周囲の人や障害物にぶつかることなく、安全かつ正確に目的地へたどり着くための「空間認識AI」の裏側でも、三平方の定理がリアルタイムで高速計算されています。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">センサーの点群データから3Dの最短距離を割り出す</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            自動運転車は、搭載されたカメラやLiDAR（レーザーセンサー）を用いて、周囲の壁や歩行者の位置を無数の「3次元座標（ $x$ 軸、 $y$ 軸、 $z$ 軸）」としてミリ秒単位で検知しています。
+                        </p>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            AIは、自分の位置と障害物の位置のズレ（縦の距離差 $\Delta x$、横の距離差 $\Delta y$、高さの距離差 $\Delta z$）を検知すると、まさに直方体の対角線公式と同じく <span style="white-space: nowrap;">$\sqrt{\Delta x^2 + \Delta y^2 + \Delta z^2}$</span> の計算を実行し、障害物までの「実際の最短直線距離」を割り出します。この計算によって、歩行者が安全圏にいるか、あるいはブレーキを踏むべき近距離にいるかを判断します。3次元の三平方の定理を何千何万回と一瞬で解き続けるAIのおかげで、次世代のクリーンで安全な自動移動システムが稼働しているのです。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="lesson-footer-nav">
+                <a href="44.html" class="btn-secondary">&larr; 前の単元へ</a>
+                <a href="index.html" class="btn-secondary">目次に戻る</a>
+                <a href="#" class="btn btn-primary">次の単元へ（第4章へ）</a>
+            </footer>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>
