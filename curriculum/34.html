@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>座標平面の仕組みと座標の読み書き | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第3章 中学校数学の基礎固め &gt; 単元34
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 03 / Unit 34</span>
+                <h2 class="lesson-title">座標平面の仕組みと座標の読み書き</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>なぜ座標を使うのか</h4>
+                    <p>日常生活で目的地を地図で探すとき、「〇〇区〇〇町〇丁目」のような住所情報を使います。また、劇場やスタジアムの座席を見つけるときは、「〇列の〇番」という縦と横の組み合わせで席を探します。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 500px;">
+                        <span class="lesson-callout-title">数字のペアで「位置」をピンポイント指定する</span>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 0;">
+                            数学でも、ある「位置」を誰が見てもズレなく一意に表現できるようにするために、数字のペアを使って表すルールを定めています。これが<strong>座標</strong>です。座標を理解すると、図形やグラフの位置関係を数字だけで正確に表現できるようになります。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>座標平面の仕組みと4つのエリア（象限）</h4>
+                    <p>座標を表す舞台となるのが**座標平面**です。横方向の数直線を <strong>$x$ 軸</strong>、縦方向の数直線を <strong>$y$ 軸</strong>といい、2つの軸の交わる中心点を <strong>原点（ $O$ ）</strong> と呼び、座標 $(0, 0)$ で表します。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 550px;">
+                        <span class="lesson-callout-title">4つのエリア（象限）の区分け</span>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 12px;">
+                            座標平面は、縦横の軸によって以下の4つのエリア（第Ⅰ〜第Ⅳ象限）に区分されています。
+                        </p>
+                        
+                        <!-- SVG Coordinates diagram -->
+                        <div style="text-align: center; margin: 15px 0;">
+                            <svg width="240" height="180" viewBox="0 0 240 180" style="background-color: var(--color-surface); border: 1px solid var(--color-paper-line); border-radius: 6px;">
+                                <!-- Axes -->
+                                <line x1="120" y1="10" x2="120" y2="170" stroke="var(--color-paper-line)" stroke-width="2"/>
+                                <line x1="10" y1="90" x2="230" y2="90" stroke="var(--color-paper-line)" stroke-width="2"/>
+                                
+                                <!-- Text labels for quadrants -->
+                                <text x="140" y="50" font-size="12" font-weight="bold" fill="var(--color-brass)">第Ⅰ象限</text>
+                                <text x="40" y="50" font-size="12" font-weight="bold" fill="var(--color-brass)">第Ⅱ象限</text>
+                                <text x="40" y="140" font-size="12" font-weight="bold" fill="var(--color-brass)">第Ⅲ象限</text>
+                                <text x="140" y="140" font-size="12" font-weight="bold" fill="var(--color-brass)">第Ⅳ象限</text>
+                                
+                                <text x="220" y="105" font-size="12" fill="var(--color-ink-soft)" font-family="var(--font-mono)">x軸</text>
+                                <text x="128" y="25" font-size="12" fill="var(--color-ink-soft)" font-family="var(--font-mono)">y軸</text>
+                                <text x="105" y="105" font-size="12" fill="var(--color-ink-soft)" font-family="var(--font-mono)">O</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>座標のルール：必ず $x$, $y$ の順に読む</h4>
+                    <p>平面上の点は、 $(x座標, y座標)$ の順で表します。順序を入れ替えると、全く異なる場所になってしまうため注意が必要です。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 550px; background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">進む方向のルール</span>
+                        <ul style="font-size: 14px; line-height: 1.7; margin-bottom: 0; padding-left: 20px; list-style: disc;">
+                            <li>$(2, 5)$ &rarr; 原点から<strong>右へ $2$、上へ $5$</strong> 進んだ位置</li>
+                            <li>$(-3, 4)$ &rarr; 原点から<strong>左へ $3$、上へ $4$</strong> 進んだ位置</li>
+                            <li>$(-2, -1)$ &rarr; 原点から<strong>左へ $2$、下へ $1$</strong> 進んだ位置</li>
+                            <li>$(4, -3)$ &rarr; 原点から<strong>右へ $4$、下へ $3$</strong> 進んだ位置</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>点を座標平面に表す</h4>
+                    <p>実際に、点 $A(2, 3)$ を座標平面に打つ流れを確認しましょう。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 600px;">
+                        <span class="lesson-callout-title">プロット手順</span>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 15px;">
+                            ① 原点 $(0,0)$ から右（ $x$ 軸プラス方向）へ $2$ 進む。<br>
+                            ② そこから垂直に上（ $y$ 軸プラス方向）へ $3$ 進んだ位置に点を打ち、 $A(2, 3)$ と書き添える。
+                        </p>
+                        
+                        <!-- SVG for Plotting A(2,3) -->
+                        <div style="text-align: center; margin: 15px 0;">
+                            <svg width="220" height="220" viewBox="0 0 220 220" style="background-color: var(--color-surface); border: 1px solid var(--color-paper-line); border-radius: 6px;">
+                                <!-- Grid Lines -->
+                                <line x1="110" y1="0" x2="110" y2="220" stroke="var(--color-paper-line)" stroke-width="2"/>
+                                <line x1="0" y1="110" x2="220" y2="110" stroke="var(--color-paper-line)" stroke-width="2"/>
+                                
+                                <line x1="30" y1="0" x2="30" y2="220" stroke="#eaeaea" stroke-width="1"/>
+                                <line x1="70" y1="0" x2="70" y2="220" stroke="#eaeaea" stroke-width="1"/>
+                                <line x1="150" y1="0" x2="150" y2="220" stroke="#eaeaea" stroke-width="1"/>
+                                <line x1="190" y1="0" x2="190" y2="220" stroke="#eaeaea" stroke-width="1"/>
+                                <line x1="0" y1="30" x2="220" y2="30" stroke="#eaeaea" stroke-width="1"/>
+                                <line x1="0" y1="70" x2="220" y2="70" stroke="#eaeaea" stroke-width="1"/>
+                                <line x1="0" y1="150" x2="220" y2="150" stroke="#eaeaea" stroke-width="1"/>
+                                <line x1="0" y1="190" x2="220" y2="190" stroke="#eaeaea" stroke-width="1"/>
+
+                                <!-- Guideline Dotted Line -->
+                                <line x1="190" y1="110" x2="190" y2="30" stroke="var(--color-red)" stroke-dasharray="3,3" stroke-width="1.5"/>
+                                <line x1="110" y1="30" x2="190" y2="30" stroke="var(--color-red)" stroke-dasharray="3,3" stroke-width="1.5"/>
+
+                                <!-- Point A -->
+                                <circle cx="190" cy="30" r="5" fill="var(--color-red)"/>
+                                <text x="145" y="24" font-size="12" font-weight="bold" fill="var(--color-ink)">A(2,3)</text>
+
+                                <!-- Grid Labels -->
+                                <text x="187" y="125" font-size="11" fill="var(--color-ink-soft)" font-family="var(--font-mono)">2</text>
+                                <text x="96" y="34" font-size="11" fill="var(--color-ink-soft)" font-family="var(--font-mono)">3</text>
+                                <text x="210" y="125" font-size="12" fill="var(--color-ink-soft)" font-family="var(--font-mono)">x</text>
+                                <text x="118" y="15" font-size="12" fill="var(--color-ink-soft)" font-family="var(--font-mono)">y</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>象限（しょうげん）の符号見分け方</h4>
+                    <p>点が平面上のどの位置（象限）にあるかは、 $x$ と $y$ のプラス・マイナスの符号を見るだけで判断できます。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 500px;">
+                        <span class="lesson-callout-title">符号とエリアの対応</span>
+                        <table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px;">
+                            <thead>
+                                <tr style="border-bottom: 2px solid var(--color-paper-line); background-color: var(--color-surface);">
+                                    <th style="padding: 8px; text-align: left;">エリア（象限）</th>
+                                    <th style="padding: 8px; text-align: center;">$x$ 座標の符号</th>
+                                    <th style="padding: 8px; text-align: center;">$y$ 座標の符号</th>
+                                    <th style="padding: 8px; text-align: left;">具体例</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border-bottom: 1px solid var(--color-paper-line);">
+                                    <td style="padding: 8px; text-align: left; font-weight: bold;">第Ⅰ象限</td>
+                                    <td style="padding: 8px; text-align: center; color: var(--color-brass); font-weight: bold;">＋</td>
+                                    <td style="padding: 8px; text-align: center; color: var(--color-brass); font-weight: bold;">＋</td>
+                                    <td style="padding: 8px; text-align: left;">$(4, 2)$</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--color-paper-line);">
+                                    <td style="padding: 8px; text-align: left; font-weight: bold;">第Ⅱ象限</td>
+                                    <td style="padding: 8px; text-align: center; color: var(--color-red); font-weight: bold;">－</td>
+                                    <td style="padding: 8px; text-align: center; color: var(--color-brass); font-weight: bold;">＋</td>
+                                    <td style="padding: 8px; text-align: left;">$(-3, 5)$</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--color-paper-line);">
+                                    <td style="padding: 8px; text-align: left; font-weight: bold;">第Ⅲ象限</td>
+                                    <td style="padding: 8px; text-align: center; color: var(--color-red); font-weight: bold;">－</td>
+                                    <td style="padding: 8px; text-align: center; color: var(--color-red); font-weight: bold;">－</td>
+                                    <td style="padding: 8px; text-align: left;">$(-2, -4)$</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--color-paper-line);">
+                                    <td style="padding: 8px; text-align: left; font-weight: bold;">第Ⅳ象限</td>
+                                    <td style="padding: 8px; text-align: center; color: var(--color-brass); font-weight: bold;">＋</td>
+                                    <td style="padding: 8px; text-align: center; color: var(--color-red); font-weight: bold;">－</td>
+                                    <td style="padding: 8px; text-align: left;">$(5, -1)$</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p style="font-size: 13px; color: var(--color-ink-soft); margin-top: 10px;">※注意：軸の上（ $x$ 軸上や $y$ 軸上）にある点は、境界線にあたるため、どの象限にも含まれません。</p>
+                </div>
+
+                <!-- Step 6 -->
+                <div class="lesson-step success">
+                    <span class="lesson-step-meta">Step 06</span>
+                    <h4>まとめ</h4>
+                    <ul>
+                        <li>座標は、平面上の特定の位置を **$(x座標, y座標)$** の数字のペアで表したルール。</li>
+                        <li>縦横の軸によって区切られた4つのエリアを**「第Ⅰ〜第Ⅳ象限」**と呼び、それぞれの座標の正負の符号の組み合わせで判別できる。</li>
+                        <li>座標のルールを正確に身につけることが、この先の各種グラフ作成のすべての基礎となる。</li>
+                    </ul>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】身近な技術との繋がり：スマホの顔認識やマップ（GPS）が動く裏側</h4>
+                    <p>一見難しそうに見える「座標平面」ですが、私たちが毎日使っているスマートフォンの便利な機能の裏側では、この座標のルールがそのまま使われています。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">日常生活の中の座標システム</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            <strong>① 写真アプリの「顔認識」と加工フィルター</strong><br>
+                            スマホのカメラで自撮りをするとき、AIが顔を検知して猫の耳をつけたり美肌にしたりします。AIは画面（写真）を「巨大なピクセル座標平面」として捉えています。目や鼻の正確な $(x, y)$ 座標を特定し、その座標を基準に「目の上にメガネのイラストを代入して表示する」という処理を行っているのです。
+                        </p>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            <strong>② Googleマップの「位置情報（GPS）」とルート予測</strong><br>
+                            スマートフォンのGPSは、地球全体を巨大な球体座標平面とみなしています。緯度（縦）と経度（横）の数字のペアによって「あなたが現在どの座標 $(x, y)$ にいるか」を特定し、AIが渋滞情報や最適な経路を計算して到着時刻を教えてくれます。座標平面は、デジタル時代のインフラを支える最も身近な技術なのです。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="lesson-footer-nav">
+                <a href="33.html" class="btn-secondary">&larr; 前の単元へ</a>
+                <a href="index.html" class="btn-secondary">目次に戻る</a>
+                <a href="#" class="btn btn-primary">次の単元へ</a>
+            </footer>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>
