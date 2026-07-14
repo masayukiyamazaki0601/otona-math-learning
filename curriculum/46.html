@@ -420,78 +420,82 @@
                 <!-- Column -->
                 <div class="lesson-step alert">
                     <span class="lesson-step-meta">番外編 (Column)</span>
-                    <h4>【番外編】身近なAI・技術との繋がり：スマホ写真のギザギザを防ぐ！画像拡大（超解像）AIで行われている数式展開</h4>
-                    <p>スマートフォンで撮影した写真を拡大したり、古い解像度の低い画像をディスプレイに大きく表示したりしても、ギザギザにならずになめらかに表示されるのはなぜでしょうか。</p>
-                    <p>この裏側では、新しく生み出す画素（ピクセル）の色を決定するために、式の展開と分配法則がミリ秒単位で超高速計算されています。</p>
+                    <h4>【番外編】ビジネスでの活用：『単価値上げ × 客数減少』の売上予測を数式展開で要素分解する</h4>
+                    <p>ビジネスにおいて、商品の値上げや値下げを行う際、「売上全体がどう変化するか」を予測することは極めて重要です。この予測シミュレーションの現場でも、式の展開公式が「要因分析のツール」として活用されています。</p>
                     
                     <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface); max-width: 700px;">
-                        <span class="lesson-callout-title" style="color: var(--color-brass);">【体験】新しく作るピクセルを周囲の「面積比」で混ぜ合わせる</span>
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">【体験】単価値上げ・客数減少の売上シミュレーター</span>
                         <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 15px; align-items: center; justify-content: center;">
                             
                             <!-- Slider Controls -->
-                            <div style="display: flex; flex-direction: column; gap: 10px; width: 220px; background-color: var(--color-paper); padding: 12px; border-radius: 6px; border: 1px solid var(--color-paper-line);">
+                            <div style="display: flex; flex-direction: column; gap: 10px; width: 230px; background-color: var(--color-paper); padding: 12px; border-radius: 6px; border: 1px solid var(--color-paper-line);">
                                 <div>
-                                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 2px;">横の距離 dx: <span id="valDx" style="color: var(--color-red);">0.40</span></label>
-                                    <input type="range" id="sliderDx" min="0.00" max="1.00" step="0.01" value="0.40" style="width: 100%; cursor: pointer;">
+                                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 2px;">値上げ額 x: <span id="valX" style="color: var(--color-brass);">+50</span> 円</label>
+                                    <input type="range" id="sliderX" min="-100" max="200" step="5" value="50" style="width: 100%; cursor: pointer;">
                                 </div>
                                 <div>
-                                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 2px;">縦の距離 dy: <span id="valDy" style="color: var(--color-red);">0.60</span></label>
-                                    <input type="range" id="sliderDy" min="0.00" max="1.00" step="0.01" value="0.60" style="width: 100%; cursor: pointer;">
+                                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 2px;">客数変化 y: <span id="valY" style="color: var(--color-red);">-30</span> 人</label>
+                                    <input type="range" id="sliderY" min="-50" max="50" step="1" value="-30" style="width: 100%; cursor: pointer;">
                                 </div>
-                                <div style="border-top: 1px dashed var(--color-paper-line); padding-top: 8px; font-size: 11px; font-family: var(--font-mono); line-height: 1.5; color: var(--color-ink);">
-                                    <div style="font-weight: bold; margin-bottom: 4px;">各画素の配合比率(重み):</div>
-                                    <div style="color: var(--color-ink); font-weight: 500;">画素A (1-dx)(1-dy) = <span id="weightA">24.0</span> %</div>
-                                    <div style="color: var(--color-brass); font-weight: 500;">画素B dx(1-dy) = <span id="weightB">16.0</span> %</div>
-                                    <div style="color: var(--color-red); font-weight: 500;">画素C (1-dx)dy = <span id="weightC">36.0</span> %</div>
-                                    <div style="color: #7f8c8d; font-weight: 500;">画素D dx・dy = <span id="weightD">24.0</span> %</div>
-                                    <div style="border-top: 1px solid var(--color-paper-line); margin-top: 4px; padding-top: 4px; display: flex; align-items: center; gap: 8px;">
-                                        <span>合成された色:</span>
-                                        <div id="colorPreview" style="width: 16px; height: 16px; border-radius: 3px; border: 1px solid var(--color-ink-soft); background-color: rgb(110, 89, 72);"></div>
+                                <div style="border-top: 1px dashed var(--color-paper-line); padding-top: 8px; font-size: 11px; font-family: var(--font-mono); line-height: 1.6; color: var(--color-ink);">
+                                    <div style="font-weight: bold; margin-bottom: 4px;">売上変動の要因分解:</div>
+                                    <div style="font-weight: 500;">① 単価値上げ効果 (200x) = <span id="valEffectX" style="color: #2ec4b6;">+10,000</span> 円</div>
+                                    <div style="font-weight: 500;">② 客数減少効果 (400y) = <span id="valEffectY" style="color: #e74c3c;">-12,000</span> 円</div>
+                                    <div style="font-weight: 500;">③ 相乗効果 (xy) = <span id="valEffectXY" style="color: #e74c3c;">-1,500</span> 円</div>
+                                    <div style="font-weight: bold; border-top: 1px solid var(--color-paper-line); margin-top: 6px; padding-top: 6px; display: flex; justify-content: space-between;">
+                                        <span>新しい売上高:</span>
+                                        <span id="valNewSales" style="color: var(--color-red);">76,500 円</span>
                                     </div>
+                                    <div style="font-size: 10px; color: var(--color-ink-soft); text-align: right;">(元の売上: 80,000 円)</div>
                                 </div>
                             </div>
 
-                            <!-- SVG Display -->
-                            <div style="background-color: var(--color-paper); padding: 10px; border-radius: 6px; border: 1px solid var(--color-paper-line); width: 280px; height: 170px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative;">
-                                <svg width="100%" height="150" viewBox="0 0 250 150">
-                                    <!-- Grid background -->
-                                    <rect x="30" y="20" width="100" height="100" fill="rgba(44, 62, 80, 0.03)" stroke="var(--color-paper-line)" stroke-width="1" />
-                                    <rect x="130" y="20" width="100" height="100" fill="rgba(168, 143, 93, 0.03)" stroke="var(--color-paper-line)" stroke-width="1" />
-                                    
-                                    <!-- Interpolated Pixel (New Point) -->
-                                    <circle id="pixelNew" cx="70" cy="80" r="6.5" fill="rgb(110, 89, 72)" stroke="var(--color-paper)" stroke-width="1.5" />
-                                    
-                                    <!-- Projection lines (distances dx, dy) -->
-                                    <line id="lineDx" x1="30" y1="80" x2="130" y2="80" stroke="var(--color-ink-soft)" stroke-width="0.8" stroke-dasharray="2,2" opacity="0.6" />
-                                    <line id="lineDy" x1="70" y1="20" x2="70" y2="120" stroke="var(--color-ink-soft)" stroke-width="0.8" stroke-dasharray="2,2" opacity="0.6" />
-                                    
-                                    <!-- Dimension markers -->
-                                    <text id="textDx" x="50" y="75" font-size="8" fill="var(--color-ink-soft)" text-anchor="middle">dx</text>
-                                    <text id="text1_dx" x="100" y="75" font-size="8" fill="var(--color-ink-soft)" text-anchor="middle">1 - dx</text>
-                                    <text id="textDy" x="75" y="50" font-size="8" fill="var(--color-ink-soft)">dy</text>
-                                    <text id="text1_dy" x="75" y="105" font-size="8" fill="var(--color-ink-soft)">1 - dy</text>
+                            <!-- SVG Display (Interactive Graph) -->
+                            <div style="background-color: var(--color-paper); padding: 10px; border-radius: 6px; border: 1px solid var(--color-paper-line); width: 280px; height: 180px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative;">
+                                <svg width="100%" height="160" viewBox="0 0 280 160">
+                                    <!-- Left side: Sales Rectangle -->
+                                    <g transform="translate(10, 0)">
+                                        <!-- Original Sales (dashed) -->
+                                        <rect id="rectSalesOrig" x="15" y="50" width="80" height="60" fill="none" stroke="var(--color-ink-soft)" stroke-dasharray="2,2" stroke-width="1" />
+                                        <!-- New Sales -->
+                                        <rect id="rectSalesNew" x="15" y="42.5" width="68" height="67.5" fill="rgba(168, 143, 93, 0.15)" stroke="var(--color-brass)" stroke-width="1.5" />
+                                        
+                                        <!-- Labels -->
+                                        <text x="55" y="125" font-size="8" fill="var(--color-ink-soft)" text-anchor="middle">客数</text>
+                                        <text x="8" y="80" font-size="8" fill="var(--color-ink-soft)" text-anchor="middle" transform="rotate(-90 8 80)">単価</text>
+                                        <text x="55" y="80" font-size="9" fill="var(--color-ink)" font-weight="bold" text-anchor="middle">売上面積</text>
+                                    </g>
 
-                                    <!-- Labels of original pixels -->
-                                    <circle cx="30" cy="20" r="4" fill="var(--color-ink)" />
-                                    <text x="25" y="14" font-size="8" fill="var(--color-ink)" font-weight="bold">A</text>
-                                    
-                                    <circle cx="130" cy="20" r="4" fill="var(--color-brass)" />
-                                    <text x="135" y="14" font-size="8" fill="var(--color-brass)" font-weight="bold">B</text>
-                                    
-                                    <circle cx="30" cy="120" r="4" fill="var(--color-red)" />
-                                    <text x="25" y="132" font-size="8" fill="var(--color-red)" font-weight="bold">C</text>
-                                    
-                                    <circle cx="130" cy="120" r="4" fill="var(--color-ink-soft)" />
-                                    <text x="135" y="132" font-size="8" fill="var(--color-ink-soft)" font-weight="bold">D</text>
+                                    <!-- Right side: Waterfall Factor Chart -->
+                                    <g transform="translate(145, 0)">
+                                        <!-- Zero baseline -->
+                                        <line x1="10" y1="80" x2="110" y2="80" stroke="var(--color-ink-soft)" stroke-width="0.8" />
+                                        <text x="110" y="76" font-size="7" fill="var(--color-ink-soft)" text-anchor="end">基準(±0)</text>
+                                        
+                                        <!-- Bar 1: 単価値上げ (200x) -->
+                                        <rect id="barX" x="20" y="65" width="18" height="15" fill="#2ec4b6" opacity="0.8" />
+                                        <text x="29" y="145" font-size="7" fill="var(--color-ink)" text-anchor="middle">単価</text>
+                                        
+                                        <!-- Bar 2: 客数減少 (400y) -->
+                                        <rect id="barY" x="45" y="80" width="18" height="18" fill="#e74c3c" opacity="0.8" />
+                                        <text x="54" y="145" font-size="7" fill="var(--color-ink)" text-anchor="middle">客数</text>
+                                        
+                                        <!-- Bar 3: 相乗効果 (xy) -->
+                                        <rect id="barXY" x="70" y="80" width="18" height="2.25" fill="#e74c3c" opacity="0.8" />
+                                        <text x="79" y="145" font-size="7" fill="var(--color-ink)" text-anchor="middle">相乗</text>
+                                        
+                                        <!-- Bar 4: 合計変動 -->
+                                        <rect id="barTotal" x="95" y="80" width="18" height="5.25" fill="#e74c3c" opacity="0.8" />
+                                        <text x="104" y="145" font-size="7" fill="var(--color-ink)" font-weight="bold" text-anchor="middle">合計</text>
+                                    </g>
                                 </svg>
                             </div>
                         </div>
                         <p style="font-size: 14px; line-height: 1.7; margin-top: 15px; margin-bottom: 0;">
-                            この重み付け計算（バイリニア補間）では、まさに <span style="white-space: nowrap;">$(1-dx)(1-dy)$</span> といった文字式の掛け算（展開）が行われています。AIや画像プロセッサは、この展開式 <span style="white-space: nowrap;">$\mathbf{1 - dx - dy + dx \cdot dy}$</span> を、展開された状態のままプログラムのハードウェア層で並列処理することで、1秒間に何千万回という超膨大なピクセル補間を可能にしているのです。写真の滑らかな拡大は、数学の展開公式の恩恵を受けている代表的な技術です。
+                            このシミュレーションの計算式は、まさに多項式の掛け算 <span style="white-space: nowrap;">$(400 + x)(200 + y)$</span> です。これを展開することで、単に売上の総額がわかるだけでなく、**「値上げ効果によるプラス（ $200x$ ）」**と**「客数減少によるマイナス（ $400y$ ）」**がそれぞれどれだけ発生しているかを個別に割り出す（要素分解する）ことが可能になります。数式の展開は、ビジネスにおける収益の要因分析を行うための強力な武器なのです。
                         </p>
                     </div>
                 </div>
-            </div>
 
             <footer class="lesson-footer-nav">
                 <a href="45.html" class="btn-secondary">&larr; 前の単元へ</a>
@@ -729,84 +733,102 @@
             update();
         })();
 
-        // --- 3. Image Scaling (Bilinear) Simulator ---
+        // --- 3. Business Sales Waterfall Simulator ---
         (function() {
-            const sliderDx = document.getElementById('sliderDx');
-            const sliderDy = document.getElementById('sliderDy');
+            const sliderX = document.getElementById('sliderX');
+            const sliderY = document.getElementById('sliderY');
 
-            if (!sliderDx || !sliderDy) return;
+            if (!sliderX || !sliderY) return;
 
             function update() {
-                const dx = parseFloat(sliderDx.value);
-                const dy = parseFloat(sliderDy.value);
+                const x = parseFloat(sliderX.value); // Price change (-100 to 200)
+                const y = parseFloat(sliderY.value); // Customer change (-50 to 50)
 
-                document.getElementById('valDx').textContent = dx.toFixed(2);
-                document.getElementById('valDy').textContent = dy.toFixed(2);
+                // Update text values
+                document.getElementById('valX').textContent = (x >= 0 ? '+' : '') + x;
+                document.getElementById('valY').textContent = (y >= 0 ? '+' : '') + y;
+                
+                // Color formatting for customer text label
+                const labelY = document.getElementById('valY');
+                if (y < 0) {
+                    labelY.style.color = '#e74c3c';
+                } else if (y > 0) {
+                    labelY.style.color = '#2ec4b6';
+                } else {
+                    labelY.style.color = 'var(--color-ink)';
+                }
 
-                const wA = (1 - dx) * (1 - dy);
-                const wB = dx * (1 - dy);
-                const wC = (1 - dx) * dy;
-                const wD = dx * dy;
+                // Calculate effects
+                const effectX = 200 * x;
+                const effectY = 400 * y;
+                const effectXY = x * y;
+                const origSales = 80000;
+                const newSales = origSales + effectX + effectY + effectXY;
 
-                document.getElementById('weightA').textContent = (wA * 100).toFixed(1);
-                document.getElementById('weightB').textContent = (wB * 100).toFixed(1);
-                document.getElementById('weightC').textContent = (wC * 100).toFixed(1);
-                document.getElementById('weightD').textContent = (wD * 100).toFixed(1);
+                // Update text elements in panel
+                document.getElementById('valEffectX').textContent = (effectX >= 0 ? '+' : '') + effectX.toLocaleString();
+                document.getElementById('valEffectY').textContent = (effectY >= 0 ? '+' : '') + effectY.toLocaleString();
+                document.getElementById('valEffectXY').textContent = (effectXY >= 0 ? '+' : '') + effectXY.toLocaleString();
+                document.getElementById('valNewSales').textContent = newSales.toLocaleString() + ' 円';
 
-                // SVG elements update
-                const cx = 30 + dx * 100;
-                const cy = 20 + dy * 100;
+                // Color coding factor label texts
+                document.getElementById('valEffectX').style.color = effectX >= 0 ? '#2ec4b6' : '#e74c3c';
+                document.getElementById('valEffectY').style.color = effectY >= 0 ? '#2ec4b6' : '#e74c3c';
+                document.getElementById('valEffectXY').style.color = effectXY >= 0 ? '#2ec4b6' : '#e74c3c';
+                document.getElementById('valNewSales').style.color = newSales >= origSales ? '#2ec4b6' : '#e74c3c';
 
-                const pixelNew = document.getElementById('pixelNew');
-                pixelNew.setAttribute('cx', cx);
-                pixelNew.setAttribute('cy', cy);
+                // --- SVG Visual Updates ---
+                // Left side: Sales Rectangle
+                // original size: w = 80 (customer 200), h = 60 (price 400)
+                // scale: 1 customer = 0.4px, 1 yen = 0.15px
+                const dx = y * 0.4;
+                const dy = x * 0.15;
 
-                const lineDx = document.getElementById('lineDx');
-                lineDx.setAttribute('y1', cy);
-                lineDx.setAttribute('y2', cy);
+                const rectNew = document.getElementById('rectSalesNew');
+                const newW = 80 + dx;
+                const newH = 60 + dy;
+                const newY = 50 + (60 - newH); // keep baseline (y=110) fixed
 
-                const lineDy = document.getElementById('lineDy');
-                lineDy.setAttribute('x1', cx);
-                lineDy.setAttribute('x2', cx);
+                rectNew.setAttribute('width', newW);
+                rectNew.setAttribute('height', newH);
+                rectNew.setAttribute('y', newY);
 
-                // Labels position
-                const textDx = document.getElementById('textDx');
-                textDx.setAttribute('x', 30 + (dx * 100) / 2);
-                textDx.setAttribute('y', cy - 5);
-                textDx.textContent = `dx: ${dx.toFixed(2)}`;
+                // Right side: Factor Bars (Baseline: Y=80)
+                // scale: 1 yen = 0.0012px
+                const scaleY = 0.0012;
+                
+                // Bar 1: Price effect
+                const barX = document.getElementById('barX');
+                const hX = Math.abs(effectX) * scaleY;
+                barX.setAttribute('height', hX > 0 ? hX : 0.5); // min height 0.5 to keep visible
+                barX.setAttribute('y', effectX >= 0 ? 80 - hX : 80);
+                barX.setAttribute('fill', effectX >= 0 ? '#2ec4b6' : '#e74c3c');
 
-                const text1_dx = document.getElementById('text1_dx');
-                text1_dx.setAttribute('x', cx + ((1 - dx) * 100) / 2);
-                text1_dx.setAttribute('y', cy - 5);
-                text1_dx.textContent = `1-dx: ${(1 - dx).toFixed(2)}`;
+                // Bar 2: Customer effect
+                const barY = document.getElementById('barY');
+                const hY = Math.abs(effectY) * scaleY;
+                barY.setAttribute('height', hY > 0 ? hY : 0.5);
+                barY.setAttribute('y', effectY >= 0 ? 80 - hY : 80);
+                barY.setAttribute('fill', effectY >= 0 ? '#2ec4b6' : '#e74c3c');
 
-                const textDy = document.getElementById('textDy');
-                textDy.setAttribute('x', cx + 5);
-                textDy.setAttribute('y', 20 + (dy * 100) / 2);
-                textDy.textContent = `dy: ${dy.toFixed(2)}`;
+                // Bar 3: Synergy effect
+                const barXY = document.getElementById('barXY');
+                const hXY = Math.abs(effectXY) * scaleY;
+                barXY.setAttribute('height', hXY > 0 ? hXY : 0.5);
+                barXY.setAttribute('y', effectXY >= 0 ? 80 - hXY : 80);
+                barXY.setAttribute('fill', effectXY >= 0 ? '#2ec4b6' : '#e74c3c');
 
-                const text1_dy = document.getElementById('text1_dy');
-                text1_dy.setAttribute('x', cx + 5);
-                text1_dy.setAttribute('y', cy + ((1 - dy) * 100) / 2);
-                text1_dy.textContent = `1-dy: ${(1 - dy).toFixed(2)}`;
-
-                // Blending colors
-                const colorA = [44, 62, 80];   // #2c3e50
-                const colorB = [168, 143, 93]; // #a88f5d
-                const colorC = [200, 75, 49];  // #c84b31
-                const colorD = [127, 140, 141];// #7f8c8d
-
-                const r = Math.round(colorA[0] * wA + colorB[0] * wB + colorC[0] * wC + colorD[0] * wD);
-                const g = Math.round(colorA[1] * wA + colorB[1] * wB + colorC[1] * wC + colorD[1] * wD);
-                const b = Math.round(colorA[2] * wA + colorB[2] * wB + colorC[2] * wC + colorD[2] * wD);
-
-                const rgbStr = `rgb(${r}, ${g}, ${b})`;
-                pixelNew.setAttribute('fill', rgbStr);
-                document.getElementById('colorPreview').style.backgroundColor = rgbStr;
+                // Bar 4: Total difference
+                const totalDiff = effectX + effectY + effectXY;
+                const barTotal = document.getElementById('barTotal');
+                const hTotal = Math.abs(totalDiff) * scaleY;
+                barTotal.setAttribute('height', hTotal > 0 ? hTotal : 0.5);
+                barTotal.setAttribute('y', totalDiff >= 0 ? 80 - hTotal : 80);
+                barTotal.setAttribute('fill', totalDiff >= 0 ? '#2ec4b6' : '#e74c3c');
             }
 
-            sliderDx.addEventListener('input', update);
-            sliderDy.addEventListener('input', update);
+            sliderX.addEventListener('input', update);
+            sliderY.addEventListener('input', update);
             update();
         })();
     </script>
