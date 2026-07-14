@@ -484,3 +484,78 @@ ul { list-style: none; }
         display: none; /* Hide nav on mobile for simplicity in mockup */
     }
 }
+
+/* Curriculum TOC Styles */
+.curriculum-toc {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.toc-chapter {
+    background-color: var(--color-surface);
+    border: var(--border-thin);
+    border-radius: var(--radius-card);
+    margin-bottom: 40px;
+    overflow: hidden;
+}
+
+.toc-chapter-title {
+    background-color: var(--color-paper);
+    padding: 20px 30px;
+    border-bottom: var(--border-thin);
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 0;
+}
+
+.toc-chapter-title .chapter-num {
+    font-family: var(--font-mono);
+    color: var(--color-paper);
+    background-color: var(--color-ink);
+    font-size: 14px;
+    padding: 4px 12px;
+    border-radius: 50px;
+}
+
+.toc-chapter-title .unit-count {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--color-ink-soft);
+    margin-left: auto;
+    font-weight: normal;
+}
+
+.toc-unit-list {
+    padding: 10px 0;
+}
+
+.toc-unit-list li {
+    border-bottom: var(--border-thin);
+}
+
+.toc-unit-list li:last-child {
+    border-bottom: none;
+}
+
+.toc-unit-list a {
+    display: flex;
+    align-items: center;
+    padding: 16px 30px;
+    color: var(--color-ink);
+    font-size: 15px;
+}
+
+.toc-unit-list a:hover {
+    background-color: rgba(217, 210, 190, 0.15); /* Soft paper line color */
+    color: var(--color-brass);
+}
+
+.unit-num {
+    font-family: var(--font-mono);
+    color: var(--color-brass);
+    margin-right: 20px;
+    font-size: 16px;
+    width: 24px;
+}
