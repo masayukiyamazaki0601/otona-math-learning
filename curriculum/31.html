@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>比の性質と比例式の解法 | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第3章 中学校数学の基礎固め &gt; 単元31
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 03 / Unit 31</span>
+                <h2 class="lesson-title">比の性質と比例式の解法</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>なぜ比を学ぶのか</h4>
+                    <p>私たちの日常やビジネスには、絶対的な数値だけでなく、**「数量同士の割合（バランス）」**を捉えるべき場面が多く存在します。例えば、画面の「アスペクト比（16：9）」や、カクテルのレシピ、デザインの「黄金比」などです。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 500px;">
+                        <span class="lesson-callout-title">相対的な「関係性」を固定する</span>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 0;">
+                            比を用いると、全体の規模が変化しても、要素間のバランス（関係性）を一定に保つことができます。そして、この比のバランスを利用して「片方が2倍になったなら、もう片方はどうなるか」という未知の数値を逆算する手法が<strong>比例式</strong>です。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>比・比の性質と「最も簡単な比」</h4>
+                    <div class="lesson-callout" style="max-width: 550px; background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">数学の用語解説</span>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 0;">
+                            ・<strong>比（ひ）</strong>：2つの数量の割合の関係を表したもの。 $a : b$ と書く。<br>
+                            ・<strong>最も簡単な比</strong>：比の両方の数を公約数で割り、それ以上小さくできない整数の比。
+                        </p>
+                    </div>
+                    
+                    <p>比の最も重要な性質は、**「両方の数に同じ数を掛けたり、同じ数で割ったりしても、比の価値は変わらない」**ということです。</p>
+
+                    <div class="lesson-callout" style="max-width: 550px;">
+                        <span class="lesson-callout-title">比の縮小操作（約分のイメージ）</span>
+                        <div class="math-formula" style="background-color: var(--color-surface); padding: 15px; font-size: 15px; font-family: var(--font-mono); text-align: left;">
+                            ・掛け算： $2 : 3$ の両辺を $2$ 倍 &rarr; $4 : 6$<br>
+                            ・割り算： $12 : 18$ の両辺を最大公約数の $6$ で割る &rarr; $2 : 3$ （最も簡単な比）
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>比例式と「内外の積」の黄金律</h4>
+                    <p>2つの比が等しいことをイコール「$=$」で結んだ式を**比例式（ひれいしき）**と呼びます。比例式を解くための、最も強力な黄金ルールがこちらです。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 550px; border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">外側どうしの積 ＝ 内側どうしの積</span>
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 16px; font-weight: bold; margin-bottom: 12px;">
+                            $$a : b = c : d \implies ad = bc$$
+                        </div>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 0;">
+                            この性質を使うことで、比の式「 $:$ 」を、見慣れた一次方程式「掛け算の等式」へと一瞬で変換することができます。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>比例式の具体的な解き方</h4>
+                    <p>比例式の性質を利用して、未知数 $x$ を含む比例式を解く手順を解説します。</p>
+                    
+                    <div class="lesson-callout">
+                        <h5 style="margin-top: 5px;">例題： $3 : 5 = x : 20$ を解きなさい。</h5>
+                        <div class="math-formula" style="background-color: var(--color-surface); text-align: left; padding: 20px; font-size: 14px; line-height: 1.8;">
+                            1. <strong>内外の積の公式を適用する</strong>：<br>
+                            $\quad 3 \times 20 = 5 \times x$<br><br>
+                            2. <strong>式を整理して一次方程式にする</strong>（見やすく左右を入れ替える）：<br>
+                            $\quad 5x = 60$<br><br>
+                            3. <strong>方程式を解く</strong>（両辺を $5$ で割る）：<br>
+                            $\quad x = 12$<br><br>
+                            4. <strong>答えを検証する</strong>：<br>
+                            $\quad$ 元の式の右辺に $x = 12$ を代入すると $12 : 20$ となる。両辺を $4$ で割って最も簡単な比にすると $3 : 5$ となり、左辺と完全に一致する。よって <strong>答え： $x = 12$</strong>。
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="lesson-step success">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>まとめ</h4>
+                    <ul>
+                        <li>比（ $a : b$ ）は、全体の規模に左右されない**「相対的なバランス」**を表す。</li>
+                        <li>比の両辺に**同じ数を掛けたり割ったりしても、比の関係は変化しない**。</li>
+                        <li>比例式（ $a : b = c : d$ ）は、**「外側の積＝内側の積（ $ad = bc$ ）」**を利用して一次方程式に直して解く。</li>
+                    </ul>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】データサイエンスとの繋がり：画像認識AI（コンピュータビジョン）の座標変換</h4>
+                    <p>自動運転や監視カメラの映像から「物体（人や車）」を検出する画像認識AI（YOLOなど）の技術において、比例式はなくてはならない重要な役割を果たしています。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">画像サイズ縮小とバウンディングボックスの再配置</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            AIが検出したターゲットの座標（バウンディングボックスの中心位置 $x$）が、元画像（横幅 $1920\text{px}$）において左から $1500\text{px}$ の位置にあったとします。
+                        </p>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            この画像を、AIが処理しやすい小さい画像（横幅 $640\text{px}$）に**比のバランス（アスペクト比）を崩さずに縮小（リサイズ）**して表示したい場合、新しい画像上での中心座標 $x'$ は比例式を用いて以下のように計算されます：
+                        </p>
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 15px; text-align: left; margin-bottom: 12px; font-family: var(--font-mono);">
+                            $$x' : 1500 = 640 : 1920$$
+                            $$1920 \cdot x' = 1500 \cdot 640$$
+                            $$1920 \cdot x' = 960,000$$
+                            $$x' = 500 \text{ px}$$
+                        </div>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            この計算により、リサイズ後の画像でも、車や人の位置が正確に左から $500\text{px}$ の位置に自動再配置されます。コンピュータビジョンの領域において、画像の拡大・縮小に伴う各種物体データ（マスクやキーポイント）の座標変換は、すべてこの比例式に基づいた比率計算によって行われています。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="lesson-footer-nav">
+                <a href="30.html" class="btn-secondary">&larr; 前の単元へ</a>
+                <a href="index.html" class="btn-secondary">目次に戻る</a>
+                <a href="#" class="btn btn-primary">次の単元へ</a>
+            </footer>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>
