@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>比例と反比例の基本概念 | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第3章 中学校数学の基礎固め &gt; 単元32
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 03 / Unit 32</span>
+                <h2 class="lesson-title">比例と反比例の基本概念</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>なぜ比例と反比例を学ぶのか</h4>
+                    <p>私たちの身の回りのデータは、ただ静止しているのではなく、連動して動いています。例えば、「広告を増やすと、売上が伸びる（増加の連動）」、あるいは「稼働人数を増やすと、作業時間が減る（減少の連動）」などです。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 500px;">
+                        <span class="lesson-callout-title">「連動して変化する2変数」の関係を掴む</span>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 0;">
+                            このように、ある数量 $x$ が変化するとき、それに応じて変化する $y$ との関係を表すモデルの代表例が<strong>比例（正比例）</strong>と<strong>反比例</strong>です。この2つの基本法則を掴むことで、将来の予測値を見積もるデータ予測の基礎が身につきます。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>比例とは：同じ倍率で増減する関係</h4>
+                    <p>比例とは、一方の変数 $x$ が2倍、3倍になると、もう一方の変数 $y$ も自動的に**2倍、3倍にスケールアップする関係**のことです。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 500px; margin-bottom: 20px;">
+                        <span class="lesson-callout-title">【例題】 1個 $100$ 円の商品の購入数と代金</span>
+                        <table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px;">
+                            <thead>
+                                <tr style="border-bottom: 2px solid var(--color-paper-line);">
+                                    <th style="padding: 8px; text-align: left;">個数 $x$</th>
+                                    <th style="padding: 8px; text-align: right;">1</th>
+                                    <th style="padding: 8px; text-align: right;">2</th>
+                                    <th style="padding: 8px; text-align: right;">3</th>
+                                    <th style="padding: 8px; text-align: right;">5</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border-bottom: 1px solid var(--color-paper-line);">
+                                    <td style="padding: 8px; text-align: left; font-weight: bold;">代金 $y$ （円）</td>
+                                    <td style="padding: 8px; text-align: right; color: var(--color-brass);">100</td>
+                                    <td style="padding: 8px; text-align: right; color: var(--color-brass);">200</td>
+                                    <td style="padding: 8px; text-align: right; color: var(--color-brass);">300</td>
+                                    <td style="padding: 8px; text-align: right; color: var(--color-brass);">500</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p>比例の関係は、次の数式（モデル）で表されます。</p>
+                    <div class="math-formula">
+                        $$y = ax$$
+                    </div>
+                    <p>この式の $a$ を**比例定数（ひれいていすう）**と呼びます。これは「 $x$ が $1$ 増えるごとに、 $y$ がどれだけ変化するか（傾き・変化の割合）」を表す固定の数値です。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 450px; background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">比例定数 $a$ の符号によるトレンド</span>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 0;">
+                            ・ $a > 0$ （正の数） のとき &rarr; <strong>右上がり</strong>（ $x$ が増えると $y$ も増える。例： $y = 5x$）<br>
+                            ・ $a < 0$ （負の数） のとき &rarr; <strong>右下がり</strong>（ $x$ が増えると $y$ は減る。例： $y = -3x$）
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>反比例とは：逆数倍で変化する関係</h4>
+                    <p>反比例とは、変数 $x$ が2倍、3倍になると、もう一方の変数 $y$ が**$\frac{1}{2}$ 倍、$\frac{1}{3}$ 倍と逆数倍に小さくなる関係**のことです。</p>
+
+                    <div class="lesson-callout" style="max-width: 500px; margin-bottom: 20px;">
+                        <span class="lesson-callout-title">【例題】 積が $12$ になる2つの数 $x$ と $y$</span>
+                        <table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px;">
+                            <thead>
+                                <tr style="border-bottom: 2px solid var(--color-paper-line);">
+                                    <th style="padding: 8px; text-align: left;">$x$</th>
+                                    <th style="padding: 8px; text-align: right;">1</th>
+                                    <th style="padding: 8px; text-align: right;">2</th>
+                                    <th style="padding: 8px; text-align: right;">3</th>
+                                    <th style="padding: 8px; text-align: right;">4</th>
+                                    <th style="padding: 8px; text-align: right;">6</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border-bottom: 1px solid var(--color-paper-line);">
+                                    <td style="padding: 8px; text-align: left; font-weight: bold;">$y$</td>
+                                    <td style="padding: 8px; text-align: right; color: var(--color-red);">12</td>
+                                    <td style="padding: 8px; text-align: right; color: var(--color-red);">6</td>
+                                    <td style="padding: 8px; text-align: right; color: var(--color-red);">4</td>
+                                    <td style="padding: 8px; text-align: right; color: var(--color-red);">3</td>
+                                    <td style="padding: 8px; text-align: right; color: var(--color-red);">2</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p>反比例の関係は、次の分数形式のモデルで表されます。</p>
+                    <div class="math-formula">
+                        $$y = \frac{a}{x}$$
+                    </div>
+                    <p>この式の $a$ を**反比例定数**と呼びます。分母の $x$ が大きくなるほど、全体の数値である $y$ は急速に小さくなっていきます。</p>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>比例と反比例を見分ける見極め公式</h4>
+                    <p>複数のデータ項目があったとき、それらが比例なのか反比例なのかを見極めるには、以下の「商（割り算）」と「積（掛け算）」の性質をチェックします。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 550px;">
+                        <span class="lesson-callout-title">見極めの方程式</span>
+                        <div class="lesson-callout-grid">
+                            <div class="grid-cell" style="background-color: var(--color-surface); border-color: var(--color-paper-line);">
+                                <span class="label" style="color: var(--color-brass);">比例である場合</span>
+                                <span class="value" style="font-size: 16px; line-height: 1.6; font-family: var(--font-mono); font-weight: bold; text-align: left;">
+                                    $$\frac{y}{x} = a \quad \text{（商が常に一定）}$$
+                                    <span style="font-size: 12px; color: var(--color-ink-soft); font-family: var(--font-body); font-weight: normal;">
+                                        例の表より： $\frac{100}{1} = \frac{200}{2} = 100$
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="grid-cell" style="background-color: var(--color-surface); border-color: var(--color-paper-line);">
+                                <span class="label" style="color: var(--color-red);">反比例である場合</span>
+                                <span class="value" style="font-size: 16px; line-height: 1.6; font-family: var(--font-mono); font-weight: bold; text-align: left;">
+                                    $$xy = a \quad \text{（積が常に一定）}$$
+                                    <span style="font-size: 12px; color: var(--color-ink-soft); font-family: var(--font-body); font-weight: normal;">
+                                        例の表より： $1 \times 12 = 2 \times 6 = 12$
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="lesson-step success">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>まとめ</h4>
+                    <ul>
+                        <li>比例は、 $x$ と同じ倍率で $y$ が変化し、 **$y = ax$ （商 $\frac{y}{x}$ が一定）**で表される。</li>
+                        <li>反比例は、 $x$ の逆数倍で $y$ が変化し、 **$y = \frac{a}{x}$ （積 $xy$ が一定）**で表される。</li>
+                        <li>比例定数 $a$ は、 $x$ の増減に対する変化のペースを規定する。</li>
+                    </ul>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】データサイエンスとの繋がり：AIモデルと「学習率の反比例減衰（Decay）」</h4>
+                    <p>データサイエンスにおいて、比例関係（ $y = ax$ ）は「最もシンプルな線形予測モデル」として活用されますが、一方で反比例関係（ $y = \frac{a}{x}$ ）も、高度なディープラーニングの訓練プロセスで大活躍しています。それが**「学習率の反比例減衰（Learning Rate Decay）」**です。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">学習の終盤にかけて一歩の幅を縮める</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            AIモデルを更新するスピードを「学習率 $\eta$」と呼びます。学習の初期段階では、素早く正解に近づくために大きな学習率が適していますが、学習の終盤（ステップ数 $t$ が大きいとき）は、正解を行き過ぎてしまわないよう、学習率を細かく縮めて調整する必要があります。
+                        </p>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            このため、ステップ数 $t$ （分母）に対して、学習率 $\eta_t$ （分子）が反比例するように減少するアルゴリズムが頻繁に使用されます：
+                        </p>
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 16px; font-weight: bold; margin-bottom: 12px;">
+                            $$\eta_t = \frac{\eta_0}{t}$$
+                            （※ $\eta_0$：初期学習率、 $t$：学習ステップ数）
+                        </div>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            このモデルでは、ステップ数 $t$ が $1 \to 10 \to 100$ と増えるに従って、学習スピード（更新幅）が反比例して $\frac{1}{1} \to \frac{1}{10} \to \frac{1}{100}$ と自動で小さくなります。この反比例を用いたパラメータ調整のおかげで、画像認識や自然言語処理のAIモデルは過学習や発散を起こすことなく、安定して最も高い知能へと収束できるのです。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="lesson-footer-nav">
+                <a href="31.html" class="btn-secondary">&larr; 前の単元へ</a>
+                <a href="index.html" class="btn-secondary">目次に戻る</a>
+                <a href="#" class="btn btn-primary">次の単元へ</a>
+            </footer>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>
