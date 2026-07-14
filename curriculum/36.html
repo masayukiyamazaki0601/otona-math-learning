@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>連立方程式の解法（加減法） | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第3章 中学校数学の基礎固め &gt; 単元36
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 03 / Unit 36</span>
+                <h2 class="lesson-title">連立方程式の解法（加減法）</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>なぜ加減法を使うのか</h4>
+                    <p>連立方程式には $x$ と $y$ の2つの未知数があるため、そのままでは解くことができません。数学における基本的なアプローチは、<strong>「分からない数を1つ減らす（消去する）」</strong>ことです。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 500px;">
+                        <span class="lesson-callout-title">文字を1つ消して、一次方程式に持ち込む</span>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 0;">
+                            2つの方程式を上下に並べて足し算・引き算をすることで、邪魔な文字を綺麗に消し去る手法が<strong>加減法（かげんほう）</strong>です。これにより、すでに学んだ一次方程式の解き方に帰着させることができます。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>加減法で解く基本プロセス</h4>
+                    <p>例えば、次の連立方程式を考えてみましょう。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 500px; background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">例題： $y$ を消去するパターン</span>
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 16px;">
+                            $$ \begin{cases} x + y = 7 & \cdots \text{①} \\ x - y = 3 & \cdots \text{②} \end{cases} $$
+                        </div>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 0; margin-top: 10px;">
+                            ①と②の式を縦に足し合わせます。<br>
+                            &emsp;&emsp;$(x + y) + (x - y) = 7 + 3$<br>
+                            &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;$\mathbf{2x = 10}$ （ $y$ が消えた！）<br>
+                            &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;$\mathbf{x = 5}$<br><br>
+                            求めた $x = 5$ を①の式に代入すると、<br>
+                            &emsp;&emsp;$5 + y = 7 &rarr; \mathbf{y = 2}$ と解が定まります。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>文字を消去するルール</h4>
+                    <p>足し算で消すか、引き算で消すかは、消去したい文字の**係数（文字の前の数字）と符号**で判断します。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 550px;">
+                        <span class="lesson-callout-title">消去の見極め</span>
+                        <div class="lesson-callout-grid">
+                            <div class="grid-cell" style="background-color: var(--color-surface); border-color: var(--color-paper-line);">
+                                <span class="label" style="color: var(--color-brass);">符号が反対なら「足す」</span>
+                                <span class="value" style="font-size: 14px; line-height: 1.6; text-align: left; display: block;">
+                                    例: $+y$ と $-y$<br>
+                                    $$(+y) + (-y) = \mathbf{0}$$
+                                </span>
+                            </div>
+                            <div class="grid-cell" style="background-color: var(--color-surface); border-color: var(--color-paper-line);">
+                                <span class="label" style="color: var(--color-red);">符号が同じなら「引く」</span>
+                                <span class="value" style="font-size: 14px; line-height: 1.6; text-align: left; display: block;">
+                                    例: $+y$ と $+y$<br>
+                                    $$(+y) - (+y) = \mathbf{0}$$
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>係数がそろっていない場合</h4>
+                    <p>文字の前の数字（係数）がそろっていない場合は、そのまま足し引きしても消去できません。この場合は、**等式の性質（両辺に同じ数を掛ける）**を利用して、あらかじめ係数をそろえます。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 550px;">
+                        <span class="lesson-callout-title">【例題】係数をそろえて引くパターン</span>
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 16px; margin-bottom: 12px;">
+                            $$ \begin{cases} 2x + y = 8 & \cdots \text{①} \\ 3x + 2y = 13 & \cdots \text{②} \end{cases} $$
+                        </div>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            ①の式を**両辺2倍**して $y$ の係数を「 $2$ 」にそろえます。<br>
+                            &emsp;&emsp;$4x + 2y = 16 \quad \cdots \text{①} \times 2$<br><br>
+                            この式から②の式を引きます。<br>
+                            &emsp;&emsp;$(4x + 2y) - (3x + 2y) = 16 - 13$<br>
+                            &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;$\mathbf{x = 3}$ （ $2y$ 同士が消えた！）<br><br>
+                            求めた $x = 3$ を①に代入して、 $2 \times 3 + y = 8 &rarr; \mathbf{y = 2}$ と求めます。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="lesson-step success">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>まとめ</h4>
+                    <ul>
+                        <li>加減法とは、2つの式を足し引きして**片方の文字を「消去」**する解法。</li>
+                        <li>消したい文字の符号が異なれば足し算、符号が同じなら引き算を行う。</li>
+                        <li>係数が異なる場合は、片方（または両方）の式を何倍かして**係数をそろえてから足し引きする**。</li>
+                    </ul>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】身近なAIとの繋がり：ノイズキャンセリングヘッドホンが周囲の雑音を消し去る仕組み</h4>
+                    <p>電車の中やカフェで静かに音楽を楽しめる「ノイズキャンセリング機能付きイヤホン」。周囲の雑音だけをピタッと消し去るこの日常テクノロジーの裏側には、まさに「加減法による文字の消去」のルールがそのまま使われています。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">「雑音」と「逆向きの波」を足し合わせてゼロにする</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            イヤホンの外側についたマイクは、周囲の「雑音（ノイズの波を文字 $y$ とします）」を常に拾っています。
+                        </p>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            あなたの耳に届く音は、「音楽 $x$」と「雑音 $y$」が足し合わされた状態です。
+                        </p>
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 14px; text-align: left; margin-bottom: 12px; font-family: var(--font-mono);">
+                            ・耳に届く元の音 ＝ $x + y$<br>
+                            ・AIが生成する打ち消し音 ＝ $-y$ （雑音 $y$ の波形を上下反転させたマイナス信号）
+                        </div>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            イヤホン内のAIは、この反転させたマイナスの波（ $-y$ ）を一瞬で生成し、流れている音楽に足し合わせます：
+                            $$(x + y) + (-y) = x$$
+                            この「足し算による文字消去（ $+y + (-y) = 0$ ）」のおかげで、雑音の文字 $y$ が完全に消し去られ、あなたの耳には純粋な音楽 $x$ だけが届けられます。連立方程式の加減法は、私たちの快適なオーディオライフを支える物理・音響AIの基本でもあるのです。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="lesson-footer-nav">
+                <a href="35.html" class="btn-secondary">&larr; 前の単元へ</a>
+                <a href="index.html" class="btn-secondary">目次に戻る</a>
+                <a href="#" class="btn btn-primary">次の単元へ</a>
+            </footer>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>
