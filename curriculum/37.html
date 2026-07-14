@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>連立方程式の解法（代入法） | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第3章 中学校数学の基礎固め &gt; 単元37
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 03 / Unit 37</span>
+                <h2 class="lesson-title">連立方程式の解法（代入法）</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>なぜ代入法を使うのか</h4>
+                    <p>前回学んだ「加減法」は、式同士を足し引きして文字を消す方法でした。しかし、式の中に $x = 2y$ や $y = x + 3$ のように、**「すでに一方の文字の正体が別の文字の式で表されている」**状態のとき、わざわざ係数をそろえて並べるのは面倒です。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 500px;">
+                        <span class="lesson-callout-title">文字を丸ごと「置き換えて」消去する</span>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 0;">
+                            このときに活躍するのが<strong>代入法（だいにゅうほう）</strong>です。一方の式をもう一方の式の中に「すっぽりはめ込む（代入する）」ことで、文字を1つに減らすことができます。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>代入法で解く基本プロセス</h4>
+                    <p>すでに片方の文字が単独で表されている最もシンプルな例を見てみましょう。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 500px; background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">例題： $x$ の正体がわかっているパターン</span>
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 16px;">
+                            $$ \begin{cases} x + y = 8 & \cdots \text{①} \\ x = 3 & \cdots \text{②} \end{cases} $$
+                        </div>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 0; margin-top: 10px;">
+                            ②の式から $x$ の正体は「 $3$ 」と判明しています。<br>
+                            この $3$ を①の式の $x$ にすっぽり入れ替えます（代入）。<br>
+                            &emsp;&emsp;$\mathbf{3 + y = 8}$ （ $x$ が消えて数字になった！）<br>
+                            これを解くと、<br>
+                            &emsp;&emsp;$\mathbf{y = 5}$ と解が求まります。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>文字に「式」を代入する</h4>
+                    <p>代入法では、数字だけでなく**「文字を含む式」**を丸ごと代入することもあります。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 500px; background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">例題： $x$ に式を代入するパターン</span>
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 16px;">
+                            $$ \begin{cases} x + y = 9 & \cdots \text{①} \\ x = 2y & \cdots \text{②} \end{cases} $$
+                        </div>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 0; margin-top: 10px;">
+                            ②の式から $x$ の正体は「 $2y$ 」と同等であるとわかります。<br>
+                            この $2y$ を①の式の $x$ の位置にはめ込みます。<br>
+                            &emsp;&emsp;$\mathbf{2y + y = 9}$<br>
+                            &emsp;&emsp;$\mathbf{3y = 9} &rarr; \mathbf{y = 3}$<br><br>
+                            求めた $y = 3$ を②の式に代入して、 $x = 2 \times 3 = 6$ と逆算します。<br>
+                            よって、解は <strong>$(x=6, y=3)$</strong> です。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>加減法と代入法の使い分け</h4>
+                    <p>どのような形の方程式のときに代入法が便利なのか、特徴を整理しておきましょう。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 550px;">
+                        <span class="lesson-callout-title">解法選択の目安</span>
+                        <div class="lesson-callout-grid">
+                            <div class="grid-cell" style="background-color: var(--color-surface); border-color: var(--color-paper-line);">
+                                <span class="label" style="color: var(--color-brass);">代入法が圧倒的に有利</span>
+                                <span class="value" style="font-size: 14px; line-height: 1.6; text-align: left; display: block;">
+                                    片方の式がすでに以下の形になっているとき。<br>
+                                    ・$y = 3x - 1$<br>
+                                    ・$x = y + 5$
+                                </span>
+                            </div>
+                            <div class="grid-cell" style="background-color: var(--color-surface); border-color: var(--color-paper-line);">
+                                <span class="label" style="color: var(--color-red);">加減法が有利</span>
+                                <span class="value" style="font-size: 14px; line-height: 1.6; text-align: left; display: block;">
+                                    両方の式が以下の形のように、文字が整理されているとき。<br>
+                                    ・$2x + 3y = 12$<br>
+                                    ・$5x - 2y = 7$
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="lesson-step success">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>まとめ</h4>
+                    <ul>
+                        <li>代入法とは、一方の文字の「中身（別の文字の式）」をもう一方の式に代入して解く方法。</li>
+                        <li>$y = \cdots$ や $x = \cdots$ のように、文字が主役に整理されている式に対して非常に相性が良い。</li>
+                        <li>加減法と代入法のどちらを使っても求まる解は同じであるため、**式の形を見て楽な方を選択する**。</li>
+                    </ul>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】身近なAIとの繋がり：フリマアプリの「出品・売上金リアルタイム計算」</h4>
+                    <p>メルカリなどのフリマアプリで、販売価格を入力した瞬間に「販売手数料（10%）」や「あなたの利益（売上金）」がリアルタイムで自動計算される機能があります。この裏側のシステム処理こそ、まさに「代入法」そのものです。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">手数料ルールを利益の計算式に代入する</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            アプリの計算システムは、販売価格を $x$ 円、販売手数料を $y$ 円、配送にかかる送料を $500$ 円としたとき、あなたの利益を計算する以下の連立方程式を持っています。
+                        </p>
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 14px; text-align: left; margin-bottom: 12px; font-family: var(--font-mono);">
+                            ・利益を求める式①： $\text{利益} = x - y - 500$ （価格から手数料と送料を引く）<br>
+                            ・手数料の定義②： $y = 0.1x$ （価格の10%）
+                        </div>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            システムは、②の式（ $y$ の正体は $0.1x$ ）を①の式に**代入**して、利益を計算する式を以下のように1つの文字式にスッキリとまとめます。
+                            $$\text{利益} = x - 0.1x - 500 = 0.9x - 500$$
+                            この変形（代入）を行っておくことで、あなたが販売価格 $x$ に「 $3,000$ 」と入力した瞬間、アプリは $0.9 \times 3000 - 500 = 2200$ 円と、余計な段階を踏まずに一瞬で利益を計算して画面に表示できるのです。数式をスマートに整理して動作を軽くする知恵は、身近なアプリの開発でも大いに使われています。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="lesson-footer-nav">
+                <a href="36.html" class="btn-secondary">&larr; 前の単元へ</a>
+                <a href="index.html" class="btn-secondary">目次に戻る</a>
+                <a href="#" class="btn btn-primary">次の単元へ</a>
+            </footer>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>
