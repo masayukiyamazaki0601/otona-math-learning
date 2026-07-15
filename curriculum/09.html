@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>計算の優先順位と括弧の扱い | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> > <a href="index.html">カリキュラム</a> > 第2章 小学校算数の再構築 > 単元09
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 02 / Unit 09</span>
+                <h2 class="lesson-title">計算の優先順位と括弧の扱い</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>計算には順番がある</h4>
+                    <p>$2 + 3 \times 4$ の答えはいくつでしょうか。左から順に計算すると $2 + 3 = 5$、$5 \times 4 = 20$ ですが、これでは間違いです。</p>
+                    <p>正しくは $3 \times 4 = 12$ を先に計算し、$2 + 12 = 14$ となります。計算には「<strong>優先順位</strong>」というルールがあります。</p>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 16px 0;">
+                        <p><strong>計算の優先順位（重要！）</strong></p>
+                        <ol style="padding-left: 24px; font-size: 17px; line-height: 2;">
+                            <li><strong>括弧</strong> の中を最優先</li>
+                            <li><strong>掛け算・割り算</strong> を次に計算</li>
+                            <li><strong>足し算・引き算</strong> は最後に計算</li>
+                        </ol>
+                        <p style="margin-top: 8px;">同じ優先順位の場合は <strong>左から右</strong> へ順に計算します。</p>
+                    </div>
+                </div>
+
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>括弧の役割</h4>
+                    <p>括弧（かっこ）は、計算の順番を変えるための記号です。括弧の中を先に計算することで、自然な優先順位を上書きできます。</p>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 16px 0;">
+                        <p><strong>括弧を使うときと使わないときの違い</strong></p>
+                        <table style="width: 100%; border-collapse: collapse; font-size: 16px; margin-top: 8px;">
+                            <tr>
+                                <th style="padding: 8px; border-bottom: 2px solid var(--color-ink); text-align: left;">式</th>
+                                <th style="padding: 8px; border-bottom: 2px solid var(--color-ink); text-align: left;">計算手順</th>
+                                <th style="padding: 8px; border-bottom: 2px solid var(--color-ink); text-align: left;">答え</th>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border-bottom: 1px solid var(--color-paper-line);">$2 + 3 \times 4$</td>
+                                <td style="padding: 8px; border-bottom: 1px solid var(--color-paper-line);">掛け算が先</td>
+                                <td style="padding: 8px; border-bottom: 1px solid var(--color-paper-line);">$14$</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border-bottom: 1px solid var(--color-paper-line);">$(2 + 3) \times 4$</td>
+                                <td style="padding: 8px; border-bottom: 1px solid var(--color-paper-line);">括弧の中が先</td>
+                                <td style="padding: 8px; border-bottom: 1px solid var(--color-paper-line);">$20$</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px;">$10 - (3 + 2)$</td>
+                                <td style="padding: 8px;">括弧の中が先</td>
+                                <td style="padding: 8px;">$5$</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <p>このように、括弧があるだけで答えが変わります。式を正確に読み解くには、括弧の位置に常に注意を払う必要があります。</p>
+                </div>
+
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>複数の括弧がある場合</h4>
+                    <p>式の中に複数の括弧がある場合は、<strong>内側の括弧</strong>から順に計算します。小学校では丸括弧 <span style="white-space: nowrap;">$(\ )$</span> が最も多く使われますが、中学校以降は波括弧 <span style="white-space: nowrap;">$\{\ \}$</span> や角括弧 <span style="white-space: nowrap;">$[\ ]$</span> も登場します。</p>
+                    <div style="background-color: var(--color-surface); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 16px 0;">
+                        <p><strong>複数の括弧の計算例</strong></p>
+                        <p style="text-align: center; font-size: 20px; margin: 8px 0;">$\{ (2 + 3) \times 4 \} - 5$</p>
+                        <ol style="padding-left: 24px; font-size: 17px;">
+                            <li>内側の丸括弧: $2 + 3 = 5$</li>
+                            <li>その結果で波括弧内: $5 \times 4 = 20$</li>
+                            <li>最後に外側の引き算: $20 - 5 = 15$</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>Excelや電卓での注意点</h4>
+                    <p>Excelや関数電卓でも、同じ優先順位のルールが適用されます。とくにExcelで計算式を入力するときは、意図した順番で計算されるように括弧を適切に使う必要があります。</p>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 16px 0;">
+                        <p><strong>Excelでの計算例</strong></p>
+                        <ul style="list-style: disc; padding-left: 24px; font-size: 17px;">
+                            <li><code>= 2 + 3 * 4</code> → 答えは $14$（掛け算が先）</li>
+                            <li><code>= (2 + 3) * 4</code> → 答えは $20$（括弧が先）</li>
+                        </ul>
+                    </div>
+                    <p>大人になっても「括弧を忘れると大違い」という場面は多々あります。とくに給与計算や割引率の計算など、ビジネスの場面では括弧の有無が大きな差を生みます。</p>
+                </div>
+
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>まとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 15px; font-size: 14px; line-height: 1.7;">
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li>計算の優先順位: 括弧 > 掛け算・割り算 > 足し算・引き算</li>
+                            <li>括弧は計算の順番を変えるための記号。</li>
+                            <li>複数の括弧がある場合は内側から順に計算する。</li>
+                            <li>Excelや電卓でも同じルールが適用される。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-footer-nav">
+                <a href="08.html" class="btn-secondary">&larr; 前の単元へ</a>
+                <a href="index.html" class="btn-secondary">目次に戻る</a>
+                <a href="10.html" class="btn btn-primary">次の単元へ &rarr;</a>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>

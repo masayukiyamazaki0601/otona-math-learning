@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数の概念（整数と小数の構造） | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> > <a href="index.html">カリキュラム</a> > 第2章 小学校算数の再構築 > 単元06
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 02 / Unit 06</span>
+                <h2 class="lesson-title">数の概念（整数と小数の構造）</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>数は「量」を表す道具</h4>
+                    <p>私たちは日常生活で、りんごの個数、体重、距離、金額など、あらゆるものを数字で表します。数字は「量」を表現するための共通言語です。</p>
+                    <p>数には大きく分けて2つの種類があります。<strong>整数</strong>と<strong>小数</strong>です。</p>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 16px 0;">
+                        <p style="margin-bottom: 8px;"><strong>整数と小数の違い</strong></p>
+                        <ul style="list-style: disc; padding-left: 24px; font-size: 17px;">
+                            <li style="margin-bottom: 6px;"><strong>整数</strong>: 物の個数を数えるときに使う数。$0, 1, 2, 3, \dots$</li>
+                            <li style="margin-bottom: 6px;"><strong>小数</strong>: 1より細かい「中途半端な量」を表す数。$0.5, 1.25, 3.14$ など</li>
+                        </ul>
+                    </div>
+                    <p>ビジネスや日常生活では、整数だけでは足りません。値段の $248$円（整数）もあれば、$248.5$円（小数）のように中途半端な値も登場します。この「中途半端な量」を扱えるようにするのが、小数の考え方です。</p>
+                </div>
+
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>10進法のしくみ</h4>
+                    <p>私たちが普段使っている数字は「<strong>10進法</strong>」でできています。10進法とは、数字が10集まると1つ上の位に繰り上がる仕組みです。</p>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 16px 0;">
+                        <p><strong>10進法の位取り</strong></p>
+                        <table style="width: 100%; border-collapse: collapse; font-size: 16px; text-align: center; margin-top: 8px;">
+                            <tr>
+                                <th style="padding: 8px; border-bottom: 2px solid var(--color-ink);">千の位</th>
+                                <th style="padding: 8px; border-bottom: 2px solid var(--color-ink);">百の位</th>
+                                <th style="padding: 8px; border-bottom: 2px solid var(--color-ink);">十の位</th>
+                                <th style="padding: 8px; border-bottom: 2px solid var(--color-ink);">一の位</th>
+                                <th style="padding: 8px; border-bottom: 2px solid var(--color-ink);">小数点</th>
+                                <th style="padding: 8px; border-bottom: 2px solid var(--color-ink);">十分の一</th>
+                                <th style="padding: 8px; border-bottom: 2px solid var(--color-ink);">百分の一</th>
+                                <th style="padding: 8px; border-bottom: 2px solid var(--color-ink);">千分の一</th>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border-bottom: 1px solid var(--color-paper-line);">$1000$</td>
+                                <td style="padding: 8px; border-bottom: 1px solid var(--color-paper-line);">$100$</td>
+                                <td style="padding: 8px; border-bottom: 1px solid var(--color-paper-line);">$10$</td>
+                                <td style="padding: 8px; border-bottom: 1px solid var(--color-paper-line);">$1$</td>
+                                <td style="padding: 8px; border-bottom: 1px solid var(--color-paper-line);">.</td>
+                                <td style="padding: 8px; border-bottom: 1px solid var(--color-paper-line);">$\frac{1}{10}$</td>
+                                <td style="padding: 8px; border-bottom: 1px solid var(--color-paper-line);">$\frac{1}{100}$</td>
+                                <td style="padding: 8px; border-bottom: 1px solid var(--color-paper-line);">$\frac{1}{1000}$</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <p>たとえば $325.47$ という数は、以下のように分解できます。</p>
+                    <p style="text-align: center; font-size: 20px; margin: 12px 0;">$325.47 = 300 + 20 + 5 + 0.4 + 0.07$</p>
+                    <p>それぞれの数字が立っている「位」によって、その数字の重みが決まります。小数点は「1より大きい世界」と「1より小さい世界」の境界線です。</p>
+                </div>
+
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>数直線で見る数の連続性</h4>
+                    <p>整数は数直線上の点を「とびとび」に打ったものです。一方、小数を使うと、整数と整数の間にある「中途半端な位置」も表せるようになります。</p>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 16px 0;">
+                        <p><strong>数直線の例：0から1の間を10等分する</strong></p>
+                        <svg width="100%" height="60" viewBox="0 0 500 60" style="margin-top: 12px;">
+                            <line x1="20" y1="30" x2="480" y2="30" stroke="var(--color-ink)" stroke-width="2"/>
+                            <!-- Ticks from 0 to 1 -->
+                            <line x1="20" y1="20" x2="20" y2="40" stroke="var(--color-ink)" stroke-width="2"/>
+                            <text x="20" y="55" text-anchor="middle" font-family="var(--font-mono)" font-size="14" fill="var(--color-ink)">0</text>
+                            <line x1="66" y1="25" x2="66" y2="35" stroke="var(--color-ink)" stroke-width="1"/>
+                            <text x="66" y="55" text-anchor="middle" font-family="var(--font-mono)" font-size="11" fill="var(--color-ink-soft)">0.1</text>
+                            <line x1="112" y1="25" x2="112" y2="35" stroke="var(--color-ink)" stroke-width="1"/>
+                            <text x="112" y="55" text-anchor="middle" font-family="var(--font-mono)" font-size="11" fill="var(--color-ink-soft)">0.2</text>
+                            <line x1="158" y1="25" x2="158" y2="35" stroke="var(--color-ink)" stroke-width="1"/>
+                            <line x1="204" y1="25" x2="204" y2="35" stroke="var(--color-ink)" stroke-width="1"/>
+                            <line x1="250" y1="25" x2="250" y2="35" stroke="var(--color-ink)" stroke-width="1"/>
+                            <text x="250" y="55" text-anchor="middle" font-family="var(--font-mono)" font-size="11" fill="var(--color-ink-soft)">0.5</text>
+                            <line x1="296" y1="25" x2="296" y2="35" stroke="var(--color-ink)" stroke-width="1"/>
+                            <line x1="342" y1="25" x2="342" y2="35" stroke="var(--color-ink)" stroke-width="1"/>
+                            <line x1="388" y1="25" x2="388" y2="35" stroke="var(--color-ink)" stroke-width="1"/>
+                            <line x1="434" y1="25" x2="434" y2="35" stroke="var(--color-ink)" stroke-width="1"/>
+                            <line x1="480" y1="20" x2="480" y2="40" stroke="var(--color-ink)" stroke-width="2"/>
+                            <text x="480" y="55" text-anchor="middle" font-family="var(--font-mono)" font-size="14" fill="var(--color-ink)">1</text>
+                            <!-- Highlight 0.3 -->
+                            <circle cx="158" cy="30" r="5" fill="var(--color-red)"/>
+                            <text x="158" y="18" text-anchor="middle" font-family="var(--font-mono)" font-size="10" fill="var(--color-red)">0.3</text>
+                        </svg>
+                    </div>
+                    <p>このように、整数の間には無限の小数が存在します。$0.3$ も $0.33$ も $0.333$ も、すべて $0$ と $1$ の間のどこかに位置します。この「数の連続性」を理解することが、小数の第一歩です。</p>
+                </div>
+
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>整数と小数の構造まとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 15px; font-size: 14px; line-height: 1.7;">
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li>数は「量」を表す共通言語である。</li>
+                            <li>10進法は、10集まると上の位に繰り上がる仕組み。</li>
+                            <li>小数点は「1より大きい世界」と「1より小さい世界」の境界線。</li>
+                            <li>小数を使うことで、整数と整数の間にある中途半端な量も正確に表せる。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-footer-nav">
+                <a href="05.html" class="btn-secondary">&larr; 前の単元へ</a>
+                <a href="index.html" class="btn-secondary">目次に戻る</a>
+                <a href="07.html" class="btn btn-primary">次の単元へ &rarr;</a>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>
