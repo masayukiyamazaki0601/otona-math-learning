@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小数点の意味と図形で理解する小数の考え方 | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第4章 高校数学への接続 &gt; 単元47
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 04 / Unit 47</span>
+                <h2 class="lesson-title">小数点の意味と図形で理解する小数の考え方</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>小数は特別な数字ではない</h4>
+                    <p>小数は、小学生の算数で学ぶ極めて基本的な内容ですが、大人になってからも「なぜ小数点の位置がこのようにズレるのか」「掛け算や割り算を行うとなぜ値が小さくなったり大きくなったりするのか」といった部分で混乱しがちです。</p>
+                    <p>しかし、小数は決して特別な数字ではありません。私たちが普段使っている整数を、さらに「細かく分けて表している」だけです。</p>
+                    <p>例えば、1メートルの長さを10等分したとき、その1つ分は0.1メートルです。商品価格、割合、データ分析、プログラム処理など、現実の世界では「ちょうど1」の塊ではない中途半端な量を扱う場面が数多くあります。小数の仕組みを直感的に捉え直すと、ビジネスにおける数字をより正確に読み解けるようになります。</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>小数は「1を細かく分けたもの」</h4>
+                    <p>まず、基準となる「1」という量を正方形の面積として考えてみましょう。この正方形全体を「1」とします。</p>
+                    <p>この全体を縦方向に10等分すると、細長い長方形が10個できます。このうちの「1個分の面積」が、全体の10分の1、すなわち <strong style="color: var(--color-brass);">$0.1$</strong> です。</p>
+                    <p>さらに、この正方形を縦10個、横10個の計100個の小さな正方形に分割したとします。このとき、極小の正方形1個分の面積は、全体の10分の1、すなわち <strong style="color: var(--color-brass);">$0.01$</strong> になります。</p>
+                    <p>
+                        $0.1 = \frac{1}{10}$<br>
+                        $0.01 = \frac{1}{100}$
+                    </p>
+
+                    <div class="lesson-callout" style="max-width: 650px; background-color: var(--color-surface); border-color: var(--color-paper-line);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">【体験】小数の単位グリッドシミュレーター</span>
+                        
+                        <!-- Guidance Box -->
+                        <div style="background-color: var(--color-paper); border-left: 3px solid var(--color-brass); padding: 8px 12px; margin-top: 12px; font-size: 12.5px; line-height: 1.6; border-radius: 0 4px 4px 0;">
+                            <strong style="color: var(--color-brass); display: block; margin-bottom: 3px;">💡 操作と観察のポイント</strong>
+                            <p style="margin: 0;">スライダーを動かして、小数の値を変えてみましょう。全体「1」の正方形が100分割されており、スライダーの値（例: $0.35$）に応じて**何マス分の面積（例: 35マス）が着色されるか**を観察してください。$0.1$ は10マス分（1本の列）、$0.01$ はわずか1マス分に相当することが視覚的に分かります。</p>
+                        </div>
+
+                        <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 15px; align-items: center; justify-content: center;">
+                            <!-- Slider Controls -->
+                            <div style="display: flex; flex-direction: column; gap: 10px; width: 220px; background-color: var(--color-paper); padding: 12px; border-radius: 6px; border: 1px solid var(--color-paper-line);">
+                                <div>
+                                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 2px;">表示する値: <span id="valGrid" style="color: var(--color-brass);">0.35</span></label>
+                                    <input type="range" id="sliderGrid" min="0.00" max="1.00" step="0.01" value="0.35" style="width: 100%; cursor: pointer;">
+                                </div>
+                                <div style="border-top: 1px dashed var(--color-paper-line); padding-top: 8px; font-size: 11px; font-family: var(--font-mono); line-height: 1.6; color: var(--color-ink);">
+                                    <div>マス目のカウント数:</div>
+                                    <div style="font-weight: bold; font-size: 13px; color: var(--color-brass); margin-top: 2px;"><span id="cntGrid">35</span> / 100 マス</div>
+                                </div>
+                            </div>
+
+                            <!-- SVG Grid -->
+                            <div style="background-color: var(--color-paper); padding: 10px; border-radius: 6px; border: 1px solid var(--color-paper-line); width: 180px; height: 180px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                                <svg id="svgGrid" width="142" height="142" viewBox="0 0 142 142">
+                                    <!-- Dynamic rect cells will be generated via JavaScript here -->
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>小数点の位置には意味がある</h4>
+                    <p>私たちが何気なく見ている小数点の位置は、単位の場所を示す重要な役割を持っています。</p>
+                    <p>例えば、<span style="white-space: nowrap;">$3.45$</span> という小数を図形で分解して捉えると、以下のようになります。</p>
+                    <ul>
+                        <li>大きな正方形（サイズ $1.0$）が 3個</li>
+                        <li>縦長の長方形（サイズ $0.1$）が 4個</li>
+                        <li>極小の正方形（サイズ $0.01$）が 5個</li>
+                    </ul>
+                    <p>
+                        $3.45 = 3 + 0.4 + 0.05$
+                    </p>
+                    <p>小数点より左側は1以上の「整数部分」、小数点より右側は1より小さい「小数部分」であり、右に行くほど細かな単位をカウントしていることが分かります。</p>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>小数の掛け算を図形（面積）で理解する</h4>
+                    <p>小数の掛け算を考えるとき、「小数点を何個ずらす」という暗記ルールに頼ると、計算の本質が見えなくなります。これも面積図で考えると、非常にシンプルに納得できます。</p>
+                    <p>例えば、縦が <span style="white-space: nowrap;">$0.5$</span>、横が <span style="white-space: nowrap;">$0.4$</span> の長方形の面積（<span style="white-space: nowrap;">$0.5 \times 0.4$</span>）を考えてみましょう。</p>
+
+                    <div class="lesson-callout" style="max-width: 650px; background-color: var(--color-surface); border-color: var(--color-paper-line);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">【体験】小数の掛け算（面積）シミュレーター</span>
+                        
+                        <!-- Guidance Box -->
+                        <div style="background-color: var(--color-paper); border-left: 3px solid var(--color-brass); padding: 8px 12px; margin-top: 12px; font-size: 12.5px; line-height: 1.6; border-radius: 0 4px 4px 0;">
+                            <strong style="color: var(--color-brass); display: block; margin-bottom: 3px;">💡 操作と観察のポイント</strong>
+                            <p style="margin: 0;">縦 $a$ と横 $b$ のスライダーを動かして、重なった長方形の面積がどう変化するかを観察してください。例えば縦 $0.5$、横 $0.4$ に設定すると、重なる領域は**「100個に細分化されたマスのうちの20マス分（$5 \times 4$）」**になります。100マス中20マスなので、全体の面積は $0.20$（つまり $0.2$）になることが視覚的に納得できます。</p>
+                        </div>
+
+                        <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 15px; align-items: center; justify-content: center;">
+                            <!-- Slider Controls -->
+                            <div style="display: flex; flex-direction: column; gap: 10px; width: 220px; background-color: var(--color-paper); padding: 12px; border-radius: 6px; border: 1px solid var(--color-paper-line);">
+                                <div>
+                                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 2px;">縦の長さ a: <span id="valMulA" style="color: var(--color-brass);">0.5</span></label>
+                                    <input type="range" id="sliderMulA" min="0.1" max="1.0" step="0.1" value="0.5" style="width: 100%; cursor: pointer;">
+                                </div>
+                                <div>
+                                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 2px;">横の長さ b: <span id="valMulB" style="color: var(--color-brass);">0.4</span></label>
+                                    <input type="range" id="sliderMulB" min="0.1" max="1.0" step="0.1" value="0.4" style="width: 100%; cursor: pointer;">
+                                </div>
+                                <div style="border-top: 1px dashed var(--color-paper-line); padding-top: 8px; font-size: 11px; font-family: var(--font-mono); line-height: 1.6; color: var(--color-ink);">
+                                    <div style="font-weight: bold; color: var(--color-red);">計算式:</div>
+                                    <div style="font-size: 12.5px; margin-top: 2px;">$a \times b = 0.5 \times 0.4$</div>
+                                    <div style="font-size: 13.5px; font-weight: bold; color: var(--color-red); margin-top: 4px;">= <span id="calcMulRes">0.20</span></div>
+                                    <div style="font-size: 10px; color: var(--color-ink-soft); margin-top: 4px;">（100マス中 <span id="cntMulGrid">20</span> マス分）</div>
+                                </div>
+                            </div>
+
+                            <!-- SVG Grid & Overlay -->
+                            <div style="background-color: var(--color-paper); padding: 10px; border-radius: 6px; border: 1px solid var(--color-paper-line); width: 180px; height: 180px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative;">
+                                <svg width="120" height="120" viewBox="0 0 120 120">
+                                    <!-- Base Grid 10x10 -->
+                                    <g id="gridBase" opacity="0.15">
+                                        <!-- Will be rendered via JS -->
+                                    </g>
+                                    <!-- Highlight Area -->
+                                    <rect id="rectMulArea" x="0" y="0" width="48" height="60" fill="rgba(168, 143, 93, 0.4)" stroke="var(--color-brass)" stroke-width="1.5" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <p style="margin-top: 15px;">小数の掛け算は、一見すると「かけると小さくなる」不思議な計算に見えますが、実際にはこのように**「細かく分割した全体の中から、特定の割合の部分を切り取る」**操作を行っているのです。</p>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>計算の基本と注意点</h4>
+                    <p>小数計算で大人が特に間違えやすい3つのポイントを整理しておきましょう。</p>
+                    
+                    <div class="lesson-callout" style="max-width: 650px; background-color: var(--color-surface); border-color: var(--color-paper-line); margin-bottom: 25px;">
+                        <span class="lesson-callout-title" style="color: var(--color-red);">⚠️ 小数の計算における落とし穴</span>
+                        
+                        <h5 style="margin: 10px 0 5px; font-size: 14px; font-weight: bold; color: var(--color-ink);">① 足し算・引き算で「小数点の位置」をそろえ忘れる</h5>
+                        <p style="font-size: 13.5px; line-height: 1.6; margin: 0 0 10px;">
+                            $2.5 + 1.25$ を計算するとき、右端をそろえて $25 + 125 = 150$ のように計算すると間違いです。小数の加減算は**単位（小数点の位置）を縦にそろえる**のが鉄則です。<br>
+                            &emsp;<span style="white-space: nowrap;">$2.50 + 1.25 = \mathbf{3.75}$</span>
+                        </p>
+
+                        <h5 style="margin: 10px 0 5px; font-size: 14px; font-weight: bold; color: var(--color-ink);">② 掛け算の終わりに「小数の桁数」を戻し忘れる</h5>
+                        <p style="font-size: 13.5px; line-height: 1.6; margin: 0 0 10px;">
+                            $0.4 \times 0.3$ を計算する際、$4 \times 3 = 12$ のままにしてしまうミスです。10分の1（$0.4$）と10分の1（$0.3$）の積なので、結果は100分の1の位まで戻す必要があります。<br>
+                            &emsp;<span style="white-space: nowrap;">$0.4 \times 0.3 = \mathbf{0.12}$</span>
+                        </p>
+
+                        <h5 style="margin: 10px 0 5px; font-size: 14px; font-weight: bold; color: var(--color-ink);">③ 「0」の数と場所による意味の違い</h5>
+                        <p style="font-size: 13.5px; line-height: 1.6; margin: 0;">
+                            $0.5$ と $0.05$ は数字の並びは似ていますが、その中身は全く異なります。$0.5$ は10分の5（半分）ですが、$0.05$ は100分の5（わずか20分の1）です。小数点のすぐ右側に0が入るだけで、値の細かさが10倍変化します。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 06</span>
+                    <h4>本単元のまとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 15px; font-size: 14px; line-height: 1.7; color: var(--color-ink);">
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li>小数は「1」より小さい細かな量を表すための手段である。</li>
+                            <li>小数点の位置は、数字の単位（10分の1の位、100分の1の位など）を示す目印である。</li>
+                            <li>小数の掛け算は、図形の面積（全体を細かく分けたうちの何マス分か）で直感的に理解できる。</li>
+                            <li>足し算では小数点を縦にそろえ、掛け算では積の小数の桁数に常に注意を払う。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】小数の考え方が支えるビジネスとテクノロジー</h4>
+                    <p>小数の計算は、日常生活やビジネスデータ処理、さらには最先端のITテクノロジーのインフラ部分でも大活躍しています。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface); max-width: 700px;">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">【体験】デジタル画像の明るさブレンドシミュレーター</span>
+                        
+                        <!-- Guidance Box -->
+                        <div style="background-color: var(--color-paper); border-left: 3px solid var(--color-brass); padding: 8px 12px; margin-top: 12px; font-size: 12.5px; line-height: 1.6; border-radius: 0 4px 4px 0;">
+                            <strong style="color: var(--color-brass); display: block; margin-bottom: 3px;">💡 操作と観察のポイント</strong>
+                            <p style="margin: 0; margin-bottom: 6px;">画像の明るさを変化させる画像処理プログラムでは、色の三原色であるRGB（$0$〜$255$の整数）に、明るさの比率を表す**小数（$0.00$〜$1.00$）を乗算**する処理が裏で行われています。</p>
+                            <p style="margin: 0;">スライダーを動かして明るさ比率を変更し、コーヒーカップのアートの色合いの変化と、乗算される小数の計算式を観察してください。画像編集アプリやスマートフォンの輝度変更画面は、まさにこの小数の掛け算を瞬時に実行しています。</p>
+                        </div>
+
+                        <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 15px; align-items: center; justify-content: center;">
+                            <!-- Slider Controls -->
+                            <div style="display: flex; flex-direction: column; gap: 10px; width: 230px; background-color: var(--color-paper); padding: 12px; border-radius: 6px; border: 1px solid var(--color-paper-line);">
+                                <div>
+                                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 2px;">明るさ比率 k: <span id="valBrightness" style="color: var(--color-brass);">0.80</span></label>
+                                    <input type="range" id="sliderBrightness" min="0.00" max="1.00" step="0.05" value="0.80" style="width: 100%; cursor: pointer;">
+                                </div>
+                                <div style="border-top: 1px dashed var(--color-paper-line); padding-top: 8px; font-size: 11px; font-family: var(--font-mono); line-height: 1.6; color: var(--color-ink);">
+                                    <div style="font-weight: bold; margin-bottom: 4px;">画素値の計算 (R, G, B):</div>
+                                    <div>R: $168 \times k = $ <span id="calcR" style="font-weight: bold; color: var(--color-brass);">134</span></div>
+                                    <div>G: $143 \times k = $ <span id="calcG" style="font-weight: bold; color: var(--color-brass);">114</span></div>
+                                    <div>B: $93 \times k = $ &ensp;<span id="calcB" style="font-weight: bold; color: var(--color-brass);">74</span></div>
+                                    <div style="border-top: 1px solid var(--color-paper-line); margin-top: 6px; padding-top: 6px; font-weight: bold;">
+                                        RGB合成色: <span id="valRgbStr" style="font-size: 10.5px;">rgb(134, 114, 74)</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- SVG Display -->
+                            <div style="background-color: var(--color-paper); padding: 10px; border-radius: 6px; border: 1px solid var(--color-paper-line); width: 220px; height: 180px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative;">
+                                <svg width="160" height="140" viewBox="0 0 160 140">
+                                    <!-- Background plate -->
+                                    <rect x="10" y="10" width="140" height="120" rx="10" fill="#fcfbf7" stroke="var(--color-paper-line)" stroke-width="1.5" />
+                                    <!-- Coffee Cup Icon -->
+                                    <g id="cupIcon" fill="rgb(134, 114, 74)">
+                                        <!-- Cup body -->
+                                        <path d="M 40,40 L 100,40 C 100,80 90,100 70,100 C 50,100 40,80 40,40 Z" />
+                                        <!-- Handle -->
+                                        <path d="M 100,50 C 115,50 115,80 100,80 C 105,75 105,55 100,50" fill="none" stroke="rgb(134, 114, 74)" stroke-width="6" stroke-linecap="round" />
+                                        <!-- Steam -->
+                                        <path d="M 55,20 Q 60,10 55,3" fill="none" stroke="rgb(134, 114, 74)" stroke-width="2.5" stroke-linecap="round" opacity="0.6" />
+                                        <path d="M 70,23 Q 75,13 70,6" fill="none" stroke="rgb(134, 114, 74)" stroke-width="2.5" stroke-linecap="round" opacity="0.6" />
+                                        <path d="M 85,21 Q 90,11 85,4" fill="none" stroke="rgb(134, 114, 74)" stroke-width="2.5" stroke-linecap="round" opacity="0.6" />
+                                    </g>
+                                    <!-- Table line -->
+                                    <line x1="20" y1="108" x2="140" y2="108" stroke="var(--color-ink-soft)" stroke-width="2" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="lesson-footer-nav">
+                <a href="46.html" class="btn-secondary">&larr; 前の単元へ</a>
+                <a href="index.html" class="btn-secondary">目次に戻る</a>
+                <a href="#" class="btn btn-primary">次の単元へ &rarr;</a>
+            </footer>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive Scripts -->
+    <script>
+        // --- 1. Decimal Grid Simulator (Step 02) ---
+        (function() {
+            const sliderGrid = document.getElementById('sliderGrid');
+            const svgGrid = document.getElementById('svgGrid');
+            if (!sliderGrid || !svgGrid) return;
+
+            // Generate 10x10 Grid Cells
+            const cellSize = 12;
+            const gap = 2;
+            for (let r = 0; r < 10; r++) {
+                for (let c = 0; c < 10; c++) {
+                    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                    rect.setAttribute('id', `cell_${r}_${c}`);
+                    rect.setAttribute('x', c * (cellSize + gap) + 1);
+                    rect.setAttribute('y', r * (cellSize + gap) + 1);
+                    rect.setAttribute('width', cellSize);
+                    rect.setAttribute('height', cellSize);
+                    rect.setAttribute('rx', 1.5);
+                    rect.setAttribute('fill', 'var(--color-paper-line)');
+                    rect.setAttribute('stroke', 'none');
+                    svgGrid.appendChild(rect);
+                }
+            }
+
+            function update() {
+                const val = parseFloat(sliderGrid.value);
+                const count = Math.round(val * 100);
+
+                document.getElementById('valGrid').textContent = val.toFixed(2);
+                document.getElementById('cntGrid').textContent = count;
+
+                for (let r = 0; r < 10; r++) {
+                    for (let c = 0; c < 10; c++) {
+                        const cellIndex = r * 10 + c;
+                        const cell = document.getElementById(`cell_${r}_${c}`);
+                        if (cellIndex < count) {
+                            cell.setAttribute('fill', 'var(--color-brass)');
+                            cell.setAttribute('opacity', '0.75');
+                        } else {
+                            cell.setAttribute('fill', 'var(--color-paper-line)');
+                            cell.setAttribute('opacity', '1.0');
+                        }
+                    }
+                }
+            }
+
+            sliderGrid.addEventListener('input', update);
+            update();
+        })();
+
+        // --- 2. Decimal Multiplication Area Simulator (Step 04) ---
+        (function() {
+            const sliderMulA = document.getElementById('sliderMulA');
+            const sliderMulB = document.getElementById('sliderMulB');
+            const gridBase = document.getElementById('gridBase');
+            const rectArea = document.getElementById('rectMulArea');
+
+            if (!sliderMulA || !sliderMulB || !gridBase || !rectArea) return;
+
+            // Generate base Grid 10x10 (dashed lines/mini rects) inside 120x120 area
+            const scale = 12; // 1 unit (1.0) = 120px, so 0.1 = 12px
+            for (let i = 0; i <= 10; i++) {
+                // Vertical lines
+                const lineV = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                lineV.setAttribute('x1', i * scale);
+                lineV.setAttribute('y1', 0);
+                lineV.setAttribute('x2', i * scale);
+                lineV.setAttribute('y2', 120);
+                lineV.setAttribute('stroke', 'var(--color-ink)');
+                lineV.setAttribute('stroke-width', i % 5 === 0 ? '1' : '0.4');
+                gridBase.appendChild(lineV);
+
+                // Horizontal lines
+                const lineH = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                lineH.setAttribute('x1', 0);
+                lineH.setAttribute('y1', i * scale);
+                lineH.setAttribute('x2', 120);
+                lineH.setAttribute('y2', i * scale);
+                lineH.setAttribute('stroke', 'var(--color-ink)');
+                lineH.setAttribute('stroke-width', i % 5 === 0 ? '1' : '0.4');
+                gridBase.appendChild(lineH);
+            }
+
+            function update() {
+                const a = parseFloat(sliderMulA.value);
+                const b = parseFloat(sliderMulB.value);
+
+                document.getElementById('valMulA').textContent = a.toFixed(1);
+                document.getElementById('valMulB').textContent = b.toFixed(1);
+
+                const res = a * b;
+                const count = Math.round(res * 100);
+
+                document.getElementById('calcMulRes').textContent = res.toFixed(2);
+                document.getElementById('cntMulGrid').textContent = count;
+
+                // Adjust SVG highlighted area size
+                rectArea.setAttribute('height', a * 120);
+                rectArea.setAttribute('width', b * 120);
+            }
+
+            sliderMulA.addEventListener('input', update);
+            sliderMulB.addEventListener('input', update);
+            update();
+        })();
+
+        // --- 3. Digital Brightness Blend Simulator (Column) ---
+        (function() {
+            const sliderBrightness = document.getElementById('sliderBrightness');
+            const cupIcon = document.getElementById('cupIcon');
+
+            if (!sliderBrightness || !cupIcon) return;
+
+            // Base color RGB values: 168, 143, 93
+            const baseR = 168;
+            const baseG = 143;
+            const baseB = 93;
+
+            function update() {
+                const k = parseFloat(sliderBrightness.value);
+                document.getElementById('valBrightness').textContent = k.toFixed(2);
+
+                // Calculate blended color
+                const r = Math.round(baseR * k);
+                const g = Math.round(baseG * k);
+                const b = Math.round(baseB * k);
+
+                // Update text elements
+                document.getElementById('calcR').textContent = r;
+                document.getElementById('calcG').textContent = g;
+                document.getElementById('calcB').textContent = b;
+
+                const rgbStr = `rgb(${r}, ${g}, ${b})`;
+                document.getElementById('valRgbStr').textContent = rgbStr;
+
+                // Apply color to cup and steam/handle stroke
+                cupIcon.setAttribute('fill', rgbStr);
+                const paths = cupIcon.querySelectorAll('path');
+                paths.forEach(path => {
+                    if (path.getAttribute('stroke')) {
+                        path.setAttribute('stroke', rgbStr);
+                    }
+                });
+            }
+
+            sliderBrightness.addEventListener('input', update);
+            update();
+        })();
+    </script>
+
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>
