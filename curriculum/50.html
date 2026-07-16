@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分母の有理化の手順 | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .premium-widget {
+            background-color: var(--color-surface);
+            border: 2px solid var(--color-paper-line);
+            border-radius: var(--radius-card);
+            padding: 35px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px -10px rgba(28, 43, 57, 0.05), 0 1px 3px rgba(28, 43, 57, 0.02);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .premium-widget:hover {
+            border-color: var(--color-brass);
+            box-shadow: 0 15px 35px -10px rgba(28, 43, 57, 0.08);
+        }
+        
+        .widget-title {
+            font-family: var(--font-heading);
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--color-ink);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--color-brass);
+            padding-bottom: 8px;
+            display: inline-block;
+        }
+
+        .business-callout {
+            background-color: #f8fafc;
+            border-left: 4px solid var(--color-brass);
+            border-radius: 4px;
+            padding: 24px;
+            margin: 30px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+        }
+
+        .business-callout h5 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--color-ink);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Rationalization Lab styles */
+        .rational-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            align-items: center;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .alchemy-chamber {
+            background-color: #0b131a;
+            border: 2px solid #1e2d3d;
+            border-radius: 8px;
+            padding: 30px;
+            width: 100%;
+            max-width: 540px;
+            color: #e2e8f0;
+            font-family: 'JetBrains Mono', monospace;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .fraction-display {
+            font-size: 40px;
+            margin: 30px 0;
+            min-height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #38bdf8;
+            text-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+        }
+
+        .alchemy-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            max-width: 440px;
+            margin: 20px auto;
+        }
+
+        .btn-catalyst {
+            background-color: #1e293b;
+            border: 1px solid #475569;
+            color: #cbd5e1;
+            padding: 12px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            font-size: 13.5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-catalyst:hover {
+            border-color: #38bdf8;
+            background-color: #172554;
+            color: #f1f5f9;
+        }
+
+        .alchemy-log {
+            font-size: 13px;
+            color: #f59e0b;
+            margin-top: 20px;
+            min-height: 25px;
+            border-top: 1px dashed rgba(245, 158, 11, 0.2);
+            padding-top: 12px;
+        }
+
+        /* Level indicator */
+        .stage-nav {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .btn-stage {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            color: var(--color-ink-soft);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-stage.active {
+            background-color: var(--color-brass);
+            color: var(--color-paper);
+            border-color: var(--color-brass);
+        }
+
+        /* Quiz styles */
+        .quiz-card {
+            background-color: var(--color-paper);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 6px;
+            padding: 28px;
+            margin-bottom: 25px;
+        }
+
+        .quiz-question {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 18px;
+            color: var(--color-ink);
+            line-height: 1.6;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .quiz-option {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            padding: 14px 22px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--color-brass);
+            background-color: rgba(169, 120, 47, 0.05);
+        }
+
+        .quiz-option.correct {
+            border-color: #2e7d32;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            font-weight: 500;
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--color-red);
+            background-color: #ffebee;
+            color: var(--color-red);
+        }
+
+        .quiz-feedback {
+            margin-top: 18px;
+            font-size: 14.5px;
+            line-height: 1.7;
+            padding: 16px;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .quiz-feedback.success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid #2e7d32;
+        }
+
+        .quiz-feedback.error {
+            background-color: #ffebee;
+            color: var(--color-red);
+            border-left: 4px solid var(--color-red);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> > <a href="index.html">カリキュラム</a> > 第4章 高校数学への接続 > 単元50
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 04 / Unit 50</span>
+                <h2 class="lesson-title">分母の有理化の手順</h2>
+            </header>
+
+            <div class="lesson-flow">
+                
+                <!-- Step 1: Definition of Rationalization -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>分母の有理化とは：分数の分母から無理数（ルート）を消去する</h4>
+                    <p>分数の分母に平方根（無理数）が含まれているとき、<b>分数の値そのものを変えずに、分母にルートを含まない数（有理数）に変形すること</b>を「分母の有理化（Rationalization of Denominator）」と呼びます。</p>
+                    
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 22px; border-radius: 6px; margin: 25px 0;">
+                        <p style="text-align: center; font-size: 22px; margin: 8px 0; font-family: var(--font-mono); letter-spacing: 0.02em;">
+                            $\frac{a}{\sqrt{b}} = \frac{a \times \sqrt{b}}{\sqrt{b} \times \sqrt{b}} = \frac{a\sqrt{b}}{b}$
+                        </p>
+                    </div>
+
+                    <p>有理化を行うための最も根本的なアプローチは、<b>「分母と分子に、同じルートの値を掛け合わせる」</b>ことです。これにより、分母側の平方根が２乗され、ルートが外れて有理数になります。</p>
+                    <p>例えば、$\frac{3}{\sqrt{2}}$ の分母のルートを消すために、分子と分母に $\sqrt{2}$ を掛け算します：</p>
+                    <p style="text-align: center; font-size: 16px; margin: 15px 0;">
+                        $\frac{3}{\sqrt{2}} = \frac{3 \times \sqrt{2}}{\sqrt{2} \times \sqrt{2}} = \frac{3\sqrt{2}}{2}$
+                    </p>
+                </div>
+
+                <!-- Step 2: Binomial Denominator -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>発展：分母が和や差の形（多項式）である場合の有理化</h4>
+                    <p>分母が $\sqrt{3} - \sqrt{2}$ のように、２つの項の和や差の形になっている場合は、単に $\sqrt{3}$ などを掛けるだけではルートが消えません。この場合は、中学校で習った乗法公式である<b>「和と差の積（$a^2 - b^2$）」の性質</b>を利用します。</p>
+
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 22px; border-radius: 6px; margin: 25px 0;">
+                        <p style="text-align: center; font-size: 20px; margin: 8px 0; font-family: var(--font-mono);">
+                            $(x - y)(x + y) = x^2 - y^2$
+                        </p>
+                    </div>
+
+                    <p>分母が $\sqrt{a} - \sqrt{b}$ であれば、符号を逆にした対になる式である **$\sqrt{a} + \sqrt{b}$** を分子と分母の両方に掛けます。すると、分母は平方数同士の引き算（$a - b$）になり、ルートが綺麗に消滅します。</p>
+                    <p>例えば、$\frac{1}{\sqrt{3} - \sqrt{2}}$ の有理化は以下のように行います：</p>
+                    <p style="text-align: center; font-size: 16px; margin: 15px 0;">
+                        $\frac{1}{\sqrt{3} - \sqrt{2}} = \frac{1 \times (\sqrt{3} + \sqrt{2})}{(\sqrt{3} - \sqrt{2})(\sqrt{3} + \sqrt{2})} = \frac{\sqrt{3} + \sqrt{2}}{3 - 2} = \sqrt{3} + \sqrt{2}$
+                    </p>
+
+                    <!-- RATIONAL ALCHEMY WIDGET -->
+                    <div class="premium-widget">
+                        <span class="widget-title">数理物理実験：分母有理化リアクター (Rationalization Chamber)</span>
+                        <p style="font-size: 14.5px; margin-bottom: 20px; color: var(--color-ink-soft); line-height: 1.7;">
+                            間違った式（共役ではない無理数）を掛けると、分母は消えるどころか余計に複雑化してしまいます。
+                            以下のシミュレーターで難易度（Stage）を選択し、分母を綺麗にクリア（有理化）できる正しい<b>「触媒（乗数）」</b>を注入してください。
+                        </p>
+
+                        <div class="rational-container">
+                            <div class="stage-nav">
+                                <button class="btn-stage active" onclick="loadStage(1)">Stage 1: 単項式分母</button>
+                                <button class="btn-stage" onclick="loadStage(2)">Stage 2: 係数付き有理化</button>
+                                <button class="btn-stage" onclick="loadStage(3)">Stage 3: 多項式（和・差）分母</button>
+                            </div>
+
+                            <div class="alchemy-chamber">
+                                <div style="font-size: 11px; color: #64748b; letter-spacing: 0.1em;">RATIONALIZATION CHAMBER v1.0</div>
+                                <div class="fraction-display" id="chamber-display">
+                                    <!-- Rendered dynamically -->
+                                </div>
+                                
+                                <div class="alchemy-grid" id="catalyst-buttons">
+                                    <!-- Rendered dynamically -->
+                                </div>
+
+                                <div class="alchemy-log" id="alchemy-log">触媒を選択して有理化反応を開始してください。</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Business context -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>なぜ分母を有理化するのか？ 実社会における必要性</h4>
+                    <p>「分母にルートがあっても値としては同じなのに、なぜわざわざ有理化しなければならないのか？」と疑問に思う方も多いでしょう。これには明確な実用的・歴史的理由が存在します。</p>
+
+                    <!-- Callout 1 -->
+                    <div class="business-callout">
+                        <h5>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-brass)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                            1. 計算盤や電卓がない時代の「割り算のしやすさ」
+                        </h5>
+                        <p style="font-size: 14.5px; line-height: 1.7; color: var(--color-ink-soft);">
+                            例えば、$\frac{3}{\sqrt{2}}$ という数値を手計算でおおよその少数値にする場合、有理化しないと $3 \div 1.4142...$ という「無限に続く小数を割る数にする非常に困難な割り算」を強いられます。<br>
+                            しかし有理化して $\frac{3\sqrt{2}}{2}$ にしておけば、$\frac{3 \times 1.4142...}{2} = 4.2426... \div 2 = 2.1213...$ のように「普通の数（2）で割る非常に容易な割り算」へと変換できます。有理化は人間の暗算や見積もりの労力を大幅に節約する仕組みなのです。
+                        </p>
+                    </div>
+
+                    <!-- Callout 2 -->
+                    <div class="business-callout">
+                        <h5>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-brass)" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                            2. 共通の尺度（同類項）としての合算しやすさ
+                        </h5>
+                        <p style="font-size: 14.5px; line-height: 1.7; color: var(--color-ink-soft);">
+                            データ分析等で、$\frac{1}{\sqrt{2}} + \sqrt{2}$ のような複数の測定値を合算・集計する場合、有理化していないとそのまま足せるかどうかの判定が難しくなります。<br>
+                            有理化を行うことで $\frac{\sqrt{2}}{2} + \sqrt{2} = \frac{3\sqrt{2}}{2}$ のように、共通の係数スケール（$\sqrt{2}$ の項）として綺麗に統合し、データの記述的処理をスムーズに行うことが可能になります。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 4: Quiz -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>理解度チェッククイズ</h4>
+                    <p>分母の有理化の手順とその応用について、理解度を確認してみましょう。</p>
+
+                    <!-- Question 1 -->
+                    <div class="quiz-card">
+                        <div class="quiz-question">Q1. 式「$\frac{10}{\sqrt{5}}$」を正しく有理化して整理した答えはどれでしょうか？</div>
+                        <div class="quiz-options">
+                            <button class="quiz-option" onclick="checkAnswer(1, 'A', false)">
+                                <span>A. $\frac{10\sqrt{5}}{5}$</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(1, 'B', true)">
+                                <span>B. $2\sqrt{5}$</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(1, 'C', false)">
+                                <span>C. $5\sqrt{2}$</span>
+                            </button>
+                        </div>
+                        <div class="quiz-feedback" id="feedback-1"></div>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="quiz-card">
+                        <div class="quiz-question">Q2. 式「$\frac{3}{\sqrt{5} - \sqrt{2}}$」の分母を有理化するために、分子分母に掛けるべき正しい式はどれでしょうか？</div>
+                        <div class="quiz-options">
+                            <button class="quiz-option" onclick="checkAnswer(2, 'A', false)">
+                                <span>A. $\sqrt{5} - \sqrt{2}$</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(2, 'B', true)">
+                                <span>B. $\sqrt{5} + \sqrt{2}$</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(2, 'C', false)">
+                                <span>C. $\sqrt{7}$</span>
+                            </button>
+                        </div>
+                        <div class="quiz-feedback" id="feedback-2"></div>
+                    </div>
+
+                    <!-- Question 3 -->
+                    <div class="quiz-card">
+                        <div class="quiz-question">Q3. 前問の「$\frac{3}{\sqrt{5} - \sqrt{2}}$」を最後まで有理化して最も簡素化した答えはどれでしょうか？</div>
+                        <div class="quiz-options">
+                            <button class="quiz-option" onclick="checkAnswer(3, 'A', true)">
+                                <span>A. $\sqrt{5} + \sqrt{2}$</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(3, 'B', false)">
+                                <span>B. $\frac{\sqrt{5} + \sqrt{2}}{3}$</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(3, 'C', false)">
+                                <span>C. $3(\sqrt{5} + \sqrt{2})$</span>
+                            </button>
+                        </div>
+                        <div class="quiz-feedback" id="feedback-3"></div>
+                    </div>
+                </div>
+
+                <!-- Step 5: Summary -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>本単元のまとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 24px; font-size: 16px; line-height: 1.85;">
+                        <ul style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px;">
+                            <li><b>基本方針</b>: 分母と分子に適切な値を掛け算し、分数の大きさを変えずに分母の平方根を解除します。</li>
+                            <li><b>単項式の有理化</b>: 分母にあるルートと同じ値を分子分母に掛けます。</li>
+                            <li><b>多項式の有理化</b>: 乗法公式 $(a-b)(a+b) = a^2 - b^2$ を利用するため、符号を逆にした共役の式を掛けます。</li>
+                            <li><b>有理化の効果</b>: 計算誤差が抑えられ、少数見積もりが容易になり、また項の合算（整理）がスムーズに行えるようになります。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-footer-nav">
+                <a href="49.html" class="btn-secondary">&larr; 前の単元へ</a>
+                <a href="index.html" class="btn-secondary">目次に戻る</a>
+                <a href="#" class="btn btn-primary">次の単元へ &rarr;</a>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- KaTeX Math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+
+    <!-- Lab Engine script -->
+    <script>
+        let currentStage = 1;
+        let audioCtx = null;
+
+        // Stage configurations
+        const stageData = {
+            1: {
+                numerator: "3",
+                denominator: "\\sqrt{2}",
+                catalysts: [
+                    { label: "\\times \\frac{\\sqrt{2}}{\\sqrt{2}}", success: true, log: "正解！分母が $\\sqrt{2} \\times \\sqrt{2} = 2$ となり、有理化成功！", result: "\\frac{3\\sqrt{2}}{2}" },
+                    { label: "\\times \\frac{\\sqrt{3}}{\\sqrt{3}}", success: false, log: "不完全！分母が $\\sqrt{6}$ となり、ルートが消えません。", result: "\\frac{3\\sqrt{3}}{\\sqrt{6}}" },
+                    { label: "\\times \\sqrt{2}", success: false, log: "エラー！分母だけに掛けては分数の値自体が変わってしまいます。", result: "\\text{値が破壊されました}" }
+                ]
+            },
+            2: {
+                numerator: "6",
+                denominator: "\\sqrt{3}",
+                catalysts: [
+                    { label: "\\times \\frac{\\sqrt{3}}{\\sqrt{3}}", success: true, log: "正解！分母が $3$ になり、分子の $6$ と約分して $2\\sqrt{3}$ になります！", result: "2\\sqrt{3}" },
+                    { label: "\\times \\frac{\\sqrt{6}}{\\sqrt{6}}", success: false, log: "不完全！分母が $\\sqrt{18} = 3\\sqrt{2}$ になり、ルートが残ります。", result: "\\frac{6\\sqrt{6}}{3\\sqrt{2}}" },
+                    { label: "\\times 3", success: false, log: "エラー！平方数ではない通常の数を掛けても分母は $3\\sqrt{3}$ になるだけです。", result: "\\frac{18}{3\\sqrt{3}}" }
+                ]
+            },
+            3: {
+                numerator: "1",
+                denominator: "\\sqrt{3} - \\sqrt{2}",
+                catalysts: [
+                    { label: "\\times \\frac{\\sqrt{3} + \\sqrt{2}}{\\sqrt{3} + \\sqrt{2}}", success: true, log: "大正解！乗法公式により分母が $3 - 2 = 1$ になり、有理化完了！", result: "\\sqrt{3} + \\sqrt{2}" },
+                    { label: "\\times \\frac{\\sqrt{3} - \\sqrt{2}}{\\sqrt{3} - \\sqrt{2}}", success: false, log: "危険！分母は $(\\sqrt{3} - \\sqrt{2})^2 = 5 - 2\\sqrt{6}$ になり、より複雑化します！", result: "\\frac{\\sqrt{3} - \\sqrt{2}}{5 - 2\\sqrt{6}}" },
+                    { label: "\\times \\frac{\\sqrt{3}}{\\sqrt{3}}", success: false, log: "不完全！分母は $3 - \\sqrt{6}$ になり、右側にルートが残ってしまいます。", result: "\\frac{\\sqrt{3}}{3 - \\sqrt{6}}" }
+                ]
+            }
+        };
+
+        function playSound(type) {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                const now = audioCtx.currentTime;
+
+                if (type === 'click') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(600, now);
+                    gain.gain.setValueAtTime(0.04, now);
+                    gain.gain.linearRampToValueAtTime(0.001, now + 0.05);
+                    osc.start(now);
+                    osc.stop(now + 0.05);
+                } else if (type === 'success') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, now); // C5
+                    osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
+                    osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
+                    gain.gain.setValueAtTime(0.06, now);
+                    gain.gain.linearRampToValueAtTime(0.001, now + 0.35);
+                    osc.start(now);
+                    osc.stop(now + 0.35);
+                } else if (type === 'error') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(150, now);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.linearRampToValueAtTime(0.001, now + 0.25);
+                    osc.start(now);
+                    osc.stop(now + 0.25);
+                }
+            } catch (e) {}
+        }
+
+        function loadStage(sNum) {
+            playSound('click');
+            currentStage = sNum;
+            
+            // Toggle active stage button
+            document.querySelectorAll('.btn-stage').forEach((btn, idx) => {
+                if (idx + 1 === sNum) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+
+            const data = stageData[sNum];
+            const display = document.getElementById('chamber-display');
+            display.innerHTML = `$\\frac{${data.numerator}}{${data.denominator}}$`;
+            document.getElementById('alchemy-log').innerHTML = "触媒を選択して有理化反応を開始してください。";
+
+            // Generate catalysts
+            const grid = document.getElementById('catalyst-buttons');
+            grid.innerHTML = '';
+            
+            data.catalysts.forEach((cat, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-catalyst';
+                btn.innerHTML = `$${cat.label}$`;
+                btn.onclick = () => triggerAlchemy(idx);
+                grid.appendChild(btn);
+            });
+
+            if (window.renderMathInElement) {
+                renderMathInElement(document.getElementById('chamber-display'), {
+                    delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]
+                });
+                renderMathInElement(grid, {
+                    delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]
+                });
+            }
+        }
+
+        function triggerAlchemy(cIdx) {
+            const data = stageData[currentStage];
+            const cat = data.catalysts[cIdx];
+            const display = document.getElementById('chamber-display');
+
+            if (cat.success) {
+                playSound('success');
+                display.innerHTML = `$${cat.result}$`;
+                document.getElementById('alchemy-log').innerHTML = `<span style="color:#10b981; font-weight:bold;">成功！</span> ${cat.log}`;
+            } else {
+                playSound('error');
+                display.innerHTML = `$${cat.result}$`;
+                document.getElementById('alchemy-log').innerHTML = `<span style="color:#ef4444; font-weight:bold;">エラー！</span> ${cat.log}`;
+            }
+
+            if (window.renderMathInElement) {
+                renderMathInElement(document.getElementById('chamber-display'), {
+                    delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]
+                });
+                renderMathInElement(document.getElementById('alchemy-log'), {
+                    delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]
+                });
+            }
+        }
+
+        // Quiz checker
+        function checkAnswer(qId, option, isCorrect) {
+            const feedback = document.getElementById(`feedback-${qId}`);
+            feedback.style.display = 'block';
+
+            const options = document.querySelectorAll(`.quiz-card:nth-of-type(${qId}) .quiz-option`);
+            options.forEach(opt => {
+                opt.disabled = true;
+                if (opt.innerText.trim().startsWith(option)) {
+                    if (isCorrect) opt.classList.add('correct');
+                    else opt.classList.add('incorrect');
+                }
+            });
+
+            if (isCorrect) {
+                playSound('success');
+                feedback.className = 'quiz-feedback success';
+                
+                let expl = '';
+                if (qId === 1) {
+                    expl = `$\\frac{10}{\\sqrt{5}}$ の分子分母に $\\sqrt{5}$ を掛けると、$\\frac{10\\sqrt{5}}{5}$ となります。<br>これを約分して整理すると $2\\sqrt{5}$ になります。`;
+                } else if (qId === 2) {
+                    expl = `分母が $\\sqrt{5} - \\sqrt{2}$ であるため、乗法公式 $(a-b)(a+b) = a^2 - b^2$ を利用するために、符号が逆になった **$\\sqrt{5} + \\sqrt{2}$** を分子分母に掛け算します。`;
+                } else if (qId === 3) {
+                    expl = `分子分母に $\\sqrt{5} + \\sqrt{2}$ を掛け合わせると：<br>分母: $(\\sqrt{5} - \\sqrt{2})(\\sqrt{5} + \\sqrt{2}) = 5 - 2 = 3$<br>分子: $3(\\sqrt{5} + \\sqrt{2})$<br>分母の $3$ と分子の $3$ が約分され、最終的に $\\sqrt{5} + \\sqrt{2}$ となります。`;
+                }
+                
+                feedback.innerHTML = `<b>正解です！</b><br>` + expl;
+            } else {
+                playSound('error');
+                feedback.className = 'quiz-feedback error';
+                feedback.innerHTML = `<b>不正解です。</b> もう一度考えてみましょう。<br>分母を平方根でない数（有理数）に変形するための正しいアプローチを選択してください。`;
+            }
+
+            if (window.renderMathInElement) {
+                renderMathInElement(feedback, {
+                    delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]
+                });
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadStage(1);
+        });
+    </script>
+</body>
+</html>
