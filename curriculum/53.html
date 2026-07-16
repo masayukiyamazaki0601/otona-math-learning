@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>関数の定義と記法（y=f(x)） | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .premium-widget {
+            background-color: var(--color-surface);
+            border: 2px solid var(--color-paper-line);
+            border-radius: var(--radius-card);
+            padding: 35px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px -10px rgba(28, 43, 57, 0.05), 0 1px 3px rgba(28, 43, 57, 0.02);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .premium-widget:hover {
+            border-color: var(--color-brass);
+            box-shadow: 0 15px 35px -10px rgba(28, 43, 57, 0.08);
+        }
+        
+        .widget-title {
+            font-family: var(--font-heading);
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--color-ink);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--color-brass);
+            padding-bottom: 8px;
+            display: inline-block;
+        }
+
+        .business-callout {
+            background-color: #f8fafc;
+            border-left: 4px solid var(--color-brass);
+            border-radius: 4px;
+            padding: 24px;
+            margin: 30px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+        }
+
+        .business-callout h5 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--color-ink);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Black Box styles */
+        .machine-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            align-items: center;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .machine-console {
+            background-color: #0b131a;
+            border: 2px solid #1e2d3d;
+            border-radius: 8px;
+            padding: 30px;
+            width: 100%;
+            max-width: 620px;
+            color: #e2e8f0;
+            font-family: 'JetBrains Mono', monospace;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+            position: relative;
+        }
+
+        .rule-selector {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .btn-rule {
+            background-color: #1e293b;
+            border: 1px solid #475569;
+            color: #cbd5e1;
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            font-size: 13.5px;
+        }
+
+        .btn-rule.active {
+            border-color: #38bdf8;
+            background-color: #172554;
+            color: #f1f5f9;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+        }
+
+        .io-panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #111b27;
+            padding: 25px;
+            border-radius: 6px;
+            border: 1px solid #1e2d3d;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-node, .output-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            width: 120px;
+        }
+
+        .node-label {
+            font-size: 11px;
+            color: #64748b;
+            letter-spacing: 0.1em;
+        }
+
+        .node-val {
+            font-size: 32px;
+            font-weight: 700;
+            color: #38bdf8;
+            text-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+        }
+
+        .input-adjuster {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-adj {
+            background-color: #1e293b;
+            border: 1px solid #475569;
+            color: #cbd5e1;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: 700;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-adj:hover {
+            border-color: #38bdf8;
+            color: #f1f5f9;
+        }
+
+        .black-box-graphic {
+            width: 140px;
+            height: 100px;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 2px solid #38bdf8;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.1);
+        }
+
+        .black-box-label {
+            font-size: 14px;
+            color: #38bdf8;
+            font-weight: 700;
+        }
+
+        .black-box-status {
+            font-size: 9px;
+            color: #10b981;
+            margin-top: 6px;
+            letter-spacing: 0.05em;
+        }
+
+        .beam {
+            position: absolute;
+            height: 2px;
+            background-color: #38bdf8;
+            width: 0;
+            top: 50%;
+            z-index: 1;
+        }
+
+        .beam-left {
+            left: 120px;
+            transform-origin: left;
+        }
+
+        .beam-right {
+            left: 260px;
+            transform-origin: left;
+        }
+
+        .btn-run {
+            background-color: #10b981;
+            border: none;
+            color: #ffffff;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+
+        .btn-run:hover {
+            background-color: #059669;
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .machine-log {
+            background-color: #080d14;
+            border: 1px solid #142334;
+            border-radius: 6px;
+            padding: 18px;
+            font-size: 14px;
+            line-height: 1.8;
+            color: #94a3b8;
+            min-height: 100px;
+        }
+
+        .history-list {
+            margin-top: 15px;
+            font-size: 12px;
+            color: #64748b;
+            border-top: 1px dashed rgba(100, 116, 139, 0.2);
+            padding-top: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .history-badge {
+            background-color: #111b27;
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid #1e2d3d;
+        }
+
+        /* Quiz styles */
+        .quiz-card {
+            background-color: var(--color-paper);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 6px;
+            padding: 28px;
+            margin-bottom: 25px;
+        }
+
+        .quiz-question {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 18px;
+            color: var(--color-ink);
+            line-height: 1.6;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .quiz-option {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            padding: 14px 22px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--color-brass);
+            background-color: rgba(169, 120, 47, 0.05);
+        }
+
+        .quiz-option.correct {
+            border-color: #2e7d32;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            font-weight: 500;
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--color-red);
+            background-color: #ffebee;
+            color: var(--color-red);
+        }
+
+        .quiz-feedback {
+            margin-top: 18px;
+            font-size: 14.5px;
+            line-height: 1.7;
+            padding: 16px;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .quiz-feedback.success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid #2e7d32;
+        }
+
+        .quiz-feedback.error {
+            background-color: #ffebee;
+            color: var(--color-red);
+            border-left: 4px solid var(--color-red);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> > <a href="index.html">カリキュラム</a> > 第4章 高校数学への接続 > 単元53
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 04 / Unit 53</span>
+                <h2 class="lesson-title">関数の定義と記法（$y=f(x)$）</h2>
+            </header>
+
+            <div class="lesson-flow">
+                
+                <!-- Step 1: Deep Background -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>なぜ $y=f(x)$ という記法を用いるのか：数理処理とプログラミングの基礎</h4>
+                    <p>中学校では、関数を単に $y = 2x + 3$ のように記述していました。しかし、高校数学や実際のビジネス演算、さらにはプログラミングの世界では、この表現方法には不便な点があります。それらを解決するために、新たに $f(x)$ という表記ルールを導入します。</p>
+                    
+                    <!-- Reason 1 -->
+                    <div class="business-callout">
+                        <h5>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-brass)" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+                            1. 複数の変換ルールに固有の「名前」を与える（処理の分離）
+                        </h5>
+                        <p style="font-size: 14.5px; line-height: 1.7; color: var(--color-ink-soft);">
+                            ビジネスにおける管理会計やシステム開発において、同時に複数の計算をおこなう状況を考えます。<br>
+                            すべてを $y = \dots$ と記述すると、どの数式がどの処理を表しているのかが分からなくなります。<br>
+                            式に $f(x)$ や $g(x)$ といった別々の名前を与えることで、例えば「原価計算ルール $f(x)$」と「税金計算ルール $g(x)$」のように、演算の役割を明確に区別できます。
+                        </p>
+                    </div>
+
+                    <!-- Reason 2 -->
+                    <div class="business-callout">
+                        <h5>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-brass)" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                            2. 入力と出力を１つの数式内に明示する（モジュール化）
+                        </h5>
+                        <p style="font-size: 14.5px; line-height: 1.7; color: var(--color-ink-soft);">
+                            従来の $y = 2x + 3$ という書き方では、「$x = 5$ のときの値を求める」という指示を伝えるために日本語の文章が必要でした。<br>
+                            しかし、$f(x) = 2x + 3$ という関数記法を用いれば、単に「$f(5) = 13$」と記述するだけで、「入力値が 5 であり、その出力値が 13 である」という情報を数式ひとつで完結できます。これはプログラミング言語における関数の引数（ひきすう）と戻り値の関係そのものです。
+                        </p>
+                    </div>
+
+                    <!-- Reason 3 -->
+                    <div class="business-callout">
+                        <h5>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-brass)" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                            3. パイプライン処理の表現（合成関数）
+                        </h5>
+                        <p style="font-size: 14.5px; line-height: 1.7; color: var(--color-ink-soft);">
+                            「ある計算の出力値を、別の計算の入力値としてそのまま引き渡す」という一連の業務工程を考えます。<br>
+                            関数記法を使うことで、$g(f(x))$ というシンプルな記述で表すことができます。これは「原価 $x$ から定価 $f(x)$ を計算し、そこから税込価格 $g(\text{定価})$ を算出する」というパイプライン処理のモデル化に非常に役立ちます。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 2: Definition of Function -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>数学における「関数」の定義</h4>
+                    <p>数学において、関数とは単なる数式のことではなく、**「入力される値 $x$ に対して、出力される値 $y$ がただ１つに決まる関係」**を指します。この性質を「一意性」と呼びます。</p>
+
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 22px; border-radius: 6px; margin: 25px 0;">
+                        <p style="font-size: 15px; margin: 0; line-height: 1.8;">
+                            <b>関数の要件</b>: 入力集合の要素 $x$ に、出力集合の要素 $y$ が<b>必ず１つだけ対応する</b>こと。<br>
+                            ※ もし１つの $x$ に対して、２つ以上の $y$ が対応してしまう関係は、関数とは呼びません。
+                        </p>
+                    </div>
+
+                    <p>例えば、「ある人の身分証番号 $x$ に対する、その人の年齢 $y$」は関数です（年齢はただ１つに決まるため）。<br>
+                    しかし、「ある人の年齢 $x$ に対する、その年齢の人の身分証番号 $y$」は、同じ年齢の人が複数存在し、値が１つに決まらないため、関数ではありません。</p>
+                </div>
+
+                <!-- Step 3: Interactive Machine -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>実験：関数ブラックボックス（Function Processing Machine）</h4>
+                    <p>関数を「入力された値を一定の規則で変換して出力する機械」に見立てて、その処理の様子を追体験できます。ルールを選択し、入力値 $x$ を変更して、出力値 $y = f(x)$ を算出してください。</p>
+
+                    <div class="premium-widget">
+                        <span class="widget-title">関数変換ブラックボックス (Function Box)</span>
+                        <div class="machine-container">
+                            <div class="machine-console">
+                                <!-- Rule Selection -->
+                                <div class="rule-selector">
+                                    <button class="btn-rule active" onclick="selectRule('A')" id="rule-A">$f(x) = 2x + 3$ (1次変換)</button>
+                                    <button class="btn-rule" onclick="selectRule('B')" id="rule-B">$f(x) = x^2$ (非線形成長)</button>
+                                    <button class="btn-rule" onclick="selectRule('C')" id="rule-C">$f(x) = -x + 10$ (逆相関関係)</button>
+                                </div>
+
+                                <!-- IO Panel with Machine graphics -->
+                                <div class="io-panel">
+                                    <div class="input-node">
+                                        <span class="node-label">INPUT (x)</span>
+                                        <span class="node-val" id="input-val">3</span>
+                                        <div class="input-adjuster">
+                                            <button class="btn-adj" onclick="adjustInput(-1)">&minus;</button>
+                                            <button class="btn-adj" onclick="adjustInput(1)">+</button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Connecting beam left -->
+                                    <div class="beam beam-left" id="beam-left"></div>
+
+                                    <div class="black-box-graphic">
+                                        <span class="black-box-label" id="machine-label">f(x)</span>
+                                        <span class="black-box-status" id="machine-status">READY</span>
+                                    </div>
+
+                                    <!-- Connecting beam right -->
+                                    <div class="beam beam-right" id="beam-right"></div>
+
+                                    <div class="output-node">
+                                        <span class="node-label">OUTPUT (y)</span>
+                                        <span class="node-val" id="output-val">?</span>
+                                    </div>
+                                </div>
+
+                                <!-- Execution button -->
+                                <button class="btn-run" onclick="runMachine()">変換処理を実行 (RUN PROCESS)</button>
+
+                                <!-- Process Log -->
+                                <div style="margin-top: 20px;">
+                                    <div class="machine-log" id="machine-log">入力値を選び、「変換処理を実行」ボタンを押してください。</div>
+                                    <div class="history-list" id="history-list">
+                                        <!-- Conversion history -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Quiz -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>理解度チェッククイズ</h4>
+                    <p>関数の定義と $y=f(x)$ 記法について、理解度の確認をおこなってください。</p>
+
+                    <!-- Question 1 -->
+                    <div class="quiz-card">
+                        <div class="quiz-question">Q1. 関数 $f(x) = 3x^2 - 2x + 1$ において、入力値 $x = -2$ のときの出力値 $f(-2)$ の正しい計算結果はどれでしょうか？</div>
+                        <div class="quiz-options">
+                            <button class="quiz-option" onclick="checkAnswer(1, 'A', false)">
+                                <span>A. $-7$</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(1, 'B', false)">
+                                <span>B. $9$</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(1, 'C', true)">
+                                <span>C. $17$</span>
+                            </button>
+                        </div>
+                        <div class="quiz-feedback" id="feedback-1"></div>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="quiz-card">
+                        <div class="quiz-question">Q2. 数学における「関数」の定義の説明として、正しい記述はどれでしょうか？</div>
+                        <div class="quiz-options">
+                            <button class="quiz-option" onclick="checkAnswer(2, 'A', true)">
+                                <span>A. 入力される値 $x$ に対して、出力される値 $y$ がただ１つに決まる関係。</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(2, 'B', false)">
+                                <span>B. 必ず変数 $x$ の２乗を含んでいる方程式のこと。</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(2, 'C', false)">
+                                <span>C. グラフを描いたときに、必ず直線になる関係。</span>
+                            </button>
+                        </div>
+                        <div class="quiz-feedback" id="feedback-2"></div>
+                    </div>
+
+                    <!-- Question 3 -->
+                    <div class="quiz-card">
+                        <div class="quiz-question">Q3. 関数記法 $y = f(x)$ がもたらすメリットとして、適切ではないものはどれでしょうか？</div>
+                        <div class="quiz-options">
+                            <button class="quiz-option" onclick="checkAnswer(3, 'A', false)">
+                                <span>A. $f(x)$ や $g(x)$ のように記述することで、複数の異なる変換ルールを明確に区別できる。</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(3, 'B', false)">
+                                <span>B. 入力値と出力値の関係をコンパクトに表現できる。</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(3, 'C', true)">
+                                <span>C. 計算結果を必ず正の数（プラスの数値）に固定できる。</span>
+                            </button>
+                        </div>
+                        <div class="quiz-feedback" id="feedback-3"></div>
+                    </div>
+                </div>
+
+                <!-- Step 5: Summary -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>本単元のまとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 24px; font-size: 16px; line-height: 1.85;">
+                        <ul style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px;">
+                            <li><b>関数の本質</b>: １つの入力に対して、出力が１つだけ対応する変換ルールのことです。</li>
+                            <li><b>記法の利点</b>: $f(x)$ と書くことで、処理の名前、入力値、および出力値を数式の中にきれいに整理できます。</li>
+                            <li><b>実務との接点</b>: プログラミングにおける関数の引数と戻り値、またはパイプライン処理の設計に直結する考え方です。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-footer-nav">
+                <a href="52.html" class="btn-secondary">&larr; 前の単元へ</a>
+                <a href="index.html" class="btn-secondary">目次に戻る</a>
+                <a href="#" class="btn btn-primary" style="opacity: 0.5; pointer-events: none;">次の単元へ &rarr;</a>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- KaTeX Math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+
+    <!-- Lab Engine script -->
+    <script>
+        let currentRule = 'A';
+        let inputVal = 3;
+        let audioCtx = null;
+        let isProcessing = false;
+
+        const rules = {
+            'A': {
+                formula: "2x + 3",
+                latex: "f(x) = 2x + 3",
+                func: (x) => 2 * x + 3
+            },
+            'B': {
+                formula: "x^2",
+                latex: "f(x) = x^2",
+                func: (x) => x * x
+            },
+            'C': {
+                formula: "-x + 10",
+                latex: "f(x) = -x + 10",
+                func: (x) => -x + 10
+            }
+        };
+
+        function playSound(type) {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                const now = audioCtx.currentTime;
+
+                if (type === 'click') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(600, now);
+                    gain.gain.setValueAtTime(0.04, now);
+                    gain.gain.linearRampToValueAtTime(0.001, now + 0.05);
+                    osc.start(now);
+                    osc.stop(now + 0.05);
+                } else if (type === 'process') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(300, now);
+                    osc.frequency.exponentialRampToValueAtTime(800, now + 0.5);
+                    gain.gain.setValueAtTime(0.03, now);
+                    gain.gain.linearRampToValueAtTime(0.001, now + 0.5);
+                    osc.start(now);
+                    osc.stop(now + 0.5);
+                } else if (type === 'success') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, now); // C5
+                    osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
+                    osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
+                    gain.gain.setValueAtTime(0.06, now);
+                    gain.gain.linearRampToValueAtTime(0.001, now + 0.35);
+                    osc.start(now);
+                    osc.stop(now + 0.35);
+                } else if (type === 'error') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(150, now);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.linearRampToValueAtTime(0.001, now + 0.25);
+                    osc.start(now);
+                    osc.stop(now + 0.25);
+                }
+            } catch (e) {}
+        }
+
+        function selectRule(ruleId) {
+            if (isProcessing) return;
+            playSound('click');
+            currentRule = ruleId;
+
+            document.querySelectorAll('.btn-rule').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(`rule-${ruleId}`).classList.add('active');
+            document.getElementById('machine-label').innerHTML = `f(x)`;
+            document.getElementById('output-val').innerText = '?';
+            document.getElementById('machine-status').innerText = 'READY';
+            document.getElementById('machine-log').innerHTML = "入力値を選び、「変換処理を実行」ボタンを押してください。";
+        }
+
+        function adjustInput(amount) {
+            if (isProcessing) return;
+            playSound('click');
+            inputVal += amount;
+            // Bound check [-10, 10]
+            inputVal = Math.max(-10, Math.min(10, inputVal));
+            document.getElementById('input-val').innerText = inputVal;
+            document.getElementById('output-val').innerText = '?';
+            document.getElementById('machine-status').innerText = 'READY';
+        }
+
+        function runMachine() {
+            if (isProcessing) return;
+            isProcessing = true;
+            playSound('process');
+            
+            document.getElementById('machine-status').innerText = 'PROCESSING';
+            document.getElementById('machine-status').style.color = '#f59e0b';
+            
+            // Trigger visual transitions
+            const beamLeft = document.getElementById('beam-left');
+            const beamRight = document.getElementById('beam-right');
+            
+            beamLeft.style.transition = 'width 0.25s linear';
+            beamLeft.style.width = '20px';
+            
+            setTimeout(() => {
+                beamLeft.style.width = '0';
+                // Inside processing
+                setTimeout(() => {
+                    const rule = rules[currentRule];
+                    const outVal = rule.func(inputVal);
+                    
+                    playSound('success');
+                    document.getElementById('output-val').innerText = outVal;
+                    document.getElementById('machine-status').innerText = 'COMPLETE';
+                    document.getElementById('machine-status').style.color = '#10b981';
+                    
+                    // Display log formula
+                    let formattedFormula = rule.formula.replace(/x/g, `(${inputVal})`);
+                    document.getElementById('machine-log').innerHTML = `
+                        <b>変換完了:</b> 入力値 $x = ${inputVal}$ に対して、規則 $f(x) = ${rule.formula}$ を適用しました。<br>
+                        計算式: $f(${inputVal}) = ${formattedFormula} = ${outVal}$<br>
+                        出力値: $y = ${outVal}$
+                    `;
+                    
+                    // Add history
+                    const history = document.getElementById('history-list');
+                    const badge = document.createElement('span');
+                    badge.className = 'history-badge';
+                    badge.innerHTML = `$f(${inputVal}) = ${outVal}$`;
+                    history.appendChild(badge);
+
+                    if (window.renderMathInElement) {
+                        renderMathInElement(document.getElementById('machine-log'), {
+                            delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]
+                        });
+                        renderMathInElement(history, {
+                            delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]
+                        });
+                    }
+                    
+                    isProcessing = false;
+                }, 200);
+            }, 250);
+        }
+
+        // Quiz checker
+        function checkAnswer(qId, option, isCorrect) {
+            const feedback = document.getElementById(`feedback-${qId}`);
+            feedback.style.display = 'block';
+
+            const options = document.querySelectorAll(`.quiz-card:nth-of-type(${qId}) .quiz-option`);
+            options.forEach(opt => {
+                opt.disabled = true;
+                if (opt.innerText.trim().startsWith(option)) {
+                    if (isCorrect) opt.classList.add('correct');
+                    else opt.classList.add('incorrect');
+                }
+            });
+
+            if (isCorrect) {
+                playSound('success');
+                feedback.className = 'quiz-feedback success';
+                
+                let expl = '';
+                if (qId === 1) {
+                    expl = `関数 $f(x) = 3x^2 - 2x + 1$ の変数 $x$ に $-2$ を代入します：<br>$f(-2) = 3 \\times (-2)^2 - 2 \\times (-2) + 1$<br>$f(-2) = 3 \\times 4 + 4 + 1 = 12 + 4 + 1 = 17$<br>負の数の２乗は正の数になる点、および符号の掛け合わせ（$-2 \\times -2 = +4$）に注意しておこないます。`;
+                } else if (qId === 2) {
+                    expl = `数学における関数の本質は、「１つの入力（$x$）に対して、対応する出力（$y$）がただ１つだけ決まる」という一意の対応関係そのものです。`;
+                } else if (qId === 3) {
+                    expl = `関数記号 $f(x)$ は、代入の表現、処理の区別、パイプライン化には非常に役立ちますが、出力される数値の符号（プラス・マイナス）自体を制限したり固定したりする機能はありません。`;
+                }
+                
+                feedback.innerHTML = `<b>正解です！</b><br>` + expl;
+            } else {
+                playSound('error');
+                feedback.className = 'quiz-feedback error';
+                feedback.innerHTML = `<b>不正解です。</b> もう一度考えてみましょう。`;
+            }
+
+            if (window.renderMathInElement) {
+                renderMathInElement(feedback, {
+                    delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]
+                });
+            }
+        }
+    </script>
+</body>
+</html>
