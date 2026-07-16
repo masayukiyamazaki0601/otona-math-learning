@@ -5,7 +5,351 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>四則演算の基本法則（乗法・除法） | Otona Math</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        /* Premium Dashboard Widgets styling */
+        .premium-widget {
+            background-color: var(--color-surface);
+            border: 2px solid var(--color-paper-line);
+            border-radius: var(--radius-card);
+            padding: 35px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px -10px rgba(28, 43, 57, 0.05), 0 1px 3px rgba(28, 43, 57, 0.02);
+            transition: all 0.3s ease;
+        }
+
+        .premium-widget:hover {
+            border-color: var(--color-brass);
+            box-shadow: 0 15px 35px -10px rgba(28, 43, 57, 0.08);
+        }
+        
+        .widget-title {
+            font-family: var(--font-heading);
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--color-ink);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--color-brass);
+            padding-bottom: 8px;
+            display: inline-block;
+        }
+
+        /* Multiplication Law Visualizer Styles */
+        .law-container {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            width: 100%;
+        }
+
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background-color: var(--color-paper);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.02);
+        }
+
+        .slider-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .slider-label {
+            font-family: var(--font-mono);
+            font-size: 15px;
+            font-weight: bold;
+            min-width: 60px;
+        }
+
+        .slider-input {
+            flex-grow: 1;
+            accent-color: var(--color-brass);
+        }
+
+        .slider-val-display {
+            font-family: var(--font-mono);
+            font-size: 18px;
+            font-weight: 700;
+            min-width: 30px;
+            text-align: right;
+        }
+
+        .visual-display-box {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            padding: 20px;
+            border: 1px dashed var(--color-paper-line);
+            border-radius: 6px;
+        }
+
+        .law-visual-row {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .law-visual-label {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--color-ink-soft);
+        }
+
+        .grid-visual-flex {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .grid-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .grid-title-sub {
+            font-size: 12px;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            color: var(--color-ink-soft);
+        }
+
+        .grid-svg {
+            border: 1px solid var(--color-paper-line);
+            background-color: var(--color-paper);
+            border-radius: 4px;
+        }
+
+        .law-equation-text {
+            font-family: var(--font-mono);
+            font-size: 17px;
+            text-align: center;
+            padding: 12px;
+            background-color: var(--color-paper);
+            border-radius: 4px;
+            font-weight: bold;
+            border: 1px solid var(--color-paper-line);
+            margin-top: 10px;
+        }
+
+        /* Inverse Operations Calc Styles */
+        .inverse-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+            width: 100%;
+        }
+
+        .interactive-calculator {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background-color: var(--color-paper);
+            padding: 24px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.02);
+        }
+
+        .calc-number {
+            font-family: var(--font-mono);
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--color-ink);
+            padding: 10px 16px;
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 4px;
+            min-width: 80px;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .calc-number.active-mul {
+            border-color: hsl(210, 80%, 45%);
+            background-color: rgba(13, 110, 253, 0.03);
+            box-shadow: 0 0 12px rgba(13, 110, 253, 0.15);
+        }
+
+        .calc-number.active-div {
+            border-color: var(--color-red);
+            background-color: rgba(180, 67, 47, 0.03);
+            box-shadow: 0 0 12px rgba(180, 67, 47, 0.15);
+        }
+
+        .calc-operator {
+            font-family: var(--font-mono);
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+
+        .calc-btn-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .calc-action-btn {
+            padding: 12px 24px;
+            font-size: 15px;
+            font-weight: 500;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .calc-action-btn:disabled {
+            background-color: var(--color-paper-line) !important;
+            color: var(--color-ink-soft) !important;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+            opacity: 0.6;
+        }
+
+        .btn-mul {
+            background-color: hsl(210, 80%, 45%);
+        }
+
+        .btn-mul:hover:not(:disabled) {
+            background-color: hsl(210, 80%, 35%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(13, 110, 253, 0.25);
+        }
+
+        .btn-div {
+            background-color: var(--color-red);
+        }
+
+        .btn-div:hover:not(:disabled) {
+            background-color: hsl(5, 75%, 35%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(180, 67, 47, 0.25);
+        }
+
+        .btn-reset {
+            background-color: var(--color-ink-soft);
+        }
+
+        .btn-reset:hover {
+            background-color: var(--color-ink);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(28, 43, 57, 0.15);
+        }
+
+        .inverse-explanation {
+            font-size: 15px;
+            line-height: 1.6;
+            text-align: center;
+            background-color: var(--color-surface);
+            padding: 18px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            width: 100%;
+            display: none;
+            animation: fadeIn 0.4s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+
+        /* Quiz Widget Styles */
+        .quiz-card {
+            background-color: var(--color-paper);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 6px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-question {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--color-ink);
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .quiz-option {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--color-brass);
+            background-color: rgba(169, 120, 47, 0.05);
+        }
+
+        .quiz-option.correct {
+            border-color: #2e7d32;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            font-weight: 500;
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--color-red);
+            background-color: #ffebee;
+            color: var(--color-red);
+        }
+
+        .quiz-feedback {
+            margin-top: 15px;
+            font-size: 14px;
+            line-height: 1.6;
+            padding: 12px;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .quiz-feedback.success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid #2e7d32;
+        }
+
+        .quiz-feedback.error {
+            background-color: #ffebee;
+            color: var(--color-red);
+            border-left: 4px solid var(--color-red);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
 </head>
 <body>
     <header class="header">
@@ -34,97 +378,215 @@
             </header>
 
             <div class="lesson-flow">
+                
+                <!-- Step 1: Multiplication -->
                 <div class="lesson-step">
                     <span class="lesson-step-meta">Step 01</span>
-                    <h4>乗法（掛け算）の意味</h4>
-                    <p>掛け算（乗法）は、同じ数を何回も足す操作を「まとめて」行う計算です。</p>
-                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 16px 0;">
-                        <p><strong>乗法の基本</strong></p>
-                        <p style="text-align: center; font-size: 22px; margin: 12px 0;">$a \times b = c$</p>
-                        <ul style="list-style: disc; padding-left: 24px; font-size: 17px;">
-                            <li>$a$ を $b$ 回足し合わせたものが $c$</li>
-                            <li>例: $4 \times 3 = 4 + 4 + 4 = 12$（4を3回足す）</li>
-                        </ul>
-                    </div>
-                    <div style="background-color: var(--color-surface); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 16px 0;">
-                        <p><strong>乗法の重要な性質</strong></p>
-                        <ol style="padding-left: 24px; font-size: 17px; line-height: 2;">
-                            <li><strong>交換法則</strong>: $a \times b = b \times a$（順番を変えても答えは同じ）</li>
-                            <li><strong>結合法則</strong>: $(a \times b) \times c = a \times (b \times c)$</li>
-                            <li><strong>単位元の存在</strong>: $a \times 1 = 1 \times a = a$（1をかけても変わらない）</li>
-                            <li><strong>ゼロの性質</strong>: $a \times 0 = 0 \times a = 0$（0をかけると必ず0になる）</li>
-                            <li><strong>分配法則</strong>: $a \times (b + c) = a \times b + a \times c$</li>
+                    <h4>乗法（掛け算）の意味と実務に活きる3つの法則</h4>
+                    <p>掛け算（乗法）とは、同じ数を繰り返し足し合わせる「累加」を効率的に行う計算です。また、縦と横の広がり（面積）や、何倍に拡大するかという「拡大（スケーリング）」の概念にも深く結びついています。</p>
+                    <p style="text-align: center; font-size: 18px; font-weight: bold; margin: 15px 0;">
+                        $a \times b = c$
+                    </p>
+                    <p>掛け算の計算順序や展開を自在に操作するための3つの基本法則を学びましょう。</p>
+                    
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 20px 0;">
+                        <ol style="padding-left: 20px; font-size: 16px; line-height: 1.8; display: flex; flex-direction: column; gap: 12px;">
+                            <li><b>交換法則（Commutative Law）</b>: $a \times b = b \times a$<br><span style="font-size: 14px; color: var(--color-ink-soft);">掛ける順番を前後させても、結果は同一です。例: $25 \times 7$ を計算する場合、頭の中で $7 \times 25$ に入れ替えると、$25$ の倍数（$25, 50, 75, 100 \dots$）のイメージから $175$ と素早く導くことができます。</span></li>
+                            <li><b>結合法則（Associative Law）</b>: $(a \times b) \times c = a \times (b \times c)$<br><span style="font-size: 14px; color: var(--color-ink-soft);">3つ以上の掛け算を行う際、どのペアから先に計算しても結果は同じです。例: $16 \times 5 \times 2$ を計算する際、後ろの $(5 \times 2) = 10$ を先に掛けることで、$16 \times 10 = 160$ と瞬時に暗算できます。</span></li>
+                            <li><b>分配法則（Distributive Law）</b>: $a \times (b + c) = a \times b + a \times c$<br><span style="font-size: 14px; color: var(--color-ink-soft);">カッコの中の足し算に対して、外側の掛け算をそれぞれに分配して計算できます。これは実務の暗算において極めて強力な武器になります。
+                            <br>例: $7 \times 98$ を暗算する場合、$98$ を $(100 - 2)$ と分解します。
+                            $$7 \times 98 = 7 \times (100 - 2) = 700 - 14 = 686$$
+                            このように、複雑な掛け算をシンプルな「引き算（または足し算）」の組み合わせへと分解できます。</span></li>
                         </ol>
                     </div>
-                    <p>分配法則はとくに重要です。$4 \times (3 + 5) = 4 \times 3 + 4 \times 5 = 12 + 20 = 32$ のように、掛け算を分解して計算できます。暗算をするときによく使うテクニックです。</p>
+
+                    <!-- MULTIPLICATION LAW VISUALIZER (Interactive, Premium) -->
+                    <div class="premium-widget">
+                        <span class="widget-title">乗法法則の視覚分析 (Visual Analysis of Multiplication Laws)</span>
+                        <p style="font-size: 14px; margin-bottom: 20px; color: var(--color-ink-soft);">
+                            スライダーで A, B, C の値を変更し、グリッド（面積）の構造変化を通して掛け算の交換法則・分配法則を視覚的に理解しましょう。
+                        </p>
+                        
+                        <div class="law-container">
+                            <div class="slider-group">
+                                <div class="slider-row">
+                                    <span class="slider-label" style="color: hsl(210, 80%, 45%);">数値 A</span>
+                                    <input type="range" class="slider-input" id="slider-a" min="2" max="8" value="4" oninput="updateMulVisual()">
+                                    <span class="slider-val-display" id="disp-a">4</span>
+                                </div>
+                                <div class="slider-row">
+                                    <span class="slider-label" style="color: hsl(30, 80%, 45%);">数値 B</span>
+                                    <input type="range" class="slider-input" id="slider-b" min="2" max="8" value="5" oninput="updateMulVisual()">
+                                    <span class="slider-val-display" id="disp-b">5</span>
+                                </div>
+                                <div class="slider-row">
+                                    <span class="slider-label" style="color: hsl(5, 75%, 45%);">数値 C</span>
+                                    <input type="range" class="slider-input" id="slider-c" min="2" max="6" value="3" oninput="updateMulVisual()">
+                                    <span class="slider-val-display" id="disp-c">3</span>
+                                </div>
+                            </div>
+
+                            <div class="visual-display-box">
+                                <!-- Commutative Law Grid Visual -->
+                                <div class="law-visual-row">
+                                    <span class="law-visual-label">① 交換法則の視覚化 ($A \times B$ vs $B \times A$)</span>
+                                    <div class="grid-visual-flex">
+                                        <div class="grid-wrapper">
+                                            <span class="grid-title-sub">A × B グリッド</span>
+                                            <svg class="grid-svg" id="grid-ab" width="180" height="180">
+                                                <!-- Drawn via JS -->
+                                            </svg>
+                                        </div>
+                                        <div class="grid-wrapper">
+                                            <span class="grid-title-sub">B × A グリッド</span>
+                                            <svg class="grid-svg" id="grid-ba" width="180" height="180">
+                                                <!-- Drawn via JS -->
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="law-equation-text" id="eq-commutative">
+                                        4 × 5 = 5 × 4 = 20
+                                    </div>
+                                </div>
+
+                                <hr style="border: none; border-top: 1px solid var(--color-paper-line); margin: 10px 0;">
+
+                                <!-- Distributive Law Grid Visual -->
+                                <div class="law-visual-row">
+                                    <span class="law-visual-label">② 分配法則の視覚化 ($A \times (B + C) = A \times B + A \times C$)</span>
+                                    <div class="grid-visual-flex">
+                                        <div class="grid-wrapper">
+                                            <span class="grid-title-sub">A × (B + C) の統合・分割グリッド</span>
+                                            <svg class="grid-svg" id="grid-distributive" width="300" height="180">
+                                                <!-- Drawn via JS -->
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="law-equation-text" id="eq-distributive">
+                                        4 × (5 + 3) = 4 × 5 + 4 × 3 = 32
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
+                <!-- Step 2: Division -->
                 <div class="lesson-step">
                     <span class="lesson-step-meta">Step 02</span>
-                    <h4>除法（割り算）の意味</h4>
-                    <p>割り算（除法）は、「全体を均等に分ける」操作です。掛け算の逆の操作です。</p>
-                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 16px 0;">
-                        <p><strong>除法の基本</strong></p>
-                        <p style="text-align: center; font-size: 22px; margin: 12px 0;">$a \div b = c$</p>
-                        <ul style="list-style: disc; padding-left: 24px; font-size: 17px;">
-                            <li>$a$ を $b$ 等分すると、1つ分は $c$ になる</li>
-                            <li>例: $12 \div 3 = 4$（12個のりんごを3人で分けると、1人4個）</li>
+                    <h4>除法（割り算）の本質と、2つの異なる視点</h4>
+                    <p>割り算（除法）とは、「全体を均等に分ける」操作です。割り算には、私たちが無意識に使い分けている2つの重要なアプローチが存在します。</p>
+
+                    <div style="background-color: var(--color-surface); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 20px 0;">
+                        <ul style="list-style: none; padding-left: 0; display: flex; flex-direction: column; gap: 12px;">
+                            <li><b>① 等分除（とうぶんじょ）: 「1つあたりの量」を求める</b>
+                            <br><span style="font-size: 14px; color: var(--color-ink-soft);">全体を決められた数に等しく分ける操作です。例: 「12個のリンゴを3人で均等に分けると、1人あたり何個になるか？」（$12 \div 3 = 4$個）</span></li>
+                            <li><b>② 包含除（ほうがんじょ）: 「いくつ分に分かれるか」を求める</b>
+                            <br><span style="font-size: 14px; color: var(--color-ink-soft);">全体の中に、特定の基準量がいくつ含まれているかを数える操作です。例: 「12個のリンゴを、1人3個ずつ配ると何人に配れるか？」（$12 \div 3 = 4$人）</span></li>
                         </ul>
                     </div>
-                    <div style="background-color: var(--color-surface); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 16px 0;">
-                        <p><strong>割り算の注意点</strong></p>
-                        <ul style="list-style: disc; padding-left: 24px; font-size: 17px;">
-                            <li>交換法則は <strong>成り立たない</strong></li>
-                            <li><strong>0で割ることはできない</strong>（数学の絶対ルール）</li>
-                            <li>$a \div b = c$ のとき、$c \times b = a$ が成り立つ（掛け算で検算できる）</li>
-                        </ul>
-                    </div>
+
+                    <p>また、割り算を扱うにあたって、数学上絶対に破ってはならない絶対ルールが1つあります。それが<b>「0で割ることの禁止（Division by Zero）」</b>です。</p>
                 </div>
 
+                <!-- Step 3: Zero Division Logic -->
                 <div class="lesson-step">
                     <span class="lesson-step-meta">Step 03</span>
-                    <h4>乗法と除法の関係</h4>
-                    <p>掛け算と割り算も、足し算と引き算と同じように逆の関係にあります。</p>
-                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 16px 0;">
-                        <p><strong>乗法と除法の相互関係</strong></p>
-                        <ul style="list-style: disc; padding-left: 24px; font-size: 17px;">
-                            <li>$a \times b = c$ ならば $c \div b = a$ かつ $c \div a = b$</li>
-                            <li>$a \div b = c$ ならば $c \times b = a$</li>
+                    <h4>なぜ「0で割ってはいけない」のか？（数理的証明）</h4>
+                    <p>「0で割ることは不可能」と学校で習いますが、その理由は引き算と掛け算の「逆演算の関係」から論理的に証明することができます。</p>
+                    <p>割り算と掛け算は $a \div b = c \iff c \times b = a$ という関係にあります。ここで、$b = 0$（0で割る）としたときに何が起きるか、2つのケースに分けて考えます。</p>
+
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 20px 0;">
+                        <ul style="list-style: none; padding-left: 0; display: flex; flex-direction: column; gap: 15px;">
+                            <li><b>ケース①: $a$ が 0 以外のとき（例: $5 \div 0 = c$）</b>
+                            <br>逆演算の式に当てはめると、 $c \times 0 = 5$ となります。
+                            <br>しかし、どんな数に0を掛けても結果は必ず0になるため、この式を満たす数値 $c$ はこの世に存在しません。数学ではこの状態を「<b>不能（解なし）</b>」と呼びます。</li>
+                            
+                            <li><b>ケース②: $a$ が 0 のとき（例: $0 \div 0 = c$）</b>
+                            <br>逆演算の式に当てはめると、 $c \times 0 = 0$ となります。
+                            <br>この式は、$c$ が $1$ であろうが $100$ であろうが、どんな数であっても成り立ってしまいます。答えが1つに決まらないため、数学ではこの状態を「<b>不定（決定できない）</b>」と呼びます。</li>
                         </ul>
+                    </div>
+                    
+                    <p>このように、0以外の数で割るときは「不能」になり、0を0で割るときは「不定」になるため、一貫した計算結果を定義できません。これが、コンピュータのプログラムやExcelでも「0除算エラー（#DIV/0!）」が発生する理由です。</p>
+
+                    <!-- MULTIPLICATIVE INVERSE OPERATIONS (Interactive, Premium) -->
+                    <div class="premium-widget">
+                        <span class="widget-title">乗除の相互逆演算 (Multiplicative Inverse Operations)</span>
+                        <p style="font-size: 14px; margin-bottom: 20px; color: var(--color-ink-soft);">
+                            初期値「15」に対して「3」を掛ける操作と、そこから「3」で割り算して元の値へ戻す操作を実行し、逆演算の関係を体験しましょう。
+                        </p>
+                        
+                        <div class="inverse-container">
+                            <div class="interactive-calculator">
+                                <div class="calc-number" id="calc-num-1">15</div>
+                                <div class="calc-operator" id="calc-op-1">×</div>
+                                <div class="calc-number" id="calc-num-2">3</div>
+                                <div class="calc-operator">=</div>
+                                <div class="calc-number" id="calc-result">15</div>
+                            </div>
+
+                            <div class="calc-btn-group">
+                                <button class="calc-action-btn btn-mul" id="btn-calc-mul" onclick="runCalcStep('mul')">3 を掛ける</button>
+                                <button class="calc-action-btn btn-div" id="btn-calc-div" onclick="runCalcStep('div')" disabled>3 で割る（逆演算）</button>
+                                <button class="calc-action-btn btn-reset" onclick="runCalcStep('reset')">リセット</button>
+                            </div>
+
+                            <div class="inverse-explanation" id="calc-explain">
+                                <!-- Filled via JS -->
+                            </div>
+                        </div>
                     </div>
                 </div>
 
+                <!-- Step 4: Exercises & Self Assessment -->
                 <div class="lesson-step">
                     <span class="lesson-step-meta">Step 04</span>
-                    <h4>ビジネスでの活用例: 単価と数量</h4>
-                    <p>ビジネスで頻繁に登場する「単価 $\times$ 数量 = 金額」の関係は、乗除の典型的な応用です。</p>
-                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 16px 0;">
-                        <p><strong>例：在庫管理</strong></p>
-                        <ul style="list-style: disc; padding-left: 24px; font-size: 17px;">
-                            <li>商品A（単価 $1,500$円）が $12$ 個売れた → 売上は $1,500 \times 12 = 18,000$円</li>
-                            <li>総売上 $45,000$円で、単価 $1,500$円の商品を何個売ったか → $45,000 \div 1,500 = 30$個</li>
-                        </ul>
+                    <h4>理解度チェッククイズ</h4>
+                    <p>乗法と除法の基本性質について、理解できているか確認しましょう。</p>
+
+                    <div class="quiz-card">
+                        <div class="quiz-question">Q1. 数学および実務（プログラム等）において「0で割り算をしてはいけない」論理的な理由として、正しい説明はどれでしょうか？</div>
+                        <div class="quiz-options">
+                            <button class="quiz-option" onclick="checkAnswer(1, 'A', false)">
+                                <span>A. 0で割ると、答えが0になってしまって元の数が復元できなくなるため。</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(1, 'B', true)">
+                                <span>B. $a \div 0 = c$ と置いたとき、逆演算の $c \times 0 = a$ を満たす答えが「存在しない（不能）」か「1つに定まらない（不定）」ため。</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(1, 'C', false)">
+                                <span>C. 0は「何もない空集合」を表す記号であり、数直線上に割り算の進行方向が存在しないため。</span>
+                            </button>
+                        </div>
+                        <div class="quiz-feedback" id="feedback-1"></div>
                     </div>
-                    <p>このように、掛け算と割り算は「全体の量 = 1つあたり $\times$ 個数」という関係を自在に行き来するために使います。</p>
+
+                    <div class="quiz-card">
+                        <div class="quiz-question">Q2. 分配法則 $a \times (b + c) = a \times b + a \times c$ を利用して、「$18 \times 102$」を最も簡単に頭の中で暗算する計算展開はどれでしょうか？</div>
+                        <div class="quiz-options">
+                            <button class="quiz-option" onclick="checkAnswer(2, 'A', true)">
+                                <span>A. $18 \times (100 + 2) = 1,800 + 36 = 1,836$</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(2, 'B', false)">
+                                <span>B. $(20 - 2) \times 102 = 2,040 - 204 = 1,836$</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(2, 'C', false)">
+                                <span>C. $(10 + 8) \times 102 = 1,020 + 816 = 1,836$</span>
+                            </button>
+                        </div>
+                        <div class="quiz-feedback" id="feedback-2"></div>
+                    </div>
                 </div>
 
+                <!-- Step 5: Summary -->
                 <div class="lesson-step">
                     <span class="lesson-step-meta">Step 05</span>
-                    <h4>九九の暗唱がなぜ重要か</h4>
-                    <p>小学校で必死に覚えた九九（くく）は、単なる暗記物ではありません。九九を瞬時に出せるようになると、頭の中の計算スペースに余裕が生まれ、複雑な計算や応用問題に集中できるようになります。</p>
-                    <p>大人になって計算機やExcelが使える環境でも、九九レベルの暗算ができると「ざっくりした見積もり」が格段に速くなります。</p>
-                </div>
-
-                <div class="lesson-step">
-                    <span class="lesson-step-meta">Step 06</span>
-                    <h4>まとめ</h4>
-                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 15px; font-size: 14px; line-height: 1.7;">
-                        <ul style="margin: 0; padding-left: 20px;">
-                            <li>乗法（掛け算）は「同じ数をまとめて足す」操作。</li>
-                            <li>乗法には交換法則・結合法則・分配法則が成り立つ。</li>
-                            <li>除法（割り算）は「均等に分ける」操作で、0で割ることはできない。</li>
-                            <li>乗法と除法は互いに逆の関係。</li>
-                            <li>ビジネスでは「単価 $\times$ 数量 = 金額」の形で頻繁に使う。</li>
+                    <h4>本単元のまとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 24px; font-size: 16px; line-height: 1.85;">
+                        <ul style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px;">
+                            <li><b>乗法の法則</b>: 交換法則・結合法則に加え、展開に便利な「分配法則」が成り立ちます。分配法則は、複雑な掛け算を簡単な暗算の組み合わせに分解する際に非常に役立ちます。</li>
+                            <li><b>除法の注意点</b>: 順序の入れ替え（交換法則）は成り立ちません。また、数学上の定義崩壊を防ぐため、「0で割る」操作は完全に禁止されています。</li>
+                            <li><b>除法の2つの意味</b>: 割り算には「1つあたりの量を求める（等分除）」と「いくつ分あるかを数える（包含除）」という2つのアプローチがあります。</li>
                         </ul>
                     </div>
                 </div>
@@ -150,8 +612,202 @@
         </div>
     </footer>
 
+    <!-- KaTeX for Math Rendering -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+
+    <!-- Interactive Script -->
+    <script>
+        // --- 1. Multiplication Law Visualizer Logics ---
+        function updateMulVisual() {
+            const a = parseInt(document.getElementById('slider-a').value) || 2;
+            const b = parseInt(document.getElementById('slider-b').value) || 2;
+            const c = parseInt(document.getElementById('slider-c').value) || 2;
+
+            document.getElementById('disp-a').innerText = a;
+            document.getElementById('disp-b').innerText = b;
+            document.getElementById('disp-c').innerText = c;
+
+            // Render A x B Grid
+            drawGrid('grid-ab', a, b, 'hsl(210, 80%, 45%)');
+            // Render B x A Grid
+            drawGrid('grid-ba', b, a, 'hsl(210, 80%, 45%)');
+
+            document.getElementById('eq-commutative').innerText = `${a} × ${b} = ${b} × ${a} = ${a * b}`;
+
+            // Render A x (B + C) Grid (Two colored regions in one grid)
+            drawSplitGrid('grid-distributive', a, b, c);
+
+            document.getElementById('eq-distributive').innerText = `${a} × (${b} + ${c}) = ${a} × ${b} + ${a} × ${c} = ${a * (b + c)}`;
+        }
+
+        function drawGrid(svgId, rows, cols, color) {
+            const svg = document.getElementById(svgId);
+            svg.innerHTML = '';
+
+            const cellW = 16;
+            const cellH = 16;
+            const gap = 2;
+            const pad = 10;
+
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                    rect.setAttribute("x", pad + c * (cellW + gap));
+                    rect.setAttribute("y", pad + r * (cellH + gap));
+                    rect.setAttribute("width", cellW);
+                    rect.setAttribute("height", cellH);
+                    rect.setAttribute("fill", color);
+                    rect.setAttribute("rx", "2");
+                    svg.appendChild(rect);
+                }
+            }
+        }
+
+        function drawSplitGrid(svgId, rows, cols1, cols2) {
+            const svg = document.getElementById(svgId);
+            svg.innerHTML = '';
+
+            const cellW = 16;
+            const cellH = 16;
+            const gap = 2;
+            const pad = 10;
+
+            // Draw portion 1 (A x B) - Blue
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols1; c++) {
+                    const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                    rect.setAttribute("x", pad + c * (cellW + gap));
+                    rect.setAttribute("y", pad + r * (cellH + gap));
+                    rect.setAttribute("width", cellW);
+                    rect.setAttribute("height", cellH);
+                    rect.setAttribute("fill", "hsl(210, 80%, 45%)");
+                    rect.setAttribute("rx", "2");
+                    svg.appendChild(rect);
+                }
+            }
+
+            // Draw portion 2 (A x C) - Orange (shifted right by cols1)
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols2; c++) {
+                    const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                    rect.setAttribute("x", pad + (cols1 + c) * (cellW + gap) + 4); // Extra space to show split
+                    rect.setAttribute("y", pad + r * (cellH + gap));
+                    rect.setAttribute("width", cellW);
+                    rect.setAttribute("height", cellH);
+                    rect.setAttribute("fill", "hsl(30, 80%, 45%)");
+                    rect.setAttribute("rx", "2");
+                    svg.appendChild(rect);
+                }
+            }
+        }
+
+        // --- 2. Inverse Operation Simulator Logics ---
+        let currentCalcState = 'init';
+
+        function runCalcStep(action) {
+            const num1 = document.getElementById('calc-num-1');
+            const op1 = document.getElementById('calc-op-1');
+            const num2 = document.getElementById('calc-num-2');
+            const result = document.getElementById('calc-result');
+            const btnMul = document.getElementById('btn-calc-mul');
+            const btnDiv = document.getElementById('btn-calc-div');
+            const explain = document.getElementById('calc-explain');
+
+            if (action === 'mul') {
+                currentCalcState = 'multiplied';
+                num1.innerText = '15';
+                op1.innerText = '×';
+                num2.innerText = '3';
+                result.innerText = '45';
+                num1.className = "calc-number active-mul";
+                num2.className = "calc-number active-mul";
+                result.className = "calc-number active-mul";
+
+                btnMul.disabled = true;
+                btnDiv.disabled = false;
+
+                explain.style.display = "block";
+                explain.innerHTML = `
+                    <span style="color: hsl(210, 80%, 45%); font-weight:bold;">掛け算を実行しました。</span><br>
+                    初期値 <b>15</b> を <b>3</b> 倍に拡大（スケーリング）し、結果は <b>45</b> になりました。<br>
+                    $15 \\times 3 = 45$
+                `;
+            } else if (action === 'div') {
+                currentCalcState = 'divided';
+                num1.innerText = '45';
+                op1.innerText = '÷';
+                num2.innerText = '3';
+                result.innerText = '15';
+                num1.className = "calc-number active-div";
+                num2.className = "calc-number active-div";
+                result.className = "calc-number active-div";
+
+                btnMul.disabled = true;
+                btnDiv.disabled = true;
+
+                explain.style.display = "block";
+                explain.innerHTML = `
+                    <span style="color: var(--color-red); font-weight:bold;">逆演算（割り算）を実行しました。</span><br>
+                    拡大した <b>45</b> を元の比率 <b>3</b> で割る（等分する）ことで、初期値の <b>15</b> に完全に戻りました！<br>
+                    $45 \\div 3 = 15$<br>
+                    <span style="font-size: 13px; color: var(--color-brass);">掛け算による拡大操作「×3」は、割り算による縮小操作「÷3」で完全に相殺されることが実証されます。</span>
+                `;
+            } else if (action === 'reset') {
+                currentCalcState = 'init';
+                num1.innerText = '15';
+                op1.innerText = '×';
+                num2.innerText = '3';
+                result.innerText = '15';
+                num1.className = "calc-number";
+                num2.className = "calc-number";
+                result.className = "calc-number";
+
+                btnMul.disabled = false;
+                btnDiv.disabled = true;
+                explain.style.display = "none";
+            }
+        }
+
+        // --- 3. Quiz Logics ---
+        function checkAnswer(qNum, option, isCorrect) {
+            const card = event.target.closest('.quiz-card');
+            const options = card.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById(`feedback-${qNum}`);
+
+            // Reset options
+            options.forEach(opt => {
+                opt.classList.remove('correct', 'incorrect');
+                opt.disabled = true;
+            });
+
+            // Mark chosen option
+            const clickedBtn = event.target.closest('.quiz-option');
+            if (isCorrect) {
+                clickedBtn.classList.add('correct');
+                feedback.className = "quiz-feedback success";
+                if (qNum === 1) {
+                    feedback.innerHTML = "<b>正解です！</b><br>割り算を掛け算の逆演算として解釈すると、$a \\div 0 = c \\iff c \\times 0 = a$ となりますが、この関係は $a \\neq 0$ のときは成り立たず（不能）、$a = 0$ のときは任意の数で成立して決定できない（不定）ため、定義できません。";
+                } else {
+                    feedback.innerHTML = "<b>正解です！</b><br>102を $(100 + 2)$ と捉え、分配法則 $18 \\times (100 + 2) = 18 \\times 100 + 18 \\times 2$ を用いることで、$1,800 + 36 = 1,836$ と筆記用具を使わずに頭の中で素早く計算が完了します。";
+                }
+            } else {
+                clickedBtn.classList.add('incorrect');
+                feedback.className = "quiz-feedback error";
+                if (qNum === 1) {
+                    feedback.innerHTML = "<b>不正解です。</b><br>0で割る計算結果が0になるわけではありません。0以外の数を0で割ると「解なし（不能）」となり、0を0で割ると「どんな数でもよい（不定）」となるため、計算を定義できないのが正しい論理です。";
+                } else {
+                    feedback.innerHTML = "<b>不正解です。</b><br>選択肢Aのように $102$ を $100$ という非常に計算しやすいキリの良い数値に分解して掛けることが、分配法則を暗算で活用する最も簡単なルートです。";
+                }
+            }
+            feedback.style.display = "block";
+        }
+
+        // Initialize Page Widgets
+        window.addEventListener('DOMContentLoaded', () => {
+            updateMulVisual();
+        });
+    </script>
 </body>
 </html>

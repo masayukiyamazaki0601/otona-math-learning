@@ -5,7 +5,348 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>数の概念（整数と小数の構造） | Otona Math</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        /* Premium Dashboard Widgets styling */
+        .premium-widget {
+            background-color: var(--color-surface);
+            border: 2px solid var(--color-paper-line);
+            border-radius: var(--radius-card);
+            padding: 35px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px -10px rgba(28, 43, 57, 0.05), 0 1px 3px rgba(28, 43, 57, 0.02);
+            transition: all 0.3s ease;
+        }
+
+        .premium-widget:hover {
+            border-color: var(--color-brass);
+            box-shadow: 0 15px 35px -10px rgba(28, 43, 57, 0.08);
+        }
+        
+        .widget-title {
+            font-family: var(--font-heading);
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--color-ink);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--color-brass);
+            padding-bottom: 8px;
+            display: inline-block;
+        }
+
+        /* Place Value Explorer Styles */
+        .explorer-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 28px;
+            width: 100%;
+        }
+
+        .digit-selector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background-color: var(--color-paper);
+            padding: 24px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            flex-wrap: wrap;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.03);
+            width: 100%;
+        }
+
+        .digit-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 75px;
+        }
+
+        .digit-label {
+            font-size: 11px;
+            color: var(--color-ink-soft);
+            margin-bottom: 8px;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+        }
+
+        .digit-btn {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            color: var(--color-ink);
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .digit-btn:hover {
+            background-color: var(--color-brass);
+            color: var(--color-paper);
+            border-color: var(--color-brass);
+            transform: translateY(-1px);
+        }
+
+        .digit-val {
+            font-family: var(--font-mono);
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--color-ink);
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid var(--color-paper-line);
+            width: 45px;
+            text-align: center;
+            outline: none;
+            margin: 8px 0;
+            padding: 2px 0;
+            transition: all 0.2s ease;
+        }
+
+        .digit-val:focus {
+            border-bottom-color: var(--color-brass);
+            background-color: rgba(169, 120, 47, 0.05);
+        }
+
+        .decimal-point-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 110px;
+        }
+
+        .decimal-point-dot {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--color-red);
+            line-height: 1;
+            margin-top: 15px;
+        }
+
+        .explorer-math-formula {
+            background-color: var(--color-paper);
+            padding: 18px;
+            border: var(--border-thin);
+            font-family: var(--font-mono);
+            text-align: center;
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 6px;
+            font-size: 17px;
+            font-weight: 500;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);
+        }
+
+        /* Decimal Grid Visualization Styles */
+        .visual-display-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            width: 100%;
+            flex-wrap: wrap;
+            border-top: 1px solid var(--color-paper-line);
+            padding-top: 28px;
+        }
+
+        .grid-box-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .grid-box-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--color-ink-soft);
+        }
+
+        .decimal-grid-svg {
+            border: 1px solid var(--color-paper-line);
+            background-color: var(--color-paper);
+            border-radius: 4px;
+        }
+
+        .breakdown-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .breakdown-table th, .breakdown-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--color-paper-line);
+            text-align: left;
+            font-size: 15px;
+        }
+
+        .breakdown-table th {
+            color: var(--color-ink);
+            font-weight: 700;
+            background-color: var(--color-paper);
+        }
+
+        /* Zoomable Number Line Styles */
+        .zoom-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .zoom-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .zoom-btn {
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 4px;
+            border: 1px solid var(--color-paper-line);
+            background-color: var(--color-surface);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            font-weight: 500;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+
+        .zoom-btn:hover {
+            border-color: var(--color-brass);
+            background-color: rgba(169, 120, 47, 0.02);
+        }
+
+        .zoom-btn.active {
+            background-color: var(--color-ink);
+            color: var(--color-paper);
+            border-color: var(--color-ink);
+            box-shadow: 0 4px 12px rgba(28, 43, 57, 0.15);
+        }
+
+        .zoom-line-box {
+            background-color: var(--color-paper);
+            padding: 28px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            position: relative;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.02);
+        }
+
+        .zoom-label-desc {
+            font-size: 13px;
+            color: var(--color-ink-soft);
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        /* Glowing Pulse Animation for Red Dot */
+        .glowing-dot {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                r: 5px;
+                fill-opacity: 1;
+            }
+            50% {
+                r: 8px;
+                fill-opacity: 0.6;
+            }
+            100% {
+                r: 5px;
+                fill-opacity: 1;
+            }
+        }
+
+        /* Quiz Widget Styles */
+        .quiz-card {
+            background-color: var(--color-paper);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 6px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-question {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--color-ink);
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .quiz-option {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--color-brass);
+            background-color: rgba(169, 120, 47, 0.05);
+        }
+
+        .quiz-option.correct {
+            border-color: #2e7d32;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            font-weight: 500;
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--color-red);
+            background-color: #ffebee;
+            color: var(--color-red);
+        }
+
+        .quiz-feedback {
+            margin-top: 15px;
+            font-size: 14px;
+            line-height: 1.6;
+            padding: 12px;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .quiz-feedback.success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid #2e7d32;
+        }
+
+        .quiz-feedback.error {
+            background-color: #ffebee;
+            color: var(--color-red);
+            border-left: 4px solid var(--color-red);
+        }
+    </style>
 </head>
 <body>
     <header class="header">
@@ -34,97 +375,220 @@
             </header>
 
             <div class="lesson-flow">
+                
+                <!-- Step 1: introduction -->
                 <div class="lesson-step">
                     <span class="lesson-step-meta">Step 01</span>
-                    <h4>数は「量」を表す道具</h4>
-                    <p>私たちは日常生活で、りんごの個数、体重、距離、金額など、あらゆるものを数字で表します。数字は「量」を表現するための共通言語です。</p>
-                    <p>数には大きく分けて2つの種類があります。<strong>整数</strong>と<strong>小数</strong>です。</p>
-                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 16px 0;">
-                        <p style="margin-bottom: 8px;"><strong>整数と小数の違い</strong></p>
-                        <ul style="list-style: disc; padding-left: 24px; font-size: 17px;">
-                            <li style="margin-bottom: 6px;"><strong>整数</strong>: 物の個数を数えるときに使う数。$0, 1, 2, 3, \dots$</li>
-                            <li style="margin-bottom: 6px;"><strong>小数</strong>: 1より細かい「中途半端な量」を表す数。$0.5, 1.25, 3.14$ など</li>
-                        </ul>
-                    </div>
-                    <p>ビジネスや日常生活では、整数だけでは足りません。値段の $248$円（整数）もあれば、$248.5$円（小数）のように中途半端な値も登場します。この「中途半端な量」を扱えるようにするのが、小数の考え方です。</p>
+                    <h4>なぜ「小数」が必要なのか？</h4>
+                    <p>私たちの祖先は、獲物の数や作物の収穫量など、「個数を数える」ことから数学を始めました。これが「1つ、2つ、3つ…」と数えられる<b>整数（Integer）</b>の世界です。しかし、生活や商業が発展するにつれ、整数だけでは表現できない問題が生じました。</p>
+                    
+                    <p>例えば、1本の丸太を3人で等しく分けるとき、あるいは1Lの水からコップ1杯分を切り出すとき、それらの量は「1」よりも小さな、いわば<b>「中途半端な量」</b>になります。このような連続的な量や、割り切れない分割を正確に表すために発明されたのが<b>小数（Decimal）</b>や分数です。</p>
+                    
+                    <p>現代のビジネスにおいても、売上成長率「15.3%」や、商品の重さ「1.25kg」、金利「0.05%」など、小数は正確な意思決定を下すための必須ツールとなっています。</p>
                 </div>
 
+                <!-- Step 2: positional notation -->
                 <div class="lesson-step">
                     <span class="lesson-step-meta">Step 02</span>
-                    <h4>10進法のしくみ</h4>
-                    <p>私たちが普段使っている数字は「<strong>10進法</strong>」でできています。10進法とは、数字が10集まると1つ上の位に繰り上がる仕組みです。</p>
-                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 16px 0;">
-                        <p><strong>10進法の位取り</strong></p>
-                        <table style="width: 100%; border-collapse: collapse; font-size: 16px; text-align: center; margin-top: 8px;">
-                            <tr>
-                                <th style="padding: 8px; border-bottom: 2px solid var(--color-ink);">千の位</th>
-                                <th style="padding: 8px; border-bottom: 2px solid var(--color-ink);">百の位</th>
-                                <th style="padding: 8px; border-bottom: 2px solid var(--color-ink);">十の位</th>
-                                <th style="padding: 8px; border-bottom: 2px solid var(--color-ink);">一の位</th>
-                                <th style="padding: 8px; border-bottom: 2px solid var(--color-ink);">小数点</th>
-                                <th style="padding: 8px; border-bottom: 2px solid var(--color-ink);">十分の一</th>
-                                <th style="padding: 8px; border-bottom: 2px solid var(--color-ink);">百分の一</th>
-                                <th style="padding: 8px; border-bottom: 2px solid var(--color-ink);">千分の一</th>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px; border-bottom: 1px solid var(--color-paper-line);">$1000$</td>
-                                <td style="padding: 8px; border-bottom: 1px solid var(--color-paper-line);">$100$</td>
-                                <td style="padding: 8px; border-bottom: 1px solid var(--color-paper-line);">$10$</td>
-                                <td style="padding: 8px; border-bottom: 1px solid var(--color-paper-line);">$1$</td>
-                                <td style="padding: 8px; border-bottom: 1px solid var(--color-paper-line);">.</td>
-                                <td style="padding: 8px; border-bottom: 1px solid var(--color-paper-line);">$\frac{1}{10}$</td>
-                                <td style="padding: 8px; border-bottom: 1px solid var(--color-paper-line);">$\frac{1}{100}$</td>
-                                <td style="padding: 8px; border-bottom: 1px solid var(--color-paper-line);">$\frac{1}{1000}$</td>
-                            </tr>
-                        </table>
+                    <h4>10進法と位取り記数法の仕組み</h4>
+                    <p>私たちが日常使用している数値システムは、<b>「10進法（Base-10）」</b>と<b>「位取り記数法（Positional Notation）」</b>という極めて洗練されたルールに基づいています。</p>
+                    <p>このシステムの最大の特徴は、<b>「数字を置く場所（位）によって、その数字の持つ重みが10倍ずつ変化する」</b>という点です。右に1つずれると重みは10分の1（$0.1$）になり、左に1つずれると10倍（$10$）になります。この「右方向への無限の拡張」を可能にしたのが<b>小数点（Decimal Point）</b>です。</p>
+                    <p>小数点は、「1以上の世界（整数部分）」と「1未満の世界（小数部分）」を分ける絶対的な境界線です。</p>
+
+                    <!-- PLACE VALUE EXPLORER (Interactive, Premium) -->
+                    <div class="premium-widget">
+                        <span class="widget-title">位取りの分解と構成 (Place Value breakdown)</span>
+                        <p style="font-size: 14px; margin-bottom: 20px; color: var(--color-ink-soft);">
+                            数値をキーボードで直接入力するか、矢印をクリックして各桁の数字を変更し、数値全体の構造がどのように分解されるか視覚的に確認しましょう。
+                        </p>
+                        
+                        <div class="explorer-container">
+                            <div class="digit-selector">
+                                <div class="digit-col">
+                                    <span class="digit-label">百の位</span>
+                                    <button class="digit-btn" onclick="changeDigit('hundreds', 1)">▲</button>
+                                    <input type="text" class="digit-val" id="val-hundreds" value="3" maxlength="1" inputmode="numeric" pattern="[0-9]*" oninput="onDigitInput('hundreds')">
+                                    <button class="digit-btn" onclick="changeDigit('hundreds', -1)">▼</button>
+                                </div>
+                                <div class="digit-col">
+                                    <span class="digit-label">十の位</span>
+                                    <button class="digit-btn" onclick="changeDigit('tens', 1)">▲</button>
+                                    <input type="text" class="digit-val" id="val-tens" value="2" maxlength="1" inputmode="numeric" pattern="[0-9]*" oninput="onDigitInput('tens')">
+                                    <button class="digit-btn" onclick="changeDigit('tens', -1)">▼</button>
+                                </div>
+                                <div class="digit-col">
+                                    <span class="digit-label">一の位</span>
+                                    <button class="digit-btn" onclick="changeDigit('ones', 1)">▲</button>
+                                    <input type="text" class="digit-val" id="val-ones" value="5" maxlength="1" inputmode="numeric" pattern="[0-9]*" oninput="onDigitInput('ones')">
+                                    <button class="digit-btn" onclick="changeDigit('ones', -1)">▼</button>
+                                </div>
+                                <div class="decimal-point-col">
+                                    <span class="digit-label" style="color: var(--color-red);">小数点</span>
+                                    <span class="decimal-point-dot">.</span>
+                                </div>
+                                <div class="digit-col">
+                                    <span class="digit-label">1/10の位</span>
+                                    <button class="digit-btn" onclick="changeDigit('tenths', 1)">▲</button>
+                                    <input type="text" class="digit-val" id="val-tenths" value="4" maxlength="1" inputmode="numeric" pattern="[0-9]*" oninput="onDigitInput('tenths')">
+                                    <button class="digit-btn" onclick="changeDigit('tenths', -1)">▼</button>
+                                </div>
+                                <div class="digit-col">
+                                    <span class="digit-label">1/100の位</span>
+                                    <button class="digit-btn" onclick="changeDigit('hundreds_place', 1)">▲</button>
+                                    <input type="text" class="digit-val" id="val-hundreds_place" value="7" maxlength="1" inputmode="numeric" pattern="[0-9]*" oninput="onDigitInput('hundreds_place')">
+                                    <button class="digit-btn" onclick="changeDigit('hundreds_place', -1)">▼</button>
+                                </div>
+                                <div class="digit-col">
+                                    <span class="digit-label">1/1000の位</span>
+                                    <button class="digit-btn" onclick="changeDigit('thousandths', 1)">▲</button>
+                                    <input type="text" class="digit-val" id="val-thousandths" value="2" maxlength="1" inputmode="numeric" pattern="[0-9]*" oninput="onDigitInput('thousandths')">
+                                    <button class="digit-btn" onclick="changeDigit('thousandths', -1)">▼</button>
+                                </div>
+                            </div>
+
+                            <div class="explorer-math-formula" id="explorer-math-formula">
+                                325.472 = (3 × 100) + (2 × 10) + (5 × 1) + (4 × 0.1) + (7 × 0.01) + (2 × 0.001)
+                            </div>
+
+                            <!-- Visual Block Grid representation of decimal part (1/10 & 1/100) -->
+                            <div class="visual-display-section">
+                                <div class="grid-box-wrapper">
+                                    <span class="grid-box-title">小数部分（0.47）の視覚化（10×10のグリッド）</span>
+                                    <svg class="decimal-grid-svg" width="160" height="160" id="decimal-grid-svg">
+                                        <!-- Rendered via JS -->
+                                    </svg>
+                                    <span style="font-size: 12px; color: var(--color-ink-soft);">
+                                        1本の列＝0.1 (1/10) | 1つの正方形＝0.01 (1/100)
+                                    </span>
+                                </div>
+                            </div>
+
+                            <table class="breakdown-table">
+                                <thead>
+                                    <tr>
+                                        <th>桁 (位)</th>
+                                        <th>数式表記</th>
+                                        <th>実際の値 (重み)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>百の位 ($10^2$)</td>
+                                        <td id="formula-hundreds">3 × 100</td>
+                                        <td id="value-hundreds" style="font-family: var(--font-mono); font-weight: 500;">300</td>
+                                    </tr>
+                                    <tr>
+                                        <td>十の位 ($10^1$)</td>
+                                        <td id="formula-tens">2 × 10</td>
+                                        <td id="value-tens" style="font-family: var(--font-mono); font-weight: 500;">20</td>
+                                    </tr>
+                                    <tr>
+                                        <td>一の位 ($10^0$)</td>
+                                        <td id="formula-ones">5 × 1</td>
+                                        <td id="value-ones" style="font-family: var(--font-mono); font-weight: 500;">5</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color: var(--color-red);">小数第一位 ($10^{-1}$)</td>
+                                        <td id="formula-tenths">4 × 0.1</td>
+                                        <td id="value-tenths" style="font-family: var(--font-mono); font-weight: 500; color: var(--color-red);">0.4</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color: var(--color-red);">小数第二位 ($10^{-2}$)</td>
+                                        <td id="formula-hundreds_place">7 × 0.01</td>
+                                        <td id="value-hundreds_place" style="font-family: var(--font-mono); font-weight: 500; color: var(--color-red);">0.07</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color: var(--color-red);">小数第三位 ($10^{-3}$)</td>
+                                        <td id="formula-thousandths">2 × 0.001</td>
+                                        <td id="value-thousandths" style="font-family: var(--font-mono); font-weight: 500; color: var(--color-red);">0.002</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <p>たとえば $325.47$ という数は、以下のように分解できます。</p>
-                    <p style="text-align: center; font-size: 20px; margin: 12px 0;">$325.47 = 300 + 20 + 5 + 0.4 + 0.07$</p>
-                    <p>それぞれの数字が立っている「位」によって、その数字の重みが決まります。小数点は「1より大きい世界」と「1より小さい世界」の境界線です。</p>
                 </div>
 
+                <!-- Step 3: Continuity & Density -->
                 <div class="lesson-step">
                     <span class="lesson-step-meta">Step 03</span>
-                    <h4>数直線で見る数の連続性</h4>
-                    <p>整数は数直線上の点を「とびとび」に打ったものです。一方、小数を使うと、整数と整数の間にある「中途半端な位置」も表せるようになります。</p>
-                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 16px 0;">
-                        <p><strong>数直線の例：0から1の間を10等分する</strong></p>
-                        <svg width="100%" height="60" viewBox="0 0 500 60" style="margin-top: 12px;">
-                            <line x1="20" y1="30" x2="480" y2="30" stroke="var(--color-ink)" stroke-width="2"/>
-                            <!-- Ticks from 0 to 1 -->
-                            <line x1="20" y1="20" x2="20" y2="40" stroke="var(--color-ink)" stroke-width="2"/>
-                            <text x="20" y="55" text-anchor="middle" font-family="var(--font-mono)" font-size="14" fill="var(--color-ink)">0</text>
-                            <line x1="66" y1="25" x2="66" y2="35" stroke="var(--color-ink)" stroke-width="1"/>
-                            <text x="66" y="55" text-anchor="middle" font-family="var(--font-mono)" font-size="11" fill="var(--color-ink-soft)">0.1</text>
-                            <line x1="112" y1="25" x2="112" y2="35" stroke="var(--color-ink)" stroke-width="1"/>
-                            <text x="112" y="55" text-anchor="middle" font-family="var(--font-mono)" font-size="11" fill="var(--color-ink-soft)">0.2</text>
-                            <line x1="158" y1="25" x2="158" y2="35" stroke="var(--color-ink)" stroke-width="1"/>
-                            <line x1="204" y1="25" x2="204" y2="35" stroke="var(--color-ink)" stroke-width="1"/>
-                            <line x1="250" y1="25" x2="250" y2="35" stroke="var(--color-ink)" stroke-width="1"/>
-                            <text x="250" y="55" text-anchor="middle" font-family="var(--font-mono)" font-size="11" fill="var(--color-ink-soft)">0.5</text>
-                            <line x1="296" y1="25" x2="296" y2="35" stroke="var(--color-ink)" stroke-width="1"/>
-                            <line x1="342" y1="25" x2="342" y2="35" stroke="var(--color-ink)" stroke-width="1"/>
-                            <line x1="388" y1="25" x2="388" y2="35" stroke="var(--color-ink)" stroke-width="1"/>
-                            <line x1="434" y1="25" x2="434" y2="35" stroke="var(--color-ink)" stroke-width="1"/>
-                            <line x1="480" y1="20" x2="480" y2="40" stroke="var(--color-ink)" stroke-width="2"/>
-                            <text x="480" y="55" text-anchor="middle" font-family="var(--font-mono)" font-size="14" fill="var(--color-ink)">1</text>
-                            <!-- Highlight 0.3 -->
-                            <circle cx="158" cy="30" r="5" fill="var(--color-red)"/>
-                            <text x="158" y="18" text-anchor="middle" font-family="var(--font-mono)" font-size="10" fill="var(--color-red)">0.3</text>
-                        </svg>
+                    <h4>数の連続性と「稠密性（ちゅうみつせい）」</h4>
+                    <p>整数は「1の次は2」「2の次は3」というように、点と点の間が飛び飛びになっています。しかし小数は、数直線上の点と点の間をどこまでも細かく埋めていくことができます。</p>
+                    <p>数学には<b>「稠密性（Density）」</b>という概念があります。これは、<b>「どんなに異なる2つの小数を取ってきても、その間には必ずもう1つの小数が存在する」</b>という性質です。例えば、$0.3$ と $0.4$ の間には $0.35$ があり、$0.35$ と $0.36$ の間には $0.355$ があります。このプロセスは無限に繰り返すことができます。</p>
+                    <p>この「数の連続的なつながり」を視覚的に体験してみましょう。</p>
+
+                    <!-- NUMBER LINE MICRO ZOOM (Interactive, Premium) -->
+                    <div class="premium-widget">
+                        <span class="widget-title">数直線のミクロズーム分析 (Ruler Micro-Zoom Analysis)</span>
+                        <p style="font-size: 14px; margin-bottom: 20px; color: var(--color-ink-soft);">
+                            ズームレベルを切り替えて、特定の範囲（例：0.3 から 0.4 の間）を拡大したときに、数がどのように細分化されていくか確認しましょう。
+                        </p>
+                        
+                        <div class="zoom-container">
+                            <div class="zoom-controls">
+                                <button class="zoom-btn active" id="zoom-btn-0" onclick="setZoomLevel(0)">等倍 (0.0 〜 1.0)</button>
+                                <button class="zoom-btn" id="zoom-btn-1" onclick="setZoomLevel(1)">10倍ズーム (0.30 〜 0.40)</button>
+                                <button class="zoom-btn" id="zoom-btn-2" onclick="setZoomLevel(2)">100倍ズーム (0.350 〜 0.360)</button>
+                            </div>
+
+                            <div class="zoom-line-box">
+                                <div class="zoom-label-desc" id="zoom-desc">表示範囲: 0.0 から 1.0 (等倍数直線 - 0.1刻み)</div>
+                                <svg width="100%" height="70" viewBox="0 0 500 70" id="number-line-svg">
+                                    <!-- Rendered via JS -->
+                                </svg>
+                            </div>
+                        </div>
                     </div>
-                    <p>このように、整数の間には無限の小数が存在します。$0.3$ も $0.33$ も $0.333$ も、すべて $0$ と $1$ の間のどこかに位置します。この「数の連続性」を理解することが、小数の第一歩です。</p>
                 </div>
 
+                <!-- Step 4: Exercises & Self Assessment -->
                 <div class="lesson-step">
                     <span class="lesson-step-meta">Step 04</span>
-                    <h4>整数と小数の構造まとめ</h4>
-                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 15px; font-size: 14px; line-height: 1.7;">
-                        <ul style="margin: 0; padding-left: 20px;">
-                            <li>数は「量」を表す共通言語である。</li>
-                            <li>10進法は、10集まると上の位に繰り上がる仕組み。</li>
-                            <li>小数点は「1より大きい世界」と「1より小さい世界」の境界線。</li>
-                            <li>小数を使うことで、整数と整数の間にある中途半端な量も正確に表せる。</li>
+                    <h4>理解度チェッククイズ</h4>
+                    <p>学んだ概念が身についているか、簡単なクイズで確認してみましょう。</p>
+
+                    <div class="quiz-card">
+                        <div class="quiz-question">Q1. 数値「4.08」を分解して説明した記述として、正しいものはどれでしょうか？</div>
+                        <div class="quiz-options">
+                            <button class="quiz-option" onclick="checkAnswer(1, 'A', false)">
+                                <span>A. 1が4個と、0.1が8個集まった数</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(1, 'B', true)">
+                                <span>B. 1が4個と、0.01が8個集まった数</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(1, 'C', false)">
+                                <span>C. 10が4個と、0.1が8個集まった数</span>
+                            </button>
+                        </div>
+                        <div class="quiz-feedback" id="feedback-1"></div>
+                    </div>
+
+                    <div class="quiz-card">
+                        <div class="quiz-question">Q2. 小数において「0.001を100倍した数」はどれでしょうか？</div>
+                        <div class="quiz-options">
+                            <button class="quiz-option" onclick="checkAnswer(2, 'A', false)">
+                                <span>A. 0.01</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(2, 'B', true)">
+                                <span>B. 0.1</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(2, 'C', false)">
+                                <span>C. 1.0</span>
+                            </button>
+                        </div>
+                        <div class="quiz-feedback" id="feedback-2"></div>
+                    </div>
+                </div>
+
+                <!-- Step 5: Summary -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>本単元のまとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 24px; font-size: 16px; line-height: 1.85;">
+                        <ul style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px;">
+                            <li><b>小数の必要性</b>: 整数で表せない「1未満の微小な量」や「連続する量」を定量化するために考案されました。</li>
+                            <li><b>位取りのルール</b>: 10進法により、右に1桁進むごとに重みが10分の1（$0.1$）になり、左に1桁進むごとに10倍になります。</li>
+                            <li><b>小数点の役割</b>: 整数（1以上）と小数（1未満）の明確な境界線として機能します。</li>
+                            <li><b>稠密性（連続性）</b>: どんなに小さな小数の間にも、無限に細分化された小数が存在し、数直線上の滑らかな線を形成しています。</li>
                         </ul>
                     </div>
                 </div>
@@ -150,8 +614,289 @@
         </div>
     </footer>
 
+    <!-- KaTeX for Math Rendering -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+
+    <!-- Interactive Script -->
+    <script>
+        // --- 1. Place Value Explorer Logics ---
+        const digits = {
+            hundreds: 3,
+            tens: 2,
+            ones: 5,
+            tenths: 4,
+            hundreds_place: 7,
+            thousandths: 2
+        };
+
+        function onDigitInput(key) {
+            const input = document.getElementById(`val-${key}`);
+            let val = input.value.replace(/[^0-9]/g, '');
+            if (val.length > 1) {
+                val = val.substring(val.length - 1);
+            }
+            if (val === '') {
+                val = '0';
+            }
+            input.value = val;
+            digits[key] = parseInt(val);
+            updateExplorerUI();
+        }
+
+        function changeDigit(key, val) {
+            let cur = digits[key];
+            cur += val;
+            if (cur > 9) cur = 0;
+            if (cur < 0) cur = 9;
+            digits[key] = cur;
+            
+            // Update UI input value
+            document.getElementById(`val-${key}`).value = cur;
+            
+            // Recalculate
+            updateExplorerUI();
+        }
+
+        function updateExplorerUI() {
+            const h = digits.hundreds;
+            const t = digits.tens;
+            const o = digits.ones;
+            const th = digits.tenths;
+            const hp = digits.hundreds_place;
+            const ts = digits.thousandths;
+
+            // Formats
+            document.getElementById('formula-hundreds').innerText = `${h} × 100`;
+            document.getElementById('value-hundreds').innerText = h * 100;
+
+            document.getElementById('formula-tens').innerText = `${t} × 10`;
+            document.getElementById('value-tens').innerText = t * 10;
+
+            document.getElementById('formula-ones').innerText = `${o} × 1`;
+            document.getElementById('value-ones').innerText = o;
+
+            document.getElementById('formula-tenths').innerText = `${th} × 0.1`;
+            document.getElementById('value-tenths').innerText = (th * 0.1).toFixed(1);
+
+            document.getElementById('formula-hundreds_place').innerText = `${hp} × 0.01`;
+            document.getElementById('value-hundreds_place').innerText = (hp * 0.01).toFixed(2);
+
+            document.getElementById('formula-thousandths').innerText = `${ts} × 0.001`;
+            document.getElementById('value-thousandths').innerText = (ts * 0.001).toFixed(3);
+
+            // Total expression
+            const totalStr = `${h}${t}${o}.${th}${hp}${ts}`;
+            const mathExpression = `${totalStr} = (${h} × 100) + (${t} × 10) + (${o} × 1) + (${th} × 0.1) + (${hp} × 0.01) + (${ts} × 0.001)`;
+            document.getElementById('explorer-math-formula').innerText = mathExpression;
+
+            // Draw decimal grid representation (1/10 and 1/100)
+            drawDecimalGrid(th, hp);
+        }
+
+        function drawDecimalGrid(tenths, hundredths) {
+            const svg = document.getElementById('decimal-grid-svg');
+            svg.innerHTML = ''; // Clear SVG
+
+            const totalCellsX = 10;
+            const totalCellsY = 10;
+            const cellSize = 14;
+            const cellGap = 2;
+            const padding = 2;
+
+            // Build grid cells
+            // Total colored cells: tenths * 10 + hundredths
+            const coloredCount = tenths * 10 + hundredths;
+
+            for (let y = 0; y < totalCellsY; y++) {
+                for (let x = 0; x < totalCellsX; x++) {
+                    const cellIndex = y * totalCellsX + x;
+                    const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                    
+                    const posX = padding + x * (cellSize + cellGap);
+                    const posY = padding + y * (cellSize + cellGap);
+
+                    rect.setAttribute("x", posX);
+                    rect.setAttribute("y", posY);
+                    rect.setAttribute("width", cellSize);
+                    rect.setAttribute("height", cellSize);
+                    rect.setAttribute("rx", "1");
+
+                    if (cellIndex < coloredCount) {
+                        // Colored cell representing tenths/hundredths
+                        // If it's part of the main columns (tenths), use a darker color, else highlight
+                        if (cellIndex < tenths * 10) {
+                            rect.setAttribute("fill", "hsl(210, 80%, 45%)"); // Main tenths (Blue)
+                        } else {
+                            rect.setAttribute("fill", "hsl(30, 80%, 45%)"); // Additional hundredths (Orange)
+                        }
+                    } else {
+                        // Uncolored cell
+                        rect.setAttribute("fill", "var(--color-surface)");
+                        rect.setAttribute("stroke", "var(--color-paper-line)");
+                        rect.setAttribute("stroke-width", "1");
+                    }
+                    svg.appendChild(rect);
+                }
+            }
+        }
+
+        // --- 2. Zoomable Number Line Logics ---
+        let currentZoomLevel = 0;
+
+        function setZoomLevel(level) {
+            currentZoomLevel = level;
+            
+            // Toggle active classes on buttons
+            document.querySelectorAll('.zoom-btn').forEach((btn, idx) => {
+                if (idx === level) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+
+            // Update description and redraw SVG
+            const desc = document.getElementById('zoom-desc');
+            if (level === 0) {
+                desc.innerText = "表示範囲: 0.0 から 1.0 (等倍数直線 - 0.1刻み)";
+            } else if (level === 1) {
+                desc.innerText = "表示範囲: 0.30 から 0.40 (10倍ズーム - 0.01刻み)";
+            } else if (level === 2) {
+                desc.innerText = "表示範囲: 0.350 から 0.360 (100倍ズーム - 0.001刻み)";
+            }
+            drawNumberLine();
+        }
+
+        function drawNumberLine() {
+            const svg = document.getElementById('number-line-svg');
+            svg.innerHTML = ''; // Clear SVG
+
+            const w = 500;
+            const h = 70;
+            
+            // Draw axis
+            const axis = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            axis.setAttribute("x1", "30");
+            axis.setAttribute("y1", "30");
+            axis.setAttribute("x2", "470");
+            axis.setAttribute("y2", "30");
+            axis.setAttribute("stroke", "var(--color-ink)");
+            axis.setAttribute("stroke-width", "2");
+            svg.appendChild(axis);
+
+            // Determine values and labels based on level
+            let startVal, step, decimals;
+            let targetPointVal = 0.357; // Target coordinate value
+            
+            if (currentZoomLevel === 0) {
+                startVal = 0.0;
+                step = 0.1;
+                decimals = 1;
+            } else if (currentZoomLevel === 1) {
+                startVal = 0.3;
+                step = 0.01;
+                decimals = 2;
+            } else {
+                startVal = 0.35;
+                step = 0.001;
+                decimals = 3;
+            }
+
+            // Draw ticks & labels
+            for (let i = 0; i <= 10; i++) {
+                const curVal = startVal + i * step;
+                const x = 30 + i * 44; // Scale 440px wide total
+
+                // Line tick
+                const tick = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                tick.setAttribute("x1", x);
+                tick.setAttribute("y1", i % 5 === 0 ? "15" : "22");
+                tick.setAttribute("x2", x);
+                tick.setAttribute("y2", i % 5 === 0 ? "45" : "38");
+                tick.setAttribute("stroke", "var(--color-ink)");
+                tick.setAttribute("stroke-width", i % 5 === 0 ? "2" : "1");
+                svg.appendChild(tick);
+
+                // Label text (every 2 ticks for clarity on high decimals)
+                if (i % 2 === 0 || i === 5) {
+                    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                    text.setAttribute("x", x);
+                    text.setAttribute("y", "60");
+                    text.setAttribute("text-anchor", "middle");
+                    text.setAttribute("font-family", "var(--font-mono)");
+                    text.setAttribute("font-size", "11");
+                    text.setAttribute("fill", "var(--color-ink)");
+                    text.textContent = curVal.toFixed(decimals);
+                    svg.appendChild(text);
+                }
+            }
+
+            // Draw target point "0.357" indicator if it's within the current range
+            const maxVal = startVal + 10 * step;
+            if (targetPointVal >= startVal && targetPointVal <= maxVal) {
+                const targetX = 30 + ((targetPointVal - startVal) / (maxVal - startVal)) * 440;
+                
+                // Point dot with pulsing animation class
+                const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                dot.setAttribute("cx", targetX);
+                dot.setAttribute("cy", "30");
+                dot.setAttribute("r", "5");
+                dot.setAttribute("fill", "var(--color-red)");
+                dot.setAttribute("class", "glowing-dot");
+                svg.appendChild(dot);
+
+                // Label text for point
+                const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                text.setAttribute("x", targetX);
+                text.setAttribute("y", "12");
+                text.setAttribute("text-anchor", "middle");
+                text.setAttribute("font-family", "var(--font-mono)");
+                text.setAttribute("font-size", "12");
+                text.setAttribute("font-weight", "bold");
+                text.setAttribute("fill", "var(--color-red)");
+                text.textContent = `★ ${targetPointVal.toFixed(3)}`;
+                svg.appendChild(text);
+            }
+        }
+
+        // --- 3. Quiz Logics ---
+        function checkAnswer(qNum, option, isCorrect) {
+            const card = event.target.closest('.quiz-card');
+            const options = card.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById(`feedback-${qNum}`);
+
+            // Reset options
+            options.forEach(opt => {
+                opt.classList.remove('correct', 'incorrect');
+                opt.disabled = true;
+            });
+
+            // Mark chosen option
+            const clickedBtn = event.target.closest('.quiz-option');
+            if (isCorrect) {
+                clickedBtn.classList.add('correct');
+                feedback.className = "quiz-feedback success";
+                if (qNum === 1) {
+                    feedback.innerHTML = "<b>正解です！</b><br>4.08 の「8」は、小数第二位（100分の1の位）にあります。したがって、1が4個と、0.01（100分の1）が8個集まった数になります。小数第一位（10分の1の位）は0です。";
+                } else {
+                    feedback.innerHTML = "<b>正解です！</b><br>0.001（1000分の1）を10倍すると0.01になり、さらに10倍（計100倍）すると <b>0.1</b> になります。10進法では、10倍するごとに小数点が左に1つ移動します（値としては大きくなります）。";
+                }
+            } else {
+                clickedBtn.classList.add('incorrect');
+                feedback.className = "quiz-feedback error";
+                if (qNum === 1) {
+                    feedback.innerHTML = "<b>不正解です。</b><br>4.08 の「8」は小数第二位に位置しているため、0.1ではなく0.01が8個あることを示しています。";
+                } else {
+                    feedback.innerHTML = "<b>不正解です。</b><br>0.001を10倍すると0.01、さらに10倍（100倍）すると 0.1 になります。";
+                }
+            }
+            feedback.style.display = "block";
+        }
+
+        // Initialize Page Widgets
+        window.addEventListener('DOMContentLoaded', () => {
+            updateExplorerUI();
+            drawNumberLine();
+        });
+    </script>
 </body>
 </html>

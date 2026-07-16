@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>平方根の四則演算 | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        /* Premium Dashboard Widgets styling */
+        .premium-widget {
+            background-color: var(--color-surface);
+            border: 2px solid var(--color-paper-line);
+            border-radius: var(--radius-card);
+            padding: 35px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px -10px rgba(28, 43, 57, 0.05), 0 1px 3px rgba(28, 43, 57, 0.02);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .premium-widget:hover {
+            border-color: var(--color-brass);
+            box-shadow: 0 15px 35px -10px rgba(28, 43, 57, 0.08);
+        }
+        
+        .widget-title {
+            font-family: var(--font-heading);
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--color-ink);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--color-brass);
+            padding-bottom: 8px;
+            display: inline-block;
+        }
+
+        /* Business Application Callout Box */
+        .business-callout {
+            background-color: #f8fafc;
+            border-left: 4px solid var(--color-brass);
+            border-radius: 4px;
+            padding: 24px;
+            margin: 30px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+        }
+
+        .business-callout h5 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--color-ink);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Radical Extractor Simulation Styles */
+        .extractor-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            align-items: center;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .lab-terminal {
+            background-color: #0b131a;
+            border: 2px solid #1e2d3d;
+            border-radius: 8px;
+            padding: 30px;
+            width: 100%;
+            max-width: 520px;
+            color: #e2e8f0;
+            font-family: 'JetBrains Mono', monospace;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+            text-align: center;
+            position: relative;
+        }
+
+        .radical-display {
+            font-size: 46px;
+            font-weight: bold;
+            color: #f59e0b;
+            text-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+            margin: 25px 0;
+            min-height: 70px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .factor-btn-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            max-width: 320px;
+            margin: 15px auto;
+        }
+
+        .btn-factor {
+            background-color: #1e293b;
+            border: 1px solid #475569;
+            color: #f1f5f9;
+            padding: 10px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            font-size: 13px;
+        }
+
+        .btn-factor:hover {
+            border-color: #f59e0b;
+            background-color: #334155;
+        }
+
+        .btn-extract {
+            background-color: #f59e0b;
+            color: #0f172a;
+            font-family: var(--font-heading);
+            font-weight: bold;
+            font-size: 15px;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 4px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(245,158,11,0.3);
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .btn-extract:hover:not(:disabled) {
+            background-color: #d97706;
+            transform: translateY(-1px);
+        }
+
+        .btn-extract:disabled {
+            background-color: #27354a;
+            color: #4b5563;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .terminal-log {
+            font-size: 13px;
+            color: #38bdf8;
+            margin-top: 20px;
+            min-height: 25px;
+            border-top: 1px dashed rgba(56, 189, 248, 0.2);
+            padding-top: 12px;
+        }
+
+        /* Quiz styles */
+        .quiz-card {
+            background-color: var(--color-paper);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 6px;
+            padding: 28px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.01);
+        }
+
+        .quiz-question {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 18px;
+            color: var(--color-ink);
+            line-height: 1.6;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .quiz-option {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            padding: 14px 22px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--color-brass);
+            background-color: rgba(169, 120, 47, 0.05);
+        }
+
+        .quiz-option.correct {
+            border-color: #2e7d32;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            font-weight: 500;
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--color-red);
+            background-color: #ffebee;
+            color: var(--color-red);
+        }
+
+        .quiz-feedback {
+            margin-top: 18px;
+            font-size: 14.5px;
+            line-height: 1.7;
+            padding: 16px;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .quiz-feedback.success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid #2e7d32;
+        }
+
+        .quiz-feedback.error {
+            background-color: #ffebee;
+            color: var(--color-red);
+            border-left: 4px solid var(--color-red);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> > <a href="index.html">カリキュラム</a> > 第4章 高校数学への接続 > 単元49
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 04 / Unit 49</span>
+                <h2 class="lesson-title">平方根の四則演算</h2>
+            </header>
+
+            <div class="lesson-flow">
+                
+                <!-- Step 1: Simplification & Addition -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>平方根の加法と減法：同じ根号を同類項として扱う</h4>
+                    <p>平方根を含む数式の足し算・引き算の計算ルールは、文字式における<b>「同類項の整理」</b>と全く同じです。<b>根号（ルート）の中身が同一である項同士のみ</b>をまとめて加減算することができます。</p>
+                    
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 22px; border-radius: 6px; margin: 25px 0;">
+                        <p style="text-align: center; font-size: 22px; margin: 8px 0; font-family: var(--font-mono); letter-spacing: 0.02em;">
+                            $a\sqrt{k} + b\sqrt{k} = (a + b)\sqrt{k}$
+                        </p>
+                    </div>
+
+                    <p>例えば、式 $4\sqrt{3} + 3\sqrt{3}$ は、「$\sqrt{3}$ が4個」と「$\sqrt{3}$ が3個」の和であると解釈できるため、係数部分のみを合算して $7\sqrt{3}$ となります。一方、文字式において $2x + 3y$ をそれ以上簡素化できないのと同様に、根号の中身が異なる $\sqrt{2} + \sqrt{3}$ はこれ以上加算することはできず、そのまま式を残すのが数学的に正しい回答となります。</p>
+                    <p style="color: var(--color-red); font-weight: bold;">⚠️注意: $\sqrt{a} + \sqrt{b} = \sqrt{a + b}$ とする計算（例: $\sqrt{2} + \sqrt{3} = \sqrt{5}$）は、非常にありがちな誤りですが数学的に完全に誤りです。十分に注意してください。</p>
+
+                    <!-- RADICAL EXTRACTOR WIDGET -->
+                    <div class="premium-widget">
+                        <span class="widget-title">数理物理実験：根号脱出リアクター (Radical Extractor Console)</span>
+                        <p style="font-size: 14.5px; margin-bottom: 20px; color: var(--color-ink-soft); line-height: 1.7;">
+                            一見、足し算ができないように見える式（例: $\sqrt{20} + \sqrt{45}$）でも、根号の中身を極限までシンプルに括り出す（簡素化する）ことによって、中身が揃い、同類項として足し算ができるようになる場合が多々あります。<br>
+                            以下のコントローラーで目標の平方根を選択し、<b>「平方数（2乗の数: 4, 9, 16, 25, 36...）」</b>の積に分解して、外側へ根号脱出させる物理変形をシミュレートしてください。
+                        </p>
+
+                        <div class="extractor-container">
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; width: 100%;">
+                                <button class="btn-factor" onclick="loadNumber(8)">√8</button>
+                                <button class="btn-factor" onclick="loadNumber(18)">√18</button>
+                                <button class="btn-factor" onclick="loadNumber(27)">√27</button>
+                                <button class="btn-factor" onclick="loadNumber(48)">√48</button>
+                                <button class="btn-factor" onclick="loadNumber(72)">√72</button>
+                                <button class="btn-factor" onclick="loadNumber(108)">√108</button>
+                                <button class="btn-factor" onclick="loadNumber(125)">√125</button>
+                                <button class="btn-factor" onclick="loadNumber(200)">√200</button>
+                            </div>
+
+                            <div class="lab-terminal">
+                                <div style="font-size: 11px; color: #64748b; letter-spacing: 0.1em;">QUANTUM RADICAL REACTOR v2.0</div>
+                                <div class="radical-display" id="radical-display">
+                                    <!-- Rendered dynamically via KaTeX -->
+                                </div>
+                                
+                                <div class="factor-btn-grid" id="factor-buttons">
+                                    <!-- Rendered dynamically -->
+                                </div>
+                                
+                                <button class="btn-extract" id="btn-extract" onclick="extractSquare()" disabled>脱出処理 (EXTRACT RADICAL)</button>
+                                <div class="terminal-log" id="terminal-log">数理ターゲットを上部パネルから選んでください。</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Multiplication & Division -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>平方根の乗法と除法：外は外、中は中で直接演算する</h4>
+                    <p>平方根同士の掛け算と割り算は、加減算と比べて非常に自由度が高いのが特徴です。<b>「ルートの外側の数値同士」「ルートの内側の数値（正の数に限る）同士」をそれぞれダイレクトに掛け合わせ・割り合わせる</b>ことができます。</p>
+
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 22px; border-radius: 6px; margin: 25px 0;">
+                        <p style="text-align: center; font-size: 20px; margin: 8px 0; font-family: var(--font-mono); display: flex; flex-direction: column; gap: 10px;">
+                            <span>$\sqrt{a} \times \sqrt{b} = \sqrt{a \times b}$</span>
+                            <span>$\frac{\sqrt{a}}{\sqrt{b}} = \sqrt{\frac{a}{b}}$</span>
+                        </p>
+                    </div>
+
+                    <p>例えば、$\sqrt{3} \times \sqrt{5} = \sqrt{15}$ となり、係数がある場合は $3\sqrt{2} \times 2\sqrt{7} = (3 \times 2)\sqrt{2 \times 7} = 6\sqrt{14}$ のようになります。</p>
+                    <p>割り算の例としては、$\frac{\sqrt{21}}{\sqrt{7}} = \sqrt{\frac{21}{7}} = \sqrt{3}$ となり、分数計算も同様にルートの中で共通因数を約分することが可能です。</p>
+                </div>
+
+                <!-- Step 3: Business Applications -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>実社会とビジネスにおける平方根の実用例</h4>
+                    <p>平方根の四則演算や簡素化は、単なる数式パズルではなく、現代ビジネスの現場やデータ分析において極めて重要な役割を果たしています。</p>
+
+                    <!-- Callout 1 -->
+                    <div class="business-callout">
+                        <h5>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-brass)" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                            1. 金融・投資分析におけるボラティリティ（ボラティリティの加減算）
+                        </h5>
+                        <p style="font-size: 14.5px; line-height: 1.7; color: var(--color-ink-soft);">
+                            ファイナンスや株式投資において、リスクの指標として用いられる「標準偏差（ボラティリティ）」は分散の平方根（$\sigma = \sqrt{V}$）です。複数の異なるポートフォリオの合成リスクを求める際には、それぞれの分散（乗算した二乗の和）の平方根を計算する必要があり、これらはすべて平方根の簡素化・四則演算のロジックに基づいてモデル化されています。
+                        </p>
+                    </div>
+
+                    <!-- Callout 2 -->
+                    <div class="business-callout">
+                        <h5>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-brass)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
+                            2. 規格サイズ（A4用紙など）の寸法比率と縮小率
+                        </h5>
+                        <p style="font-size: 14.5px; line-height: 1.7; color: var(--color-ink-soft);">
+                            私たちが日常的に使用しているA4用紙やB5用紙などのアスペクト比は「白銀比（$1:\sqrt{2}$）」です。A3用紙をA4用紙に縮小コピー（面積を $1/2$ に）する際の線分縮小倍率は $\frac{1}{\sqrt{2}} = \frac{\sqrt{2}}{2} \approx 0.707$（70.7%）であり、これも平方根の有理化や演算によって定義されています。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 4: Exercises -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>理解度チェッククイズ</h4>
+                    <p>平方根の四則演算および簡素化の処理について、理解度を確認してみましょう。</p>
+
+                    <!-- Question 1 -->
+                    <div class="quiz-card">
+                        <div class="quiz-question">Q1. 式「$\sqrt{27} - \sqrt{12}$」を最もシンプルに計算した答えはどれでしょうか？</div>
+                        <div class="quiz-options">
+                            <button class="quiz-option" onclick="checkAnswer(1, 'A', false)">
+                                <span>A. $\sqrt{15}$</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(1, 'B', true)">
+                                <span>B. $\sqrt{3}$</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(1, 'C', false)">
+                                <span>C. $5\sqrt{3}$</span>
+                            </button>
+                        </div>
+                        <div class="quiz-feedback" id="feedback-1"></div>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="quiz-card">
+                        <div class="quiz-question">Q2. 式「$2\sqrt{6} \times \sqrt{3}$」を正しく計算して最も簡素化した答えはどれでしょうか？</div>
+                        <div class="quiz-options">
+                            <button class="quiz-option" onclick="checkAnswer(2, 'A', false)">
+                                <span>A. $2\sqrt{18}$</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(2, 'B', false)">
+                                <span>B. $6$</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(2, 'C', true)">
+                                <span>C. $6\sqrt{2}$</span>
+                            </button>
+                        </div>
+                        <div class="quiz-feedback" id="feedback-2"></div>
+                    </div>
+
+                    <!-- Question 3 -->
+                    <div class="quiz-card">
+                        <div class="quiz-question">Q3. 【応用】式「$\frac{6}{\sqrt{3}} + \sqrt{12}$」を計算して綺麗にまとめた答えはどれでしょうか？</div>
+                        <div class="quiz-options">
+                            <button class="quiz-option" onclick="checkAnswer(3, 'A', false)">
+                                <span>A. $\frac{6 + 6\sqrt{3}}{\sqrt{3}}$</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(3, 'B', true)">
+                                <span>B. $4\sqrt{3}$</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(3, 'C', false)">
+                                <span>C. $3\sqrt{3}$</span>
+                            </button>
+                        </div>
+                        <div class="quiz-feedback" id="feedback-3"></div>
+                    </div>
+
+                    <!-- Question 4 -->
+                    <div class="quiz-card">
+                        <div class="quiz-question">Q4. 【発展】分配法則を利用して式「$(\sqrt{5} + 2)(\sqrt{5} - 1)$」を展開・整理した答えはどれでしょうか？</div>
+                        <div class="quiz-options">
+                            <button class="quiz-option" onclick="checkAnswer(4, 'A', true)">
+                                <span>A. $3 + \sqrt{5}$</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(4, 'B', false)">
+                                <span>B. $3 - \sqrt{5}$</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(4, 'C', false)">
+                                <span>C. $5 + \sqrt{5}$</span>
+                            </button>
+                        </div>
+                        <div class="quiz-feedback" id="feedback-4"></div>
+                    </div>
+                </div>
+
+                <!-- Step 5: Summary -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>本単元のまとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 24px; font-size: 16px; line-height: 1.85;">
+                        <ul style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px;">
+                            <li><b>足し算・引き算</b>: ルートの中身が一致している項のみ、係数（前の数）を足し引きできます。</li>
+                            <li><b>掛け算・割り算</b>: ルートの中身同士、外側の数同士をダイレクトに乗除できます。</li>
+                            <li><b>簡素化（$\sqrt{a^2 b} = a\sqrt{b}$）</b>: 計算を行う前、あるいは計算の最後に、ルートの中の平方数を外にくくり出すことで、他の項とまとめられるようになります。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-footer-nav">
+                <a href="48.html" class="btn-secondary">&larr; 前の単元へ</a>
+                <a href="index.html" class="btn-secondary">目次に戻る</a>
+                <a href="#" class="btn btn-primary">次の単元へ &rarr;</a>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- KaTeX Math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+
+    <!-- Lab Engine script -->
+    <script>
+        let currentTarget = 8;
+        let selectedPerfect = 0;
+        let selectedRem = 0;
+
+        let audioCtx = null;
+
+        function playSound(type) {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                const now = audioCtx.currentTime;
+
+                if (type === 'click') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(600, now);
+                    gain.gain.setValueAtTime(0.04, now);
+                    gain.gain.linearRampToValueAtTime(0.001, now + 0.05);
+                    osc.start(now);
+                    osc.stop(now + 0.05);
+                } else if (type === 'success') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, now); // C5
+                    osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
+                    osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
+                    gain.gain.setValueAtTime(0.06, now);
+                    gain.gain.linearRampToValueAtTime(0.001, now + 0.35);
+                    osc.start(now);
+                    osc.stop(now + 0.35);
+                } else if (type === 'error') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(150, now);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.linearRampToValueAtTime(0.001, now + 0.2);
+                    osc.start(now);
+                    osc.stop(now + 0.2);
+                }
+            } catch (e) {}
+        }
+
+        function setRadicalDisplay(latex) {
+            const el = document.getElementById('radical-display');
+            el.innerHTML = `$${latex}$`;
+            if (window.renderMathInElement) {
+                renderMathInElement(el, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false}
+                    ]
+                });
+            }
+        }
+
+        function loadNumber(num) {
+            playSound('click');
+            currentTarget = num;
+            selectedPerfect = 0;
+            selectedRem = 0;
+
+            setRadicalDisplay(`\\sqrt{${num}}`);
+            document.getElementById('btn-extract').disabled = true;
+            document.getElementById('terminal-log').innerText = `ターゲット: √${num} がロードされました。`;
+
+            generateFactorButtons(num);
+        }
+
+        function generateFactorButtons(num) {
+            const container = document.getElementById('factor-buttons');
+            container.innerHTML = '';
+
+            const perfectSquares = [4, 9, 16, 25, 36, 49, 64, 81, 100];
+            const options = [];
+
+            perfectSquares.forEach(sq => {
+                if (num % sq === 0) {
+                    options.push({ sq: sq, rem: num / sq });
+                }
+            });
+
+            if (options.length === 0) {
+                document.getElementById('terminal-log').innerText = `√${num} はこれ以上くくり出せる平方数がありません。`;
+                return;
+            }
+
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-factor';
+                btn.innerHTML = `${opt.sq} × ${opt.rem}`;
+                btn.onclick = () => selectFactor(opt.sq, opt.rem);
+                container.appendChild(btn);
+            });
+        }
+
+        function selectFactor(sq, rem) {
+            playSound('click');
+            selectedPerfect = sq;
+            selectedRem = rem;
+
+            setRadicalDisplay(`\\sqrt{${sq} \\times ${rem}}`);
+            document.getElementById('btn-extract').disabled = false;
+            document.getElementById('terminal-log').innerText = `積の分解を選択しました: ${sq} × ${rem}`;
+        }
+
+        function extractSquare() {
+            if (selectedPerfect === 0) return;
+
+            const rootVal = Math.sqrt(selectedPerfect);
+            
+            setRadicalDisplay(`${rootVal}\\sqrt{${selectedRem}}`);
+            document.getElementById('btn-extract').disabled = true;
+            document.getElementById('terminal-log').innerText = `成功！ 平方数 ${selectedPerfect} の平方根 ${rootVal} を根号の外に括り出しました！`;
+            
+            playSound('success');
+        }
+
+        // Quiz checker
+        function checkAnswer(qId, option, isCorrect) {
+            const feedback = document.getElementById(`feedback-${qId}`);
+            feedback.style.display = 'block';
+
+            const options = document.querySelectorAll(`.quiz-card:nth-of-type(${qId}) .quiz-option`);
+            options.forEach(opt => {
+                opt.disabled = true;
+                if (opt.innerText.trim().startsWith(option)) {
+                    if (isCorrect) opt.classList.add('correct');
+                    else opt.classList.add('incorrect');
+                }
+            });
+
+            if (isCorrect) {
+                playSound('success');
+                feedback.className = 'quiz-feedback success';
+                
+                let expl = '';
+                if (qId === 1) {
+                    expl = `$\\sqrt{27} = 3\\sqrt{3}$ であり、$\\sqrt{12} = 2\\sqrt{3}$ です。<br>これらを引くことで、$3\\sqrt{3} - 2\\sqrt{3} = 1\\sqrt{3} = \\sqrt{3}$ になります。`;
+                } else if (qId === 2) {
+                    expl = `$2\\sqrt{6} \\times \\sqrt{3} = 2\\sqrt{18}$ です。<br>ここで $\\sqrt{18} = 3\\sqrt{2}$ と変形できるため、$2 \\times 3\\sqrt{2} = 6\\sqrt{2}$ になります。`;
+                } else if (qId === 3) {
+                    expl = `$\\frac{6}{\\sqrt{3}}$ の分母を分子分母に $\\sqrt{3}$ を掛けて有理化すると、$\\frac{6\\sqrt{3}}{3} = 2\\sqrt{3}$ となります。<br>また $\\sqrt{12} = 2\\sqrt{3}$ です。<br>両者を合算すると $2\\sqrt{3} + 2\\sqrt{3} = 4\\sqrt{3}$ となります。`;
+                } else if (qId === 4) {
+                    expl = `分配法則により順に展開します：<br>$(\\sqrt{5} + 2)(\\sqrt{5} - 1) = \\sqrt{5}\\sqrt{5} - \\sqrt{5} + 2\\sqrt{5} - 2$<br>$= 5 + \\sqrt{5} - 2 = 3 + \\sqrt{5}$ となります。`;
+                }
+                
+                feedback.innerHTML = `<b>正解です！</b><br>` + expl;
+            } else {
+                playSound('error');
+                feedback.className = 'quiz-feedback error';
+                feedback.innerHTML = `<b>不正解です。</b> もう一度考えてみましょう。<br>まずは各平方根を $a\\sqrt{b}$ の形に簡素化（あるいは有理化）してから計算を行ってください。`;
+            }
+
+            if (window.renderMathInElement) {
+                renderMathInElement(feedback, {
+                    delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]
+                });
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadNumber(8);
+        });
+    </script>
+</body>
+</html>

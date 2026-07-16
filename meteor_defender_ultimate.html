@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>METEOR DEFENDER: ULTIMATE PRIME</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #030712;
+            --color-surface: #0b0f19;
+            --color-primary: #38bdf8;
+            --color-accent: #f59e0b;
+            --color-pink: #ec4899;
+            --color-success: #10b981;
+            --color-danger: #ef4444;
+            --font-display: 'Orbitron', sans-serif;
+            --font-mono: 'Share Tech Mono', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--color-bg);
+            color: #f1f5f9;
+            font-family: var(--font-display);
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Arcade Cabinet Frame */
+        .cabinet-frame {
+            position: relative;
+            width: 960px;
+            height: 640px;
+            background-color: var(--color-surface);
+            border: 4px solid #1e293b;
+            border-radius: 16px;
+            box-shadow: 0 0 50px rgba(56, 189, 248, 0.15), inset 0 0 20px rgba(0,0,0,0.8);
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* Screen Canvas (Left 65%) */
+        .screen-container {
+            position: relative;
+            width: 65%;
+            height: 100%;
+            border-right: 4px solid #1e293b;
+            background-color: #020617;
+        }
+
+        #game-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            cursor: crosshair;
+        }
+
+        /* Control Panel (Right 35%) */
+        .control-panel {
+            width: 35%;
+            height: 100%;
+            background: linear-gradient(135deg, #0b132b 0%, #1c2541 100%);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: inset 5px 0 15px rgba(0,0,0,0.5);
+            font-family: var(--font-mono);
+        }
+
+        .panel-header {
+            text-align: center;
+            border-bottom: 2px dashed rgba(56, 189, 248, 0.3);
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+        }
+
+        .panel-header h1 {
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--color-accent);
+            text-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+            letter-spacing: 0.05em;
+        }
+
+        .panel-header p {
+            font-size: 11px;
+            color: var(--color-primary);
+            margin-top: 4px;
+        }
+
+        /* Live Dashboard Stats */
+        .stats-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background-color: rgba(2, 6, 23, 0.6);
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 14px;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-label {
+            color: #94a3b8;
+        }
+
+        .stat-value {
+            font-weight: bold;
+            color: #f8fafc;
+        }
+
+        .stat-value.shards {
+            color: var(--color-accent);
+        }
+
+        /* Weapons/Ammo Selector */
+        .ammo-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .ammo-title {
+            font-size: 11px;
+            color: var(--color-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 4px;
+        }
+
+        .ammo-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .ammo-btn {
+            background-color: #0b1329;
+            border: 2px solid #334155;
+            color: #cbd5e1;
+            padding: 12px 0;
+            border-radius: 6px;
+            font-family: var(--font-display);
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .ammo-btn:hover {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        .ammo-btn.active[data-ammo="1/2"] {
+            border-color: var(--color-primary);
+            background-color: rgba(56, 189, 248, 0.15);
+            color: var(--color-primary);
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+        }
+
+        .ammo-btn.active[data-ammo="1/3"] {
+            border-color: var(--color-accent);
+            background-color: rgba(245, 158, 11, 0.15);
+            color: var(--color-accent);
+            box-shadow: 0 0 12px rgba(245, 158, 11, 0.3);
+        }
+
+        .ammo-btn.active[data-ammo="1/5"] {
+            border-color: var(--color-pink);
+            background-color: rgba(236, 72, 153, 0.15);
+            color: var(--color-pink);
+            box-shadow: 0 0 12px rgba(236, 72, 153, 0.3);
+        }
+
+        .hotkey-hint {
+            font-size: 9px;
+            color: #64748b;
+            margin-top: 4px;
+            display: block;
+            text-align: center;
+        }
+
+        /* Special GCD Weapon Slot */
+        .special-weapon-btn {
+            background-color: #1e1b4b;
+            border: 2px dashed #4f46e5;
+            color: #c7d2fe;
+            padding: 10px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .special-weapon-btn:hover:not(.locked) {
+            border-color: #818cf8;
+            background-color: #312e81;
+        }
+
+        .special-weapon-btn.locked {
+            opacity: 0.4;
+            cursor: not-allowed;
+            border-color: #334155;
+            color: #64748b;
+            background-color: #0f172a;
+        }
+
+        .cooldown-bar {
+            width: 60px;
+            height: 6px;
+            background-color: #1e293b;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .cooldown-fill {
+            height: 100%;
+            background-color: #818cf8;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        /* Audio / Config Controls */
+        .config-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        .audio-btn {
+            background: none;
+            border: 1px solid #334155;
+            color: #94a3b8;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .audio-btn:hover {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        /* Overlay Screens inside Screen Container */
+        .screen-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(2, 6, 23, 0.96);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            text-align: center;
+            z-index: 100;
+        }
+
+        .screen-overlay h2 {
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--color-accent);
+            text-shadow: 0 0 15px rgba(245,158,11,0.5);
+            margin-bottom: 20px;
+            letter-spacing: 0.1em;
+        }
+
+        .screen-overlay p {
+            font-family: var(--font-mono);
+            font-size: 13px;
+            line-height: 1.6;
+            color: #94a3b8;
+            max-width: 460px;
+            margin-bottom: 30px;
+        }
+
+        .btn-action {
+            background: linear-gradient(135deg, var(--color-accent) 0%, #d97706 100%);
+            color: #020617;
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: 18px;
+            padding: 16px 48px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+            transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.6);
+        }
+
+        /* Upgrades/Shop Overlay */
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            width: 100%;
+            max-width: 520px;
+            margin-bottom: 25px;
+        }
+
+        .shop-card {
+            background-color: #0b1329;
+            border: 2px solid #1e293b;
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            position: relative;
+        }
+
+        .shop-card:hover {
+            border-color: var(--color-primary);
+            background-color: #172554;
+        }
+
+        .shop-card.purchased {
+            border-color: var(--color-success);
+            background-color: rgba(16,185,129,0.05);
+        }
+
+        .shop-card.max-out {
+            border-color: #334155;
+            background-color: #0f172a;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .shop-icon {
+            font-size: 28px;
+        }
+
+        .shop-info {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .shop-name {
+            font-size: 13px;
+            font-weight: bold;
+            color: #f1f5f9;
+        }
+
+        .shop-desc {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: #94a3b8;
+            line-height: 1.3;
+        }
+
+        .shop-cost {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: bold;
+            color: var(--color-accent);
+            margin-top: 4px;
+        }
+
+        .shop-lvl {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            font-size: 9px;
+            background-color: #334155;
+            color: #cbd5e1;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        .shop-card.purchased .shop-lvl {
+            background-color: var(--color-success);
+            color: white;
+        }
+
+        /* Screen shakes */
+        .shake-screen {
+            animation: shakeCanvas 0.3s ease-in-out;
+        }
+
+        @keyframes shakeCanvas {
+            0%, 100% { transform: translate(0, 0); }
+            10%, 50%, 90% { transform: translate(-4px, -2px); }
+            30%, 70% { transform: translate(4px, 2px); }
+        }
+
+        /* CRT scanlines effect overlay */
+        .crt-scanlines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%, 
+                rgba(0, 0, 0, 0.25) 50%
+            ), linear-gradient(
+                90deg, 
+                rgba(255, 0, 0, 0.06), 
+                rgba(0, 255, 0, 0.02), 
+                rgba(0, 0, 255, 0.06)
+            );
+            background-size: 100% 4px, 6px 100%;
+            z-index: 10;
+            pointer-events: none;
+            opacity: 0.45;
+        }
+    </style>
+</head>
+<body>
+    <div class="cabinet-frame">
+        
+        <!-- Screen container -->
+        <div class="screen-container" id="screen-viewport">
+            <canvas id="game-canvas" width="624" height="640"></canvas>
+            <div class="crt-scanlines"></div>
+
+            <!-- Start screen -->
+            <div class="screen-overlay" id="overlay-start">
+                <h2>METEOR DEFENDER</h2>
+                <h3 style="color: var(--color-primary); font-size: 18px; margin-bottom: 20px; letter-spacing: 0.1em;">ULTIMATE PRIME</h3>
+                <p style="text-align: left;">
+                    【オペレーション命令】<br>
+                    1. 落下する合成数隕石を約分・消滅させ、地球を守り抜け！<br>
+                    2. 下部ドックまたは数字キー【1, 2, 3】で弾丸（1/2, 1/3, 1/5）をトグル。<br>
+                    3. 割り切れると隕石は商に縮小、1以下で完全大爆発！<br>
+                    4. 割り切れない弾はバウンドし、隕石を赤熱させて急加速させる！<br>
+                    5. 収集したシャードで自機をカスタムビルドし、最終ボス「5040」を約分せよ。
+                </p>
+                <button class="btn-action" onclick="initAndStartGame()">LAUNCH DEPLOYMENT</button>
+            </div>
+
+            <!-- Shop / Waves clear screen -->
+            <div class="screen-overlay" id="overlay-shop" style="display: none;">
+                <h2>INTERSTELLAR SHIPYARD</h2>
+                <p style="margin-bottom: 15px;">シャードを消費して、自機の兵装アビリティをアップデートしてください</p>
+                <div style="font-size: 18px; font-weight: bold; color: var(--color-accent); margin-bottom: 20px;">
+                    持っているシャード: <span id="shop-shards-val">0</span>
+                </div>
+                
+                <div class="shop-grid">
+                    <!-- Shop items generated by JS -->
+                </div>
+
+                <button class="btn-action" style="font-size:15px; padding:12px 35px;" onclick="advanceNextWave()">LAUNCH NEXT WAVE</button>
+            </div>
+
+            <!-- Game Over screen -->
+            <div class="screen-overlay" id="overlay-over" style="display: none;">
+                <h2 id="over-title">MISSION FAILED</h2>
+                <p id="over-desc">
+                    地球は粉砕されました...
+                    <br>到達Wave: --
+                    <br>獲得スコア: -- 点
+                </p>
+                <button class="btn-action" onclick="initAndStartGame()">RE-DEPLOY</button>
+            </div>
+        </div>
+
+        <!-- Control panel -->
+        <div class="control-panel">
+            <div class="panel-header">
+                <h1>METEOR DEFENDER</h1>
+                <p>WEAPONS CONTROL INTERFACE</p>
+            </div>
+
+            <!-- Dashboard Stats -->
+            <div class="stats-group">
+                <div class="stat-row">
+                    <span class="stat-label">WAVE</span>
+                    <span class="stat-value" id="hud-wave" style="color:var(--color-primary);">1</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">SCORE</span>
+                    <span class="stat-value" id="hud-score">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">HIGH SCORE</span>
+                    <span class="stat-value" id="hud-high">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">SHARDS</span>
+                    <span class="stat-value shards" id="hud-shards">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">SHIELDS</span>
+                    <span class="stat-value" id="hud-shields" style="color:var(--color-danger);">❤❤❤</span>
+                </div>
+            </div>
+
+            <!-- Weapon Select Dock -->
+            <div class="ammo-section">
+                <span class="ammo-title">レーザー口径（弾種）</span>
+                <div class="ammo-grid">
+                    <button class="ammo-btn active" data-ammo="1/2" onclick="selectWeapon('1/2')">1/2</button>
+                    <button class="ammo-btn" data-ammo="1/3" onclick="selectWeapon('1/3')">1/3</button>
+                    <button class="ammo-btn" data-ammo="1/5" onclick="selectWeapon('1/5')">1/5</button>
+                </div>
+                <span class="hotkey-hint">キーボード【1】【2】【3】で即座に切り替え可能</span>
+            </div>
+
+            <!-- Special GCD Weapon slot -->
+            <div class="ammo-section">
+                <span class="ammo-title">補助兵器スロット</span>
+                <div class="special-weapon-btn locked" id="gcd-weapon-btn" onclick="fireGCDBlast()">
+                    <span>GCD衝撃波 (GCD BLAST)</span>
+                    <div class="cooldown-bar">
+                        <div class="cooldown-fill" id="gcd-cooldown-fill"></div>
+                    </div>
+                </div>
+                <span class="hotkey-hint">右クリックで発動。全隕石の素因数を一度に約分する</span>
+            </div>
+
+            <!-- System Audio Configuration controls -->
+            <div class="config-controls">
+                <span>SOUNDS SYNTH</span>
+                <button class="audio-btn" id="btn-audio-toggle" onclick="toggleMute()">MUTE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Retro Synthesizer and Game Engine Script -->
+    <script>
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d');
+        const viewport = document.getElementById('screen-viewport');
+
+        // Game parameters
+        let isRunning = false;
+        let score = 0;
+        let shards = 0;
+        let shields = 3;
+        let maxShields = 3;
+        let wave = 1;
+        let highscore = localStorage.getItem('otona_ultimate_high') || 0;
+        document.getElementById('hud-high').innerText = highscore;
+
+        // Entities state
+        let meteors = [];
+        let lasers = [];
+        let particles = [];
+        let backgroundStars = [];
+        let activeWeapon = '1/2';
+        let gameLoopId = null;
+        let lastShootTime = 0;
+
+        // Wave Spawner mechanics
+        let waveState = 'intro'; // 'intro', 'combat', 'clear', 'gameover'
+        let waveSpawnCount = 0;
+        let lastSpawnTime = 0;
+        let spawnDelay = 2500; // ms
+        let bossSpawned = false;
+
+        // Shop Upgrades stats & inventory
+        let shopUpgrades = {
+            scanner: { title: '素因数解析装置', desc: '隕石の素因数(約数)を常時スキャン表示します', cost: 15, lvl: 0, max: 1, icon: '🔍' },
+            gcd: { title: 'GCD衝撃波キャノン', desc: '右クリックで衝撃波を放ち、全隕石を一括約分', cost: 25, lvl: 0, max: 1, icon: '💥' },
+            slow: { title: '時空歪曲エンジン', desc: '隕石の落下速度を常時20%遅延させます', cost: 20, lvl: 0, max: 3, icon: '⏳' },
+            shield: { title: 'シールド回復・増強', desc: 'シールドを1回復し、最大耐久上限を+1します', cost: 18, lvl: 0, max: 5, icon: '🛡' },
+            cannon: { title: '連射装置', desc: 'ビーム射撃のチャージ冷却速度を向上させます', cost: 12, lvl: 0, max: 4, icon: '⚡' }
+        };
+
+        // GCD Weapon cooldown
+        let gcdCooldown = 0; // ms
+        let gcdMaxCooldown = 15000; // 15 seconds cooldown
+
+        // Keyboard hotkeys
+        window.addEventListener('keydown', (e) => {
+            if (!isRunning) return;
+            if (e.key === '1') selectWeapon('1/2');
+            if (e.key === '2') selectWeapon('1/3');
+            if (e.key === '3') selectWeapon('1/5');
+            if (e.key === 'x' || e.key === 'X' || e.key === ' ') {
+                fireGCDBlast();
+            }
+        });
+
+        // Mouse inputs
+        canvas.addEventListener('mousedown', (e) => {
+            if (!isRunning || waveState === 'clear') return;
+            
+            // Right click triggers GCD blast
+            if (e.button === 2) {
+                e.preventDefault();
+                fireGCDBlast();
+                return;
+            }
+
+            const rect = canvas.getBoundingClientRect();
+            const clickX = (e.clientX - rect.left) * (624 / rect.width);
+            const clickY = (e.clientY - rect.top) * (640 / rect.height);
+            shootLaser(clickX, clickY);
+        });
+
+        // Prevent right click menu
+        canvas.addEventListener('contextmenu', e => e.preventDefault());
+
+        // --- 1. Sound wave synthesizer (Web Audio API) ---
+        let audioCtx = null;
+        let isMuted = false;
+        let synthBgmInterval = null;
+
+        function playSound(type) {
+            if (isMuted) return;
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                const now = audioCtx.currentTime;
+
+                if (type === 'laser') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(500, now);
+                    osc.frequency.exponentialRampToValueAtTime(150, now + 0.1);
+                    gain.gain.setValueAtTime(0.06, now);
+                    gain.gain.linearRampToValueAtTime(0.001, now + 0.1);
+                    osc.start(now);
+                    osc.stop(now + 0.1);
+                } else if (type === 'hit') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(659.25, now); // E5
+                    osc.frequency.setValueAtTime(987.77, now + 0.06); // B5
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.linearRampToValueAtTime(0.001, now + 0.18);
+                    osc.start(now);
+                    osc.stop(now + 0.18);
+                } else if (type === 'bounce') {
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(130, now);
+                    gain.gain.setValueAtTime(0.12, now);
+                    gain.gain.linearRampToValueAtTime(0.001, now + 0.22);
+                    osc.start(now);
+                    osc.stop(now + 0.22);
+                } else if (type === 'explosion') {
+                    // Thick noise explosion
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(180, now);
+                    osc.frequency.exponentialRampToValueAtTime(30, now + 0.45);
+                    gain.gain.setValueAtTime(0.25, now);
+                    gain.gain.linearRampToValueAtTime(0.001, now + 0.45);
+                    osc.start(now);
+                    osc.stop(now + 0.45);
+                } else if (type === 'gcd') {
+                    // Ascending sweep chord
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(220, now);
+                    osc.frequency.exponentialRampToValueAtTime(1200, now + 0.4);
+                    gain.gain.setValueAtTime(0.1, now);
+                    gain.gain.linearRampToValueAtTime(0.001, now + 0.4);
+                    osc.start(now);
+                    osc.stop(now + 0.4);
+                } else if (type === 'boss_warn') {
+                    // Siren alert
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(100, now);
+                    osc.frequency.linearRampToValueAtTime(160, now + 0.25);
+                    osc.frequency.linearRampToValueAtTime(100, now + 0.5);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.linearRampToValueAtTime(0.001, now + 0.5);
+                    osc.start(now);
+                    osc.stop(now + 0.5);
+                }
+            } catch (e) {}
+        }
+
+        // Procedural synth bass & ticking beat
+        function startSynthBGM() {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                
+                stopSynthBGM();
+
+                let stepTime = 135; // ms (corresponding to ~110 BPM)
+                let step = 0;
+                // Cyberpunk bass progression: Am -> F -> G -> Em
+                let baseNotes = [
+                    55, 55, 55, 55, 55, 55, 55, 55,       // A1
+                    43.65, 43.65, 43.65, 43.65, 43.65, 43.65, 43.65, 43.65, // F1
+                    49.0, 49.0, 49.0, 49.0, 49.0, 49.0, 49.0, 49.0,       // G1
+                    41.2, 41.2, 41.2, 41.2, 41.2, 41.2, 82.4, 82.4        // E1/E2
+                ];
+
+                synthBgmInterval = setInterval(() => {
+                    if (!isRunning || waveState === 'clear') return;
+                    if (isMuted) return;
+
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    const now = audioCtx.currentTime;
+
+                    // Bassline note
+                    const freq = baseNotes[step % baseNotes.length];
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(freq, now);
+                    
+                    // Lowpass filter effect using exponential frequency decay
+                    osc.frequency.exponentialRampToValueAtTime(freq * 1.5, now + 0.1);
+
+                    gain.gain.setValueAtTime(0.04, now);
+                    gain.gain.linearRampToValueAtTime(0.001, now + 0.12);
+
+                    osc.start(now);
+                    osc.stop(now + 0.12);
+
+                    // Procedural high-hat tick on off-beats
+                    if (step % 2 === 1) {
+                        const tickOsc = audioCtx.createOscillator();
+                        const tickGain = audioCtx.createGain();
+                        tickOsc.connect(tickGain);
+                        tickGain.connect(audioCtx.destination);
+                        
+                        tickOsc.type = 'triangle';
+                        tickOsc.frequency.setValueAtTime(8000, now);
+                        tickGain.gain.setValueAtTime(0.008, now);
+                        tickGain.gain.linearRampToValueAtTime(0.001, now + 0.02);
+                        
+                        tickOsc.start(now);
+                        tickOsc.stop(now + 0.02);
+                    }
+
+                    step++;
+                }, stepTime);
+
+            } catch (e) {}
+        }
+
+        function stopSynthBGM() {
+            if (synthBgmInterval) {
+                clearInterval(synthBgmInterval);
+                synthBgmInterval = null;
+            }
+        }
+
+        function toggleMute() {
+            isMuted = !isMuted;
+            document.getElementById('btn-audio-toggle').innerText = isMuted ? 'UNMUTE' : 'MUTE';
+            document.getElementById('btn-audio-toggle').style.borderColor = isMuted ? 'var(--color-danger)' : '#334155';
+            if (isMuted) stopSynthBGM();
+            else if (isRunning) startSynthBGM();
+        }
+
+        // --- 2. Upgrades and Inventory Shop ---
+        function renderShopItems() {
+            const container = document.querySelector('.shop-grid');
+            container.innerHTML = '';
+
+            for (const key in shopUpgrades) {
+                const item = shopUpgrades[key];
+                const card = document.createElement('div');
+                card.className = 'shop-card';
+                if (item.lvl >= item.max) card.classList.add('max-out');
+
+                const levelLabel = item.lvl >= item.max ? 'MAX' : `LV: ${item.lvl}/${item.max}`;
+                const costText = item.lvl >= item.max ? '売り切れ' : `${item.cost} SHARDS`;
+
+                card.innerHTML = `
+                    <span class="shop-icon">${item.icon}</span>
+                    <div class="shop-info">
+                        <span class="shop-name">${item.title}</span>
+                        <span class="shop-desc">${item.desc}</span>
+                        <span class="shop-cost">${costText}</span>
+                    </div>
+                    <span class="shop-lvl">${levelLabel}</span>
+                `;
+
+                if (item.lvl < item.max) {
+                    card.onclick = () => purchaseUpgrade(key);
+                }
+                container.appendChild(card);
+            }
+        }
+
+        function purchaseUpgrade(key) {
+            const item = shopUpgrades[key];
+            if (shards >= item.cost && item.lvl < item.max) {
+                shards -= item.cost;
+                item.lvl++;
+                
+                // Trigger actual stat updates
+                if (key === 'shield') {
+                    maxShields++;
+                    shields = maxShields; // heal fully
+                    updateHUD();
+                } else if (key === 'gcd') {
+                    document.getElementById('gcd-weapon-btn').classList.remove('locked');
+                }
+
+                playSound('hit');
+                document.getElementById('shop-shards-val').innerText = shards;
+                renderShopItems();
+            } else {
+                playSound('bounce');
+            }
+        }
+
+        // --- 3. Main Gameplay logic loop ---
+        function initAndStartGame() {
+            isRunning = true;
+            score = 0;
+            shards = 0;
+            wave = 1;
+            maxShields = 3;
+            shields = 3;
+            
+            // Clear inventory
+            for (const key in shopUpgrades) {
+                shopUpgrades[key].lvl = 0;
+            }
+
+            document.getElementById('hud-score').innerText = '0';
+            document.getElementById('hud-shards').innerText = '0';
+            document.getElementById('hud-wave').innerText = '1';
+            document.getElementById('gcd-weapon-btn').classList.add('locked');
+
+            // Hide overlays
+            document.getElementById('overlay-start').style.display = 'none';
+            document.getElementById('overlay-shop').style.display = 'none';
+            document.getElementById('overlay-over').style.display = 'none';
+
+            selectWeapon('1/2');
+            initStars();
+            updateHUD();
+
+            startSynthBGM();
+            initWave();
+
+            if (gameLoopId) cancelAnimationFrame(gameLoopId);
+            gameLoopId = requestAnimationFrame(updateLoop);
+        }
+
+        function selectWeapon(ammo) {
+            activeWeapon = ammo;
+            document.querySelectorAll('.ammo-btn').forEach(btn => {
+                if (btn.getAttribute('data-ammo') === ammo) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+        }
+
+        function initStars() {
+            backgroundStars = [];
+            for (let i = 0; i < 40; i++) {
+                backgroundStars.push({
+                    x: Math.random() * 624,
+                    y: Math.random() * 640,
+                    size: 1 + Math.random() * 2,
+                    speed: 0.2 + Math.random() * 0.8
+                });
+            }
+        }
+
+        function updateHUD() {
+            document.getElementById('hud-score').innerText = score;
+            document.getElementById('hud-shards').innerText = shards;
+            document.getElementById('hud-wave').innerText = wave;
+            
+            let shieldStr = '';
+            for (let i = 0; i < maxShields; i++) {
+                if (i < shields) shieldStr += '❤';
+                else shieldStr += '♡';
+            }
+            document.getElementById('hud-shields').innerText = shieldStr;
+        }
+
+        function initWave() {
+            waveState = 'combat';
+            bossSpawned = false;
+            
+            if (wave === 5) {
+                // Wave 5 Boss Spawn count
+                waveSpawnCount = 1; // Boss!
+            } else {
+                waveSpawnCount = 6 + wave * 3;
+            }
+
+            lastSpawnTime = Date.now();
+            spawnDelay = Math.max(900, 2500 - wave * 300);
+            meteors = [];
+        }
+
+        function spawnMeteor() {
+            if (waveState !== 'combat') return;
+
+            // Wave 5 Boss: PRIME SINGULARITY
+            if (wave === 5 && !bossSpawned) {
+                bossSpawned = true;
+                playSound('boss_warn');
+                meteors.push({
+                    x: 312,
+                    y: -80,
+                    val: 5040, // Highly composite number (2^4 * 3^2 * 5 * 7)
+                    radius: 70,
+                    speed: 0.1 * (1 - shopUpgrades.slow.lvl * 0.2),
+                    color: '#991b1b',
+                    isBoss: true,
+                    maxVal: 5040
+                });
+                return;
+            }
+
+            if (wave === 5) {
+                // Boss spawns minion composite numbers
+                if (Math.random() < 0.3) {
+                    const minionVal = [4, 6, 8, 10, 12][Math.floor(Math.random() * 5)];
+                    meteors.push({
+                        x: 60 + Math.random() * 504,
+                        y: -30,
+                        val: minionVal,
+                        radius: 20 + minionVal * 0.6,
+                        speed: 0.55 * (1 - shopUpgrades.slow.lvl * 0.2),
+                        color: '#475569',
+                        isMinion: true
+                    });
+                }
+                return;
+            }
+
+            // Normal wave spawning
+            // Increases difficulty by choosing higher composite pools per wave
+            const pools = [
+                [4, 6, 8, 9, 10], // wave 1
+                [6, 8, 9, 10, 12, 15, 18], // wave 2
+                [12, 15, 18, 20, 24, 30], // wave 3
+                [18, 20, 24, 30, 36, 40, 45, 50] // wave 4
+            ];
+            const currentPool = pools[Math.min(pools.length - 1, wave - 1)];
+            const val = currentPool[Math.floor(Math.random() * currentPool.length)];
+
+            meteors.push({
+                x: 60 + Math.random() * 504,
+                y: -35,
+                val: val,
+                radius: 20 + val * 0.8,
+                speed: (0.35 + wave * 0.05 + Math.random() * 0.15) * (1 - shopUpgrades.slow.lvl * 0.2),
+                color: '#1e293b'
+            });
+
+            waveSpawnCount--;
+        }
+
+        function shootLaser(tx, ty) {
+            // Apply Autoloader fire cooldown
+            const cooldownMod = 1 - shopUpgrades.cannon.lvl * 0.2;
+            const now = Date.now();
+            if (typeof lastShootTime !== 'undefined' && now - lastShootTime < 150 * cooldownMod) {
+                return; // rate limited
+            }
+            lastShootTime = now;
+
+            playSound('laser');
+
+            // Draw laser line
+            const laserColor = activeWeapon === '1/2' ? '#38bdf8' : (activeWeapon === '1/3' ? '#f59e0b' : '#ec4899');
+            lasers.push({
+                sx: 312, sy: 620, tx: tx, ty: ty,
+                color: laserColor, life: 1.0
+            });
+
+            // Check collision with meteors
+            let hitIdx = -1;
+            for (let i = 0; i < meteors.length; i++) {
+                const m = meteors[i];
+                const d = Math.hypot(m.x - tx, m.y - ty);
+                if (d <= m.radius + 20) {
+                    hitIdx = i;
+                    break;
+                }
+            }
+
+            if (hitIdx > -1) {
+                processHit(hitIdx, tx, ty);
+            }
+        }
+
+        function processHit(idx, tx, ty) {
+            const m = meteors[idx];
+            
+            let factor = 1;
+            if (activeWeapon === '1/2') factor = 2;
+            if (activeWeapon === '1/3') factor = 3;
+            if (activeWeapon === '1/5') factor = 5;
+
+            if (m.val % factor === 0) {
+                // SUCCESS HIT!
+                m.val = m.val / factor;
+                score += 100;
+                shards += 1; // Gain shards!
+                updateHUD();
+
+                createParticles(m.x, m.y, 8, '#10b981');
+
+                if (m.val <= 1) {
+                    playSound('explosion');
+                    score += m.isBoss ? 2000 : 300;
+                    shards += m.isBoss ? 50 : 3; // Large bonus
+                    updateHUD();
+
+                    createParticles(m.x, m.y, m.isBoss ? 60 : 25, m.isBoss ? '#ef4444' : '#f59e0b');
+                    meteors.splice(idx, 1);
+
+                    if (m.isBoss) {
+                        triggerVictory();
+                    }
+                } else {
+                    playSound('hit');
+                    // Shrink sizing
+                    m.radius = m.isBoss ? 45 + m.val * 0.015 : 20 + m.val * 0.8;
+                }
+            } else {
+                // Laser bounced (failure!)
+                playSound('bounce');
+                createParticles(tx, ty, 8, '#ef4444');
+                m.speed *= 1.4;
+                m.color = '#ef4444';
+                
+                // Shake canvas container viewport
+                const v = document.getElementById('screen-viewport');
+                v.classList.remove('shake-screen');
+                void v.offsetWidth;
+                v.classList.add('shake-screen');
+            }
+        }
+
+        // Auxiliary weapon GCD Blast
+        function fireGCDBlast() {
+            if (shopUpgrades.gcd.lvl === 0) return; // Locked
+            if (gcdCooldown > 0) return; // Cooldown active
+
+            playSound('gcd');
+            gcdCooldown = gcdMaxCooldown;
+            
+            let factor = 1;
+            if (activeWeapon === '1/2') factor = 2;
+            if (activeWeapon === '1/3') factor = 3;
+            if (activeWeapon === '1/5') factor = 5;
+
+            // Trigger flash lines across canvas
+            lasers.push({ sx: 0, sy: 320, tx: 624, ty: 320, color: '#818cf8', life: 2.0 });
+            lasers.push({ sx: 312, sy: 0, tx: 312, ty: 640, color: '#818cf8', life: 2.0 });
+
+            // Apply GCD division to ALL meteors on screen!
+            for (let i = meteors.length - 1; i >= 0; i--) {
+                const m = meteors[i];
+                if (m.val % factor === 0) {
+                    m.val = m.val / factor;
+                    score += 150;
+                    shards += 1;
+                    createParticles(m.x, m.y, 10, '#818cf8');
+
+                    if (m.val <= 1) {
+                        createParticles(m.x, m.y, 25, '#f59e0b');
+                        meteors.splice(i, 1);
+                        score += 300;
+                    } else {
+                        m.radius = m.isBoss ? 45 + m.val * 0.015 : 20 + m.val * 0.8;
+                    }
+                } else {
+                    // Miss penalty not applied for GCD blast to encourage dynamic use!
+                    createParticles(m.x, m.y, 4, '#cbd5e1');
+                }
+            }
+
+            updateHUD();
+        }
+
+        function createParticles(x, y, count, color) {
+            for (let i = 0; i < count; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = 2.0 + Math.random() * 5.0;
+                particles.push({
+                    x: x, y: y,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    color: color,
+                    life: 1.0,
+                    decay: 0.015 + Math.random() * 0.025
+                });
+            }
+        }
+
+        function getPrimeFactors(n) {
+            const factors = [];
+            let d = 2;
+            let val = n;
+            while (val > 1) {
+                while (val % d === 0) {
+                    factors.push(d);
+                    val /= d;
+                }
+                d++;
+                if (d * d > val) {
+                    if (val > 1) factors.push(val);
+                    break;
+                }
+            }
+            return factors;
+        }
+
+        // Wave completion & Shipyard Shop transition
+        function checkWaveComplete() {
+            if (waveState === 'combat' && waveSpawnCount <= 0 && meteors.length === 0) {
+                waveState = 'clear';
+                
+                if (wave === 5) {
+                    // Fully won the campaign!
+                    triggerVictory();
+                    return;
+                }
+
+                // Show shipyard store
+                setTimeout(() => {
+                    document.getElementById('shop-shards-val').innerText = shards;
+                    renderShopItems();
+                    document.getElementById('overlay-shop').style.display = 'flex';
+                }, 1000);
+            }
+        }
+
+        function advanceNextWave() {
+            document.getElementById('overlay-shop').style.display = 'none';
+            wave++;
+            initWave();
+            updateHUD();
+        }
+
+        // --- 4. Main Animation Frame loops ---
+        function updateLoop() {
+            if (!isRunning) return;
+
+            // Clear
+            ctx.fillStyle = '#020617';
+            ctx.fillRect(0, 0, 624, 640);
+
+            // Draw Parallax grid background
+            ctx.strokeStyle = '#0f172a';
+            ctx.lineWidth = 1;
+            const gridSz = 40;
+            const gridScroll = (Date.now() / 15) % gridSz;
+            for (let x = 0; x < 624; x += gridSz) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, 640);
+                ctx.stroke();
+            }
+            for (let y = gridScroll; y < 640; y += gridSz) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(624, y);
+                ctx.stroke();
+            }
+
+            // Draw Stars
+            ctx.fillStyle = 'rgba(56, 189, 248, 0.4)';
+            backgroundStars.forEach(star => {
+                star.y += star.speed;
+                if (star.y > 640) {
+                    star.y = -5;
+                    star.x = Math.random() * 624;
+                }
+                ctx.fillRect(star.x, star.y, star.size, star.size);
+            });
+
+            // GCD Cooldown bar progress HUD
+            if (gcdCooldown > 0) {
+                gcdCooldown = Math.max(0, gcdCooldown - 16.7); // Roughly 60fps frame delta
+                const fillPct = (1 - gcdCooldown / gcdMaxCooldown) * 100;
+                document.getElementById('gcd-cooldown-fill').style.width = `${fillPct}%`;
+            } else {
+                document.getElementById('gcd-cooldown-fill').style.width = '100%';
+            }
+
+            // Spawner
+            const now = Date.now();
+            if (waveState === 'combat' && waveSpawnCount > 0 && now - lastSpawnTime > spawnDelay) {
+                spawnMeteor();
+                lastSpawnTime = now;
+            }
+
+            checkWaveComplete();
+
+            // Draw Boss HP bar if Boss active
+            if (wave === 5) {
+                const boss = meteors.find(m => m.isBoss);
+                if (boss) {
+                    ctx.fillStyle = '#1e293b';
+                    ctx.fillRect(162, 20, 300, 10);
+                    ctx.fillStyle = '#ef4444';
+                    const hpPct = Math.log(boss.val) / Math.log(boss.maxVal); // Log scale makes it feel epic
+                    ctx.fillRect(162, 20, 300 * Math.max(0, hpPct), 10);
+                    ctx.font = 'bold 9px "Share Tech Mono", monospace';
+                    ctx.fillStyle = '#ffffff';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(`ボス素因数縮小率: ${(hpPct*100).toFixed(0)}%`, 312, 17);
+                }
+            }
+
+            // Update & Draw Meteors
+            for (let i = meteors.length - 1; i >= 0; i--) {
+                const m = meteors[i];
+                m.y += m.speed;
+
+                // Boss hover coordinates behavior
+                if (m.isBoss && m.y > 100) {
+                    m.y = 100;
+                }
+
+                // Meteor main shadow glow
+                ctx.shadowBlur = m.isBoss ? 20 : 10;
+                ctx.shadowColor = m.color === '#ef4444' ? 'rgba(239, 68, 68, 0.5)' : 'rgba(245, 158, 11, 0.3)';
+
+                ctx.beginPath();
+                ctx.arc(m.x, m.y, m.radius, 0, Math.PI * 2);
+                ctx.fillStyle = m.isBoss ? '#7f1d1d' : (m.color === '#ef4444' ? '#991b1b' : '#0f172a');
+                ctx.fill();
+                ctx.lineWidth = m.isBoss ? 4 : 2;
+                ctx.strokeStyle = m.isBoss ? '#ef4444' : (m.color === '#ef4444' ? '#ef4444' : '#f59e0b');
+                ctx.stroke();
+
+                ctx.shadowBlur = 0; // reset
+
+                // Draw main integer
+                ctx.font = m.isBoss ? 'bold 28px "Orbitron", sans-serif' : 'bold 16px "Orbitron", sans-serif';
+                ctx.fillStyle = '#f8fafc';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(m.val, m.x, m.y);
+
+                // Inventory upgrade Scanner overlay
+                if (shopUpgrades.scanner.lvl > 0) {
+                    const factors = getPrimeFactors(m.val);
+                    ctx.font = '10px "Share Tech Mono", monospace';
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.fillText(`FACTORS: [${factors.join(',')}]`, m.x, m.y + m.radius + 15);
+                }
+
+                // Check out of bounds at bottom edge
+                if (m.y - m.radius > 640) {
+                    meteors.splice(i, 1);
+                    shields--;
+                    updateHUD();
+                    playSound('bounce');
+                    if (shields <= 0) {
+                        triggerGameOver();
+                    }
+                }
+            }
+
+            // Draw Lasers
+            for (let i = lasers.length - 1; i >= 0; i--) {
+                const l = lasers[i];
+                ctx.beginPath();
+                ctx.moveTo(l.sx, l.sy);
+                ctx.lineTo(l.tx, l.ty);
+                ctx.strokeStyle = l.color;
+                ctx.lineWidth = 4 * l.life;
+                ctx.stroke();
+
+                l.life -= 0.12;
+                if (l.life <= 0) {
+                    lasers.splice(i, 1);
+                }
+            }
+
+            // Draw Particles
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.life -= p.decay;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 3 * p.life, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = p.life;
+                ctx.fill();
+                ctx.globalAlpha = 1.0;
+
+                if (p.life <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+
+            // Draw Core Cannon Tower base
+            ctx.fillStyle = '#1e293b';
+            ctx.beginPath();
+            ctx.arc(312, 640, 36, Math.PI, 0);
+            ctx.fill();
+            ctx.strokeStyle = '#f59e0b';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // Draw nozzle pointing towards cursor
+            ctx.save();
+            ctx.translate(312, 630);
+            ctx.fillStyle = '#475569';
+            ctx.fillRect(-8, -25, 16, 25);
+            ctx.restore();
+
+            gameLoopId = requestAnimationFrame(updateLoop);
+        }
+
+        function triggerGameOver() {
+            isRunning = false;
+            stopSynthBGM();
+            cancelAnimationFrame(gameLoopId);
+
+            if (score > highscore) {
+                highscore = score;
+                localStorage.setItem('otona_ultimate_high', highscore);
+                document.getElementById('hud-high').innerText = highscore;
+            }
+
+            document.getElementById('over-title').innerText = "MISSION FAILED";
+            document.getElementById('over-desc').innerHTML = `
+                地球防衛軍シールドが突破され、人類は滅亡しました。
+                <br>到達Wave: ${wave}
+                <br>最終スコア: <span style="font-size:24px; color:var(--color-accent); font-weight:bold;">${score.toLocaleString()} 点</span>
+                <br>ハイスコア: ${highscore.toLocaleString()} 点
+            `;
+            document.getElementById('overlay-over').style.display = 'flex';
+        }
+
+        function triggerVictory() {
+            isRunning = false;
+            stopSynthBGM();
+            cancelAnimationFrame(gameLoopId);
+
+            if (score > highscore) {
+                highscore = score;
+                localStorage.setItem('otona_ultimate_high', highscore);
+                document.getElementById('hud-high').innerText = highscore;
+            }
+
+            document.getElementById('over-title').innerText = "MISSION ACCOMPLISHED!";
+            document.getElementById('over-title').style.color = 'var(--color-success)';
+            document.getElementById('over-desc').innerHTML = `
+                おめでとうございます！ 最終約分ボス「5040」の完全分解に成功しました！
+                宇宙の秩序と分数の調和は保たれました。
+                <br>最終スコア: <span style="font-size:24px; color:var(--color-success); font-weight:bold;">${score.toLocaleString()} 点</span>
+                <br>ハイスコア: ${highscore.toLocaleString()} 点
+            `;
+            document.getElementById('overlay-over').style.display = 'flex';
+        }
+    </script>
+</body>
+</html>

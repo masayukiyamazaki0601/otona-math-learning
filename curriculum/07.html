@@ -3,9 +3,358 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>四則演算の基本法則（加法・減法） | Otona Math</title>
+    <title>四則演算 of basic laws（加法・減法） | Otona Math</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        /* Premium Dashboard Widgets styling */
+        .premium-widget {
+            background-color: var(--color-surface);
+            border: 2px solid var(--color-paper-line);
+            border-radius: var(--radius-card);
+            padding: 35px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px -10px rgba(28, 43, 57, 0.05), 0 1px 3px rgba(28, 43, 57, 0.02);
+            transition: all 0.3s ease;
+        }
+
+        .premium-widget:hover {
+            border-color: var(--color-brass);
+            box-shadow: 0 15px 35px -10px rgba(28, 43, 57, 0.08);
+        }
+        
+        .widget-title {
+            font-family: var(--font-heading);
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--color-ink);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--color-brass);
+            padding-bottom: 8px;
+            display: inline-block;
+        }
+
+        /* Visual Law Explorer Styles */
+        .law-container {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            width: 100%;
+        }
+
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background-color: var(--color-paper);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.02);
+        }
+
+        .slider-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .slider-label {
+            font-family: var(--font-mono);
+            font-size: 15px;
+            font-weight: bold;
+            min-width: 60px;
+        }
+
+        .slider-input {
+            flex-grow: 1;
+            accent-color: var(--color-brass);
+        }
+
+        .slider-val-display {
+            font-family: var(--font-mono);
+            font-size: 18px;
+            font-weight: 700;
+            min-width: 30px;
+            text-align: right;
+        }
+
+        .visual-display-box {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 20px;
+            border: 1px dashed var(--color-paper-line);
+            border-radius: 6px;
+        }
+
+        .law-visual-row {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .law-visual-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--color-ink-soft);
+        }
+
+        .block-bar {
+            display: flex;
+            height: 35px;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid var(--color-paper-line);
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .block-segment {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            font-size: 14px;
+            transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .segment-a {
+            background-color: hsl(210, 80%, 45%); /* Elegant Blue */
+        }
+
+        .segment-b {
+            background-color: hsl(30, 80%, 45%);  /* Elegant Orange */
+        }
+
+        .segment-c {
+            background-color: hsl(5, 75%, 45%);   /* Elegant Red */
+        }
+
+        .law-equation-text {
+            font-family: var(--font-mono);
+            font-size: 18px;
+            text-align: center;
+            padding: 12px;
+            background-color: var(--color-paper);
+            border-radius: 4px;
+            font-weight: bold;
+            border: 1px solid var(--color-paper-line);
+        }
+
+        /* Inverse Operation Simulator Styles */
+        .inverse-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+            width: 100%;
+        }
+
+        .interactive-calculator {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background-color: var(--color-paper);
+            padding: 24px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.02);
+        }
+
+        .calc-number {
+            font-family: var(--font-mono);
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--color-ink);
+            padding: 10px 16px;
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 4px;
+            min-width: 80px;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .calc-number.active-add {
+            border-color: hsl(210, 80%, 45%);
+            background-color: rgba(13, 110, 253, 0.03);
+            box-shadow: 0 0 12px rgba(13, 110, 253, 0.15);
+        }
+
+        .calc-number.active-sub {
+            border-color: var(--color-red);
+            background-color: rgba(180, 67, 47, 0.03);
+            box-shadow: 0 0 12px rgba(180, 67, 47, 0.15);
+        }
+
+        .calc-operator {
+            font-family: var(--font-mono);
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+
+        .calc-btn-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .calc-action-btn {
+            padding: 12px 24px;
+            font-size: 15px;
+            font-weight: 500;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .calc-action-btn:disabled {
+            background-color: var(--color-paper-line) !important;
+            color: var(--color-ink-soft) !important;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+            opacity: 0.6;
+        }
+
+        .btn-add {
+            background-color: hsl(210, 80%, 45%);
+        }
+
+        .btn-add:hover:not(:disabled) {
+            background-color: hsl(210, 80%, 35%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(13, 110, 253, 0.25);
+        }
+
+        .btn-sub {
+            background-color: var(--color-red);
+        }
+
+        .btn-sub:hover:not(:disabled) {
+            background-color: hsl(5, 75%, 35%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(180, 67, 47, 0.25);
+        }
+
+        .btn-reset {
+            background-color: var(--color-ink-soft);
+        }
+
+        .btn-reset:hover {
+            background-color: var(--color-ink);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(28, 43, 57, 0.15);
+        }
+
+        .inverse-explanation {
+            font-size: 15px;
+            line-height: 1.6;
+            text-align: center;
+            background-color: var(--color-surface);
+            padding: 18px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            width: 100%;
+            display: none;
+            animation: fadeIn 0.4s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+
+        /* Quiz Widget Styles */
+        .quiz-card {
+            background-color: var(--color-paper);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 6px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-question {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--color-ink);
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .quiz-option {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--color-brass);
+            background-color: rgba(169, 120, 47, 0.05);
+        }
+
+        .quiz-option.correct {
+            border-color: #2e7d32;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            font-weight: 500;
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--color-red);
+            background-color: #ffebee;
+            color: var(--color-red);
+        }
+
+        .quiz-feedback {
+            margin-top: 15px;
+            font-size: 14px;
+            line-height: 1.6;
+            padding: 12px;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .quiz-feedback.success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid #2e7d32;
+        }
+
+        .quiz-feedback.error {
+            background-color: #ffebee;
+            color: var(--color-red);
+            border-left: 4px solid var(--color-red);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
 </head>
 <body>
     <header class="header">
@@ -34,94 +383,186 @@
             </header>
 
             <div class="lesson-flow">
+                
+                <!-- Step 1: Addition Definition -->
                 <div class="lesson-step">
                     <span class="lesson-step-meta">Step 01</span>
-                    <h4>加法（足し算）の意味</h4>
-                    <p>足し算（加法）は、2つの数量を「合わせる」操作です。もっとも基本的な演算であり、すべての計算の土台になります。</p>
-                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 16px 0;">
-                        <p><strong>加法の基本</strong></p>
-                        <p style="text-align: center; font-size: 22px; margin: 12px 0;">$a + b = c$</p>
-                        <ul style="list-style: disc; padding-left: 24px; font-size: 17px;">
-                            <li>$a$ に $b$ を「加える」と $c$ になる</li>
-                            <li>例: $3 + 5 = 8$（3個のりんごに5個のりんごを加えると、全部で8個）</li>
-                        </ul>
-                    </div>
-                    <p>足し算には、次の3つの重要な性質があります。</p>
-                    <div style="background-color: var(--color-surface); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 16px 0;">
-                        <p><strong>加法の3つの性質</strong></p>
-                        <ol style="padding-left: 24px; font-size: 17px; line-height: 2;">
-                            <li><strong>交換法則</strong>: $a + b = b + a$（順番を変えても答えは同じ）</li>
-                            <li><strong>結合法則</strong>: $(a + b) + c = a + (b + c)$（どこから足しても答えは同じ）</li>
-                            <li><strong>単位元の存在</strong>: $a + 0 = 0 + a = a$（0を足しても変わらない）</li>
+                    <h4>加法（足し算）の本質的意味と計算法則</h4>
+                    <p>足し算（加法）とは、複数の数量を「一つに合わせる（合併・追加）」操作です。数直線上では<b>「右方向に進む」</b>動作に対応します。</p>
+                    <p>足し算をビジネスや日常生活で無意識に処理する際、私たちは以下の3つの重要な数理法則を使っています。これらを意識的に応用することで、暗算が劇的に効率化されます。</p>
+
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 20px 0;">
+                        <ol style="padding-left: 20px; font-size: 16px; line-height: 1.8; display: flex; flex-direction: column; gap: 10px;">
+                            <li><b>交換法則（Commutative Law）</b>: $a + b = b + a$<br><span style="font-size: 14px; color: var(--color-ink-soft);">足す順番を入れ替えても、合計値は変化しません。例: $7 + 9$ が難しければ $9 + 7$ としても答えは同じ $16$ です。</span></li>
+                            <li><b>結合法則（Associative Law）</b>: $(a + b) + c = a + (b + c)$<br><span style="font-size: 14px; color: var(--color-ink-soft);">3つ以上の数を足す際、どこからグループにして足しても結果は同じです。例: $48 + 37 + 13$ を計算する際、先に後ろの $37 + 13 = 50$ を計算すると $48 + 50 = 98$ と暗算が容易になります。</span></li>
+                            <li><b>単位元の存在（Additive Identity）</b>: $a + 0 = a$<br><span style="font-size: 14px; color: var(--color-ink-soft);">「0」という数は、足し算において相手の数を変えない唯一の存在（単位元）です。</span></li>
                         </ol>
                     </div>
+
+                    <!-- ADDITION LAW VISUALIZER (Interactive, Premium) -->
+                    <div class="premium-widget">
+                        <span class="widget-title">加法法則の視覚分析 (Visual Analysis of Addition Laws)</span>
+                        <p style="font-size: 14px; margin-bottom: 20px; color: var(--color-ink-soft);">
+                            スライダーで A, B, C の値を変更し、足し算の順番を入れ替えても全体の長さ（合計値）が変わらないことを視覚的に確認しましょう。
+                        </p>
+                        
+                        <div class="law-container">
+                            <div class="slider-group">
+                                <div class="slider-row">
+                                    <span class="slider-label" style="color: hsl(210, 80%, 45%);">数値 A</span>
+                                    <input type="range" class="slider-input" id="slider-a" min="1" max="15" value="5" oninput="updateLawVisual()">
+                                    <span class="slider-val-display" id="disp-a">5</span>
+                                </div>
+                                <div class="slider-row">
+                                    <span class="slider-label" style="color: hsl(30, 80%, 45%);">数値 B</span>
+                                    <input type="range" class="slider-input" id="slider-b" min="1" max="15" value="8" oninput="updateLawVisual()">
+                                    <span class="slider-val-display" id="disp-b">8</span>
+                                </div>
+                                <div class="slider-row">
+                                    <span class="slider-label" style="color: hsl(5, 75%, 45%);">数値 C</span>
+                                    <input type="range" class="slider-input" id="slider-c" min="1" max="15" value="3" oninput="updateLawVisual()">
+                                    <span class="slider-val-display" id="disp-c">3</span>
+                                </div>
+                            </div>
+
+                            <div class="visual-display-box">
+                                <!-- Commutative Law Visual -->
+                                <div class="law-visual-row">
+                                    <span class="law-visual-label">① 交換法則の視覚化 ($A + B$ vs $B + A$)</span>
+                                    <div class="block-bar" id="bar-commutative-1">
+                                        <!-- Rendered via JS -->
+                                    </div>
+                                    <div class="block-bar" id="bar-commutative-2">
+                                        <!-- Rendered via JS -->
+                                    </div>
+                                    <div class="law-equation-text" id="eq-commutative">
+                                        5 + 8 = 8 + 5 = 13
+                                    </div>
+                                </div>
+
+                                <hr style="border: none; border-top: 1px solid var(--color-paper-line); margin: 10px 0;">
+
+                                <!-- Associative Law Visual -->
+                                <div class="law-visual-row">
+                                    <span class="law-visual-label">② 結合法則の視覚化 ( $(A + B) + C$ vs $A + (B + C)$ )</span>
+                                    <div class="block-bar" id="bar-associative-1">
+                                        <!-- Rendered via JS -->
+                                    </div>
+                                    <div class="block-bar" id="bar-associative-2">
+                                        <!-- Rendered via JS -->
+                                    </div>
+                                    <div class="law-equation-text" id="eq-associative">
+                                        (5 + 8) + 3 = 5 + (8 + 3) = 16
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
+                <!-- Step 2: Subtraction Definition -->
                 <div class="lesson-step">
                     <span class="lesson-step-meta">Step 02</span>
-                    <h4>減法（引き算）の意味</h4>
-                    <p>引き算（減法）は、数量から一部を「取り除く」操作です。足し算の逆の操作と考えることができます。</p>
-                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 16px 0;">
-                        <p><strong>減法の基本</strong></p>
-                        <p style="text-align: center; font-size: 22px; margin: 12px 0;">$a - b = c$</p>
-                        <ul style="list-style: disc; padding-left: 24px; font-size: 17px;">
-                            <li>$a$ から $b$ を「取り去る」と $c$ になる</li>
-                            <li>例: $8 - 5 = 3$（8個のりんごから5個を取り除くと、3個残る）</li>
-                        </ul>
-                    </div>
-                    <div style="background-color: var(--color-surface); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 16px 0;">
-                        <p><strong>引き算の注意点</strong></p>
-                        <ul style="list-style: disc; padding-left: 24px; font-size: 17px;">
-                            <li>交換法則は <strong>成り立たない</strong>: $a - b \neq b - a$（ただし $a = b$ の場合を除く）</li>
-                            <li>$a - b = c$ のとき、$c + b = a$ が成り立つ（足し算で検算できる）</li>
+                    <h4>減法（引き算）の本質と注意点</h4>
+                    <p>引き算（減法）とは、ある全体量から一部を「取り去る（求残）」、または2つの数量の「差を比べる（求差）」操作です。数直線上では<b>「左方向に進む」</b>動作に対応します。</p>
+                    
+                    <p>引き算を扱う際、最も重要かつ注意すべきルールは、<b>「交換法則や結合法則が成り立たない」</b>という点です。</p>
+                    
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 20px 0;">
+                        <ul style="list-style: disc; padding-left: 20px; font-size: 16px; display: flex; flex-direction: column; gap: 8px;">
+                            <li><b>交換法則は不成立</b>: $a - b \neq b - a$<br>例: $10 - 3 = 7$ ですが、$3 - 10$ は $7$ にはなりません（のちの単元で学ぶ「負の数」になります）。順番を絶対に入れ替えてはいけません。</li>
+                            <li><b>結合法則は不成立</b>: $(a - b) - c \neq a - (b - c)$<br>例: $(10 - 5) - 2 = 3$ ですが、$10 - (5 - 2) = 7$ となり、計算結果が全く異なります。</li>
                         </ul>
                     </div>
                 </div>
 
+                <!-- Step 3: Inverse Relationship -->
                 <div class="lesson-step">
                     <span class="lesson-step-meta">Step 03</span>
-                    <h4>加法と減法の関係</h4>
-                    <p>足し算と引き算は、互いに逆の関係にあります。この関係を理解すると、計算の検算や暗算がぐっと楽になります。</p>
-                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 16px 0;">
-                        <p><strong>加法と減法の相互関係</strong></p>
-                        <ul style="list-style: disc; padding-left: 24px; font-size: 17px;">
-                            <li>$a + b = c$ ならば $c - b = a$ かつ $c - a = b$</li>
-                            <li>$a - b = c$ ならば $c + b = a$</li>
-                        </ul>
+                    <h4>加法と減法の「相互逆演算」の関係</h4>
+                    <p>足し算と引き算は、表裏一体の関係にあります。数学的には<b>「互いに逆の操作（逆演算）」</b>と呼びます。</p>
+                    <p>ある数に何かを足した後、同じ数を引くと元の数に戻ります。この関係こそが、計算の「検算（正しさの確認）」において最も強力な武器となります。特に実務の簿記や売上データの突き合わせ業務では、この関係を利用して入力ミスやシステムエラーを検出します。</p>
+                    <p style="text-align: center; font-size: 18px; font-weight: bold; margin: 20px 0;">
+                        $a + b = c \iff c - b = a$
+                    </p>
+
+                    <!-- INVERSE OPERATIONS SIMULATOR (Interactive, Premium) -->
+                    <div class="premium-widget">
+                        <span class="widget-title">加減の相互逆演算 (Additive Inverse Operations)</span>
+                        <p style="font-size: 14px; margin-bottom: 20px; color: var(--color-ink-soft);">
+                            初期値「25」に対して「17」を加える操作と、そこから「17」を引き算して元の値へ戻す操作を実行し、逆演算の関係を体験しましょう。
+                        </p>
+                        
+                        <div class="inverse-container">
+                            <div class="interactive-calculator">
+                                <div class="calc-number" id="calc-num-1">25</div>
+                                <div class="calc-operator" id="calc-op-1">+</div>
+                                <div class="calc-number" id="calc-num-2">17</div>
+                                <div class="calc-operator">=</div>
+                                <div class="calc-number" id="calc-result">25</div>
+                            </div>
+
+                            <div class="calc-btn-group">
+                                <button class="calc-action-btn btn-add" id="btn-calc-add" onclick="runCalcStep('add')">17 を足す</button>
+                                <button class="calc-action-btn btn-sub" id="btn-calc-sub" onclick="runCalcStep('sub')" disabled>17 を引く（逆演算）</button>
+                                <button class="calc-action-btn btn-reset" onclick="runCalcStep('reset')">リセット</button>
+                            </div>
+
+                            <div class="inverse-explanation" id="calc-explain">
+                                <!-- Filled via JS -->
+                            </div>
+                        </div>
                     </div>
-                    <p>たとえば $25 + 17 = 42$ が正しいかどうかは、$42 - 17 = 25$ で確認できます。買い物でお釣りを計算するときも、この関係を使っています。</p>
                 </div>
 
+                <!-- Step 4: Exercises & Self Assessment -->
                 <div class="lesson-step">
                     <span class="lesson-step-meta">Step 04</span>
-                    <h4>ビジネスでの活用例</h4>
-                    <p>足し算と引き算は、ビジネスのさまざまな場面で使われています。</p>
-                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 16px 0;">
-                        <p><strong>例：売上の計算</strong></p>
-                        <p>ある店舗の1日の取引:</p>
-                        <ul style="list-style: disc; padding-left: 24px; font-size: 17px;">
-                            <li>朝の売上: $45,000$円</li>
-                            <li>昼の売上: $62,000$円</li>
-                            <li>夜の売上: $38,000$円</li>
-                            <li><strong>合計</strong>: $45,000 + 62,000 + 38,000 = 145,000$円</li>
-                        </ul>
-                        <p style="margin-top: 8px;">経費 $98,000$円を差し引いた利益:</p>
-                        <ul style="list-style: disc; padding-left: 24px; font-size: 17px;">
-                            <li>$145,000 - 98,000 = 47,000$円</li>
-                        </ul>
+                    <h4>理解度チェッククイズ</h4>
+                    <p>加法と減法の法則について理解が深まったか、クイズで確認してみましょう。</p>
+
+                    <div class="quiz-card">
+                        <div class="quiz-question">Q1. 引き算（減法）において「交換法則」が成り立たないことを示す例（反例）として、最も適切なものはどれでしょうか？</div>
+                        <div class="quiz-options">
+                            <button class="quiz-option" onclick="checkAnswer(1, 'A', true)">
+                                <span>A. $8 - 3 = 5$ であるが、$3 - 8 \neq 5$ である。</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(1, 'B', false)">
+                                <span>B. $8 + 3 = 11$ であり、$3 + 8 = 11$ である。</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(1, 'C', false)">
+                                <span>C. $(8 - 3) - 1 \neq 8 - (3 - 1)$ である。</span>
+                            </button>
+                        </div>
+                        <div class="quiz-feedback" id="feedback-1"></div>
                     </div>
-                    <p>このように、加法と減法は「増減」を把握するための基本的な道具です。複雑なビジネス計算も、このシンプルな足し算と引き算の組み合わせでできています。</p>
+
+                    <div class="quiz-card">
+                        <div class="quiz-question">Q2. 結合法則 $(a + b) + c = a + (b + c)$ を応用して、「$57 + 89 + 11$」を最も簡単に暗算する場合の組み合わせはどれでしょうか？</div>
+                        <div class="quiz-options">
+                            <button class="quiz-option" onclick="checkAnswer(2, 'A', false)">
+                                <span>A. 先に $(57 + 89)$ を計算して、それに $11$ を足す。</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(2, 'B', true)">
+                                <span>B. 先に $(89 + 11)$ で $100$ を作り、それに $57$ を足す。</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(2, 'C', false)">
+                                <span>C. 先に $(57 + 11)$ を計算して、それに $89$ を足す。</span>
+                            </button>
+                        </div>
+                        <div class="quiz-feedback" id="feedback-2"></div>
+                    </div>
                 </div>
 
+                <!-- Step 5: Summary -->
                 <div class="lesson-step">
                     <span class="lesson-step-meta">Step 05</span>
-                    <h4>まとめ</h4>
-                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 15px; font-size: 14px; line-height: 1.7;">
-                        <ul style="margin: 0; padding-left: 20px;">
-                            <li>加法（足し算）は数量を「合わせる」操作。</li>
-                            <li>加法には交換法則・結合法則が成り立つ。</li>
-                            <li>減法（引き算）は数量から「取り去る」操作。</li>
-                            <li>加法と減法は互いに逆の関係にあり、検算に使える。</li>
+                    <h4>本単元のまとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 24px; font-size: 16px; line-height: 1.85;">
+                        <ul style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px;">
+                            <li><b>加法（足し算）の法則</b>: 「交換法則」と「結合法則」が成り立ちます。これにより、計算の順序を自由に変えて暗算しやすく工夫することができます。</li>
+                            <li><b>減法（引き算）の制約</b>: 交換法則・結合法則はどちらも成り立ちません。順序やカッコの位置を変えると、答えが変わってしまいます。</li>
+                            <li><b>逆演算の重要性</b>: 加法と減法は互いに打ち消し合う逆関係（逆演算）です。これにより、$a + b = c$ の検証を $c - b = a$ で行うことができます。</li>
                         </ul>
                     </div>
                 </div>
@@ -147,8 +588,165 @@
         </div>
     </footer>
 
+    <!-- KaTeX for Math Rendering -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+
+    <!-- Interactive Script -->
+    <script>
+        // --- 1. Visual Law Explorer Logics ---
+        function updateLawVisual() {
+            const a = parseInt(document.getElementById('slider-a').value) || 1;
+            const b = parseInt(document.getElementById('slider-b').value) || 1;
+            const c = parseInt(document.getElementById('slider-c').value) || 1;
+
+            // Update displays
+            document.getElementById('disp-a').innerText = a;
+            document.getElementById('disp-b').innerText = b;
+            document.getElementById('disp-c').innerText = c;
+
+            const totalAB = a + b;
+            const totalABC = a + b + c;
+
+            // ① Commutative Law visuals: A + B vs B + A
+            const commBar1 = document.getElementById('bar-commutative-1');
+            commBar1.innerHTML = `
+                <div class="block-segment segment-a" style="width: ${(a / totalAB) * 100}%">A (${a})</div>
+                <div class="block-segment segment-b" style="width: ${(b / totalAB) * 100}%">B (${b})</div>
+            `;
+
+            const commBar2 = document.getElementById('bar-commutative-2');
+            commBar2.innerHTML = `
+                <div class="block-segment segment-b" style="width: ${(b / totalAB) * 100}%">B (${b})</div>
+                <div class="block-segment segment-a" style="width: ${(a / totalAB) * 100}%">A (${a})</div>
+            `;
+
+            document.getElementById('eq-commutative').innerText = `${a} + ${b} = ${b} + ${a} = ${totalAB}`;
+
+            // ② Associative Law visuals: (A + B) + C vs A + (B + C)
+            const assocBar1 = document.getElementById('bar-associative-1');
+            assocBar1.innerHTML = `
+                <div class="block-segment segment-a" style="width: ${(a / totalABC) * 100}%; opacity: 0.85;">A (${a})</div>
+                <div class="block-segment segment-b" style="width: ${(b / totalABC) * 100}%; opacity: 0.85;">B (${b})</div>
+                <div class="block-segment segment-c" style="width: ${(c / totalABC) * 100}%">C (${c})</div>
+            `;
+
+            const assocBar2 = document.getElementById('bar-associative-2');
+            assocBar2.innerHTML = `
+                <div class="block-segment segment-a" style="width: ${(a / totalABC) * 100}%">A (${a})</div>
+                <div class="block-segment segment-b" style="width: ${(b / totalABC) * 100}%; opacity: 0.85;">B (${b})</div>
+                <div class="block-segment segment-c" style="width: ${(c / totalABC) * 100}%; opacity: 0.85;">C (${c})</div>
+            `;
+
+            document.getElementById('eq-associative').innerText = `(${a} + ${b}) + ${c} = ${a} + (${b} + ${c}) = ${totalABC}`;
+        }
+
+        // --- 2. Inverse Operation Simulator Logics ---
+        let currentCalcState = 'init';
+
+        function runCalcStep(action) {
+            const num1 = document.getElementById('calc-num-1');
+            const op1 = document.getElementById('calc-op-1');
+            const num2 = document.getElementById('calc-num-2');
+            const result = document.getElementById('calc-result');
+            const btnAdd = document.getElementById('btn-calc-add');
+            const btnSub = document.getElementById('btn-calc-sub');
+            const explain = document.getElementById('calc-explain');
+
+            if (action === 'add') {
+                currentCalcState = 'added';
+                num1.innerText = '25';
+                op1.innerText = '+';
+                num2.innerText = '17';
+                result.innerText = '42';
+                num1.className = "calc-number active-add";
+                num2.className = "calc-number active-add";
+                result.className = "calc-number active-add";
+
+                btnAdd.disabled = true;
+                btnSub.disabled = false;
+
+                explain.style.display = "block";
+                explain.innerHTML = `
+                    <span style="color: hsl(210, 80%, 45%); font-weight:bold;">足し算を実行しました。</span><br>
+                    初期値 <b>25</b> に <b>17</b> を合わせることで、結果は <b>42</b> に増えました。<br>
+                    $25 + 17 = 42$
+                `;
+            } else if (action === 'sub') {
+                currentCalcState = 'subbed';
+                num1.innerText = '42';
+                op1.innerText = '-';
+                num2.innerText = '17';
+                result.innerText = '25';
+                num1.className = "calc-number active-sub";
+                num2.className = "calc-number active-sub";
+                result.className = "calc-number active-sub";
+
+                btnAdd.disabled = true;
+                btnSub.disabled = true;
+
+                explain.style.display = "block";
+                explain.innerHTML = `
+                    <span style="color: var(--color-red); font-weight:bold;">逆演算（引き算）を実行しました。</span><br>
+                    加算結果の <b>42</b> から、足した数と同じ <b>17</b> を引く（差し引く）ことで、初期値の <b>25</b> に完全に戻りました！<br>
+                    $42 - 17 = 25$<br>
+                    <span style="font-size: 13px; color: var(--color-brass);">「+17」という操作は、「-17」という操作で完全に打ち消される（元に戻る）ことが視覚的に確認できます。</span>
+                `;
+            } else if (action === 'reset') {
+                currentCalcState = 'init';
+                num1.innerText = '25';
+                op1.innerText = '+';
+                num2.innerText = '17';
+                result.innerText = '25';
+                num1.className = "calc-number";
+                num2.className = "calc-number";
+                result.className = "calc-number";
+
+                btnAdd.disabled = false;
+                btnSub.disabled = true;
+                explain.style.display = "none";
+            }
+        }
+
+        // --- 3. Quiz Logics ---
+        function checkAnswer(qNum, option, isCorrect) {
+            const card = event.target.closest('.quiz-card');
+            const options = card.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById(`feedback-${qNum}`);
+
+            // Reset options
+            options.forEach(opt => {
+                opt.classList.remove('correct', 'incorrect');
+                opt.disabled = true;
+            });
+
+            // Mark chosen option
+            const clickedBtn = event.target.closest('.quiz-option');
+            if (isCorrect) {
+                clickedBtn.classList.add('correct');
+                feedback.className = "quiz-feedback success";
+                if (qNum === 1) {
+                    feedback.innerHTML = "<b>正解です！</b><br>引き算では順序を入れ替えると結果が変わる（交換法則が成り立たない）ため、一般に $a - b \\neq b - a$ となります。$8 - 3 = 5$ であるのに対し、$3 - 8 = -5$ となり、正負が反転してしまいます。";
+                } else {
+                    feedback.innerHTML = "<b>正解です！</b><br>結合法則 $(57 + 89) + 11 = 57 + (89 + 11)$ を用いて、先にキリの良い $100$ をつくる $(89 + 11 = 100)$ ことにより、暗算で $57 + 100 = 157$ を極めて簡単かつ高速に算出できます。";
+                }
+            } else {
+                clickedBtn.classList.add('incorrect');
+                feedback.className = "quiz-feedback error";
+                if (qNum === 1) {
+                    feedback.innerHTML = "<b>不正解です。</b><br>選択肢Bは足し算の交換法則の例であり、選択肢Cは引き算の結合法則が成り立たない例（結合法則の反例）です。交換法則の不成立を示すには選択肢Aが適切です。";
+                } else {
+                    feedback.innerHTML = "<b>不正解です。</b><br>足し算の順番を工夫して、10や100といった「キリの良い数字」を優先して作ることが暗算の最も代表的なテクニックです。";
+                }
+            }
+            feedback.style.display = "block";
+        }
+
+        // Initialize Page Widgets
+        window.addEventListener('DOMContentLoaded', () => {
+            updateLawVisual();
+        });
+    </script>
 </body>
 </html>

@@ -5,7 +5,258 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>偶数・奇数と倍数・約数の性質 | Otona Math</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        /* Premium Dashboard Widgets styling */
+        .premium-widget {
+            background-color: var(--color-surface);
+            border: 2px solid var(--color-paper-line);
+            border-radius: var(--radius-card);
+            padding: 35px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px -10px rgba(28, 43, 57, 0.05), 0 1px 3px rgba(28, 43, 57, 0.02);
+            transition: all 0.3s ease;
+        }
+
+        .premium-widget:hover {
+            border-color: var(--color-brass);
+            box-shadow: 0 15px 35px -10px rgba(28, 43, 57, 0.08);
+        }
+        
+        .widget-title {
+            font-family: var(--font-heading);
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--color-ink);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--color-brass);
+            padding-bottom: 8px;
+            display: inline-block;
+        }
+
+        /* Visual Proof Styles */
+        .proof-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            align-items: center;
+        }
+
+        .proof-display-card {
+            background-color: var(--color-paper);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 8px;
+            padding: 24px;
+            width: 100%;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .proof-svg {
+            border-radius: 6px;
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            max-width: 100%;
+        }
+
+        .proof-explanation-text {
+            font-size: 15px;
+            line-height: 1.6;
+            background-color: var(--color-surface);
+            padding: 16px 20px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            width: 100%;
+            min-height: 80px;
+        }
+
+        /* Divisibility Grid Game Styles */
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            align-items: center;
+        }
+
+        .game-challenge-banner {
+            background-color: var(--color-ink);
+            color: var(--color-paper);
+            padding: 16px 24px;
+            border-radius: 6px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(28,43,57,0.15);
+            letter-spacing: 0.03em;
+        }
+
+        .grid-numbers-wrapper {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            width: 100%;
+            max-width: 400px;
+            margin: 15px 0;
+        }
+
+        .grid-num-btn {
+            aspect-ratio: 1;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            background-color: var(--color-surface);
+            color: var(--color-ink);
+            font-size: 20px;
+            font-weight: bold;
+            font-family: var(--font-mono);
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .grid-num-btn:hover {
+            border-color: var(--color-brass);
+            background-color: rgba(169,120,47,0.02);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .grid-num-btn.selected {
+            background-color: var(--color-brass);
+            color: var(--color-paper);
+            border-color: var(--color-brass);
+            box-shadow: 0 4px 12px rgba(169,120,47,0.25);
+        }
+
+        .game-eval-btn {
+            background-color: #2e7d32;
+            color: white;
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(46, 125, 50, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .game-eval-btn:hover {
+            background-color: #1b5e20;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(46, 125, 50, 0.3);
+        }
+
+        .game-feedback-box {
+            width: 100%;
+            padding: 15px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            line-height: 1.6;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .game-feedback-box.success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid #2e7d32;
+        }
+
+        .game-feedback-box.error {
+            background-color: #ffebee;
+            color: var(--color-red);
+            border-left: 4px solid var(--color-red);
+        }
+
+        /* Quiz Widget Styles */
+        .quiz-card {
+            background-color: var(--color-paper);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 6px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-question {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--color-ink);
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .quiz-option {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--color-brass);
+            background-color: rgba(169, 120, 47, 0.05);
+        }
+
+        .quiz-option.correct {
+            border-color: #2e7d32;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            font-weight: 500;
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--color-red);
+            background-color: #ffebee;
+            color: var(--color-red);
+        }
+
+        .quiz-feedback {
+            margin-top: 15px;
+            font-size: 14px;
+            line-height: 1.6;
+            padding: 12px;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .quiz-feedback.success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid #2e7d32;
+        }
+
+        .quiz-feedback.error {
+            background-color: #ffebee;
+            color: var(--color-red);
+            border-left: 4px solid var(--color-red);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
 </head>
 <body>
     <header class="header">
@@ -34,112 +285,175 @@
             </header>
 
             <div class="lesson-flow">
+                
+                <!-- Step 1: Evens and Odds -->
                 <div class="lesson-step">
                     <span class="lesson-step-meta">Step 01</span>
-                    <h4>偶数と奇数</h4>
-                    <p>整数を $2$ で割ったとき、余りが出るかどうかで、<strong>偶数</strong>と<strong>奇数</strong>に分類できます。</p>
-                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 16px 0;">
-                        <p><strong>偶数と奇数の定義</strong></p>
-                        <ul style="list-style: disc; padding-left: 24px; font-size: 17px;">
-                            <li><strong>偶数</strong>: $2$ で割り切れる整数。例: $\dots, -4, -2, 0, 2, 4, 6, \dots$</li>
-                            <li><strong>奇数</strong>: $2$ で割ると $1$ 余る整数。例: $\dots, -3, -1, 1, 3, 5, \dots$</li>
+                    <h4>偶数と奇数：代数的定義と演算の規則</h4>
+                    <p>整数は $2$ で割り切れるか（余りが $0$ か $1$ か）によって、例外なく<b>偶数（Even Number）</b>と<b>奇数（Odd Number）</b>のいずれか一方に分類されます。</p>
+                    <p>数学的な代数表記では、整数 $k$ を用いて以下のように定義されます。</p>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 20px 0;">
+                        <ul style="list-style: none; padding-left: 0; font-size: 16px; display: flex; flex-direction: column; gap: 8px;">
+                            <li><b>偶数の定義</b>: $2k$ （$2$ の倍数となる整数。$0$ や負の偶数 $\dots, -4, -2, 0, 2, 4, \dots$ も含む）</li>
+                            <li><b>奇数の定義</b>: $2k + 1$ （$2$ で割ると $1$ 余る整数。$\dots, -3, -1, 1, 3, 5, \dots$）</li>
                         </ul>
                     </div>
-                    <div style="background-color: var(--color-surface); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 16px 0;">
-                        <p><strong>偶数と奇数の計算の性質</strong></p>
-                        <table style="width: 100%; border-collapse: collapse; font-size: 16px; margin-top: 8px;">
-                            <tr>
-                                <th style="padding: 6px 12px; border-bottom: 2px solid var(--color-ink);">計算</th>
-                                <th style="padding: 6px 12px; border-bottom: 2px solid var(--color-ink);">結果</th>
-                                <th style="padding: 6px 12px; border-bottom: 2px solid var(--color-ink);">例</th>
-                            </tr>
-                            <tr>
-                                <td style="padding: 6px 12px; border-bottom: 1px solid var(--color-paper-line);">偶数 + 偶数</td>
-                                <td style="padding: 6px 12px; border-bottom: 1px solid var(--color-paper-line);">偶数</td>
-                                <td style="padding: 6px 12px; border-bottom: 1px solid var(--color-paper-line);">$2 + 4 = 6$</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 6px 12px; border-bottom: 1px solid var(--color-paper-line);">奇数 + 奇数</td>
-                                <td style="padding: 6px 12px; border-bottom: 1px solid var(--color-paper-line);">偶数</td>
-                                <td style="padding: 6px 12px; border-bottom: 1px solid var(--color-paper-line);">$3 + 5 = 8$</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 6px 12px; border-bottom: 1px solid var(--color-paper-line);">偶数 + 奇数</td>
-                                <td style="padding: 6px 12px; border-bottom: 1px solid var(--color-paper-line);">奇数</td>
-                                <td style="padding: 6px 12px; border-bottom: 1px solid var(--color-paper-line);">$2 + 3 = 5$</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 6px 12px;">偶数 $\times$ 偶数</td>
-                                <td style="padding: 6px 12px;">偶数</td>
-                                <td style="padding: 6px 12px;">$2 \times 4 = 8$</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 6px 12px; border-bottom: 1px solid var(--color-paper-line);">奇数 $\times$ 奇数</td>
-                                <td style="padding: 6px 12px; border-bottom: 1px solid var(--color-paper-line);">奇数</td>
-                                <td style="padding: 6px 12px; border-bottom: 1px solid var(--color-paper-line);">$3 \times 5 = 15$</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 6px 12px;">偶数 $\times$ 奇数</td>
-                                <td style="padding: 6px 12px;">偶数</td>
-                                <td style="padding: 6px 12px;">$2 \times 3 = 6$</td>
-                            </tr>
-                        </table>
+
+                    <p>偶数と奇数を足したり掛けたりしたときの法則は、この定義から数式で綺麗に証明することができます。</p>
+                    <p>例えば、<b>「奇数 + 奇数 ＝ 偶数」</b>になる理由は、2つの奇数を $2m+1$ と $2n+1$ （$m, n$ は整数）と置いたとき：</p>
+                    <p style="text-align: center; font-size: 18px; font-weight: bold; margin: 15px 0;">
+                        (2m + 1) + (2n + 1) = 2m + 2n + 2 = 2(m + n + 1)
+                    </p>
+                    <p>括弧の中の $(m+n+1)$ は整数ですから、$2 \times (\text{整数})$ の形になり、これは偶数の定義そのものです。したがって、どのような奇数同士を足しても必ず偶数になります。実務での検算やロジックチェックでも、こうした偶奇の性質を知っておくと「計算結果の整合性」を瞬時に検証できます。</p>
+
+                    <!-- VISUAL ODD/EVEN PROOF WIDGET (Interactive, Premium) -->
+                    <div class="premium-widget">
+                        <span class="widget-title">奇数と偶数の演算性質の視覚的証明 (Visual Proof of Odd/Even Arithmetic)</span>
+                        <p style="font-size: 14px; margin-bottom: 20px; color: var(--color-ink-soft);">
+                            数式の種類を切り替えて、2つのペア（2つのブロック結合）の余り（端数）がどのように結びつき、偶数または奇数を形成するか視覚的に確認しましょう。
+                        </p>
+                        
+                        <div class="proof-container">
+                            <div class="eq-selector-group">
+                                <button class="eq-btn active" id="proof-btn-0" onclick="selectProofType(0)">奇数 ＋ 奇数 ＝ 偶数</button>
+                                <button class="eq-btn" id="proof-btn-1" onclick="selectProofType(1)">偶数 ＋ 奇数 ＝ 奇数</button>
+                                <button class="eq-btn" id="proof-btn-2" onclick="selectProofType(2)">奇数 × 奇数 ＝ 奇数</button>
+                            </div>
+
+                            <div class="proof-display-card">
+                                <svg class="proof-svg" id="proof-svg" width="460" height="150" viewBox="0 0 460 150">
+                                    <!-- Rendered via JS -->
+                                </svg>
+                                
+                                <div class="proof-explanation-text" id="proof-explanation">
+                                    <!-- Rendered via JS -->
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <p>この性質を覚えておくと、複雑な計算の答えが偶数か奇数かを事前に見抜くことができます。</p>
                 </div>
 
+                <!-- Step 2: Multiples and Divisibility Rules -->
                 <div class="lesson-step">
                     <span class="lesson-step-meta">Step 02</span>
-                    <h4>倍数の考え方</h4>
-                    <p>ある整数を $1$ 倍、$2$ 倍、$3$ 倍、$\dots$ としていった数のことを、その整数の<strong>倍数</strong>といいます。</p>
-                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 16px 0;">
-                        <p><strong>倍数の例</strong></p>
-                        <ul style="list-style: disc; padding-left: 24px; font-size: 17px;">
-                            <li>$3$ の倍数: $3, 6, 9, 12, 15, \dots$</li>
-                            <li>$5$ の倍数: $5, 10, 15, 20, 25, \dots$</li>
+                    <h4>倍数の本質と、実務で使える「倍数判定法」</h4>
+                    <p>ある整数を $1$ 倍、$2$ 倍、$3$ 倍、$\dots$ と掛け算していった数の集まりを、その数の<b>倍数（Multiple）</b>といいます。倍数は無限に存在します。</p>
+                    <p>実務のデータ分析や暗算において、「この巨大な数値はある数で割り切れるか？」を瞬時に判断できる<b>倍数判定法（Divisibility Rules）</b>は非常に便利です。</p>
+
+                    <div style="background-color: var(--color-surface); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 20px 0;">
+                        <ul style="list-style: none; padding-left: 0; display: flex; flex-direction: column; gap: 15px;">
+                            <li><b>3の倍数判定</b>：<b>「すべての桁の数字を足した合計が3の倍数」</b>であれば、元の数も3の倍数です。
+                            <br><span style="font-size: 14px; color: var(--color-ink-soft);">例: $57,132$ &rarr; $5+7+1+3+2 = 18$。$18$ は3の倍数なので、 $57,132$ は3で割り切れます。</span></li>
+                            
+                            <li><b>4の倍数判定</b>：<b>「下2桁の数字が4の倍数（または 00）」</b>であれば、元の数も4の倍数です。
+                            <br><span style="font-size: 14px; color: var(--color-ink-soft);">例: $1,924$ &rarr; 下2桁の $24$ は4の倍数なので、全体も4で割り切れます。</span></li>
+                            
+                            <li><b>5の倍数判定</b>：<b>「一の位が 0 または 5」</b>であれば、5の倍数です。</li>
                         </ul>
                     </div>
-                    <p>倍数には「数が無限に続く」という特徴があります。倍数の考え方は、分数の通分や周期の計算など、さまざまな場面で必要になります。</p>
+
+                    <!-- Divisibility Grid Puzzle -->
+                    <div class="premium-widget">
+                        <span class="widget-title">数理パズル：グリッド・ファクターハンター (Factor Hunter)</span>
+                        <p style="font-size: 14px; margin-bottom: 20px; color: var(--color-ink-soft);">
+                            ステージを選択し、表示された12個 of 数字の中から、条件に合致するターゲット数値を<b>すべて</b>クリックして選択し、判定ボタンを押してください。
+                        </p>
+                        
+                        <div class="game-container">
+                            <div class="eq-selector-group">
+                                <button class="eq-btn active" id="game-btn-0" onclick="selectGameStage(0)">ステージ 1: 3の倍数をすべて狩れ</button>
+                                <button class="eq-btn" id="game-btn-1" onclick="selectGameStage(1)">ステージ 2: 42の約数をすべて狩れ</button>
+                            </div>
+
+                            <div class="game-challenge-banner" id="game-challenge-desc">
+                                ターゲット: 「3の倍数」
+                            </div>
+
+                            <div class="grid-numbers-wrapper" id="grid-numbers-wrapper">
+                                <!-- Rendered via JS -->
+                            </div>
+
+                            <button class="game-eval-btn" onclick="evaluateGameSelection()">選択を判定する</button>
+
+                            <div class="game-feedback-box" id="game-feedback">
+                                <!-- Success/Error Feedback -->
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
+                <!-- Step 3: Divisors -->
                 <div class="lesson-step">
                     <span class="lesson-step-meta">Step 03</span>
-                    <h4>約数の考え方</h4>
-                    <p>ある整数を「割り切れる」整数のことを、その整数の<strong>約数</strong>といいます。</p>
-                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 16px 0;">
-                        <p><strong>約数の例</strong></p>
-                        <ul style="list-style: disc; padding-left: 24px; font-size: 17px;">
-                            <li>$12$ の約数: $1, 2, 3, 4, 6, 12$</li>
-                            <li>$15$ の約数: $1, 3, 5, 15$</li>
+                    <h4>約数の見つけ方と倍数・約数の対比</h4>
+                    <p>ある整数を過不足なく「割り切れる」整数を、その整数の<b>約数（Divisor / Factor）</b>といいます。倍数が無限に広がるのに対し、約数は必ず<b>有限個</b>になります。</p>
+                    <p>約数を漏れなく見つける最大のコツは、<b>「掛け合わせてその数になるペアで探す」</b>ことです。例えば $24$ の約数を探す場合：</p>
+                    <p style="text-align: center; font-size: 16px; font-family: var(--font-mono); font-weight: bold; margin: 15px 0;">
+                        1 × 24 = 24 &nbsp;|&nbsp; 2 × 12 = 24 &nbsp;|&nbsp; 3 × 8 = 24 &nbsp;|&nbsp; 4 × 6 = 24
+                    </p>
+                    <p>このようにペアで書き出していくと、境界となる真ん中（$4$ と $6$ の間）で探索が完了し、約数が $[1, 2, 3, 4, 6, 8, 12, 24]$ の8個であることが漏れなく判明します。</p>
+
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 20px 0;">
+                        <p style="font-weight: bold; margin-bottom: 8px;">【倍数と約数は表裏一体】</p>
+                        <p>$a \div b = c$ （割り切れる）とき、</p>
+                        <ul style="list-style: disc; padding-left: 20px; font-size: 15px; display: flex; flex-direction: column; gap: 6px;">
+                            <li>$b$（および商の $c$）は $a$ の<b>約数</b>である</li>
+                            <li>$a$ は $b$（および $c$）の<b>倍数</b>である</li>
                         </ul>
                     </div>
-                    <p>約数には「数が有限である」という特徴がありますまた、$1$ と元の数自体はかならず約数になります。</p>
+                    <p>ビジネスでも「一定周期（倍数）で発生する業務の重なりを調べる」「限られた予算やリソース（約数）を均等配分する」など、この関係性の直感的な理解がロジカルシンキングを支えます。</p>
                 </div>
 
+                <!-- Step 4: Exercises -->
                 <div class="lesson-step">
                     <span class="lesson-step-meta">Step 04</span>
-                    <h4>倍数と約数の関係</h4>
-                    <p>倍数と約数は、視点を変えただけの同じ関係です。</p>
-                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 16px 0;">
-                        <p><strong>倍数と約数の関係</strong></p>
-                        <p style="margin-bottom: 8px;">$12 \div 3 = 4$ が成り立つとき:</p>
-                        <ul style="list-style: disc; padding-left: 24px; font-size: 17px;">
-                            <li>$3$ は $12$ の<strong>約数</strong>（$12$ を割り切る数）</li>
-                            <li>$12$ は $3$ の<strong>倍数</strong>（$3$ を何倍かした数）</li>
-                        </ul>
+                    <h4>理解度チェッククイズ</h4>
+                    <p>偶数・奇数と倍数・約数の法則について、クイズで確認してみましょう。</p>
+
+                    <!-- Question 1 -->
+                    <div class="quiz-card">
+                        <div class="quiz-question">Q1. 「奇数と奇数を掛け算すると、答えは必ず奇数になる」という性質を代数的に証明する数式展開として、最も適切なものはどれでしょうか？（$m, n$ は整数とします）</div>
+                        <div class="quiz-options">
+                            <button class="quiz-option" onclick="checkAnswer(1, 'A', false)">
+                                <span>A. $2m \times 2n = 4mn = 2(2mn)$</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(1, 'B', true)">
+                                <span>B. $(2m + 1)(2n + 1) = 4mn + 2m + 2n + 1 = 2(2mn + m + n) + 1$</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(1, 'C', false)">
+                                <span>C. $(2m + 1) + (2n + 1) = 2m + 2n + 2 = 2(m + n + 1)$</span>
+                            </button>
+                        </div>
+                        <div class="quiz-feedback" id="feedback-1"></div>
                     </div>
-                    <p>ビジネスでも「予算を均等に割り振る」「一定周期で棚卸しをする」など、倍数と約数の考え方は頻繁に登場します。</p>
+
+                    <!-- Question 2 -->
+                    <div class="quiz-card">
+                        <div class="quiz-question">Q2. 数値「57,132」が「3で割り切れる（3の倍数である）」か判定する方法として、最も効率的な説明はどれでしょうか？</div>
+                        <div class="quiz-options">
+                            <button class="quiz-option" onclick="checkAnswer(2, 'A', false)">
+                                <span>A. 一の位の数字が 2 であり偶数なので、3では割り切れないと判断する。</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(2, 'B', true)">
+                                <span>B. 各桁の合計値 $5+7+1+3+2 = 18$ を計算し、18が3の倍数であるため割り切れると判断する。</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(2, 'C', false)">
+                                <span>C. 実際に $57,132 \div 3$ を筆算で割り算して、余りが出ないことを確認する。</span>
+                            </button>
+                        </div>
+                        <div class="quiz-feedback" id="feedback-2"></div>
+                    </div>
                 </div>
 
+                <!-- Step 5: Summary -->
                 <div class="lesson-step">
                     <span class="lesson-step-meta">Step 05</span>
-                    <h4>まとめ</h4>
-                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 15px; font-size: 14px; line-height: 1.7;">
-                        <ul style="margin: 0; padding-left: 20px;">
-                            <li>偶数は $2$ で割り切れる数、奇数は $2$ で割ると $1$ 余る数。</li>
-                            <li>倍数は「その数の何倍か」で、無限に続く。</li>
-                            <li>約数は「その数を割り切れる数」で、有限個しかない。</li>
-                            <li>「$A$ が $B$ の約数」であれば「$B$ が $A$ の倍数」という関係にある。</li>
+                    <h4>本単元のまとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 24px; font-size: 16px; line-height: 1.85;">
+                        <ul style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px;">
+                            <li><b>偶奇の分類</b>: 整数は $2k$ (偶数) か $2k+1$ (奇数) に分かれます。「奇＋奇＝偶」「奇×奇＝奇」といった規則は代数的に証明可能です。</li>
+                            <li><b>倍数の判定</b>: 3の倍数（各位の和が3の倍数）や4の倍数（下2桁が4の倍数）といった判定ルールを知っておくと、暗算力が飛躍的に高まります。</li>
+                            <li><b>約数の抽出</b>: 約数は掛け合わせてその数になる「ペア」で探索することで、漏れなくすべてを抽出することができます。</li>
                         </ul>
                     </div>
                 </div>
@@ -165,8 +479,306 @@
         </div>
     </footer>
 
+    <!-- KaTeX for Math Rendering -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+
+    <!-- Interactive Script -->
+    <script>
+        // --- 1. Visual Odd/Even Proof Logics ---
+        const proofStages = [
+            {
+                type: 'odd_plus_odd',
+                explain: '<b>奇数 (5) ＋ 奇数 (3) ＝ 偶数 (8) の証明</b><br>奇数は「2人ずつのペアを作ると、1つだけ余り（端数）が出る」という特徴があります。奇数と奇数を足し算すると、それぞれの余り者であった<b>1個のブロック同士が結合し、新しく「2個のペア」を形成する</b>ため、余りブロックがなくなり全体が偶数（8）になります。'
+            },
+            {
+                type: 'even_plus_odd',
+                explain: '<b>偶数 (6) ＋ 奇数 (3) ＝ 奇数 (9) の証明</b><br>偶数はすべてのブロックが「2つずつのペア」で綺麗に構成されていますが、奇数は「1個の余りブロック」を抱えています。これらを足し算すると、偶数側の綺麗なペアの集まりに、奇数側の1個の余りブロックがそのまま残るため、全体の合計は必ず奇数（9）になります。'
+            },
+            {
+                type: 'odd_mul_odd',
+                explain: '<b>奇数 (5) × 奇数 (3) ＝ 奇数 (15) の証明</b><br>奇数（5）個のグループを奇数（3）回掛け合わせます。代数的には $(2m+1)(2n+1) = 2(2mn+m+n)+1$ となり、縦横のグリッド（5×3）を並べたときにも、最後の右下隅に<b>1個のブロックが必ずペアを作れずに飛び出る</b>形状となり、全体としてはやはり奇数（15）になります。'
+            }
+        ];
+
+        function selectProofType(index) {
+            document.querySelectorAll('[id^="proof-btn-"]').forEach((btn, idx) => {
+                if (idx === index) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+
+            document.getElementById('proof-explanation').innerHTML = proofStages[index].explain;
+            drawProofSVG(proofStages[index].type);
+        }
+
+        function drawProofSVG(type) {
+            const svg = document.getElementById('proof-svg');
+            svg.innerHTML = ''; // Clear SVG
+
+            const boxW = 20;
+            const boxH = 20;
+            const gap = 2;
+            const blueColor = 'hsl(210, 80%, 45%)';
+            const orangeColor = 'hsl(30, 80%, 45%)';
+            const redColor = 'var(--color-red)';
+            const grayColor = 'var(--color-paper-line)';
+
+            if (type === 'odd_plus_odd') {
+                // Draw 5 (Odd 1): 2 columns of 2, plus 1 leftover
+                // Draw pairs
+                drawBox(svg, 20, 20, blueColor); drawBox(svg, 20, 42, blueColor);
+                drawBox(svg, 42, 20, blueColor); drawBox(svg, 42, 42, blueColor);
+                // Draw leftover
+                drawBox(svg, 20, 64, redColor);
+
+                // Draw Operator Text "+"
+                drawText(svg, 95, 45, '+', '28px', 'var(--color-ink)');
+
+                // Draw 3 (Odd 2): 1 column of 2, plus 1 leftover
+                drawBox(svg, 130, 20, orangeColor); drawBox(svg, 130, 42, orangeColor);
+                // Draw leftover
+                drawBox(svg, 130, 64, redColor);
+
+                // Draw Arrow Text "=" or "→"
+                drawText(svg, 185, 45, '→', '28px', 'var(--color-ink)');
+
+                // Draw Result 8 (Even): pairs combine
+                // Blue pairs
+                drawBox(svg, 230, 20, blueColor); drawBox(svg, 230, 42, blueColor);
+                drawBox(svg, 252, 20, blueColor); drawBox(svg, 252, 42, blueColor);
+                // Orange pairs
+                drawBox(svg, 274, 20, orangeColor); drawBox(svg, 274, 42, orangeColor);
+                // Combined leftover pairs (red)
+                drawBox(svg, 296, 20, redColor); drawBox(svg, 296, 42, redColor);
+
+                // Draw labels
+                drawText(svg, 40, 110, '奇数 (5)', '13px', 'var(--color-ink-soft)');
+                drawText(svg, 140, 110, '奇数 (3)', '13px', 'var(--color-ink-soft)');
+                drawText(svg, 280, 110, '偶数 (8)', '13px', 'var(--color-ink)');
+                drawText(svg, 296, 75, '端数がペアを結成', '11px', redColor);
+
+            } else if (type === 'even_plus_odd') {
+                // Draw 6 (Even): 3 columns of 2, perfectly paired
+                drawBox(svg, 20, 20, blueColor); drawBox(svg, 20, 42, blueColor);
+                drawBox(svg, 42, 20, blueColor); drawBox(svg, 42, 42, blueColor);
+                drawBox(svg, 64, 20, blueColor); drawBox(svg, 64, 42, blueColor);
+
+                // Draw operator "+"
+                drawText(svg, 105, 45, '+', '28px', 'var(--color-ink)');
+
+                // Draw 3 (Odd): 1 column of 2, plus 1 leftover
+                drawBox(svg, 140, 20, orangeColor); drawBox(svg, 140, 42, orangeColor);
+                drawBox(svg, 140, 64, redColor); // leftover
+
+                // Draw arrow "→"
+                drawText(svg, 195, 45, '→', '28px', 'var(--color-ink)');
+
+                // Draw Result 9 (Odd): 4 pairs, 1 leftover
+                drawBox(svg, 240, 20, blueColor); drawBox(svg, 240, 42, blueColor);
+                drawBox(svg, 262, 20, blueColor); drawBox(svg, 262, 42, blueColor);
+                drawBox(svg, 284, 20, blueColor); drawBox(svg, 284, 42, blueColor);
+                // Orange pairs
+                drawBox(svg, 306, 20, orangeColor); drawBox(svg, 306, 42, orangeColor);
+                // Single red leftover still remains
+                drawBox(svg, 328, 20, redColor);
+
+                // Draw labels
+                drawText(svg, 50, 110, '偶数 (6)', '13px', 'var(--color-ink-soft)');
+                drawText(svg, 150, 110, '奇数 (3)', '13px', 'var(--color-ink-soft)');
+                drawText(svg, 290, 110, '奇数 (9)', '13px', 'var(--color-ink)');
+                drawText(svg, 328, 75, '端数が残る', '11px', redColor);
+
+            } else if (type === 'odd_mul_odd') {
+                // Show 5 × 3 grid representation
+                // A grid of 5 columns, 3 rows.
+                // 5 = 2m + 1 (m=2, two pairs + 1 leftover column)
+                // 3 = 2n + 1 (n=1, one pair + 1 leftover row)
+                const startX = 140;
+                const startY = 15;
+
+                for (let r = 0; r < 3; r++) {
+                    for (let c = 0; c < 5; c++) {
+                        const x = startX + c * 24;
+                        const y = startY + r * 24;
+                        let color = blueColor;
+                        
+                        // Let's color-code based on algebraic components:
+                        // (2m + 1) * (2n + 1) = 4mn (blue) + 2m (orange) + 2n (orange) + 1 (red)
+                        // In 5x3: 
+                        // First 4 cols, first 2 rows -> 4x2 = 8 blocks (perfect pairs - Blue)
+                        // 5th col, first 2 rows -> 1x2 = 2 blocks (orange)
+                        // First 4 cols, 3rd row -> 4x1 = 4 blocks (orange)
+                        // 5th col, 3rd row -> 1x1 = 1 block (leftover - Red)
+                        if (c < 4 && r < 2) {
+                            color = blueColor;
+                        } else if (c === 4 && r === 2) {
+                            color = redColor; // The ultimate leftover!
+                        } else {
+                            color = orangeColor;
+                        }
+                        
+                        drawBox(svg, x, y, color);
+                    }
+                }
+
+                // Draw grid indicators
+                // Width = 5 (2 + 2 + 1)
+                drawText(svg, startX + 50, 110, '横の長さ: 奇数 (5)', '13px', 'var(--color-ink-soft)');
+                // Height = 3 (2 + 1)
+                drawText(svg, startX - 60, 45, '縦: 3', '13px', 'var(--color-ink-soft)');
+                
+                // Draw final explanation label
+                drawText(svg, startX + 160, 50, '奇数 × 奇数 ＝ 15', '14px', 'var(--color-ink)');
+                drawText(svg, startX + 160, 75, '右下に1個の端数が残る', '11px', redColor);
+            }
+        }
+
+        function drawBox(svg, x, y, color) {
+            const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            rect.setAttribute("x", x);
+            rect.setAttribute("y", y);
+            rect.setAttribute("width", "20");
+            rect.setAttribute("height", "20");
+            rect.setAttribute("fill", color);
+            rect.setAttribute("rx", "3");
+            svg.appendChild(rect);
+        }
+
+        function drawText(svg, x, y, text, size, color) {
+            const el = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            el.setAttribute("x", x);
+            el.setAttribute("y", y);
+            el.setAttribute("font-size", size);
+            el.setAttribute("fill", color);
+            el.setAttribute("font-family", "var(--font-heading)");
+            el.setAttribute("font-weight", "bold");
+            el.setAttribute("text-anchor", "middle");
+            el.textContent = text;
+            svg.appendChild(el);
+        }
+
+        // --- 2. Divisibility Grid Game Logics ---
+        const gameStages = [
+            {
+                targetDesc: 'ターゲット: 「3の倍数」',
+                numbers: [12, 14, 17, 18, 22, 25, 27, 31, 33, 35, 41, 45],
+                evalFunc: (n) => (n % 3 === 0),
+                feedbackSuccess: '<b>パーフェクト！大正解です。</b><br>選択した $[12, 18, 27, 33, 45]$ はすべて各位の和が3の倍数（あるいは実際に3で割り切れる数）です。正しい倍数判定ができています。',
+                feedbackError: '<b>惜しいです、または誤りがあります。</b><br>「3の倍数」をすべて選べているか、あるいは関係のない数を選んでいないか、各位の数の和を計算し直して確認してください。'
+            },
+            {
+                targetDesc: 'ターゲット: 「42の約数」',
+                numbers: [1, 2, 3, 4, 6, 8, 12, 14, 18, 21, 30, 42],
+                evalFunc: (n) => (42 % n === 0),
+                feedbackSuccess: '<b>パーフェクト！大正解です。</b><br>選択した $[1, 2, 3, 6, 14, 21, 42]$ は、すべて 42 を過不足なく割り切ることができる「約数」です。',
+                feedbackError: '<b>選択に誤りがあります。</b><br>42を割り切れない数（例: 4, 8, 12など）が混ざっていないか、あるいは見落としがないか確認してください。'
+            }
+        ];
+
+        let selectedStageIndex = 0;
+        let selectedNumbers = [];
+
+        function selectGameStage(index) {
+            selectedStageIndex = index;
+            selectedNumbers = [];
+            
+            document.querySelectorAll('[id^="game-btn-"]').forEach((btn, idx) => {
+                if (idx === index) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+
+            document.getElementById('game-challenge-desc').innerText = gameStages[index].targetDesc;
+            document.getElementById('game-feedback').style.display = 'none';
+
+            const grid = document.getElementById('grid-numbers-wrapper');
+            grid.innerHTML = '';
+            gameStages[index].numbers.forEach((num, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'grid-num-btn';
+                btn.id = `grid-num-${idx}`;
+                btn.innerText = num;
+                btn.onclick = () => toggleGridNumber(num, idx);
+                grid.appendChild(btn);
+            });
+        }
+
+        function toggleGridNumber(num, idx) {
+            const btn = document.getElementById(`grid-num-${idx}`);
+            const selectIdx = selectedNumbers.indexOf(num);
+            
+            if (selectIdx > -1) {
+                selectedNumbers.splice(selectIdx, 1);
+                btn.classList.remove('selected');
+            } else {
+                selectedNumbers.push(num);
+                btn.classList.add('selected');
+            }
+            document.getElementById('game-feedback').style.display = 'none';
+        }
+
+        function evaluateGameSelection() {
+            const feedback = document.getElementById('game-feedback');
+            const stage = gameStages[selectedStageIndex];
+
+            const correctNumbers = stage.numbers.filter(stage.evalFunc);
+            const hasError = selectedNumbers.some(n => !stage.evalFunc(n));
+            const foundAll = correctNumbers.every(n => selectedNumbers.includes(n));
+            const exactMatch = foundAll && (selectedNumbers.length === correctNumbers.length);
+
+            if (exactMatch) {
+                feedback.className = 'game-feedback-box success';
+                feedback.innerHTML = stage.feedbackSuccess;
+            } else {
+                feedback.className = 'game-feedback-box error';
+                feedback.innerHTML = stage.feedbackError;
+            }
+            feedback.style.display = 'block';
+
+            if (window.renderMathInElement) {
+                renderMathInElement(feedback, {
+                    delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]
+                });
+            }
+        }
+
+        // --- 3. Quiz Logics ---
+        function checkAnswer(qNum, option, isCorrect) {
+            const card = event.target.closest('.quiz-card');
+            const options = card.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById(`feedback-${qNum}`);
+
+            options.forEach(opt => {
+                opt.classList.remove('correct', 'incorrect');
+                opt.disabled = true;
+            });
+
+            const clickedBtn = event.target.closest('.quiz-option');
+            if (isCorrect) {
+                clickedBtn.classList.add('correct');
+                feedback.className = "quiz-feedback success";
+                if (qNum === 1) {
+                    feedback.innerHTML = "<b>正解です！</b><br>奇数は $2k+1$ （$k$ は整数）の形で表されます。異なる奇数同士を掛け合わせた $(2m+1)(2n+1)$ を展開すると、$4mn + 2m + 2n + 1 = 2(2mn + m + n) + 1$ となります。$(2mn + m + n)$ は整数なので、全体として $2 \\times (\\text{整数}) + 1$ の形（奇数）になることが論理的に証明されます。";
+                } else {
+                    feedback.innerHTML = "<b>正解です！</b><br>「各位の数字の合計が3の倍数ならば、元の数も3の倍数である」という判定法を用います。$5+7+1+3+2 = 18$ となり、18は3の倍数（$3 \\times 6$）であるため、実際に割る計算をせずとも $57,132$ が3の倍数であると一瞬で断定できます。";
+                }
+            } else {
+                clickedBtn.classList.add('incorrect');
+                feedback.className = "quiz-feedback error";
+                if (qNum === 1) {
+                    feedback.innerHTML = "<b>不正解です。</b><br>選択肢Aは偶数同士の掛け算の例、選択肢Cは奇数同士の「足し算」の証明例（足すと偶数になる証明）です。掛け算が奇数になることを証明する式は選択肢Bが正解です。";
+                } else {
+                    feedback.innerHTML = "<b>不正解です。</b><br>偶数だからといって3で割り切れないわけではありません（例: 6, 12など）。また、筆算をするのは最も時間がかかります。各位の合計を計算する選択肢Bが最もスマートで強力な手法です。";
+                }
+            }
+            feedback.style.display = "block";
+        }
+
+        // Initialize Page Widgets
+        window.addEventListener('DOMContentLoaded', () => {
+            selectProofType(0);
+            selectGameStage(0);
+        });
+    </script>
 </body>
 </html>

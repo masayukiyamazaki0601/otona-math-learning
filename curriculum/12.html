@@ -1,1 +1,807 @@
-<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>最大公約数と最小公倍数 | Otona Math</title><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="../css/style.css"></head><body><header class="header"><div class="header-inner container"><h1 class="logo"><a href="../index.html" style="color:inherit;">Otona Math</a></h1><nav class="nav"><ul><li><a href="index.html">カリキュラム</a></li><li><a href="../columns/index.html">コラム</a></li><li><a href="../reviews/index.html">参考書・ツール</a></li><li><a href="../schools/index.html">スクール比較</a></li></ul></nav></div></header><main class="container"><div class="lesson-breadcrumbs"><a href="../index.html">ホーム</a> > <a href="index.html">カリキュラム</a> > 第2章 小学校算数の再構築 > 単元12</div><article class="lesson-container"><header class="lesson-header"><span class="lesson-chapter-label">Chapter 02 / Unit 12</span><h2 class="lesson-title">最大公約数と最小公倍数</h2></header><div class="lesson-flow"><div class="lesson-step"><span class="lesson-step-meta">Step 01</span><h4>最大公約数とは</h4><p>2つ以上の整数に共通する約数（公約数）のうち、もっとも大きいものを<strong>最大公約数</strong>といいます。</p><div style="background-color:var(--color-paper);border:1px solid var(--color-paper-line);padding:20px;border-radius:6px;margin:16px 0;"><p><strong>例：12と18の最大公約数</strong></p><ul style="list-style:disc;padding-left:24px;font-size:17px;"><li>$12$ の約数: $1, 2, 3, 4, 6, 12$</li><li>$18$ の約数: $1, 2, 3, 6, 9, 18$</li><li>共通する約数（公約数）: $1, 2, 3, 6$</li><li>もっとも大きい共通の約数（最大公約数）: <strong style="color:var(--color-brass);">$6$</strong></li></ul></div><div style="background-color:var(--color-surface);border:1px solid var(--color-paper-line);padding:20px;border-radius:6px;margin:16px 0;"><p><strong>素因数分解を使った求め方</strong></p><p>$12 = 2^2 \times 3$、$18 = 2 \times 3^2$ と素因数分解し、共通する素因数のうち<strong>指数が小さい方</strong>をかけ合わせます。</p><p style="text-align:center;font-size:20px;margin:8px 0;">最大公約数 $= 2 \times 3 = 6$</p></div></div><div class="lesson-step"><span class="lesson-step-meta">Step 02</span><h4>最小公倍数とは</h4><p>2つ以上の整数に共通する倍数（公倍数）のうち、もっとも小さいものを<strong>最小公倍数</strong>といいます。</p><div style="background-color:var(--color-paper);border:1px solid var(--color-paper-line);padding:20px;border-radius:6px;margin:16px 0;"><p><strong>例：4と6の最小公倍数</strong></p><ul style="list-style:disc;padding-left:24px;font-size:17px;"><li>$4$ の倍数: $4, 8, \underline{12}, 16, 20, \dots$</li><li>$6$ の倍数: $6, \underline{12}, 18, 24, 30, \dots$</li><li>共通する倍数（公倍数）: $12, 24, 36, \dots$</li><li>もっとも小さい共通の倍数（最小公倍数）: <strong style="color:var(--color-brass);">$12$</strong></li></ul></div><div style="background-color:var(--color-surface);border:1px solid var(--color-paper-line);padding:20px;border-radius:6px;margin:16px 0;"><p><strong>素因数分解を使った求め方</strong></p><p>$4 = 2^2$、$6 = 2 \times 3$ と素因数分解し、すべての素因数のうち<strong>指数が大きい方</strong>をかけ合わせます。</p><p style="text-align:center;font-size:20px;margin:8px 0;">最小公倍数 $= 2^2 \times 3 = 12$</p></div></div><div class="lesson-step"><span class="lesson-step-meta">Step 03</span><h4>最大公約数と最小公倍数の関係</h4><p>2つの数 $A$ と $B$ について、次の関係が成り立ちます。</p><div style="background-color:var(--color-paper);border:1px solid var(--color-paper-line);padding:20px;border-radius:6px;margin:16px 0;"><p style="text-align:center;font-size:20px;">$A \times B = (最大公約数) \times (最小公倍数)$</p><p style="margin-top:8px;">例: $12 \times 18 = 216$、$6 \times 36 = 216$</p><p>$12$ と $18$ の最大公約数は $6$、最小公倍数は $36$ で、積が一致します。</p></div></div><div class="lesson-step"><span class="lesson-step-meta">Step 04</span><h4>ビジネスでの活用例</h4><div style="background-color:var(--color-paper);border:1px solid var(--color-paper-line);padding:20px;border-radius:6px;margin:16px 0;"><p><strong>例1：在庫発注のタイミング</strong></p><p>商品Aは $4$ 日ごと、商品Bは $6$ 日ごとに発注するとします。両方同時に発注するタイミングは、最小公倍数の $12$ 日後です。</p><p style="margin-top:8px;"><strong>例2：予算の均等配分</strong></p><p>$48$ 万円と $36$ 万円の予算を、同じ金額ずつ複数の部署に配分する場合、最大公約数の $12$ 万円が1部署あたりの最大配分額になります。</p></div></div><div class="lesson-step"><span class="lesson-step-meta">Step 05</span><h4>まとめ</h4><div style="background-color:var(--color-paper);border:1px solid var(--color-paper-line);border-radius:6px;padding:15px;font-size:14px;line-height:1.7;"><ul style="margin:0;padding-left:20px;"><li>最大公約数は、共通する約数のうち最大のもの。</li><li>最小公倍数は、共通する倍数のうち最小のもの。</li><li>素因数分解を使って、指数の大小でどちらも求められる。</li><li>$A \times B = (最大公約数) \times (最小公倍数)$ の関係がある。</li></ul></div></div></div><div class="lesson-footer-nav"><a href="11.html" class="btn-secondary">&larr; 前の単元へ</a><a href="index.html" class="btn-secondary">目次に戻る</a><a href="13.html" class="btn btn-primary">次の単元へ &rarr;</a></div></article></main><footer class="footer"><div class="container footer-inner"><div class="footer-left"><div class="footer-logo">Otona Math</div><p>大人のためのやり直し数学プラットフォーム</p></div><div class="footer-right"><p class="copyright">&copy; 2026 Otona Math.</p></div></div></footer><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css"><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script></body></html>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>最大公約数と最小公倍数 | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        /* Premium Dashboard Widgets styling */
+        .premium-widget {
+            background-color: var(--color-surface);
+            border: 2px solid var(--color-paper-line);
+            border-radius: var(--radius-card);
+            padding: 35px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px -10px rgba(28, 43, 57, 0.05), 0 1px 3px rgba(28, 43, 57, 0.02);
+            transition: all 0.3s ease;
+        }
+
+        .premium-widget:hover {
+            border-color: var(--color-brass);
+            box-shadow: 0 15px 35px -10px rgba(28, 43, 57, 0.08);
+        }
+        
+        .widget-title {
+            font-family: var(--font-heading);
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--color-ink);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--color-brass);
+            padding-bottom: 8px;
+            display: inline-block;
+        }
+
+        /* LCM Runner Simulator Styles */
+        .lcm-simulator-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            align-items: center;
+        }
+
+        .lcm-flex-row {
+            display: flex;
+            gap: 40px;
+            width: 100%;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .track-wrapper {
+            position: relative;
+            background-color: var(--color-paper);
+            border-radius: 50%;
+            width: 200px;
+            height: 200px;
+            border: 1px solid var(--color-paper-line);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.02);
+        }
+
+        .track-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .start-line-marker {
+            position: absolute;
+            top: 0;
+            left: 100px;
+            width: 2px;
+            height: 25px;
+            background-color: var(--color-red);
+            z-index: 10;
+        }
+
+        .lcm-stats-panel {
+            flex-grow: 1;
+            max-width: 320px;
+            background-color: var(--color-paper);
+            border: 1px solid var(--color-paper-line);
+            padding: 20px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .lcm-timer-view {
+            font-family: var(--font-mono);
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--color-ink);
+            text-align: center;
+            background-color: var(--color-surface);
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid var(--color-paper-line);
+        }
+
+        .runner-log-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+        }
+
+        /* GCD Tiling Grid Animator Styles */
+        .gcd-simulator-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            align-items: center;
+        }
+
+        .tiling-board-wrapper {
+            background-color: var(--color-paper);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 8px;
+            padding: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.02);
+        }
+
+        .tiling-svg {
+            background-color: var(--color-surface);
+            border: 2px solid var(--color-ink);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            max-width: 100%;
+        }
+
+        .tiling-controls {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tiling-btn {
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 4px;
+            border: 1px solid var(--color-paper-line);
+            background-color: var(--color-surface);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tiling-btn.active {
+            background-color: var(--color-ink);
+            color: var(--color-paper);
+            border-color: var(--color-ink);
+        }
+
+        .tiling-eval-btn {
+            background-color: hsl(210, 80%, 45%);
+            color: white;
+            padding: 12px 28px;
+            border: none;
+            font-weight: 500;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 4px 12px rgba(13, 110, 253, 0.15);
+        }
+
+        .tiling-eval-btn:hover:not(:disabled) {
+            background-color: hsl(210, 80%, 35%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(13, 110, 253, 0.25);
+        }
+
+        .tiling-eval-btn:disabled {
+            background-color: var(--color-paper-line);
+            color: var(--color-ink-soft);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .tiling-feedback-box {
+            width: 100%;
+            padding: 15px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            line-height: 1.6;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tiling-feedback-box.success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid #2e7d32;
+        }
+
+        .tiling-feedback-box.error {
+            background-color: #ffebee;
+            color: var(--color-red);
+            border-left: 4px solid var(--color-red);
+        }
+
+        /* Quiz Widget Styles */
+        .quiz-card {
+            background-color: var(--color-paper);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 6px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-question {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--color-ink);
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .quiz-option {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--color-brass);
+            background-color: rgba(169, 120, 47, 0.05);
+        }
+
+        .quiz-option.correct {
+            border-color: #2e7d32;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            font-weight: 500;
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--color-red);
+            background-color: #ffebee;
+            color: var(--color-red);
+        }
+
+        .quiz-feedback {
+            margin-top: 15px;
+            font-size: 14px;
+            line-height: 1.6;
+            padding: 12px;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .quiz-feedback.success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid #2e7d32;
+        }
+
+        .quiz-feedback.error {
+            background-color: #ffebee;
+            color: var(--color-red);
+            border-left: 4px solid var(--color-red);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> > <a href="index.html">カリキュラム</a> > 第2章 小学校算数の再構築 > 単元12
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 02 / Unit 12</span>
+                <h2 class="lesson-title">最大公約数と最小公倍数</h2>
+            </header>
+
+            <div class="lesson-flow">
+                
+                <!-- Step 1: GCD -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>最大公約数（GCD）：共通の「最大サイズ」を見出す</h4>
+                    <p>2つ以上の整数に共通する約数（公約数）のうち、最も大きい数値を<b>最大公約数（GCD: Greatest Common Divisor）</b>と呼びます。</p>
+                    <p>例えば、$12$ と $18$ の最大公約数を求める場合、それぞれの約数を並べます。</p>
+                    <ul style="list-style: disc; padding-left: 20px; font-size: 15px; margin: 10px 0;">
+                        <li>$12$ の約数: $1, 2, 3, 4, \mathbf{6}, 12$</li>
+                        <li>$18$ の約数: $1, 2, 3, \mathbf{6}, 9, 18$</li>
+                    </ul>
+                    <p>共通する約数のうち、最大のものは <b>6</b> となります。</p>
+
+                    <p>幾何学的に言えば、最大公約数は<b>「縦 $A$、横 $B$ の長方形の床を、隙間なくきれいに敷き詰められる『最大の正方形の1辺の長さ』」</b>を表しています。この長方形の敷き詰めを動的なシミュレーションで可視化してみましょう。</p>
+
+                    <!-- GCD TILING SIMULATOR (Interactive, Premium, Animated) -->
+                    <div class="premium-widget">
+                        <span class="widget-title">最大公約数による正方形敷き詰め分析 (GCD Rectangle Tiling Grid Analysis)</span>
+                        <p style="font-size: 14px; margin-bottom: 20px; color: var(--color-ink-soft);">
+                            縦 240、横 180 の長方形に対して、1辺の長さ（60, 40, 30）の正方形タイルを選び、「敷き詰め開始」を押してタイルの配置アニメーションを観察しましょう。隙間なくぴったり埋まる最大のサイズが最大公約数です。
+                        </p>
+                        
+                        <div class="gcd-simulator-container">
+                            <div class="tiling-controls">
+                                <button class="tiling-btn active" id="tile-btn-60" onclick="selectTileSize(60)">タイルサイズ: 60 (最大公約数)</button>
+                                <button class="tiling-btn" id="tile-btn-40" onclick="selectTileSize(40)">タイルサイズ: 40</button>
+                                <button class="tiling-btn" id="tile-btn-30" onclick="selectTileSize(30)">タイルサイズ: 30</button>
+                            </div>
+
+                            <div class="tiling-board-wrapper">
+                                <svg class="tiling-svg" id="tiling-svg" width="240" height="180" viewBox="0 0 240 180">
+                                    <!-- Rendered dynamically -->
+                                </svg>
+                            </div>
+
+                            <button class="tiling-eval-btn" id="btn-run-tiling" onclick="runTilingAnimation()">敷き詰め開始</button>
+
+                            <div class="tiling-feedback-box" id="tiling-feedback">
+                                <!-- Feedback text -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: LCM -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>最小公倍数（LCM）：周期が重なる「最初の地点」</h4>
+                    <p>2つ以上の整数に共通する倍数（公倍数）のうち、最も小さい正の数値を<b>最小公倍数（LCM: Least Common Multiple）</b>と呼びます。</p>
+                    <p>例えば、$4$ と $6$ の倍数を並べていくと、</p>
+                    <ul style="list-style: disc; padding-left: 20px; font-size: 15px; margin: 10px 0;">
+                        <li>$4$ の倍数: $4, 8, \mathbf{12}, 16, 20, 24, \dots$</li>
+                        <li>$6$ の倍数: $6, \mathbf{12}, 18, 24, 30, \dots$</li>
+                    </ul>
+                    <p>共通する倍数のうち、最小のものは <b>12</b> となります。</p>
+
+                    <p>最小公倍数は、実社会における<b>「異なる周期で動くものの重なり（タイミング）」</b>を表します。円形のトラックを異なる速度で走る2人のランナーを例に、2人が同時にスタートラインで再会する瞬間の動きをシミュレーションしてみましょう。</p>
+
+                    <!-- LCM RUNNER SIMULATOR (Interactive, Premium, Animated) -->
+                    <div class="premium-widget">
+                        <span class="widget-title">最小公倍数による周回ランナー分析 (LCM Circular Track Runner Analysis)</span>
+                        <p style="font-size: 14px; margin-bottom: 20px; color: var(--color-ink-soft);">
+                            ランナーA（1周 4秒）とランナーB（1周 6秒）が同時にスタートします。「スタート」を押すとドットがトラック上を走り、次に2人がスタートライン（最上部の赤い線）で同時に重なる「最小公倍数の秒数（12秒）」で自動停止します。
+                        </p>
+                        
+                        <div class="lcm-simulator-container">
+                            <div class="lcm-flex-row">
+                                <!-- Circular Track SVG -->
+                                <div class="track-wrapper">
+                                    <div class="start-line-marker"></div>
+                                    <svg class="track-svg" width="200" height="200" viewBox="0 0 200 200" id="track-svg">
+                                        <!-- Running Track Path -->
+                                        <circle cx="100" cy="100" r="85" fill="none" stroke="var(--color-paper-line)" stroke-width="8" />
+                                        <!-- Runner A Dot (Blue) -->
+                                        <circle cx="100" cy="15" r="7" fill="hsl(210, 80%, 45%)" id="runner-a" />
+                                        <!-- Runner B Dot (Orange) -->
+                                        <circle cx="100" cy="15" r="7" fill="hsl(30, 80%, 45%)" id="runner-b" />
+                                    </svg>
+                                </div>
+
+                                <!-- Running Logs -->
+                                <div class="lcm-stats-panel">
+                                    <div class="lcm-timer-view" id="lcm-timer">0.00 秒</div>
+                                    <hr style="border: none; border-top: 1px solid var(--color-paper-line); margin: 5px 0;">
+                                    <div class="runner-log-row" style="color: hsl(210, 80%, 45%); font-weight: bold;">
+                                        <span>ランナー A (4秒周期):</span>
+                                        <span id="laps-a">0 周</span>
+                                    </div>
+                                    <div class="runner-log-row" style="color: hsl(30, 80%, 45%); font-weight: bold;">
+                                        <span>ランナー B (6秒周期):</span>
+                                        <span id="laps-b">0 周</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="calc-btn-group">
+                                <button class="calc-action-btn btn-add" id="btn-lcm-start" onclick="startLcmSimulation()">シミュレーション開始</button>
+                                <button class="calc-action-btn btn-reset" onclick="resetLcmSimulation()">リセット</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Math Relations & Prime Factorization -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>素因数分解を用いたスマートな求め方と2数の積の関係</h4>
+                    <p>対象とする数値が大きくなった場合、公約数や公倍数を書き並べる方法は非効率になります。そこで、前単元で学んだ<b>素因数分解</b>を用いると、どんなに大きな数であっても機械的かつ確実にGCDとLCMを算出できます。</p>
+
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 20px 0;">
+                        <p style="font-weight: bold; margin-bottom: 8px;">【素因数分解から求める手順（例: 24 と 36）】</p>
+                        <p style="font-family: var(--font-mono); font-size: 15px; line-height: 1.6;">
+                            24 = 2^3 × 3^1
+                            <br>36 = 2^2 × 3^2
+                        </p>
+                        <ul style="list-style: disc; padding-left: 20px; font-size: 15px; margin-top: 8px; display: flex; flex-direction: column; gap: 8px;">
+                            <li><b>最大公約数 (GCD)</b>: 共通する素因数の<b>「指数が小さい方」</b>を掛け合わせます。
+                            <br>$\text{GCD} = 2^2 \times 3^1 = 4 \times 3 = 12$</li>
+                            <li><b>最小公倍数 (LCM)</b>: すべての素因数の<b>「指数が大きい方」</b>を掛け合わせます。
+                            <br>$\text{LCM} = 2^3 \times 3^2 = 8 \times 9 = 72$</li>
+                        </ul>
+                    </div>
+
+                    <p>また、任意の2つの整数 $A, B$ について、その積は最大公約数と最小公倍数の積に等しくなるという美しい対称性が成り立ちます。</p>
+                    <p style="text-align: center; font-size: 18px; font-weight: bold; margin: 20px 0;">
+                        A × B = GCD(A, B) × LCM(A, B)
+                    </p>
+                    <p>例: $24 \times 36 = 864$ ですが、これは $\text{GCD}(12) \times \text{LCM}(72) = 864$ となり、完全に一致します。</p>
+                </div>
+
+                <!-- Step 4: Business cases -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>ビジネス実務への応用シナリオ</h4>
+                    <p>最大公約数と最小公倍数は、ビジネスの効率化（オペレーションズ・リサーチ）において頻繁に応用されます。</p>
+                    
+                    <div style="background-color: var(--color-surface); border: 1px solid var(--color-paper-line); padding: 20px; border-radius: 6px; margin: 20px 0;">
+                        <ul style="list-style: none; padding-left: 0; display: flex; flex-direction: column; gap: 15px;">
+                            <li><b>① サーバー cron タスクの実行同期（LCMの応用）</b>
+                            <br><span style="font-size: 14px; color: var(--color-ink-soft);">バッチ処理Aが「15分ごと」、処理Bが「20分ごと」に起動する場合、サーバー負荷が集中する同時実行の瞬間は、最小公倍数である「60分ごと（1時間ごと）」に発生します。これを見越したインフラ設計を行います。</span></li>
+                            
+                            <li><b>② 物流容器と仕切り設計の標準化（GCDの応用）</b>
+                            <br><span style="font-size: 14px; color: var(--color-ink-soft);">「横幅 48cm」と「横幅 36cm」の2種類の異なるダンボールを、共通のサイズ区切りの仕切り板で埋め尽くしたい場合、最大公約数である「12cm」を基本モジュールとすることで、余分なスペーサーを使わず在庫共有化が可能です。</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Step 5: Exercises -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>理解度チェッククイズ</h4>
+                    <p>最大公約数と最小公倍数の概念について、理解が深まったかクイズで確認してみましょう。</p>
+
+                    <!-- Question 1 -->
+                    <div class="quiz-card">
+                        <div class="quiz-question">Q1. 縦 36cm、横 54cm の長方形の金属板を、余りが出ないように同じ大きさの正方形にすべて切り分けたい。切り分けられる「最も大きい正方形」の1辺の長さは何cmでしょうか？</div>
+                        <div class="quiz-options">
+                            <button class="quiz-option" onclick="checkAnswer(1, 'A', false)">
+                                <span>A. 6 cm</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(1, 'B', false)">
+                                <span>B. 9 cm</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(1, 'C', true)">
+                                <span>C. 18 cm</span>
+                            </button>
+                        </div>
+                        <div class="quiz-feedback" id="feedback-1"></div>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="quiz-card">
+                        <div class="quiz-question">Q2. 2つのサーバー用バッチスケジュールがあり、バッチXは「30分ごと」、バッチYは「45分ごと」に実行されます。午前9時に両バッチが同時に実行された後、次に同時に実行される時刻はどれでしょうか？</div>
+                        <div class="quiz-options">
+                            <button class="quiz-option" onclick="checkAnswer(2, 'A', false)">
+                                <span>A. 午前9時45分</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(2, 'B', true)">
+                                <span>B. 午前10時30分</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(2, 'C', false)">
+                                <span>C. 午前11時15分</span>
+                            </button>
+                        </div>
+                        <div class="quiz-feedback" id="feedback-2"></div>
+                    </div>
+                </div>
+
+                <!-- Step 6: Summary -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 06</span>
+                    <h4>本単元のまとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 24px; font-size: 16px; line-height: 1.85;">
+                        <ul style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px;">
+                            <li><b>最大公約数 (GCD)</b>: 共通する約数の最大値。幾何学的には、長方形の床にきれいに敷き詰められる最大の正方形のサイズ。</li>
+                            <li><b>最小公倍数 (LCM)</b>: 共通する倍数の最小値。時間軸においては、異なる周期が再び同時に重なる最初のタイミング。</li>
+                            <li><b>積の関係</b>: 2つの整数の積は、それらの最大公約数と最小公倍数の積に完全に等しくなります（$A \times B = \text{GCD} \times \text{LCM}$）。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-footer-nav">
+                <a href="11.html" class="btn-secondary">&larr; 前の単元へ</a>
+                <a href="index.html" class="btn-secondary">目次に戻る</a>
+                <a href="13.html" class="btn btn-primary">次の単元へ &rarr;</a>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+
+    <!-- Interactive Script -->
+    <script>
+        // --- 1. GCD Tiling Simulator Logics ---
+        let selectedTileSize = 60;
+        let tilingAnimationId = null;
+
+        function selectTileSize(size) {
+            selectedTileSize = size;
+            
+            document.querySelectorAll('.tiling-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(`tile-btn-${size}`).classList.add('active');
+            
+            resetTilingBoard();
+        }
+
+        function resetTilingBoard() {
+            if (tilingAnimationId) {
+                clearTimeout(tilingAnimationId);
+                tilingAnimationId = null;
+            }
+            const svg = document.getElementById('tiling-svg');
+            svg.innerHTML = ''; // Clear svg
+            
+            // Draw background rectangle outlines
+            svg.innerHTML = `
+                <rect x="0" y="0" width="240" height="180" fill="none" stroke="var(--color-paper-line)" stroke-width="1" />
+            `;
+            document.getElementById('tiling-feedback').style.display = 'none';
+            document.getElementById('btn-run-tiling').disabled = false;
+        }
+
+        function runTilingAnimation() {
+            resetTilingBoard();
+            document.getElementById('btn-run-tiling').disabled = true;
+
+            const svg = document.getElementById('tiling-svg');
+            const size = selectedTileSize;
+            const w = 240;
+            const h = 180;
+
+            const cols = Math.ceil(w / size);
+            const rows = Math.ceil(h / size);
+
+            const tiles = [];
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    tiles.push({ r, c });
+                }
+            }
+
+            let index = 0;
+            function drawNextTile() {
+                if (index >= tiles.length) {
+                    // Animation finished, evaluate result
+                    showTilingFeedback();
+                    return;
+                }
+
+                const { r, c } = tiles[index];
+                const x = c * size;
+                const y = r * size;
+
+                // Create SVG rect representing tile
+                const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                rect.setAttribute("x", x);
+                rect.setAttribute("y", y);
+                
+                // Set sizes (clip if overflowing to show leftover gaps visually)
+                const currentW = Math.min(size, w - x);
+                const currentH = Math.min(size, h - y);
+                rect.setAttribute("width", currentW);
+                rect.setAttribute("height", currentH);
+                
+                // Color code: if it overflows (meaning it left gaps or does not fit), color it red/pink, else green or gold.
+                const fitsExactly = (x + size <= w) && (y + size <= h);
+                if (fitsExactly) {
+                    rect.setAttribute("fill", "rgba(169, 120, 47, 0.2)"); // Brass tint
+                    rect.setAttribute("stroke", "var(--color-brass)");
+                } else {
+                    rect.setAttribute("fill", "rgba(180, 67, 47, 0.15)"); // Red/leftover tint
+                    rect.setAttribute("stroke", "var(--color-red)");
+                }
+                rect.setAttribute("stroke-width", "1.5");
+                rect.setAttribute("class", "fade-in-tile");
+                svg.appendChild(rect);
+
+                index++;
+                tilingAnimationId = setTimeout(drawNextTile, 150);
+            }
+
+            drawNextTile();
+        }
+
+        function showTilingFeedback() {
+            const feedback = document.getElementById('tiling-feedback');
+            const size = selectedTileSize;
+            
+            if (size === 60) {
+                feedback.className = 'tiling-feedback-box success';
+                feedback.innerHTML = '<b>敷き詰め成功！</b><br>1辺 <b>60</b> のタイルは、横に4枚 ($240 \\div 60 = 4$)、縦に3枚 ($180 \\div 60 = 3$) 隙間なく完全に収まりました。この 60 が、敷き詰められる最大の正方形のサイズであり、すなわち 240 と 180 の<b>最大公約数 (GCD)</b> です！';
+            } else if (size === 30) {
+                feedback.className = 'tiling-feedback-box success';
+                feedback.innerHTML = '<b>敷き詰め成功！（ただし最大ではありません）</b><br>1辺 <b>30</b> のタイルは、横に8枚 ($240 \\div 30 = 8$)、縦に6枚 ($180 \\div 30 = 6$) 隙間なく完全に収まります。30 は公約数ではありますが、最大ではないため「最大公約数」ではありません。';
+            } else {
+                feedback.className = 'tiling-feedback-box error';
+                feedback.innerHTML = '<b>敷き詰め失敗（端数が発生）</b><br>1辺 <b>40</b> のタイルを敷き詰めると、横は6枚できれいに並びますが、縦は $180 \\div 40 = 4.5$ となり、4枚敷いたあとに <b>20px の隙間（赤枠部分）</b> が生じてしまいます。したがって、40 は 180 の約数ではないため、公約数ではありません。';
+            }
+            feedback.style.display = 'block';
+
+            if (window.renderMathInElement) {
+                renderMathInElement(feedback, {
+                    delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]
+                });
+            }
+        }
+
+        // --- 2. LCM Runner Simulator Logics ---
+        let lcmAnimationId = null;
+        let simTime = 0.00;
+        let isLcmRunning = false;
+        
+        const trackRadius = 85;
+        const trackCx = 100;
+        const trackCy = 100;
+
+        function startLcmSimulation() {
+            if (isLcmRunning) return;
+            isLcmRunning = true;
+            document.getElementById('btn-lcm-start').disabled = true;
+
+            const runnerA = document.getElementById('runner-a');
+            const runnerB = document.getElementById('runner-b');
+            const timerText = document.getElementById('lcm-timer');
+            const lapsTextA = document.getElementById('laps-a');
+            const lapsTextB = document.getElementById('laps-b');
+
+            const speedA = 4; // 1 lap every 4 seconds
+            const speedB = 6; // 1 lap every 6 seconds
+            const targetTime = 12.0; // The LCM where they meet
+
+            const startTime = performance.now() - (simTime * 1000);
+
+            function updateSimulation(timeNow) {
+                if (!isLcmRunning) return;
+
+                simTime = (timeNow - startTime) / 1000;
+                
+                // Automatically cap at target LCM (12 seconds)
+                if (simTime >= targetTime) {
+                    simTime = targetTime;
+                    isLcmRunning = false;
+                    
+                    // Highlight the meeting point with a flash / feedback
+                    timerText.style.color = 'var(--color-red)';
+                    timerText.style.borderColor = 'var(--color-red)';
+                    timerText.innerHTML = '12.00 秒 (最小公倍数！)';
+                    
+                    // Force precise 12.0 meeting coordinates (at 0 degrees / top)
+                    updateRunnerPos(runnerA, 0);
+                    updateRunnerPos(runnerB, 0);
+
+                    lapsTextA.innerText = '3.0 周 (到達！)';
+                    lapsTextB.innerText = '2.0 周 (到達！)';
+                    document.getElementById('btn-lcm-start').disabled = true;
+                    return;
+                }
+
+                // Calculate progress angle (in radians)
+                // Angle = (time / lap_time) * 360 degrees
+                // 0 degrees starts at the top (y = 15) which corresponds to -PI/2 radians
+                const angleA = ((simTime / speedA) * 2 * Math.PI) - (Math.PI / 2);
+                const angleB = ((simTime / speedB) * 2 * Math.PI) - (Math.PI / 2);
+
+                updateRunnerPos(runnerA, angleA);
+                updateRunnerPos(runnerB, angleB);
+
+                // Update logs
+                timerText.innerText = `${simTime.toFixed(2)} 秒`;
+                lapsTextA.innerText = `${(simTime / speedA).toFixed(1)} 周`;
+                lapsTextB.innerText = `${(simTime / speedB).toFixed(1)} 周`;
+
+                lcmAnimationId = requestAnimationFrame(updateSimulation);
+            }
+
+            lcmAnimationId = requestAnimationFrame(updateSimulation);
+        }
+
+        function updateRunnerPos(runnerEl, angle) {
+            const x = trackCx + trackRadius * Math.cos(angle);
+            const y = trackCy + trackRadius * Math.sin(angle);
+            runnerEl.setAttribute('cx', x);
+            runnerEl.setAttribute('cy', y);
+        }
+
+        function resetLcmSimulation() {
+            isLcmRunning = false;
+            if (lcmAnimationId) {
+                cancelAnimationFrame(lcmAnimationId);
+                lcmAnimationId = null;
+            }
+            simTime = 0.00;
+
+            const runnerA = document.getElementById('runner-a');
+            const runnerB = document.getElementById('runner-b');
+            
+            // Put runners back to top start line (angle = -PI/2)
+            updateRunnerPos(runnerA, -Math.PI / 2);
+            updateRunnerPos(runnerB, -Math.PI / 2);
+
+            const timerText = document.getElementById('lcm-timer');
+            timerText.innerText = '0.00 秒';
+            timerText.style.color = 'var(--color-ink)';
+            timerText.style.borderColor = 'var(--color-paper-line)';
+
+            document.getElementById('laps-a').innerText = '0.0 周';
+            document.getElementById('laps-b').innerText = '0.0 周';
+            document.getElementById('btn-lcm-start').disabled = false;
+        }
+
+        // --- 3. Quiz Logics ---
+        function checkAnswer(qNum, option, isCorrect) {
+            const card = event.target.closest('.quiz-card');
+            const options = card.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById(`feedback-${qNum}`);
+
+            options.forEach(opt => {
+                opt.classList.remove('correct', 'incorrect');
+                opt.disabled = true;
+            });
+
+            const clickedBtn = event.target.closest('.quiz-option');
+            if (isCorrect) {
+                clickedBtn.classList.add('correct');
+                feedback.className = "quiz-feedback success";
+                if (qNum === 1) {
+                    feedback.innerHTML = "<b>正解です！</b><br>長方形の板を隙間なく最大の正方形に切り分ける問題は、「最大公約数 (GCD)」を求めることに対応します。36 と 54 の公約数は $[1, 2, 3, 6, 9, 18]$ であり、そのうち最大のものは <b>18 cm</b> となります。";
+                } else {
+                    feedback.innerHTML = "<b>正解です！</b><br>2つのスケジュールが重なる最小の間隔は、実行周期の「最小公倍数 (LCM)」になります。30分と45分の倍数を調べると、最小公倍数は <b>90分（1時間30分）</b> です。午前9時に同時実行された後、次に重なるのは90分後の <b>午前10時30分</b> になります。";
+                }
+            } else {
+                clickedBtn.classList.add('incorrect');
+                feedback.className = "quiz-feedback error";
+                if (qNum === 1) {
+                    feedback.innerHTML = "<b>不正解です。</b><br>切り分けた後の正方形に余りが出ないようにするためには、1辺の長さが 36 と 54 の両方の約数（公約数）である必要があります。選択肢Aの6や、選択肢Bの9も公約数ですが、問題文の「最も大きい」を満たす最大公約数は 18 cm です。";
+                } else {
+                    feedback.innerHTML = "<b>不正解です。</b><br>次の同時実行時刻は、周期の最小公倍数 (LCM) を足すことで求まります。30分と45分の最小公倍数は90分（1時間30分）なので、9時00分 ＋ 1時間30分 ＝ 10時30分 が正解です。";
+                }
+            }
+            feedback.style.display = "block";
+        }
+
+        // Initialize Page Widgets
+        window.addEventListener('DOMContentLoaded', () => {
+            selectTileSize(60);
+            resetLcmSimulation();
+        });
+    </script>
+</body>
+</html>
