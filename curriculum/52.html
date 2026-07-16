@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>二次方程式の解の公式 | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .premium-widget {
+            background-color: var(--color-surface);
+            border: 2px solid var(--color-paper-line);
+            border-radius: var(--radius-card);
+            padding: 35px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px -10px rgba(28, 43, 57, 0.05), 0 1px 3px rgba(28, 43, 57, 0.02);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .premium-widget:hover {
+            border-color: var(--color-brass);
+            box-shadow: 0 15px 35px -10px rgba(28, 43, 57, 0.08);
+        }
+        
+        .widget-title {
+            font-family: var(--font-heading);
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--color-ink);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--color-brass);
+            padding-bottom: 8px;
+            display: inline-block;
+        }
+
+        .business-callout {
+            background-color: #f8fafc;
+            border-left: 4px solid var(--color-brass);
+            border-radius: 4px;
+            padding: 24px;
+            margin: 30px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+        }
+
+        .business-callout h5 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--color-ink);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Formula Engine styles */
+        .engine-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            align-items: center;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .engine-panel {
+            background-color: #0b131a;
+            border: 2px solid #1e2d3d;
+            border-radius: 8px;
+            padding: 30px;
+            width: 100%;
+            max-width: 600px;
+            color: #e2e8f0;
+            font-family: 'JetBrains Mono', monospace;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+            position: relative;
+        }
+
+        .coeff-controls {
+            display: flex;
+            justify-content: space-around;
+            gap: 15px;
+            margin-bottom: 25px;
+            background-color: #111b27;
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid #1e2d3d;
+        }
+
+        .coeff-control {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .coeff-label {
+            font-size: 12px;
+            color: #94a3b8;
+            font-weight: 700;
+        }
+
+        .coeff-val {
+            font-size: 22px;
+            color: #38bdf8;
+            font-weight: 700;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .btn-adjust {
+            background-color: #1e293b;
+            border: 1px solid #475569;
+            color: #cbd5e1;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 700;
+            font-size: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-adjust:hover {
+            border-color: #38bdf8;
+            color: #f1f5f9;
+            background-color: #1e3a8a;
+        }
+
+        .equation-preview {
+            font-size: 28px;
+            color: #f1f5f9;
+            text-align: center;
+            margin: 20px 0;
+            min-height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .steps-box {
+            background-color: #080d14;
+            border: 1px solid #142334;
+            border-radius: 6px;
+            padding: 20px;
+            font-size: 15px;
+            line-height: 1.8;
+            color: #94a3b8;
+            min-height: 150px;
+        }
+
+        .steps-box h6 {
+            color: #38bdf8;
+            font-size: 12px;
+            margin-top: 0;
+            margin-bottom: 12px;
+            letter-spacing: 0.1em;
+        }
+
+        .step-item {
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .step-item.active {
+            color: #e2e8f0;
+        }
+
+        .discriminant-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+
+        .disc-positive {
+            background-color: #064e3b;
+            color: #34d399;
+        }
+
+        .disc-zero {
+            background-color: #78350f;
+            color: #fbbf24;
+        }
+
+        .disc-negative {
+            background-color: #7f1d1d;
+            color: #f87171;
+        }
+
+        /* Quiz styles */
+        .quiz-card {
+            background-color: var(--color-paper);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 6px;
+            padding: 28px;
+            margin-bottom: 25px;
+        }
+
+        .quiz-question {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 18px;
+            color: var(--color-ink);
+            line-height: 1.6;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .quiz-option {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            padding: 14px 22px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--color-brass);
+            background-color: rgba(169, 120, 47, 0.05);
+        }
+
+        .quiz-option.correct {
+            border-color: #2e7d32;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            font-weight: 500;
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--color-red);
+            background-color: #ffebee;
+            color: var(--color-red);
+        }
+
+        .quiz-feedback {
+            margin-top: 18px;
+            font-size: 14.5px;
+            line-height: 1.7;
+            padding: 16px;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .quiz-feedback.success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid #2e7d32;
+        }
+
+        .quiz-feedback.error {
+            background-color: #ffebee;
+            color: var(--color-red);
+            border-left: 4px solid var(--color-red);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> > <a href="index.html">カリキュラム</a> > 第4章 高校数学への接続 > 単元52
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 04 / Unit 52</span>
+                <h2 class="lesson-title">二次方程式の解の公式</h2>
+            </header>
+
+            <div class="lesson-flow">
+                
+                <!-- Step 1: Motivation -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>なぜ「解の公式」を学ぶのか：因数分解の限界と万能解決メカニズム</h4>
+                    <p>二次方程式を解くとき、私たちは因数分解（項のくくり出し）を好んで使います。しかし、実際の業務データや自然界における物理現象では、きれいに因数分解できる方程式はほとんど存在しません。この問題をクリアにするために、解の公式が不可欠となります。</p>
+                    
+                    <!-- Reason 1 -->
+                    <div class="business-callout">
+                        <h5>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-brass)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                            1. 因数分解が通用しないあらゆる数値への万能性（汎用アルゴリズム）
+                        </h5>
+                        <p style="font-size: 14.5px; line-height: 1.7; color: var(--color-ink-soft);">
+                            前単元で学んだ因数分解による解法は、「足して $b$、掛けて $c$ になる整数のペア」が見つかるという、非常に特殊な状況でのみ使えます。<br>
+                            しかし、ビジネス上の複雑な費用モデルや、工学における放物線軌道の解析などで現れる式（例：$x^2 - 4.5x + 3.12 = 0$ など）は、手作業での因数分解ができません。<br>
+                            解の公式は、係数の数値が小数や分数、無理数であっても、公式に代入するだけで必ず解を導き出せる万能の計算アルゴリズムです。
+                        </p>
+                    </div>
+
+                    <!-- Reason 2 -->
+                    <div class="business-callout">
+                        <h5>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-brass)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                            2. 実際に計算する前の「解の有無・個数の判定」（判別式の価値）
+                        </h5>
+                        <p style="font-size: 14.5px; line-height: 1.7; color: var(--color-ink-soft);">
+                            有益なビジネス判断を下すためには、「そもそもこの課題を解決できる数値（実数解）が存在するかどうか」を事前に把握する必要があります。<br>
+                            解の公式のルートの中身である「$b^2 - 4ac$（判別式 $D$）」を計算することで、膨大な実務シミュレーションをおこなう前に、解が2つあるのか、1つなのか、あるいは実数解が存在しないのかを迅速に判定できます。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 2: The Formula -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>二次方程式の解の公式の定義</h4>
+                    <p>一般の二次方程式 $ax^2 + bx + c = 0$（ただし $a \neq 0$）において、解 $x$ は以下の公式で表されます。</p>
+
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); padding: 25px; border-radius: 6px; margin: 25px 0;">
+                        <p style="text-align: center; font-size: 26px; margin: 8px 0; font-family: var(--font-mono); letter-spacing: 0.05em;">
+                            $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$
+                        </p>
+                    </div>
+
+                    <p>この公式における記号 $\pm$ （プラス・マイナス）は、２つの解が存在することを示しています。すなわち、一方はプラスを用いた式であり、もう一方はマイナスを用いた式です。</p>
+                    <p>例えば、$2x^2 - 5x + 3 = 0$ という方程式に $a=2, b=-5, c=3$ を代入すると、以下の通りに計算が展開されます：</p>
+                    <p style="text-align: center; font-size: 16.5px; margin: 20px 0; line-height: 2;">
+                        $x = \frac{-(-5) \pm \sqrt{(-5)^2 - 4 \times 2 \times 3}}{2 \times 2}$<br>
+                        $x = \frac{5 \pm \sqrt{25 - 24}}{4}$<br>
+                        $x = \frac{5 \pm \sqrt{1}}{4} = \frac{5 \pm 1}{4}$<br>
+                        $x = 1.5$ または $x = 1$
+                    </p>
+                </div>
+
+                <!-- Step 3: Interactive Engine -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>実験：解の公式シミュレーター（Formula Solver Engine）</h4>
+                    <p>係数 $a, b, c$ を調整し、解の公式がどのように数値を処理して解を導くのか、そのプロセスの移り変わりを確認できます。</p>
+
+                    <div class="premium-widget">
+                        <span class="widget-title">二次方程式ソルバーエンジン (Formula Solver Engine)</span>
+                        <div class="engine-container">
+                            <div class="engine-panel">
+                                <!-- Coefficient adjustment controls -->
+                                <div class="coeff-controls">
+                                    <div class="coeff-control">
+                                        <span class="coeff-label">係数 a ($x^2$の項)</span>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <button class="btn-adjust" onclick="adjustCoeff('a', -1)">&minus;</button>
+                                            <span class="coeff-val" id="val-a">1</span>
+                                            <button class="btn-adjust" onclick="adjustCoeff('a', 1)">+</button>
+                                        </div>
+                                    </div>
+                                    <div class="coeff-control">
+                                        <span class="coeff-label">係数 b ($x$の項)</span>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <button class="btn-adjust" onclick="adjustCoeff('b', -1)">&minus;</button>
+                                            <span class="coeff-val" id="val-b">-5</span>
+                                            <button class="btn-adjust" onclick="adjustCoeff('b', 1)">+</button>
+                                        </div>
+                                    </div>
+                                    <div class="coeff-control">
+                                        <span class="coeff-label">定数項 c</span>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <button class="btn-adjust" onclick="adjustCoeff('c', -1)">&minus;</button>
+                                            <span class="coeff-val" id="val-c">6</span>
+                                            <button class="btn-adjust" onclick="adjustCoeff('c', 1)">+</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Current Equation Display -->
+                                <div class="equation-preview" id="equation-display">
+                                    <!-- Rendered dynamically -->
+                                </div>
+
+                                <!-- Calculation Process Output -->
+                                <div class="steps-box">
+                                    <h6>CALCULATION PROCESS</h6>
+                                    <div id="process-steps">
+                                        <!-- Rendered dynamically -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Quiz -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>理解度チェッククイズ</h4>
+                    <p>解の公式の構造と計算手順について、確認クイズに答えてみましょう。</p>
+
+                    <!-- Question 1 -->
+                    <div class="quiz-card">
+                        <div class="quiz-question">Q1. 方程式 $x^2 + 3x - 1 = 0$ に解の公式を適用するとき、正しい代入の形を示しているものはどれでしょうか？</div>
+                        <div class="quiz-options">
+                            <button class="quiz-option" onclick="checkAnswer(1, 'A', false)">
+                                <span>A. $x = \frac{-3 \pm \sqrt{3^2 - 4 \times 1 \times 1}}{2}$</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(1, 'B', true)">
+                                <span>B. $x = \frac{-3 \pm \sqrt{3^2 - 4 \times 1 \times (-1)}}{2}$</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(1, 'C', false)">
+                                <span>C. $x = \frac{3 \pm \sqrt{3^2 - 4 \times 1 \times (-1)}}{2}$</span>
+                            </button>
+                        </div>
+                        <div class="quiz-feedback" id="feedback-1"></div>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="quiz-card">
+                        <div class="quiz-question">Q2. 二次方程式 $x^2 - 6x + 9 = 0$ に公式を適用したとき、ルートの中身である判別式 $D = b^2 - 4ac$ の値はいくつになりますか？</div>
+                        <div class="quiz-options">
+                            <button class="quiz-option" onclick="checkAnswer(2, 'A', false)">
+                                <span>A. $72$</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(2, 'B', false)">
+                                <span>B. $12$</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(2, 'C', true)">
+                                <span>C. $0$</span>
+                            </button>
+                        </div>
+                        <div class="quiz-feedback" id="feedback-2"></div>
+                    </div>
+
+                    <!-- Question 3 -->
+                    <div class="quiz-card">
+                        <div class="quiz-question">Q3. 二次方程式 $x^2 + 2x + 5 = 0$ において、実数解は存在するかどうかを判定した結果として、正しい記述はどれでしょうか？</div>
+                        <div class="quiz-options">
+                            <button class="quiz-option" onclick="checkAnswer(3, 'A', false)">
+                                <span>A. 判別式の値が正となるため、異なる２つの実数解が存在する。</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(3, 'B', true)">
+                                <span>B. 判別式の値が負となるため、実数解は存在しない。</span>
+                            </button>
+                            <button class="quiz-option" onclick="checkAnswer(3, 'C', false)">
+                                <span>C. 判別式の値がゼロとなるため、１つの実数解（重解）が存在する。</span>
+                            </button>
+                        </div>
+                        <div class="quiz-feedback" id="feedback-3"></div>
+                    </div>
+                </div>
+
+                <!-- Step 5: Summary -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>本単元のまとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 24px; font-size: 16px; line-height: 1.85;">
+                        <ul style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px;">
+                            <li><b>公式の万能性</b>: 係数の値に関わらず、すべての二次方程式に適用できる計算アルゴリズムです。</li>
+                            <li><b>公式の構成</b>: $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$ であり、係数 $a, b, c$ の符号を含めて代入をおこないます。</li>
+                            <li><b>判別式の役割</b>: 平方根の内部にある式 $b^2 - 4ac$ は判別式と呼ばれ、解の個数を判定するために役立ちます。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-footer-nav">
+                <a href="50.html" class="btn-secondary">&larr; 前の単元へ</a>
+                <a href="index.html" class="btn-secondary">目次に戻る</a>
+                <a href="#" class="btn btn-primary" style="opacity: 0.5; pointer-events: none;">次の単元へ &rarr;</a>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- KaTeX Math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+
+    <!-- Lab Engine script -->
+    <script>
+        let coeffs = { a: 1, b: -5, c: 6 };
+        let audioCtx = null;
+
+        function playSound(type) {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                const now = audioCtx.currentTime;
+
+                if (type === 'click') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(800, now);
+                    gain.gain.setValueAtTime(0.04, now);
+                    gain.gain.linearRampToValueAtTime(0.001, now + 0.05);
+                    osc.start(now);
+                    osc.stop(now + 0.05);
+                } else if (type === 'success') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, now); // C5
+                    osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
+                    osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
+                    gain.gain.setValueAtTime(0.06, now);
+                    gain.gain.linearRampToValueAtTime(0.001, now + 0.35);
+                    osc.start(now);
+                    osc.stop(now + 0.35);
+                } else if (type === 'error') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(150, now);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.linearRampToValueAtTime(0.001, now + 0.25);
+                    osc.start(now);
+                    osc.stop(now + 0.25);
+                }
+            } catch (e) {}
+        }
+
+        function adjustCoeff(coeff, amount) {
+            playSound('click');
+            
+            // Adjust coefficients, prevent a from being 0
+            coeffs[coeff] += amount;
+            if (coeff === 'a' && coeffs.a === 0) {
+                coeffs.a = amount > 0 ? 1 : -1;
+            }
+
+            document.getElementById(`val-${coeff}`).innerText = coeffs[coeff];
+            updateEngine();
+        }
+
+        function formatTerm(val, termStr) {
+            if (val === 0) return "";
+            let sign = val > 0 ? "+" : "-";
+            let absVal = Math.abs(val);
+            let displayVal = absVal === 1 && termStr !== "" ? "" : absVal;
+            return ` ${sign} ${displayVal}${termStr}`;
+        }
+
+        function updateEngine() {
+            const { a, b, c } = coeffs;
+            
+            // Render current equation display
+            const displayEl = document.getElementById('equation-display');
+            let termA = a === 1 ? "x^2" : a === -1 ? "-x^2" : `${a}x^2`;
+            let termB = formatTerm(b, "x");
+            let termC = formatTerm(c, "");
+            
+            displayEl.innerHTML = `$${termA}${termB}${termC} = 0$`;
+
+            // Calculate Discriminant and Steps
+            const stepsEl = document.getElementById('process-steps');
+            const d = b * b - 4 * a * c;
+            
+            let discBadgeHtml = "";
+            let solutionHtml = "";
+
+            if (d > 0) {
+                discBadgeHtml = `<span class="discriminant-badge disc-positive">判別式 D > 0 (異なる２つの実数解が存在する)</span>`;
+                const rootD = Math.sqrt(d);
+                if (Number.isInteger(rootD)) {
+                    const sol1 = (-b + rootD) / (2 * a);
+                    const sol2 = (-b - rootD) / (2 * a);
+                    solutionHtml = `<div class="step-item active"><b>解の整理:</b> $x = ${sol1}$ または $x = ${sol2}$</div>`;
+                } else {
+                    const gcd = getGCD(Math.abs(-b), getGCD(2 * a, 1)); // Simplified logic
+                    solutionHtml = `<div class="step-item active"><b>解の整理:</b> $x = \\frac{${-b} \\pm \\sqrt{${d}}}{${2 * a}}$</div>`;
+                }
+            } else if (d === 0) {
+                discBadgeHtml = `<span class="discriminant-badge disc-zero">判別式 D = 0 (１つの重解が存在する)</span>`;
+                const sol = -b / (2 * a);
+                solutionHtml = `<div class="step-item active"><b>解の整理:</b> $x = ${sol}$ (重解)</div>`;
+            } else {
+                discBadgeHtml = `<span class="discriminant-badge disc-negative">判別式 D < 0 (実数解は存在しない)</span>`;
+                solutionHtml = `<div class="step-item active"><b>解の整理:</b> 実数範囲での解は存在しません (複素数解: $x = \\frac{${-b} \\pm \\sqrt{${Math.abs(d)}}i}{${2 * a}}$)</div>`;
+            }
+
+            stepsEl.innerHTML = `
+                <div class="step-item"><b>1. 公式への代入:</b> $x = \\frac{ -(${b}) \\pm \\sqrt{(${b})^2 - 4 \\times (${a}) \\times (${c})} }{ 2 \\times (${a}) }$</div>
+                <div class="step-item"><b>2. ルート内部の計算:</b> $x = \\frac{ ${-b} \\pm \\sqrt{${b * b} - ${4 * a * c}} }{ ${2 * a} }$</div>
+                <div class="step-item"><b>3. 判別式の確定:</b> $b^2 - 4ac = ${d}$ ${discBadgeHtml}</div>
+                ${solutionHtml}
+            `;
+
+            if (window.renderMathInElement) {
+                renderMathInElement(displayEl, {
+                    delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]
+                });
+                renderMathInElement(stepsEl, {
+                    delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]
+                });
+            }
+        }
+
+        function getGCD(x, y) {
+            while (y) {
+                var t = y;
+                y = x % y;
+                x = t;
+            }
+            return x;
+        }
+
+        // Quiz checker
+        function checkAnswer(qId, option, isCorrect) {
+            const feedback = document.getElementById(`feedback-${qId}`);
+            feedback.style.display = 'block';
+
+            const options = document.querySelectorAll(`.quiz-card:nth-of-type(${qId}) .quiz-option`);
+            options.forEach(opt => {
+                opt.disabled = true;
+                if (opt.innerText.trim().startsWith(option)) {
+                    if (isCorrect) opt.classList.add('correct');
+                    else opt.classList.add('incorrect');
+                }
+            });
+
+            if (isCorrect) {
+                playSound('success');
+                feedback.className = 'quiz-feedback success';
+                
+                let expl = '';
+                if (qId === 1) {
+                    expl = `方程式 $x^2 + 3x - 1 = 0$ では、係数 $a = 1, b = 3, c = -1$ となります。<br>これを解の公式の平方根の中身（$-4ac$）に代入するとき、定数項の負の符号が残り、$- 4 \\times 1 \\times (-1)$ となる点に注意してください。`;
+                } else if (qId === 2) {
+                    expl = `方程式 $x^2 - 6x + 9 = 0$ において、係数は $a=1, b=-6, c=9$ です。<br>判別式を計算すると、$(-6)^2 - 4 \\times 1 \\times 9 = 36 - 36 = 0$ となり、ルートの中身は $0$ になります。`;
+                } else if (qId === 3) {
+                    expl = `方程式 $x^2 + 2x + 5 = 0$ において、判別式は $D = 2^2 - 4 \\times 1 \\times 5 = 4 - 20 = -16$ となり、負の数になります。<br>平方根の中身がマイナスになるため、実数の範囲で解を求めることはできません。`;
+                }
+                
+                feedback.innerHTML = `<b>正解です！</b><br>` + expl;
+            } else {
+                playSound('error');
+                feedback.className = 'quiz-feedback error';
+                feedback.innerHTML = `<b>不正解です。</b> 係数の符号（特にマイなスの値）の扱いに注意して、もう一度確認してみましょう。`;
+            }
+
+            if (window.renderMathInElement) {
+                renderMathInElement(feedback, {
+                    delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]
+                });
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            updateEngine();
+        });
+    </script>
+</body>
+</html>
