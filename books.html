@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>書籍紹介・書評：パターン認識と機械学習 | Otona Math & Stats</title>
+    <title>数学・統計学 推薦書籍紹介 | Otona Math & Stats</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css?v=3">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -11,54 +11,142 @@
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
     <style>
         .books-container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 40px auto;
             padding: 0 20px;
         }
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+            border-bottom: 2px solid var(--color-paper-line);
+            padding-bottom: 30px;
+        }
+        .page-title {
+            font-size: 28px;
+            color: var(--color-brass);
+            font-family: 'Shippori Mincho', serif;
+            margin: 0 0 10px 0;
+        }
+        .page-subtitle {
+            font-size: 14px;
+            color: var(--color-ink-soft);
+        }
         .book-card {
             background-color: var(--color-paper);
-            border: 2px solid var(--color-brass);
+            border: 1px solid var(--color-paper-line);
             border-radius: 8px;
-            padding: 40px;
-            margin-bottom: 40px;
-        }
-        .book-title-section {
-            border-bottom: 1px solid var(--color-paper-line);
-            padding-bottom: 20px;
+            padding: 30px;
             margin-bottom: 30px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .book-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+        .book-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .book-info {
+            flex: 1;
+            min-width: 250px;
         }
         .book-title {
-            font-size: 24px;
+            font-size: 20px;
             color: var(--color-brass);
-            margin: 0 0 10px 0;
+            margin: 0 0 8px 0;
             font-family: 'Shippori Mincho', serif;
         }
-        .book-author {
-            font-size: 14px;
+        .book-details {
+            font-size: 13px;
             color: #888;
+            line-height: 1.5;
         }
-        .review-content {
-            font-size: 15px;
-            line-height: 1.9;
+        .book-category {
+            background-color: var(--color-surface);
+            color: var(--color-brass);
+            font-size: 12px;
+            font-weight: bold;
+            padding: 4px 10px;
+            border-radius: 4px;
+            border: 1px solid var(--color-paper-line);
+        }
+        .book-description {
+            font-size: 14px;
+            line-height: 1.7;
             color: var(--color-ink);
+            margin-bottom: 20px;
+        }
+        .review-toggle {
+            background: none;
+            border: none;
+            color: var(--color-brass);
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .review-toggle:hover {
+            text-decoration: underline;
+        }
+        .review-detail {
+            display: none;
+            background-color: var(--color-surface);
+            border-top: 1px solid var(--color-paper-line);
+            margin-top: 20px;
+            padding: 25px;
+            border-radius: 6px;
+            font-size: 14px;
+            line-height: 1.8;
             text-align: justify;
         }
-        .review-section-title {
-            font-size: 18px;
+        .review-detail h4 {
+            font-size: 16px;
             color: var(--color-brass);
-            margin: 35px 0 15px 0;
-            border-left: 4px solid var(--color-brass);
-            padding-left: 15px;
+            margin: 25px 0 10px 0;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 5px;
+        }
+        .review-detail h4:first-of-type {
+            margin-top: 0;
+        }
+        .review-detail p {
+            margin-bottom: 15px;
+        }
+        .review-detail p:last-child {
+            margin-bottom: 0;
         }
         .math-box {
-            background-color: var(--color-surface);
+            background-color: var(--color-paper);
             border: 1px solid var(--color-paper-line);
             border-radius: 6px;
-            padding: 20px;
-            margin: 20px 0;
+            padding: 15px;
+            margin: 15px 0;
             overflow-x: auto;
         }
     </style>
+    <script>
+        function toggleReview(id) {
+            const el = document.getElementById(id);
+            const btn = document.getElementById(id + '-btn');
+            if (el.style.display === 'block') {
+                el.style.display = 'none';
+                btn.textContent = '➔ 学部時代のバイブルとしての詳細書評を読む';
+            } else {
+                el.style.display = 'block';
+                btn.textContent = '▼ 書評を閉じる';
+            }
+        }
+    </script>
 </head>
 <body>
     <header class="header">
@@ -79,19 +167,35 @@
             <a href="index.html">ホーム</a> &gt; 書籍紹介
         </div>
 
-        <section class="book-card">
-            <div class="book-title-section">
-                <h2 class="book-title">📚 推薦書籍と学部時代のバイブルとしての詳細書評</h2>
-                <div class="book-author">『パターン認識と機械学習 上』<br>著者：C.M.ビショップ / 訳者：元田浩 他 / 発行：丸善出版</div>
-            </div>
+        <header class="page-header">
+            <h2 class="page-title">📚 数学・統計学 書籍紹介</h2>
+            <p class="page-subtitle">大人のやり直し数学・統計学の道標となる、珠玉の推薦図書です。</p>
+        </header>
 
-            <div class="review-content">
+        <!-- 書籍1: PRML -->
+        <section class="book-card">
+            <div class="book-meta">
+                <div class="book-info">
+                    <h3 class="book-title">『パターン認識と機械学習 上』</h3>
+                    <div class="book-details">著者：C.M.ビショップ / 訳者：元田浩 他 / 発行：丸善出版</div>
+                </div>
+                <span class="book-category">機械学習・ベイズ統計</span>
+            </div>
+            <div class="book-description">
+                ベイズ確率論の視点から機械学習アルゴリズムを体系的に解説した世界的名著です。
+                決定木モデルの背景にある情報エントロピーの数学的定義や、確率分布の差異を測定するカルバック・ライブラー情報量などの情報理論についても、極めて厳密に解説しています。
+            </div>
+            <button id="prml-review-btn" class="review-toggle" onclick="toggleReview('prml-review')">
+                ➔ 学部時代のバイブルとしての詳細書評を読む
+            </button>
+            
+            <div id="prml-review" class="review-detail">
                 <p>
                     機械学習を本質から理解しようと志す者が必ずその名前を耳にする本書『パターン認識と機械学習』（PRML）は、かつて大学の学部時代に「バイブル」として肌身離さず携え、数式の一行一行と格闘した思い出深い一冊です。
                     大学の講義室や図書館で、同じページを開いたまま数日間立ち往生し、ノートを数式で埋め尽くしながらも突破した瞬間に得られた知的興奮と、それが現在の実務に与えた影響について、当時の実感をもとに記述いたします。
                 </p>
 
-                <h3 class="review-section-title">1. 多項式フィッティングから始まる、ベイズ確率の強烈な洗礼</h3>
+                <h4>1. 多項式フィッティングから始まる、ベイズ確率の強烈な洗礼</h4>
                 <p>
                     本書を開いて最初に目にするのは、高校数学でも馴染み深い「曲線フィッティング」の課題です。
                     与えられた点に最も近い多項式を引くという、極めて単純な問題から解説が始まります。
@@ -107,7 +211,7 @@
                     単なる過学習を防ぐための「天下り的なペナルティ項」だと思い込んでいた数式が、実はベイズ確率論という巨大な思想の上で必然的に導き出された結果であったことを、自分の手で計算を追うことで初めて体感できたからです。
                 </p>
 
-                <h3 class="review-section-title">2. 第2章・ガウス分布の深淵と、手計算による泥臭い闘争</h3>
+                <h4>2. 第2章・ガウス分布の深淵と、手計算による泥臭い闘争</h4>
                 <p>
                     本書の最初の大きな壁であり、多くの読者が脱落するポイントが「第2章：確率分布」です。
                     一般の機械学習書であれば、ガウス分布（正規分布）の定義式を提示し、平均と分散の説明をして終わる箇所に、本書は100ページ近くを割いて執拗な数式展開を行います。
@@ -122,9 +226,9 @@
                     学部時代という十分な時間があった時期に、この泥臭い格闘をやり遂げたことが、現在の実務において欠損値やノイズの多い汚いデータに対峙した際、「不確実性そのものを確率分布として伝播させる」という、一歩進んだモデリング思考の強固な土台を形作ったと確信しております。
                 </p>
 
-                <h3 class="review-section-title">3. 情報エントロピーとKLダイバージェンスが繋ぐ、情報理論の美</h3>
+                <h4>3. 情報エントロピーとKLダイバージェンスが繋ぐ、情報理論の美</h4>
                 <p>
-                    本単元（決定木）のテーマでもある「情報エントロピー」について、本書はシャノンの情報理論の立場から極めて論理的に説明を試みます。
+                    決定木モデルの評価指標でもある「情報エントロピー」について、本書はシャノンの情報理論の立場から極めて論理的に説明を試みます。
                     エントロピーが単なる「乱雑さ」ではなく、情報を最も効率的に伝達するための「平均符号長」の理論的限界値であるという説明は、私の情報理論に対する視界を180度変えました。
                 </p>
                 <p>
@@ -139,7 +243,7 @@
                     学部時代のノートにこの証明を書き写し、数式の裏にある意味が腑に落ちるという知的跳躍を体験できたことは、生涯の貴重な財産となっております。
                 </p>
 
-                <h3 class="review-section-title">4. 線形モデルのベイズ化と、ニュートン・ラフソン法の衝撃</h3>
+                <h4>4. 線形モデルのベイズ化と、ニュートン・ラフソン法の衝撃</h4>
                 <p>
                     第3章の線形回帰、第4章の線形分類（ロジスティック回帰）では、これまでに培ったガウス分布の数理が炸裂します。
                     線形回帰においては、ガウスノイズを仮定することで最小二乗法が最大尤度推定として自然に導かれ、さらに事前分布を導入することでベイズ線形回帰へと発展します。
@@ -156,7 +260,7 @@
                     まさに、当時の泥臭い勉強が将来の実務に直結した瞬間であり、パッケージの裏側で行われている数学の全貌が見えているという感覚は、今もデータ分析業務における圧倒的な自信に繋がっています。
                 </p>
 
-                <h3 class="review-section-title">5. 実務家が本書を読むべき理由と、挫折を防ぐためのアドバイス</h3>
+                <h4>5. 実務家が本書を読むべき理由と、挫折を防ぐための私からのアドバイス</h4>
                 <p>
                     実務において、PRMLの数式を直接書き下ろしてスクラッチでコードを実装する機会は稀です。
                     多くの仕事は、既存のパッケージをインポートし、パラメータを調整するだけで完結します。
@@ -176,7 +280,7 @@
                     全体の流れを掴んだ後、必要に応じて特定の数式（例えばガウス分布の平方完成など）に絞って手を動かすのが、挫折を防ぐための最も現実的なアプローチです。
                 </p>
 
-                <h3 class="review-section-title">総評：単なる「道具」としての機械学習から、厳密な「思考の道具」へ</h3>
+                <h4>総評：単なる「道具」としての機械学習から、厳密な「思考の道具」へ</h4>
                 <p>
                     本書を読み終えたとき、世界の見え方は変わります。
                     乱雑でノイズだらけの現実のデータを、確率論という厳密極まりないレンズを通して切り取り、その裏に潜む真の構造を数学的にあぶり出していくプロセスは、知的な興奮に満ちています。
@@ -185,6 +289,36 @@
                     大人の数学学び直しにおいて、学部時代のバイブルであった本書に真剣に対峙することは、単なる技術的なスキル習得を超えた「最強の論理的思考トレーニング」になります。
                     データの裏側にある数学的な真実を見通す力を得たいと願うすべての方に、私は本書を強い熱量と敬意を持って推薦いたします。
                 </p>
+            </div>
+        </section>
+
+        <!-- 書籍2: 統計学入門 -->
+        <section class="book-card">
+            <div class="book-meta">
+                <div class="book-info">
+                    <h3 class="book-title">『データサイエンスのための統計学入門 第2版』</h3>
+                    <div class="book-details">著者：Peter Bruce, Andrew Bruce, Peter Gedeck / 訳者：黒川利明 / 発行：オライリー・ジャパン</div>
+                </div>
+                <span class="book-category">統計学・データ分析実務</span>
+            </div>
+            <div class="book-description">
+                データサイエンスの実務で必要とされる統計学の手法（探索的データ分析、ランダムサンプリング、ブートストラップ法、A/Bテスト、多重比較など）を、数式を過度に用いず、Python/Rの実装コードを交えて直感的に解説した実務書です。
+                ビジネスの文脈における予測モデルの評価や、決定木・アンサンブル学習（ランダムフォレストや勾配ブースティングなど）の基礎コンセプトを俯瞰するのに最も適した推薦書籍です。
+            </div>
+        </section>
+
+        <!-- 書籍3: プログラミングのための線形代数 -->
+        <section class="book-card">
+            <div class="book-meta">
+                <div class="book-info">
+                    <h3 class="book-title">『プログラミングのための線形代数』</h3>
+                    <div class="book-details">著者：平岡和幸、堀玄 / 発行：オーム社</div>
+                </div>
+                <span class="book-category">線形代数・幾何表現</span>
+            </div>
+            <div class="book-description">
+                固有値や固有ベクトル、行列式といった線形代数の抽象的な概念を、数式の展開だけに頼らず、「空間の写像（幾何学的イメージ）」として徹底的に視覚化し解説した名著です。
+                機械学習モデルがなぜ多次元の空間操作を行うのか、その裏側の「幾何学的イメージ」を脳内に構築したい大人の学び直しに強く推薦いたします。
             </div>
         </section>
     </main>
