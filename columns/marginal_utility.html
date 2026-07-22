@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>限界効用逓減の法則：「飽き」を数理で解く経済学 | Otona Math コラム</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .column-content {
+            background-color: var(--color-surface);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            margin-bottom: 40px;
+        }
+        .column-content p {
+            line-height: 2.1;
+            margin-bottom: 28px;
+        }
+        .section-header {
+            color: var(--color-brass);
+            margin-top: 40px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 10px;
+            font-size: 22px;
+        }
+        
+        /* Interactive Simulator Styles */
+        .interactive-simulator {
+            background-color: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        .simulator-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 15px;
+        }
+        .simulator-header h3 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            color: var(--color-ink);
+        }
+        .simulator-header p {
+            font-size: 14px;
+            color: var(--color-ink-soft);
+        }
+        
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        @media (max-width: 900px) {
+            .sim-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Control Panel */
+        .control-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .sim-state-card {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .sim-control-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--color-ink);
+            margin-bottom: 10px;
+        }
+        
+        /* Preset Buttons */
+        .preset-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .preset-btn {
+            padding: 8px;
+            font-size: 11px;
+            font-weight: bold;
+            border: 1px solid var(--color-paper-line);
+            background: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .preset-btn:hover, .preset-btn.active {
+            background-color: var(--color-ink);
+            color: var(--color-paper);
+            border-color: var(--color-ink);
+        }
+
+        /* Slider Group */
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 15px;
+        }
+        .slider-label-container {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--color-ink);
+        }
+        .sim-slider {
+            width: 100%;
+            height: 6px;
+            background: var(--color-paper);
+            border-radius: 3px;
+            outline: none;
+            accent-color: var(--color-brass);
+        }
+
+        /* SVG Visualization Container */
+        .utility-viz-box {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .utility-viz-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--color-ink-soft);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .utility-svg-container {
+            width: 100%;
+            height: 240px;
+            position: relative;
+        }
+        .utility-svg-container svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        /* Results Board */
+        .results-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            background: var(--color-paper);
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        @media (max-width: 600px) {
+            .results-board {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+        .res-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .res-label {
+            font-size: 13px;
+            color: var(--color-ink-soft);
+            margin-bottom: 4px;
+        }
+        .res-val {
+            font-size: 24px;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            color: var(--color-ink);
+        }
+        .res-val.status-warn { color: var(--color-red); }
+        .res-val.status-ok { color: #10b981; }
+
+        /* Status Board */
+        .status-board {
+            background: rgba(169, 120, 47, 0.05);
+            border: 1px solid rgba(169, 120, 47, 0.2);
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        .status-board.active-warning {
+            background: rgba(180, 67, 47, 0.06);
+            border-color: rgba(180, 67, 47, 0.3);
+        }
+        @media (max-width: 600px) {
+            .status-board {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+        .status-left {
+            display: flex;
+            flex-direction: column;
+        }
+        .status-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .status-board.active-warning .status-title {
+            color: var(--color-red);
+        }
+        .status-desc {
+            font-size: 12px;
+            color: var(--color-ink-soft);
+        }
+        .status-right {
+            display: flex;
+            align-items: center;
+        }
+        .status-stat-value {
+            font-family: var(--font-body);
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .status-board.active-warning .status-stat-value {
+            color: var(--color-red);
+        }
+
+        /* SVG Element Styling */
+        .chart-axis {
+            stroke: var(--color-paper-line);
+            stroke-width: 1;
+        }
+        .chart-grid {
+            stroke: #f1f3f5;
+            stroke-width: 1;
+            stroke-dasharray: 2 2;
+        }
+        .bar-marginal {
+            fill: #3b5063;
+            opacity: 0.85;
+            transition: height 0.5s, y 0.5s;
+        }
+        .bar-marginal-negative {
+            fill: var(--color-red);
+            opacity: 0.85;
+            transition: height 0.5s, y 0.5s;
+        }
+        .line-total {
+            fill: none;
+            stroke: var(--color-brass);
+            stroke-width: 2.5;
+            transition: d 0.5s;
+        }
+        .point-total {
+            fill: #fff;
+            stroke: var(--color-brass);
+            stroke-width: 2;
+            transition: cx 0.5s, cy 0.5s;
+        }
+        .point-total.active {
+            fill: var(--color-brass);
+        }
+        .viz-label {
+            font-family: var(--font-body);
+            font-size: 9px;
+            fill: var(--color-ink-soft);
+        }
+        .legend-text {
+            font-family: var(--font-body);
+            font-size: 10px;
+            fill: var(--color-ink);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="../index.html">数学と統計学</a></li>
+                    <li><a href="index.html">コラム</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">コラム</a> &gt; 限界効用逓減の法則
+        </div>
+
+        <article class="column-content">
+            <h2 style="font-size: 28px; margin-bottom: 30px; line-height: 1.4;">限界効用逓減の法則：<br>「飽き」を計算して利益を最大化する経済学の数理モデル</h2>
+            
+            <p>
+                経済学において、人間が消費から得る主観的な満足度のことを「効用（こうよう）」と呼びます。
+                そして、この効用に関して広く知られている根本的な数理モデルが「限界効用逓減（げんかいこうようていげん）の法則」です。
+            </p>
+            <p>
+                「限界」とは数学や経済学において「追加で1単位増やしたとき」を意味し、「逓減」とは「次第に減っていく」ことを指します。
+                すなわち、この法則は「人間は同じ商品を繰り返し追加で消費すればするほど、新しく得られる満足度（追加分）は減少していく」という心理的特徴を表したものです。
+            </p>
+
+            <h3 class="section-header">第1章：飲み物の満足度と限界効用の推移</h3>
+            <p>
+                この法則は、喉が渇いた状態での冷たい飲み物の消費を例に考えると直感的に理解できます。
+            </p>
+            <p>
+                渇きを癒す「最初の1杯目」から得られる感動（追加される満足度）を基準値の100と仮定します。
+                続いて飲む「2杯目」も美味しいですが、すでに渇きが一部満たされているため、1杯目ほどの強い感動は得られず、追加の満足度は50に減少します。
+                さらに「3杯目」となると水分は十分に満ちており、追加の満足度は10に激減します。
+                さらに飲み続け「5杯目以降」になると、胃袋の物理的な制限から水分の摂取は苦痛に変わり、追加の満足度はマイナス（不快感）へと突入します。
+            </p>
+            <p>
+                支払う対価や商品の品質が同一であっても、消費者の脳が感じる価値（追加満足度）は、消費量の増加に伴って右肩下がりに急落していきます。
+            </p>
+
+            <h3 class="section-header">【体験】追加消費と満足度（効用）シミュレーター</h3>
+            <p>
+                消費する本数をスライダーで変更し、追加で得られる「限界効用（棒グラフ）」と、満足度の累計である「総効用（折れ線グラフ）」の動きを比較してください。
+                限界効用が減少している間でもプラスであれば総効用は上昇し、限界効用がマイナスになると総効用が減少に転じるプロットの放物線を確認できます。
+            </p>
+
+            <!-- シミュレーター容器 -->
+            <div class="interactive-simulator">
+                <div class="simulator-header">
+                    <h3>飲料の消費量と満足度の相関関係</h3>
+                    <p>渇きの状況を選択し、本数スライダーを動かして、限界効用（追加満足）と総効用（合計満足）の変化をグラフで観測します。</p>
+                </div>
+                
+                <div class="sim-grid">
+                    <!-- 左：設定とコントロール -->
+                    <div class="control-panel">
+                        <div class="sim-state-card">
+                            <div class="sim-control-title">📋 喉の渇き状況の選択</div>
+                            <div class="preset-buttons">
+                                <button id="preset-one" class="preset-btn active" onclick="applyPreset('sport')">① 炎天下の運動後<br>(1杯目の価値極大)</button>
+                                <button id="preset-two" class="preset-btn" onclick="applyPreset('meal')">② 通常の食事中<br>(緩やかな減少)</button>
+                            </div>
+                        </div>
+
+                        <div class="sim-state-card">
+                            <div class="sim-control-title">⚙️ 消費本数の調整</div>
+                            <div class="slider-group">
+                                <div class="slider-label-container">
+                                    <span>🥤 追加で飲んだ本数</span>
+                                    <span><span id="val-drinks">2</span> 本</span>
+                                </div>
+                                <input type="range" id="slide-drinks" class="sim-slider" min="0" max="6" step="1" value="2" oninput="onParamChange()">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 右：SVG可視化 -->
+                    <div class="utility-viz-box">
+                        <div class="utility-viz-title">
+                            <span>📈 満足度カーブグラフ</span>
+                            <span style="font-family:var(--font-mono); font-size:11px;">縦軸: 満足度数値</span>
+                        </div>
+                        <div class="utility-svg-container">
+                            <svg id="svg-utility" viewBox="0 0 240 200">
+                                <!-- グリッド線と軸 -->
+                                <line x1="30" y1="20" x2="30" y2="180" class="chart-axis" />
+                                <line x1="30" y1="120" x2="220" y2="120" class="chart-axis" /> <!-- 0ライン -->
+                                <line x1="30" y1="180" x2="220" y2="180" class="chart-axis" />
+                                
+                                <line x1="30" y1="70" x2="220" y2="70" class="chart-grid" /> <!-- 50ライン -->
+                                <line x1="30" y1="20" x2="220" y2="20" class="chart-grid" />  <!-- 100ライン -->
+
+                                <!-- 軸ラベル -->
+                                <text x="12" y="24" class="viz-label">100</text>
+                                <text x="17" y="74" class="viz-label">50</text>
+                                <text x="22" y="124" class="viz-label">0</text>
+                                <text x="12" y="154" class="viz-label">-30</text>
+                                <text x="220" y="132" class="viz-label">本数</text>
+
+                                <!-- レジェンド（凡例） -->
+                                <rect x="40" y="5" width="10" height="6" fill="#3b5063" opacity="0.8" />
+                                <text x="54" y="11" class="legend-text">限界効用 (追加)</text>
+                                <line x1="130" y1="8" x2="145" y2="8" stroke="var(--color-brass)" stroke-width="2.5" />
+                                <text x="150" y="11" class="legend-text">総効用 (合計)</text>
+
+                                <!-- 動的に要素を描画するグループ -->
+                                <g id="group-bars"></g>
+                                <path id="path-total-line" class="line-total" />
+                                <g id="group-points"></g>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 結果ボード -->
+                <div class="results-board">
+                    <div class="res-box">
+                        <div class="res-label">この1本の追加満足度 (限界効用)</div>
+                        <div class="res-val" id="val-mu-wrapper"><span id="val-mu">0</span></div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">これまでの満足度合計 (総効用)</div>
+                        <div class="res-val" style="color:var(--color-brass);"><span id="val-tu">0</span></div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">最も効率的な消費量</div>
+                        <div class="res-val" style="color:#10b981;"><span id="val-opt-count">0</span> 本</div>
+                    </div>
+                </div>
+                
+                <!-- 判定ボード -->
+                <div id="sim-status-board" class="status-board">
+                    <div class="status-left">
+                        <div class="status-title">🚥 消費状態の評価</div>
+                        <div id="sim-status-desc" class="status-desc">スライダーを動かして、最適な消費バランスを確認してください。</div>
+                    </div>
+                    <div class="status-right">
+                        <div id="sim-status-val" class="target-stat-value">分析中</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-header">第2章：「食べ放題」ビジネスが成立するカラクリ</h3>
+            <p>
+                この限界効用逓減の法則を応用している身近なビジネス戦略が、飲食店における「食べ放題（ビュッフェ）」システムです。
+            </p>
+            <p>
+                定額の支払いで無制限に食品を提供するシステムは、一見すると店舗側の大きなリスクに見えます。
+                しかし、実際には食べ放題を提供する店舗は安定した利益を獲得しています。
+                その理由は、消費者の「限界効用の低下速度」が精緻に計算されているためです。
+            </p>
+            <p>
+                利用者は最初の30分間は高い満足度とともに単価の高い食材を優先的に消費しますが、限界効用逓減の法則に従い、胃袋の容量限界を迎えるよりも前に「脳の満足度の限界（飽き）」が必ず発生します。
+                その結果、中盤から後半にかけては単価が低く満足度をリセットしやすい食材（サラダやデザート、飲料など）の消費が中心となり、全体の平均消費価値は、店舗側が設定した「利益分岐ライン」の中に確実に収まります。
+            </p>
+
+            <h3 class="section-header">第3章：「飽き」から逃れるためのセット戦略とサブスク</h3>
+            <p>
+                同一の価値を反復して提供し続けると、消費者の限界効用は速やかにゼロに向かって低下します。
+                企業はこの逓減現象を回避するために、以下のような経営戦略を展開しています。
+            </p>
+            <p>
+                <strong>1. 製品バリエーションの追加</strong>：<br>
+                同一の商品のみでは消費者は即座に飽きを覚えますが、「複数の味」や「期間限定パッケージ」を交互に提案することにより、低下しかけた限界効用を一時的に回復（リセット）させ、継続的な購買行動を維持します。
+            </p>
+            <p>
+                <strong>2. パッケージ販売（セット売り）</strong>：<br>
+                単一の製品を2点追加購入させるよりも、「メイン商品、サイドメニュー、飲料」をセットで提供する方が、合計の販売価値は高まります。
+                異なる性質の製品を組み合わせることで、各製品の「1単位目の高い満足度」を同時に獲得させることが狙いです。
+            </p>
+            <p>
+                <strong>3. 定額見放題モデル（サブスクリプション）</strong>：<br>
+                動画配信サービスに見られる定額モデルは、利用者の「いくらでも利用可能である」という最大期待値に訴求します。
+                実際には利用者が反復消費するにつれて個々の作品に対する限界効用（熱中度）が低下し、1日あたりに処理できるコンテンツ量が必ず平準化される性質に基づいた、安全な利益設計モデルです。
+            </p>
+
+            <h3 class="section-header">まとめ</h3>
+            <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 20px; font-size: 15px; line-height: 1.8;">
+                限界効用逓減の法則は、「製品の価値は固定されたものではなく、それを受け取る人間の状況によって絶えず変化する」という真理を示しています。
+                ビジネスにおいて安定した利益を得るためには、消費者がどの段階の「飽き」に位置しているかを予測し、効用が消失する前に異なる体験やアプローチを提供し続ける仕組みが必要です。
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- シミュレーター制御スクリプト -->
+    <script>
+        // 状況パターンデータ
+        const scenarios = {
+            sport: {
+                // 限界効用 (0本目から6本目までの各1本の価値、0本目はダミー)
+                mu: [0, 100, 60, 20, 0, -30, -60],
+                // 総効用 (累計)
+                tu: [0, 100, 160, 180, 180, 150, 90],
+                optCount: 3
+            },
+            meal: {
+                mu: [0, 60, 45, 30, 15, 0, -15],
+                tu: [0, 60, 105, 135, 150, 150, 135],
+                optCount: 4
+            }
+        };
+
+        // 状態変数
+        let activeScenario = 'sport';
+        let currentDrinks = 2;
+
+        const slideDrinks = document.getElementById('slide-drinks');
+        const lblDrinks = document.getElementById('val-drinks');
+
+        const lblMu = document.getElementById('val-mu');
+        const lblTu = document.getElementById('val-tu');
+        const lblOptCount = document.getElementById('val-opt-count');
+        const valMuWrapper = document.getElementById('val-mu-wrapper');
+
+        const statusBoard = document.getElementById('sim-status-board');
+        const statusDesc = document.getElementById('sim-status-desc');
+        const statusVal = document.getElementById('sim-status-val');
+
+        const gBars = document.getElementById('group-bars');
+        const pathLine = document.getElementById('path-total-line');
+        const gPoints = document.getElementById('group-points');
+
+        // プリセット適用
+        function applyPreset(type) {
+            activeScenario = type;
+            document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+            if (type === 'sport') {
+                document.getElementById('preset-one').classList.add('active');
+            } else {
+                document.getElementById('preset-two').classList.add('active');
+            }
+            calculateResults();
+        }
+
+        // スライダー変更時
+        function onParamChange() {
+            currentDrinks = parseInt(slideDrinks.value);
+            lblDrinks.textContent = currentDrinks;
+            calculateResults();
+        }
+
+        function calculateResults() {
+            const data = scenarios[activeScenario];
+            const mu = data.mu[currentDrinks];
+            const tu = data.tu[currentDrinks];
+            
+            lblMu.textContent = currentDrinks === 0 ? '0' : (mu > 0 ? `+${mu}` : mu);
+            lblTu.textContent = tu;
+            lblOptCount.textContent = data.optCount;
+
+            // 限界効用の符号による色分け
+            if (mu > 0) {
+                valMuWrapper.className = 'res-val';
+            } else if (mu === 0) {
+                valMuWrapper.className = 'res-val';
+            } else {
+                valMuWrapper.className = 'res-val status-warn';
+            }
+
+            // 診断評価
+            if (currentDrinks === 0) {
+                statusBoard.className = 'status-board';
+                statusVal.textContent = '未消費';
+                statusDesc.textContent = 'まだ飲み物を口にしていません。非常に強い渇きを覚えている状態です。';
+            } else if (currentDrinks === 1) {
+                statusBoard.className = 'status-board';
+                statusVal.textContent = '最高の一杯目';
+                statusDesc.textContent = `最初の1杯目により最高の満足度【+${data.mu[1]}】を得ました。限界効用が最も高い状態です。`;
+            } else if (currentDrinks < data.optCount) {
+                statusBoard.className = 'status-board';
+                statusVal.textContent = '追加消費中';
+                statusDesc.textContent = `2杯目以降を消費し、満足度は減少していますが総効用はまだ上昇しています。`;
+            } else if (currentDrinks === data.optCount) {
+                statusBoard.className = 'status-board';
+                statusVal.textContent = '総効用最大（最適値）';
+                statusDesc.textContent = `満足度が限界に達しました。これ以上の追加消費は、限界効用がマイナスとなり不快感が蓄積される原因になります。`;
+            } else {
+                statusBoard.className = 'status-board active-warning';
+                statusVal.textContent = '過剰摂取（不快領域）';
+                statusDesc.textContent = `飲むほどに満足度が減少する（限界効用がマイナス）段階に突入しました。総効用は${tu}まで低下し、無駄な出費と不快感を生んでいます。`;
+            }
+
+            // グラフの描画更新
+            drawCharts(data);
+        }
+
+        // グラフ描画
+        function drawCharts(data) {
+            gBars.innerHTML = '';
+            gPoints.innerHTML = '';
+
+            const startX = 30;
+            const endX = 220;
+            const zeroY = 120; // 0ライン
+            const stepX = (endX - startX) / 7; // 本数（0〜6）のピッチ
+            
+            // スケーリング：値100 = 100px (100のとき、y = zeroY - 100 = 20)
+            // 限界効用バーの描画
+            for (let i = 1; i <= 6; i++) {
+                const val = data.mu[i];
+                const x = startX + i * stepX - 10;
+                const width = 16;
+                let height = Math.abs(val);
+                let y = zeroY;
+
+                if (val >= 0) {
+                    y = zeroY - height;
+                }
+
+                const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                rect.setAttribute('x', x);
+                rect.setAttribute('y', y);
+                rect.setAttribute('width', width);
+                rect.setAttribute('height', height);
+
+                // 現在の本数以下ならアクティブに光らせる
+                const isActive = (i <= currentDrinks);
+
+                if (val >= 0) {
+                    rect.setAttribute('class', 'bar-marginal');
+                    rect.style.opacity = isActive ? 0.9 : 0.25;
+                } else {
+                    rect.setAttribute('class', 'bar-marginal-negative');
+                    rect.style.opacity = isActive ? 0.9 : 0.25;
+                }
+
+                // バーの値ラベル
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', x + width / 2);
+                text.setAttribute('y', val >= 0 ? y - 4 : y + height + 10);
+                text.setAttribute('class', 'viz-label');
+                text.setAttribute('text-anchor', 'middle');
+                text.textContent = val >= 0 ? `+${val}` : val;
+                text.style.opacity = isActive ? 0.8 : 0.3;
+                gBars.appendChild(text);
+
+                gBars.appendChild(rect);
+
+                // X軸ラベル
+                const lblX = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                lblX.setAttribute('x', startX + i * stepX - 2);
+                lblX.setAttribute('y', 195);
+                lblX.setAttribute('class', 'viz-label');
+                lblX.setAttribute('text-anchor', 'middle');
+                lblX.textContent = `${i}本`;
+                gBars.appendChild(lblX);
+            }
+
+            // 総効用ラインパスの生成
+            let points = [];
+            for (let i = 0; i <= 6; i++) {
+                const val = data.tu[i];
+                const x = startX + i * stepX - 2;
+                const y = zeroY - val * 0.8; // 総効用は少し圧縮スケール（最大180をグラフ内に収める）
+                points.push({ x, y, idx: i });
+            }
+
+            // パス描画
+            let d = `M ${points[0].x} ${points[0].y}`;
+            for (let i = 1; i <= 6; i++) {
+                d += ` L ${points[i].x} ${points[i].y}`;
+            }
+            pathLine.setAttribute('d', d);
+
+            // 総効用プロットドットの描画
+            points.forEach(pt => {
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', pt.x);
+                circle.setAttribute('cy', pt.y);
+                circle.setAttribute('r', 4);
+                
+                const isActive = (pt.idx === currentDrinks);
+                if (isActive) {
+                    circle.setAttribute('class', 'point-total active');
+                    // 数値表示
+                    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    text.setAttribute('x', pt.x);
+                    text.setAttribute('y', pt.y - 8);
+                    text.setAttribute('class', 'viz-label');
+                    text.setAttribute('text-anchor', 'middle');
+                    text.setAttribute('font-weight', 'bold');
+                    text.textContent = data.tu[pt.idx];
+                    gPoints.appendChild(text);
+                } else {
+                    circle.setAttribute('class', 'point-total');
+                    circle.style.opacity = 0.4;
+                }
+                gPoints.appendChild(circle);
+            });
+        }
+
+        // 初期ロード
+        applyPreset('sport');
+    </script>
+</body>
+</html>
