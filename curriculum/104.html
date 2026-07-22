@@ -6,6 +6,9 @@
     <title>決定木モデルと情報エントロピー | Otona Math</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/style.css?v=3">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
     <style>
         .concept-box {
             background-color: var(--color-paper);
@@ -191,10 +194,10 @@
             <div class="concept-box">
                 <h3 style="margin-top:0;">情報エントロピーの定義式</h3>
                 <p>
-                    あるデータセットにおいて、属するクラスの確率を \(P(x_i)\) とするとき、情報エントロピー \(H(X)\) は以下の数式で定義されます。
+                    あるデータセットにおいて、属するクラスの確率を $P(x_i)$ とするとき、情報エントロピー $H(X)$ は以下の数式で定義されます。
                 </p>
                 <div class="math-display">
-                    H(X) = - \sum_{i=1}^{n} P(x_i) \log_2 P(x_i)
+                    $$H(X) = - \sum_{i=1}^{n} P(x_i) \log_2 P(x_i)$$
                 </div>
                 <p>
                     この値は、データセットが最も綺麗に整理されている（1つのクラスしかない）ときに「0」となり、最も乱雑に混ざり合っているときに最大値「1」をとります。
@@ -217,7 +220,7 @@
                 決定木は、データを分割する前（親ノード）のエントロピーから、分割した後（子ノード）のエントロピーの加重平均を差し引くことで、「情報獲得」を計算します。
             </p>
             <div class="math-display">
-                \text{情報獲得} = H(\text{親}) - \left( \frac{N_{\text{左}}}{N_{\text{親}}} H(\text{左}) + \frac{N_{\text{右}}}{N_{\text{親}}} H(\text{右}) \right)
+                $$\text{情報獲得} = H(\text{親}) - \left( \frac{N_{\text{左}}}{N_{\text{親}}} H(\text{左}) + \frac{N_{\text{右}}}{N_{\text{親}}} H(\text{右}) \right)$$
             </div>
             <p>
                 この情報獲得の値が最も大きくなる分岐条件が、最適な分割条件として採用されます。
