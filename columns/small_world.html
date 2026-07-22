@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>スモールワールド現象（六次の隔たり）：ネットワークの数理 | Otona Math コラム</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .column-content {
+            background-color: var(--color-surface);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            margin-bottom: 40px;
+        }
+        .column-content p {
+            line-height: 2.1;
+            margin-bottom: 28px;
+        }
+        .section-header {
+            color: var(--color-brass);
+            margin-top: 40px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 10px;
+            font-size: 22px;
+        }
+        
+        /* Interactive Simulator Styles */
+        .interactive-simulator {
+            background-color: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        .simulator-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 15px;
+        }
+        .simulator-header h3 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            color: var(--color-ink);
+        }
+        .simulator-header p {
+            font-size: 14px;
+            color: var(--color-ink-soft);
+        }
+        
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        @media (max-width: 900px) {
+            .sim-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Control Panel */
+        .control-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .sim-state-card {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .sim-control-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--color-ink);
+            margin-bottom: 10px;
+        }
+        
+        /* Slider Group */
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 15px;
+        }
+        .slider-label-container {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--color-ink);
+        }
+        .sim-slider {
+            width: 100%;
+            height: 6px;
+            background: var(--color-paper);
+            border-radius: 3px;
+            outline: none;
+            accent-color: var(--color-brass);
+        }
+
+        /* SVG Visualization Container */
+        .network-viz-box {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .network-viz-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--color-ink-soft);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .network-svg-container {
+            width: 100%;
+            height: 240px;
+            position: relative;
+        }
+        .network-svg-container svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        /* Results Board */
+        .results-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            background: var(--color-paper);
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        @media (max-width: 600px) {
+            .results-board {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+        .res-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .res-label {
+            font-size: 13px;
+            color: var(--color-ink-soft);
+            margin-bottom: 4px;
+        }
+        .res-val {
+            font-size: 24px;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            color: var(--color-ink);
+        }
+        .res-val.status-warn { color: var(--color-red); }
+        .res-val.status-ok { color: #10b981; }
+
+        /* Status Board */
+        .status-board {
+            background: rgba(169, 120, 47, 0.05);
+            border: 1px solid rgba(169, 120, 47, 0.2);
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        .status-board.active-warning {
+            background: rgba(180, 67, 47, 0.06);
+            border-color: rgba(180, 67, 47, 0.3);
+        }
+        @media (max-width: 600px) {
+            .status-board {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+        .status-left {
+            display: flex;
+            flex-direction: column;
+        }
+        .status-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .status-board.active-warning .status-title {
+            color: var(--color-red);
+        }
+        .status-desc {
+            font-size: 12px;
+            color: var(--color-ink-soft);
+        }
+        .status-right {
+            display: flex;
+            align-items: center;
+        }
+        .status-stat-value {
+            font-family: var(--font-body);
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .status-board.active-warning .status-stat-value {
+            color: var(--color-red);
+        }
+
+        /* SVG Element Styling */
+        .ring-line {
+            stroke: #e9ecef;
+            stroke-width: 1px;
+            opacity: 0.8;
+        }
+        .shortcut-line {
+            stroke: var(--color-brass);
+            stroke-width: 1.5px;
+            opacity: 0.8;
+            stroke-dasharray: 2 1;
+        }
+        .shortest-path-line {
+            stroke: #10b981;
+            stroke-width: 2.5px;
+            transition: d 0.5s;
+        }
+        .network-node {
+            fill: #dee2e6;
+            stroke: #fff;
+            stroke-width: 0.5px;
+        }
+        .network-node.active-node {
+            fill: #10b981;
+            stroke: #fff;
+            stroke-width: 1px;
+        }
+        .network-node.start-end {
+            fill: var(--color-ink);
+            r: 4px;
+        }
+        .viz-label {
+            font-family: var(--font-body);
+            font-size: 10px;
+            fill: var(--color-ink-soft);
+            text-anchor: middle;
+        }
+
+        /* Common Button Style */
+        .sim-btn {
+            background: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            color: var(--color-ink);
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: var(--radius-btn);
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+        }
+        .sim-btn:hover {
+            border-color: var(--color-ink);
+            background-color: #f7f7f7;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="../index.html">数学と統計学</a></li>
+                    <li><a href="index.html">コラム</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">コラム</a> &gt; スモールワールド現象
+        </div>
+
+        <article class="column-content">
+            <h2 style="font-size: 28px; margin-bottom: 30px; line-height: 1.4;">スモールワールド現象（六次の隔たり）：<br>「世界は驚くほど狭い」ことを証明するネットワークの数理モデル</h2>
+            
+            <p>
+                地球上には約80億人の人々が暮らしており、私たちは直感的に「世界は非常に広く、自分と関わりのある人間はごく少数に限られる」と考えがちです。
+                しかし、グラフ理論やネットワーク科学などの数理的なアプローチを適用すると、この直感は完全に覆されます。
+            </p>
+            <p>
+                「六次の隔たり（Six Degrees of Separation）」と呼ばれる数理モデルは、「世界中のどのような場所にいる見知らぬ人であっても、知り合いの知り合いを平均してたった6人仲介するだけで、確実につながることができる」という性質を示したものです。
+                現代のSNSマーケティングや情報拡散（バズる現象）の基礎となる本理論の仕組みを解説します。
+            </p>
+
+            <h3 class="section-header">第1章：ミルグラムの「手紙の実験」</h3>
+            <p>
+                この概念が世に広まる契機となったのは、1967年に社会心理学者スタンレー・ミルグラムが実施した実証実験です。
+            </p>
+            <p>
+                <strong>【実験プロセス】</strong><br>
+                アメリカのネブラスカ州などの地方都市に住む無作為の一般参加者に手紙を渡しました。
+                手紙の最終目的地（ターゲット）は、遠方のマサチューセッツ州ボストンに居住する「特定の株式仲買人」でした。
+                参加者はこの仲買人の連絡先を知らないため、以下の条件でリレー送信を依頼しました。
+            </p>
+            <ul style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
+                <li>ターゲットを直接知っている場合は、直接郵送する。</li>
+                <li>直接知らない場合は、自身の友人の中から「最もターゲットに近づきそうな人物（ボストン近郊に住む友人、金融業界の関係者など）」を選択して手紙を送る。</li>
+                <li>手紙を受け取った別の友人も、同様の条件でリレーを繰り返す。</li>
+            </ul>
+            <p>
+                広大なアメリカ国内において、数億人の人口を介したこの手紙は途中で紛失するか、膨大な日数を要すると予想されていました。
+                しかし、実際にターゲットへ到達した手紙の経由人数を平均すると、わずか「5.5人（約6人）」でした。
+                「Aさんの友人の、友人の、友人の、友人の、友人の、友人」という関係性をたどれば、国内の誰とでも繋がる事実が実証されたのです。
+            </p>
+
+            <h3 class="section-header">【体験】スモールワールド・ネットワーク接続シミュレーター</h3>
+            <p>
+                100人のユーザーが円状に並び、隣接する人と密に繋がっている世界（強い紐帯）をシミュレートしています。
+                スライダーで「弱い紐帯（ランダムな遠い知り合い）」を追加し、円の反対側のノード（0番から50番）に情報が届くまでの「最短ステップ数（緑色のライン）」が劇的に減少するネットワーク変化を体感してください。
+            </p>
+
+            <!-- シミュレーター容器 -->
+            <div class="interactive-simulator">
+                <div class="simulator-header">
+                    <h3>ショートカット線による経由ステップ数の縮小</h3>
+                    <p>スライダーを動かして、離れたコミュニティを結ぶ「弱い紐帯（ショートカット）」を追加し、接続距離の変化を観測します。</p>
+                </div>
+                
+                <div class="sim-grid">
+                    <!-- 左：設定とコントロール -->
+                    <div class="control-panel">
+                        <div class="sim-state-card">
+                            <div class="sim-control-title">⚙️ 弱い紐帯の追加本数</div>
+                            <div class="slider-group">
+                                <div class="slider-label-container">
+                                    <span>🔗 追加したショートカットの数</span>
+                                    <span><span id="val-shortcuts">0</span> 本</span>
+                                </div>
+                                <input type="range" id="slide-shortcuts" class="sim-slider" min="0" max="15" step="1" value="0" oninput="onParamChange()">
+                            </div>
+                        </div>
+
+                        <div>
+                            <button id="btn-rerun" class="sim-btn" onclick="runShortestPath()">⚡ 新たな経路リレーを実行する</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 右：SVG可視化 -->
+                    <div class="network-viz-box">
+                        <div class="network-viz-title">
+                            <span>🕸️ リング状ネットワークモデル</span>
+                            <span style="font-family:var(--font-mono); font-size:10px; color:var(--color-ink-soft);">総ノード数: 100</span>
+                        </div>
+                        <div class="network-svg-container">
+                            <svg id="svg-network" viewBox="0 0 240 240">
+                                <!-- 動的描画グループ -->
+                                <g id="group-ring-lines"></g>
+                                <g id="group-shortcuts"></g>
+                                <g id="group-path"></g>
+                                <g id="group-nodes"></g>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 結果ボード -->
+                <div class="results-board">
+                    <div class="res-box">
+                        <div class="res-label">追加された弱い紐帯</div>
+                        <div class="res-val"><span id="val-shortcuts-res">0</span> 本</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">0番から50番までの経由数</div>
+                        <div class="res-val" style="color:var(--color-brass);"><span id="val-step-count">25</span> ステップ</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">情報拡散の伝播速度</div>
+                        <div class="res-val" style="color:#10b981;" id="val-spread-speed">地域停滞</div>
+                    </div>
+                </div>
+                
+                <!-- 判定ボード -->
+                <div id="sim-status-board" class="status-board">
+                    <div class="status-left">
+                        <div class="status-title">🚥 ネットワークの特性評価</div>
+                        <div id="sim-status-desc" class="status-desc">ショートカットの本数を増やして、ステップ数の推移を確認してください。</div>
+                    </div>
+                    <div class="status-right">
+                        <div id="sim-status-val" class="target-stat-value">分析中</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-header">第2章：なぜわずか6人で世界がつながるのか</h3>
+            <p>
+                数億人、数拾億人の規模に対して、たった6人という仲介で繋がる理由は、関係性の「指数関数的な増殖」にあります。
+                簡単な数式を用いてその組み合わせを計算します。
+            </p>
+            <p>
+                あなたに「100人の知り合い」がおり、その100人それぞれがさらに「重複しない別の100人の知り合い」を持っていると仮定します。
+            </p>
+            <ul style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
+                <li><strong>1次（直接の友人）</strong>：100人</li>
+                <li><strong>2次（友人の友人）</strong>：100人 × 100人 ＝ 1万人</li>
+                <li><strong>3次（3ステップ先）</strong>：1万人 × 100人 ＝ 100万人</li>
+                <li><strong>4次（4ステップ先）</strong>：100万人 × 100人 ＝ 1億人（日本の人口規模に匹敵）</li>
+                <li><strong>5次（5ステップ先）</strong>：1億人 × 100人 ＝ 100億人（地球総人口80億人を突破）</li>
+            </ul>
+            <p>
+                このように、人脈のネットワークは足し算ではなく掛け算（べき乗）で爆発的に拡大するため、わずか5〜6次の繋がりがあれば、理論上全人類を包含する巨大なウェブが構築されます。
+            </p>
+
+            <h3 class="section-header">第3章：「弱い紐帯の強さ」が持つワープ効果</h3>
+            <p>
+                しかし、実際の人間関係においては「自分の友人の知り合いは、自分にとっても知り合いである」という重複が生じるため、同じようなコミュニティの範囲に閉じこもりがちになります。
+                この問題を解決する仕組みが、社会学者マーク・グラノヴェッターが提唱した**「弱い紐帯の強さ（The strength of weak ties）」**です。
+            </p>
+            <p>
+                家族や親友といった緊密な繋がりは「強い紐帯」と呼ばれます。
+                これらは感情的な信頼関係は強固ですが、情報の共有においては同一のコミュニティ内を循環するため、新規の情報が入りにくい性質を持ちます。
+            </p>
+            <p>
+                これに対し、「数年に1回連絡をとる同級生」や「他業種での知人」といった「弱い紐帯」は、あなたとは全く異なる別のコミュニティ（異なる職業、地域）に属しています。
+                この弱い紐帯が、異なる二つの密なコミュニティを一瞬で繋ぐショートカット（ワープホール）として機能します。
+                世界中に広がるこの「ちょっとした知り合い」という細い糸が、遠く離れた世界を繋ぎ止め、スモールワールド現象を生み出しています。
+            </p>
+
+            <h3 class="section-header">第4章：SNS時代のバズとビジネスへの応用</h3>
+            <p>
+                現代のデジタル社会において、この数理モデルはSNSの拡散ロジックやマーケティング戦略にそのまま活用されています。
+            </p>
+            <p>
+                製品情報の拡散において、共通のテーマでまとまった高密度なコミュニティの内部で発信しても、情報は外部へ広がりません。
+                異なる複数のコミュニティ間を結びつける「弱い紐帯のハブ」となるインフルエンサーに情報を届ける設計が、数学的に最も高い効率でバイラル（バズ）を引き起こします。
+            </p>
+            <p>
+                転職活動や新しい顧客の開拓においても、親しい友人（強い紐帯）からの紹介より、過去の緩い知り合い（弱い紐帯）からもたらされる情報の方が、有用な出会いに繋がる確率が高いことが社会調査で示されています。
+                価値のある情報や機会は、身内の関係の「外側」にある細い経路からもたらされます。
+            </p>
+
+            <h3 class="section-header">まとめ</h3>
+            <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 20px; font-size: 15px; line-height: 1.8;">
+                スモールワールド現象は、世界が想像よりも密接に結びついている事実を数式で示しています。
+                同質性の高い既存の人間関係にのみ注力するのではなく、他者と他者を結ぶ「弱い紐帯」のショートカットの価値を理解し、その広大なネットワークを活用することが、情報化社会において優位性を築くための論理的戦略です。
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- シミュレーター制御スクリプト -->
+    <script>
+        // 100ノードの座標リスト
+        const numNodes = 100;
+        const cx = 120;
+        const cy = 120;
+        const radius = 90;
+        let nodes = [];
+        let edges = {}; // 各ノードからの接続先リスト
+        let shortcuts = []; // 追加したショートカットのリスト
+
+        const slideShortcuts = document.getElementById('slide-shortcuts');
+        const lblShortcuts = document.getElementById('val-shortcuts');
+        const lblShortcutsRes = document.getElementById('val-shortcuts-res');
+        const lblStepCount = document.getElementById('val-step-count');
+        const lblSpreadSpeed = document.getElementById('val-spread-speed');
+
+        const statusBoard = document.getElementById('sim-status-board');
+        const statusDesc = document.getElementById('sim-status-desc');
+        const statusVal = document.getElementById('sim-status-val');
+
+        const gRingLines = document.getElementById('group-ring-lines');
+        const gShortcuts = document.getElementById('group-shortcuts');
+        const gPath = document.getElementById('group-path');
+        const gNodes = document.getElementById('group-nodes');
+
+        // ノードの初期化
+        for (let i = 0; i < numNodes; i++) {
+            const theta = (2 * Math.PI * i / numNodes) - (Math.PI / 2);
+            nodes.push({
+                idx: i,
+                x: cx + radius * Math.cos(theta),
+                y: cy + radius * Math.sin(theta)
+            });
+        }
+
+        // 基本のリング状ネットワーク接続 (各ノードは隣の左右2人、計4人と接続)
+        function initBaseEdges() {
+            edges = {};
+            for (let i = 0; i < numNodes; i++) {
+                edges[i] = new Set();
+                const neighbors = [
+                    (i - 1 + numNodes) % numNodes,
+                    (i + 1) % numNodes,
+                    (i - 2 + numNodes) % numNodes,
+                    (i + 2) % numNodes
+                ];
+                neighbors.forEach(n => edges[i].add(n));
+            }
+        }
+
+        // 基本リング線画
+        function drawBaseNetwork() {
+            gRingLines.innerHTML = '';
+            for (let i = 0; i < numNodes; i++) {
+                // 右隣1人、右隣2人のみ結ぶ（二重描画を防ぐ）
+                const n1 = (i + 1) % numNodes;
+                const n2 = (i + 2) % numNodes;
+
+                const line1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line1.setAttribute('x1', nodes[i].x);
+                line1.setAttribute('y1', nodes[i].y);
+                line1.setAttribute('x2', nodes[n1].x);
+                line1.setAttribute('y2', nodes[n1].y);
+                line1.setAttribute('class', 'ring-line');
+                gRingLines.appendChild(line1);
+
+                const line2 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line2.setAttribute('x1', nodes[i].x);
+                line2.setAttribute('y1', nodes[i].y);
+                line2.setAttribute('x2', nodes[n2].x);
+                line2.setAttribute('y2', nodes[n2].y);
+                line2.setAttribute('class', 'ring-line');
+                gRingLines.appendChild(line2);
+            }
+
+            // ノードの描画 (0と50だけ強調)
+            gNodes.innerHTML = '';
+            for (let i = 0; i < numNodes; i++) {
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', nodes[i].x);
+                circle.setAttribute('cy', nodes[i].y);
+                circle.setAttribute('id', `node-${i}`);
+                
+                if (i === 0 || i === 50) {
+                    circle.setAttribute('r', 4);
+                    circle.setAttribute('class', 'network-node start-end');
+                } else {
+                    circle.setAttribute('r', 1.5);
+                    circle.setAttribute('class', 'network-node');
+                }
+                gNodes.appendChild(circle);
+            }
+        }
+
+        // スライダー変更時
+        function onParamChange() {
+            const numShortcuts = parseInt(slideShortcuts.value);
+            lblShortcuts.textContent = numShortcuts;
+            lblShortcutsRes.textContent = numShortcuts;
+
+            initBaseEdges();
+            generateShortcuts(numShortcuts);
+            drawShortcuts();
+            runShortestPath();
+        }
+
+        // ランダムなショートカット線を生成する
+        // 今回の再現性向上のため、毎回ランダムに生成しつつ配列に保存
+        function generateShortcuts(count) {
+            shortcuts = [];
+            // ランダムシード的な配慮をしつつ、常に0から遠く離れた反対側のエリアに結線させる
+            // 本数に応じて異なるショートカットペアを格納する
+            for (let i = 0; i < count; i++) {
+                // ノードi*6 から、その対角線上(反対側)付近へ繋ぐ
+                const u = (i * 7) % numNodes;
+                const v = (u + 45 + Math.floor(Math.random() * 10)) % numNodes;
+                shortcuts.push({ u, v });
+                edges[u].add(v);
+                edges[v].add(u);
+            }
+        }
+
+        // ショートカットの描画
+        function drawShortcuts() {
+            gShortcuts.innerHTML = '';
+            shortcuts.forEach(s => {
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', nodes[s.u].x);
+                line.setAttribute('y1', nodes[s.u].y);
+                line.setAttribute('x2', nodes[s.v].x);
+                line.setAttribute('y2', nodes[s.v].y);
+                line.setAttribute('class', 'shortcut-line');
+                gShortcuts.appendChild(line);
+            });
+        }
+
+        // BFS（幅優先探索）でノード0からノード50までの最短経路を見つける
+        function runShortestPath() {
+            gPath.innerHTML = '';
+            
+            // ノード表示をリセット（0と50以外）
+            for (let i = 0; i < numNodes; i++) {
+                if (i !== 0 && i !== 50) {
+                    document.getElementById(`node-${i}`).setAttribute('class', 'network-node');
+                }
+            }
+
+            const queue = [0];
+            const visited = new Set([0]);
+            const parent = {};
+
+            let found = false;
+
+            while (queue.length > 0) {
+                const curr = queue.shift();
+                if (curr === 50) {
+                    found = true;
+                    break;
+                }
+
+                const adj = edges[curr];
+                if (adj) {
+                    for (let neighbor of adj) {
+                        if (!visited.has(neighbor)) {
+                            visited.add(neighbor);
+                            parent[neighbor] = curr;
+                            queue.push(neighbor);
+                        }
+                    }
+                }
+            }
+
+            if (found) {
+                let path = [50];
+                let curr = 50;
+                while (curr !== 0) {
+                    curr = parent[curr];
+                    path.unshift(curr);
+                }
+
+                // 最短経路のハイライト線を描く
+                for (let i = 0; i < path.length - 1; i++) {
+                    const u = path[i];
+                    const v = path[i + 1];
+
+                    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    line.setAttribute('x1', nodes[u].x);
+                    line.setAttribute('y1', nodes[u].y);
+                    line.setAttribute('x2', nodes[v].x);
+                    line.setAttribute('y2', nodes[v].y);
+                    line.setAttribute('class', 'shortest-path-line');
+                    gPath.appendChild(line);
+
+                    // 経由ノードの色付け
+                    if (u !== 0 && u !== 50) {
+                        document.getElementById(`node-${u}`).setAttribute('class', 'network-node active-node');
+                    }
+                }
+
+                const stepCount = path.length - 1;
+                lblStepCount.textContent = stepCount;
+
+                // 評価と診断
+                const numShortcuts = shortcuts.length;
+                if (numShortcuts === 0) {
+                    lblSpreadSpeed.textContent = '地域停滞';
+                    lblSpreadSpeed.style.color = varColorWarn();
+                    statusBoard.className = 'status-board active-warning';
+                    statusVal.textContent = '孤立したコミュニティ（隔たり大）';
+                    statusDesc.textContent = 'ショートカットがゼロのため、情報の伝達には円周を伝うしかなく、対角線上の相手までに【25ステップ】を要する広い世界です。';
+                } else if (stepCount > 6) {
+                    lblSpreadSpeed.textContent = '順次拡散中';
+                    lblSpreadSpeed.style.color = 'var(--color-ink)';
+                    statusBoard.className = 'status-board';
+                    statusVal.textContent = '距離の短縮（弱い紐帯の効果）';
+                    statusDesc.textContent = `数本のショートカット（弱い紐帯）の追加により、伝達ステップ数は【${stepCount}ステップ】へと激減し、世界の距離が大幅に縮まりました。`;
+                } else {
+                    lblSpreadSpeed.textContent = '爆発的バズ（超速）';
+                    lblSpreadSpeed.style.color = '#10b981';
+                    statusBoard.className = 'status-board';
+                    statusVal.textContent = 'スモールワールド現象（六次の隔たり以下）';
+                    statusDesc.textContent = `ショートカット数が${numShortcuts}本に達したことで、対角線までの隔たりは【${stepCount}ステップ】となりました。6人を介するだけで誰もが繋がるスモールワールドが実現しています。`;
+                }
+            }
+        }
+
+        function varColorWarn() {
+            return 'var(--color-red)';
+        }
+
+        // 初期ロード
+        initBaseEdges();
+        drawBaseNetwork();
+        runShortestPath();
+    </script>
+</body>
+</html>

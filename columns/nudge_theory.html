@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ナッジ理論：強制せずに人を動かす行動経済学の環境設計 | Otona Math コラム</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .column-content {
+            background-color: var(--color-surface);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            margin-bottom: 40px;
+        }
+        .column-content p {
+            line-height: 2.1;
+            margin-bottom: 28px;
+        }
+        .section-header {
+            color: var(--color-brass);
+            margin-top: 40px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 10px;
+            font-size: 22px;
+        }
+        
+        /* Interactive Simulator Styles */
+        .interactive-simulator {
+            background-color: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        .simulator-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 15px;
+        }
+        .simulator-header h3 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            color: var(--color-ink);
+        }
+        .simulator-header p {
+            font-size: 14px;
+            color: var(--color-ink-soft);
+        }
+        
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        @media (max-width: 900px) {
+            .sim-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Control Panel */
+        .control-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .sim-state-card {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .sim-control-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--color-ink);
+            margin-bottom: 10px;
+        }
+        
+        /* Toggle Option Groups */
+        .option-button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .opt-btn {
+            padding: 10px;
+            font-size: 12px;
+            font-weight: bold;
+            border: 1px solid var(--color-paper-line);
+            background: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .opt-btn:hover, .opt-btn.active {
+            background-color: var(--color-ink);
+            color: var(--color-paper);
+            border-color: var(--color-ink);
+        }
+
+        /* SVG Visualization Container */
+        .nudge-viz-box {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .nudge-viz-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--color-ink-soft);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .nudge-svg-container {
+            width: 100%;
+            height: 240px;
+            position: relative;
+        }
+        .nudge-svg-container svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        /* Results Board */
+        .results-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            background: var(--color-paper);
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        @media (max-width: 600px) {
+            .results-board {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+        .res-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .res-label {
+            font-size: 13px;
+            color: var(--color-ink-soft);
+            margin-bottom: 4px;
+        }
+        .res-val {
+            font-size: 24px;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            color: var(--color-ink);
+        }
+        .res-val.status-warn { color: var(--color-red); }
+        .res-val.status-ok { color: #10b981; }
+
+        /* Status Board */
+        .status-board {
+            background: rgba(169, 120, 47, 0.05);
+            border: 1px solid rgba(169, 120, 47, 0.2);
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        .status-board.active-warning {
+            background: rgba(180, 67, 47, 0.06);
+            border-color: rgba(180, 67, 47, 0.3);
+        }
+        @media (max-width: 600px) {
+            .status-board {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+        .status-left {
+            display: flex;
+            flex-direction: column;
+        }
+        .status-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .status-board.active-warning .status-title {
+            color: var(--color-red);
+        }
+        .status-desc {
+            font-size: 12px;
+            color: var(--color-ink-soft);
+        }
+        .status-right {
+            display: flex;
+            align-items: center;
+        }
+        .status-stat-value {
+            font-family: var(--font-body);
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .status-board.active-warning .status-stat-value {
+            color: var(--color-red);
+        }
+
+        /* SVG Element Styling */
+        .user-dot {
+            transition: all 0.5s;
+        }
+        .user-dot.agreed {
+            fill: #10b981;
+        }
+        .user-dot.disagreed {
+            fill: var(--color-red);
+            opacity: 0.7;
+        }
+        .user-dot.untested {
+            fill: #dee2e6;
+        }
+        .viz-label {
+            font-family: var(--font-body);
+            font-size: 10px;
+            fill: var(--color-ink-soft);
+            text-anchor: middle;
+        }
+        .bar-agreed {
+            fill: #10b981;
+            transition: width 0.5s;
+        }
+        .bar-disagreed {
+            fill: var(--color-red);
+            transition: width 0.5s;
+        }
+
+        /* Common Button Style */
+        .sim-btn {
+            background: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            color: var(--color-ink);
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: var(--radius-btn);
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+        }
+        .sim-btn:hover {
+            border-color: var(--color-ink);
+            background-color: #f7f7f7;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="../index.html">数学と統計学</a></li>
+                    <li><a href="index.html">コラム</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">コラム</a> &gt; ナッジ理論
+        </div>
+
+        <article class="column-content">
+            <h2 style="font-size: 28px; margin-bottom: 30px; line-height: 1.4;">ナッジ理論：<br>「強制」せずに人を望ましい方向へ動かす行動経済学の設計モデル</h2>
+            
+            <p>
+                行動経済学における最大の成果の一つであり、リチャード・セイラー教授にノーベル経済学賞をもたらしたフレームワークが「ナッジ理論」です。
+                人々に特定の選択や行動を促したい場合、従来は「罰則などの強制力」を用いるか、「金銭的なインセンティブ」を与えるかの二つのアプローチが基本とされていました。
+            </p>
+            <p>
+                しかしナッジ理論は、人間の認知特性や不合理性を計算し、選択肢を禁じることなく、自由度を残したまま自然により好ましい行動へ誘導する環境設計（アーキテクチャ）の手法を提供しました。
+            </p>
+
+            <h3 class="section-header">第1章：そっと後押しする「ナッジ」の概念</h3>
+            <p>
+                ナッジ（Nudge）とは、英語で「肘でそっと小突く」「優しく後押しする」ことを意味します。
+                法的な規制や物理的な強制を行わず、選択肢の提示方法や提示環境をわずかに調整することで、人々に特定の意思決定を自発的に選択させる仕組みを指します。
+            </p>
+            <p>
+                命令や警告などの直接的な指示は、人間の心理的な反発を招きやすくなります。
+                これに対し、行動環境の初期設計を最適化するだけで、多くの人が意図された選択肢を能動的に選ぶようになります。
+            </p>
+
+            <h3 class="section-header">【体験】意思表示デフォルト設定シミュレーター</h3>
+            <p>
+                臓器提供の同意表明をモデルに、初期設定（デフォルト）および社会的規範（他者の賛同情報）の表示の有無による同意率の変化を検証するシミュレーターです。
+                設定を組み合わせて「100名の登録テストを実行」を押し、個人の自由意志は同一であるにもかかわらず、提示方法の違いのみで結果に圧倒的な格差が発生する様子を確認してください。
+            </p>
+
+            <!-- シミュレーター容器 -->
+            <div class="interactive-simulator">
+                <div class="simulator-header">
+                    <h3>意思表示のアーキテクチャ設計テスト</h3>
+                    <p>デフォルト状態と社会的情報提示を組み合わせ、利用者の意思表示結果（100人相当）をシミュレーションします。</p>
+                </div>
+                
+                <div class="sim-grid">
+                    <!-- 左：設定とコントロール -->
+                    <div class="control-panel">
+                        <div class="sim-state-card">
+                            <div class="sim-control-title">📋 初期チェック（デフォルト効果）</div>
+                            <div class="option-button-group">
+                                <button id="btn-opt-in" class="opt-btn active" onclick="setOpt('opt-in')">オプトイン方式<br>(初期値: 不同意)</button>
+                                <button id="btn-opt-out" class="opt-btn" onclick="setOpt('opt-out')">オプトアウト方式<br>(初期値: 同意)</button>
+                            </div>
+                        </div>
+
+                        <div class="sim-state-card">
+                            <div class="sim-control-title">📢 社会的規範（社会的証明）の提示</div>
+                            <div class="option-button-group">
+                                <button id="btn-social-none" class="opt-btn active" onclick="setSocial('none')">情報提示なし<br>(規約のみ表示)</button>
+                                <button id="btn-social-show" class="opt-btn" onclick="setSocial('show')">他者の傾向表示<br>(「90%が賛同」)</button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <button id="btn-run-sim" class="sim-btn" onclick="runNudgeSim()">👥 100名の登録テストを実行する</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 右：SVG可視化 -->
+                    <div class="nudge-viz-box">
+                        <div class="nudge-viz-title">
+                            <span>🗺️ 登録者100人の行動結果</span>
+                            <span style="font-family:var(--font-mono); font-size:10px; color:var(--color-ink-soft);">緑: 同意 / 赤: 不同意</span>
+                        </div>
+                        <div class="nudge-svg-container">
+                            <svg id="svg-nudge" viewBox="0 0 240 200">
+                                <!-- 10x10のドット配置エリア -->
+                                <g id="group-dots"></g>
+
+                                <!-- 統計棒グラフ -->
+                                <rect x="30" y="160" width="180" height="8" fill="#e9ecef" rx="4" />
+                                <rect id="bar-green" x="30" y="160" width="0" height="8" class="bar-agreed" rx="4" />
+                                
+                                <text x="30" y="185" class="viz-label" style="text-anchor:start;" id="lbl-agreed-count">同意: 0%</text>
+                                <text x="210" y="185" class="viz-label" style="text-anchor:end;" id="lbl-disagreed-count">不同意: 0%</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 結果ボード -->
+                <div class="results-board">
+                    <div class="res-box">
+                        <div class="res-label">適用した設定方式</div>
+                        <div class="res-val" style="font-size:16px;" id="val-setting">オプトイン（ナッジなし）</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">同意（賛同）した人数</div>
+                        <div class="res-val" style="color:#10b981;"><span id="val-agreed-num">0</span> 人</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">最終合意（賛同）率</div>
+                        <div class="res-val" style="color:var(--color-brass);"><span id="val-agreed-ratio">0</span> %</div>
+                    </div>
+                </div>
+                
+                <!-- 判定ボード -->
+                <div id="sim-status-board" class="status-board">
+                    <div class="status-left">
+                        <div class="status-title">🚥 選択環境デザインの診断</div>
+                        <div id="sim-status-desc" class="status-desc">設定を選んで「登録テストを実行する」ボタンを押してください。</div>
+                    </div>
+                    <div class="status-right">
+                        <div id="sim-status-val" class="target-stat-value">未テスト</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-header">第2章：オランダの空港トイレにおけるハエの標的</h3>
+            <p>
+                ナッジ理論の実用的な成果として有名な事例が、オランダのスキポール空港における男性用トイレの清掃維持プロジェクトです。
+            </p>
+            <p>
+                空港側は男性用トイレの尿の飛び散りによる清掃費用の肥大化に頭を悩ませていました。
+                「綺麗に使いましょう」という警告の設置や、清掃維持の呼びかけといった道徳的アプローチは機能しませんでした。
+            </p>
+            <p>
+                そこで設計者は、便器の底の特定の箇所に「一匹の小さなハエのシール」を配置する仕掛けを行いました。
+                この仕掛けにより、男性利用者は誰からも強制されることなく、無意識のうちにハエの標的を狙って尿を当てるようになりました。
+                これは「標的があると無意識に狙いたくなる」という男性の直感的な心理特性を利用したものです。
+                注意書きも罰則も設けないこのハエの絵だけで、飛び散りによる汚れは80%減少しました。
+            </p>
+
+            <h3 class="section-header">第3章：脳の省エネシステム「システム1」の特性</h3>
+            <p>
+                ナッジが機能する背景には、人間の脳の判断システムの特徴があります。
+                心理学者ダニエル・カーネマンは、人間の意思決定プロセスを以下の二つのモードに分類しました。
+            </p>
+            <ul style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
+                <li><strong>システム1（直感・自動的）</strong>：無意識のうちに、大きな脳エネルギーを使わずに瞬時に判断するモード。</li>
+                <li><strong>システム2（熟考・論理的）</strong>：高いエネルギーを消費しながら、論理的に深く推論するモード。</li>
+            </ul>
+            <p>
+                人間の日常的な決断の90%以上は、脳の疲労を防ぐために自動的な「システム1」で行われています。
+                ナッジ理論は、この「システム1」が直感的に選んでしまうように物理的環境や選択肢の順番を設計し、無意識下の行動変化を促す技術です。
+            </p>
+
+            <h3 class="section-header">第4章：初期値の設定（デフォルト効果）の決定的な影響</h3>
+            <p>
+                システム1の特性を利用した最も強力なナッジ設計が、初期値（デフォルト）の制御です。
+                人間は、あらかじめ用意されているデフォルトの選択肢を、手動で変更することを避ける傾向が統計的に示されています。
+            </p>
+            <p>
+                ヨーロッパの隣接する文化圏における「死後の臓器提供」に対する合意率のデータは、この効果を明確に示しています。
+                「同意する場合はチェックを入れる」形式（オプトイン）を採用した国々では合意率が10%から20%に留まるのに対し、「同意しない場合はチェックを入れる」形式（オプトアウト）の国々では合意率が約99%に達しました。
+            </p>
+            <p>
+                どちらの形式でも個人の選択の自由は完全に保証されています。
+                しかし、多くの人は「わざわざ手動でチェックを切り替える（システム2の起動）」という摩擦を嫌い、初期設定をそのまま受け入れます。
+            </p>
+
+            <h3 class="section-header">まとめ</h3>
+            <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 20px; font-size: 15px; line-height: 1.8;">
+                ナッジ理論は、人間の不合理や惰性を前提とし、選択の自由を保護しながら望ましい行動へと促す高度な環境設計モデルです。
+                その影響力の大きさから、利用者の不利益になるよう設計された「悪意のあるナッジ（ダークパターン）」の広まりも懸念されています。
+                ビジネスで本理論を応用する際は、その誘導が「利用者の幸福や利益に合致していること」という倫理観を維持することが不可欠です。
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- シミュレーター制御スクリプト -->
+    <script>
+        // 状態変数
+        let optSetting = 'opt-in';
+        let socialSetting = 'none';
+
+        const btnOptIn = document.getElementById('btn-opt-in');
+        const btnOptOut = document.getElementById('btn-opt-out');
+        const btnSocialNone = document.getElementById('btn-social-none');
+        const btnSocialShow = document.getElementById('btn-social-show');
+
+        const lblSetting = document.getElementById('val-setting');
+        const lblAgreedNum = document.getElementById('val-agreed-num');
+        const lblAgreedRatio = document.getElementById('val-agreed-ratio');
+
+        const lblAgreedCount = document.getElementById('lbl-agreed-count');
+        const lblDisagreedCount = document.getElementById('lbl-disagreed-count');
+        const barGreen = document.getElementById('bar-green');
+
+        const statusBoard = document.getElementById('sim-status-board');
+        const statusDesc = document.getElementById('sim-status-desc');
+        const statusVal = document.getElementById('sim-status-val');
+
+        const gDots = document.getElementById('group-dots');
+
+        // 設定のセット
+        function setOpt(type) {
+            optSetting = type;
+            btnOptIn.classList.remove('active');
+            btnOptOut.classList.remove('active');
+            if (type === 'opt-in') {
+                btnOptIn.classList.add('active');
+            } else {
+                btnOptOut.classList.add('active');
+            }
+            updateSettingLabel();
+        }
+
+        function setSocial(type) {
+            socialSetting = type;
+            btnSocialNone.classList.remove('active');
+            btnSocialShow.classList.remove('active');
+            if (type === 'none') {
+                btnSocialNone.classList.add('active');
+            } else {
+                btnSocialShow.classList.add('active');
+            }
+            updateSettingLabel();
+        }
+
+        function updateSettingLabel() {
+            let optText = optSetting === 'opt-in' ? 'オプトイン' : 'オプトアウト';
+            let socialText = socialSetting === 'none' ? '（ナッジなし）' : '（社会的規範あり）';
+            lblSetting.textContent = optText + socialText;
+        }
+
+        // 初期状態でドットを描く
+        function initDots() {
+            gDots.innerHTML = '';
+            for (let r = 0; r < 10; r++) {
+                for (let c = 0; c < 10; c++) {
+                    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    circle.setAttribute('cx', 30 + c * 20);
+                    circle.setAttribute('cy', 30 + r * 12);
+                    circle.setAttribute('r', 4);
+                    circle.setAttribute('class', 'user-dot untested');
+                    gDots.appendChild(circle);
+                }
+            }
+        }
+
+        // シミュレーション実行
+        function runNudgeSim() {
+            gDots.innerHTML = '';
+            let agreedCount = 0;
+            
+            // 確率の設定
+            // オプトイン × ナッジなし ＝ 同意率15% (手動チェックが必要)
+            // オプトイン × 社会的規範 ＝ 同意率42% (他者情報をみてチェックする)
+            // オプトアウト × ナッジなし ＝ 同意率85% (初期値が同意のため、外す人が少ない)
+            // オプトアウト × 社会的規範 ＝ 同意率97% (社会的証明＋初期値でほぼ100%)
+            let agreeProb = 0.15;
+            if (optSetting === 'opt-in' && socialSetting === 'show') {
+                agreeProb = 0.42;
+            } else if (optSetting === 'opt-out' && socialSetting === 'none') {
+                agreeProb = 0.85;
+            } else if (optSetting === 'opt-out' && socialSetting === 'show') {
+                agreeProb = 0.97;
+            }
+
+            // 100人分をシミュレート
+            for (let r = 0; r < 10; r++) {
+                for (let c = 0; c < 10; c++) {
+                    const isAgreed = Math.random() < agreeProb;
+                    if (isAgreed) agreedCount++;
+
+                    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    circle.setAttribute('cx', 30 + c * 20);
+                    circle.setAttribute('cy', 30 + r * 12);
+                    circle.setAttribute('r', 4);
+                    circle.setAttribute('class', isAgreed ? 'user-dot agreed' : 'user-dot disagreed');
+                    gDots.appendChild(circle);
+                }
+            }
+
+            const disagreedCount = 100 - agreedCount;
+
+            // ボード表示更新
+            lblAgreedNum.textContent = agreedCount;
+            lblAgreedRatio.textContent = agreedCount;
+
+            // 棒グラフ更新
+            barGreen.setAttribute('width', Math.round(180 * (agreedCount / 100)));
+            lblAgreedCount.textContent = `同意: ${agreedCount}%`;
+            lblDisagreedCount.textContent = `不同意: ${disagreedCount}%`;
+
+            // 診断
+            if (optSetting === 'opt-in' && socialSetting === 'none') {
+                statusBoard.className = 'status-board active-warning';
+                statusVal.textContent = '初期チェックの障壁（不同意多数）';
+                statusDesc.textContent = `同意のために「能動的にチェックを入れる」必要があるため、大半のユーザーがそのまま送信し、同意率は【${agreedCount}%】に低迷しました。`;
+            } else if (optSetting === 'opt-in' && socialSetting === 'show') {
+                statusBoard.className = 'status-board';
+                statusVal.textContent = '社会的証明による後押し';
+                statusDesc.textContent = `「他の多くの人も同意している」という情報を提示したため、手動でチェックを入れる行動が促され、同意率は【${agreedCount}%】へ上昇しました。`;
+            } else if (optSetting === 'opt-out' && socialSetting === 'none') {
+                statusBoard.className = 'status-board';
+                statusVal.textContent = 'デフォルト効果（無意識の受容）';
+                statusDesc.textContent = `「何もしなければ同意」という初期設定により、チェックを外す手間を避ける心理が働き、同意率は【${agreedCount}%】を記録しました。`;
+            } else if (optSetting === 'opt-out' && socialSetting === 'show') {
+                statusBoard.className = 'status-board';
+                statusVal.textContent = '最強のナッジ（ほぼ全員同意）';
+                statusDesc.textContent = `デフォルト効果と「他者も賛同している」という安心感（社会的証明）が相乗効果を生み、同意率は驚異の【${agreedCount}%】に達しました。`;
+            }
+        }
+
+        // 初期ロード
+        initDots();
+        updateSettingLabel();
+    </script>
+</body>
+</html>

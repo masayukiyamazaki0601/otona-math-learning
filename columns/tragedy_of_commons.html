@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>共有地の悲劇：強欲が全体を破滅させる経済学の数理 | Otona Math コラム</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .column-content {
+            background-color: var(--color-surface);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            margin-bottom: 40px;
+        }
+        .column-content p {
+            line-height: 2.1;
+            margin-bottom: 28px;
+        }
+        .section-header {
+            color: var(--color-brass);
+            margin-top: 40px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 10px;
+            font-size: 22px;
+        }
+        
+        /* Interactive Simulator Styles */
+        .interactive-simulator {
+            background-color: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        .simulator-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 15px;
+        }
+        .simulator-header h3 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            color: var(--color-ink);
+        }
+        .simulator-header p {
+            font-size: 14px;
+            color: var(--color-ink-soft);
+        }
+        
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 0.95fr 1.05fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        @media (max-width: 900px) {
+            .sim-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Control Panel */
+        .control-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .sim-state-card {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .sim-control-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--color-ink);
+            margin-bottom: 10px;
+        }
+        
+        /* Slider Group */
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 15px;
+        }
+        .slider-label-container {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--color-ink);
+        }
+        .sim-slider {
+            width: 100%;
+            height: 6px;
+            background: var(--color-paper);
+            border-radius: 3px;
+            outline: none;
+            accent-color: var(--color-brass);
+        }
+
+        /* SVG Visualization Container */
+        .pasture-viz-box {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .pasture-viz-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--color-ink-soft);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .pasture-svg-container {
+            width: 100%;
+            height: 240px;
+            position: relative;
+        }
+        .pasture-svg-container svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        /* Results Board */
+        .results-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            background: var(--color-paper);
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        @media (max-width: 600px) {
+            .results-board {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+        .res-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .res-label {
+            font-size: 13px;
+            color: var(--color-ink-soft);
+            margin-bottom: 4px;
+        }
+        .res-val {
+            font-size: 24px;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            color: var(--color-ink);
+        }
+        .res-val.status-warn { color: var(--color-red); }
+        .res-val.status-ok { color: #10b981; }
+
+        /* Status Board */
+        .status-board {
+            background: rgba(169, 120, 47, 0.05);
+            border: 1px solid rgba(169, 120, 47, 0.2);
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        .status-board.active-warning {
+            background: rgba(180, 67, 47, 0.06);
+            border-color: rgba(180, 67, 47, 0.3);
+        }
+        @media (max-width: 600px) {
+            .status-board {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+        .status-left {
+            display: flex;
+            flex-direction: column;
+        }
+        .status-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .status-board.active-warning .status-title {
+            color: var(--color-red);
+        }
+        .status-desc {
+            font-size: 12px;
+            color: var(--color-ink-soft);
+        }
+        .status-right {
+            display: flex;
+            align-items: center;
+        }
+        .status-stat-value {
+            font-family: var(--font-body);
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .status-board.active-warning .status-stat-value {
+            color: var(--color-red);
+        }
+
+        /* SVG Element Styling */
+        .pasture-bg {
+            transition: fill 0.8s;
+            stroke: #ced4da;
+            stroke-width: 1.5px;
+            rx: 8;
+        }
+        .sheep-dot {
+            fill: #fff;
+            stroke: #adb5bd;
+            stroke-width: 0.5px;
+            transition: all 0.5s;
+        }
+        .sheep-dot.self-sheep {
+            fill: var(--color-brass);
+            stroke: #8d5d1c;
+            stroke-width: 1px;
+        }
+        .viz-label {
+            font-family: var(--font-body);
+            font-size: 10px;
+            fill: var(--color-ink-soft);
+            text-anchor: middle;
+        }
+
+        /* Common Button Style */
+        .sim-btn {
+            background: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            color: var(--color-ink);
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: var(--radius-btn);
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+        }
+        .sim-btn:hover {
+            border-color: var(--color-ink);
+            background-color: #f7f7f7;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="../index.html">数学と統計学</a></li>
+                    <li><a href="index.html">コラム</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">コラム</a> &gt; 共有地の悲劇
+        </div>
+
+        <article class="column-content">
+            <h2 style="font-size: 28px; margin-bottom: 30px; line-height: 1.4;">共有地の悲劇：<br>人間の「合理的な強欲」が全体を破滅させる経済学の数理モデル</h2>
+            
+            <p>
+                「共有地の悲劇（The Tragedy of the Commons）」は、1968年に生物学者ギャレット・ハーディンによって提唱された、共有資源の管理と個人の利己的な行動に関する代表的な経済学の数理モデルです。
+            </p>
+            <p>
+                この理論は、「誰もが制限なく利用できる共有資源は、各個人が自己の利益を合理的に追求した結果、必ず乱開発され枯渇し、最終的に社会全体が破滅的な状況に陥る」という数理的メカニズムを示したものです。
+                ビジネスにおける組織管理から地球規模の環境問題まで幅広く当てはまるこの法則を、村の共有牧場の例を用いて解説します。
+            </p>
+
+            <h3 class="section-header">第1章：「利益の独占」と「損失の分散」という構造バグ</h3>
+            <p>
+                村人全員が自由に羊を放牧できる共有牧場があると仮定します。
+            </p>
+            <p>
+                この牧場において、環境（草地）を良好な状態に維持したまま放牧できる羊の最大頭数は10頭です。
+                村に10人の羊飼いがおり、全員がルールを守ってそれぞれ1頭ずつ放牧している場合は、安定して適正な利益（羊毛など）を維持できます。
+            </p>
+            <p>
+                ここで、ある1人の羊飼いが「自分だけ放牧する羊をもう1頭増やし、合計2頭にしよう」と計画します。
+                牧場全体の羊は11頭となり、草地の上限を超えるため、牧場はわずかに荒れ始めます。
+                しかし、この羊飼いの利害計算は、以下のような極端な歪みを生みます。
+            </p>
+            <ul style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
+                <li><strong>個人的な利益</strong>：羊を1頭から2頭に増やしたため、自身の獲得できる利益はほぼ2倍になります。この追加の利益は本人が独占します。</li>
+                <li><strong>個人的な損失</strong>：過剰放牧によって牧場全体が受けるダメージ（草の減少）は、放牧されているすべての羊に影響します。これは村のメンバー全員に均等に分散（割り勘）されます。</li>
+            </ul>
+            <p>
+                このように、「得られる利益は本人が独占するのに対し、発生したコストやダメージは全体へ分散される」という制度的なバグが存在する限り、個人にとって過剰利用を選択することが最も合理的であるという結論が導かれます。
+            </p>
+
+            <h3 class="section-header">【体験】共有牧場放牧シミュレーター</h3>
+            <p>
+                あなた（黄色い羊）と、他の9人の羊飼い（白い羊）の放牧頭数をスライダーで調整します。
+                全体の放牧数（合計頭数）が適正上限（10頭）を超えると、放牧地（SVG）の草の色が緑から次第に枯れて茶色（砂漠化）に変化します。
+                羊を増やしたときの「個人の利益」と「牧場の維持可能性」のアンバランスを確認してください。
+            </p>
+
+            <!-- シミュレーター容器 -->
+            <div class="interactive-simulator">
+                <div class="simulator-header">
+                    <h3>共有牧場における放牧頭数の割り当て</h3>
+                    <p>あなたと他の9人の放牧頭数を設定し、全体の羊の数とそれに対する牧場の土壌変化、個人の売上の相関を確認します。</p>
+                </div>
+                
+                <div class="sim-grid">
+                    <!-- 左：設定とコントロール -->
+                    <div class="control-panel">
+                        <div class="sim-state-card">
+                            <div class="sim-control-title">⚙️ あなたの放牧数 (10人中 1人)</div>
+                            <div class="slider-group">
+                                <div class="slider-label-container">
+                                    <span>🐑 放牧する頭数</span>
+                                    <span><span id="val-self-sheep">1</span> 頭</span>
+                                </div>
+                                <input type="range" id="slide-self-sheep" class="sim-slider" min="1" max="4" step="1" value="1" oninput="onParamChange()">
+                            </div>
+                        </div>
+
+                        <div class="sim-state-card">
+                            <div class="sim-control-title">👥 他の9人の平均放牧数</div>
+                            <div class="slider-group">
+                                <div class="slider-label-container">
+                                    <span>🐑 1人あたりの放牧数</span>
+                                    <span><span id="val-others-sheep">1</span> 頭</span>
+                                </div>
+                                <input type="range" id="slide-others-sheep" class="sim-slider" min="1" max="4" step="1" value="1" oninput="onParamChange()">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 右：SVG可視化 -->
+                    <div class="pasture-viz-box">
+                        <div class="pasture-viz-title">
+                            <span>🌿 共有牧場の草地状況</span>
+                            <span style="font-family:var(--font-mono); font-size:10px; color:var(--color-ink-soft);">適正上限: 10頭</span>
+                        </div>
+                        <div class="pasture-svg-container">
+                            <svg id="svg-pasture" viewBox="0 0 240 200">
+                                <!-- 牧場背景 -->
+                                <rect id="pasture-ground" x="10" y="10" width="220" height="180" fill="#d3f9d8" class="pasture-bg" />
+                                
+                                <!-- 羊を配置するコンテナ -->
+                                <g id="group-sheep"></g>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 結果ボード -->
+                <div class="results-board">
+                    <div class="res-box">
+                        <div class="res-label">全体の放牧頭数</div>
+                        <div class="res-val"><span id="val-total-sheep">10</span> 頭</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">羊1頭あたりの価値</div>
+                        <div class="res-val" style="color:var(--color-brass);"><span id="val-sheep-val">100</span> 万円</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">あなたの総売上利益</div>
+                        <div class="res-val" style="color:#10b981;" id="val-self-profit-wrapper"><span id="val-self-profit">100</span> 万円</div>
+                    </div>
+                </div>
+                
+                <!-- 判定ボード -->
+                <div id="sim-status-board" class="status-board">
+                    <div class="status-left">
+                        <div class="status-title">🚥 資源利用の診断評価</div>
+                        <div id="sim-status-desc" class="status-desc">パラメータを変更して、共有地全体の状況を確認してください。</div>
+                    </div>
+                    <div class="status-right">
+                        <div id="sim-status-val" class="target-stat-value">分析中</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-header">第2章：合理的判断の連鎖による資源の完全崩壊</h3>
+            <p>
+                過剰利用を選択するプレイヤーの動きは、周囲の他の参加者にも波及します。
+            </p>
+            <p>
+                「Aさんが羊を増やして売上を倍増させている。自分たちが規律を守り続けても、Aさんが招いた牧場損壊のしわ寄せを一方的に負わされるだけであり、ルールを遵守し続けることは経済的に大損になる」
+                他の羊飼いも自己防衛のために羊を増やし始めます。
+                全員が「自分一人が増やす程度なら全体の損失は軽微である」と言い訳をしながら、合理的な利害計算に基づいて行動します。
+            </p>
+            <p>
+                その結果、牧場全体の許容量を超えた数倍の羊が放牧され、牧草は再生速度を超えて食い尽くされ、牧場は砂漠化します。
+                最終的にはすべての羊が飢え死にし、全員が売上を失う破滅的な結果に終わります。
+            </p>
+
+            <h3 class="section-header">第3章：現代社会における悲劇の構図</h3>
+            <p>
+                共有地の悲劇は、現代社会のさまざまな領域で生じています。
+            </p>
+            <ul style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
+                <li><strong>水産資源の乱獲（漁業資源）</strong>：海洋の魚類は特定の人物の所有物ではありません。将来の保全のために1社が捕獲を制限しても、他社が乱獲を行えば、我慢した企業が一方的に不利益を被るため、競争的な乱獲が発生します。</li>
+                <li><strong>地球温暖化（大気の汚染）</strong>：工場が二酸化炭素を排出する問題も同様です。高いコストをかけて排気浄化装置を導入するよりも、そのまま大気に放出した方が個別企業の利益は最大化されます。大気汚染のダメージは全世界の人類に分散されるためです。</li>
+                <li><strong>フリーライダー（組織のタダ乗り）</strong>：共同プロジェクトにおいて、「自分が少し手を抜いても、他のメンバーが作業を完了するためチームの成果は下がらない」と判断して怠慢を選択する行動です。これを見た他のメンバーの士気も低下し、プロジェクトは瓦解します。</li>
+            </ul>
+
+            <h3 class="section-header">第4章：悲劇を回避する2つの制度設計</h3>
+            <p>
+                参加者の道徳観のみに依拠する対策では、この利己的なゲーム構造を打破することは不可能です。
+                経済学および法学は、これを解決するための具体的な制度設計を提示しています。
+            </p>
+            <p>
+                <strong>解決策1：私有地への分割（財産権の設定）</strong>：<br>
+                共有地を区画分けして個人の私有地に変換します。
+                土地が自己の所有になれば、過剰利用による損失（草の消滅）はすべて本人の負担（損失が分散されない）になるため、将来の持続性を考慮して適正な利用数に維持するインセンティブが働きます。
+            </p>
+            <p>
+                <strong>解決策2：管理機関による規制と罰則の制定</strong>：<br>
+                大気や海洋のように分割が不可能な公共財（コモンズ）に対しては、法的な制限を設定します。
+                許容上限を超えた利用に対して、「得られる利益を超える高額な罰則（ペナルティ）」を科すルールを導入し、過剰利用を選択する方が個人にとっても「損」になるように数理構造そのものを変更する手法です。
+            </p>
+
+            <h3 class="section-header">まとめ</h3>
+            <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 20px; font-size: 15px; line-height: 1.8;">
+                共有地の悲劇は、個人ごとの最適な合理的意思決定の積み重ねが、集団全体にとって最悪の結果を生み出すというパラドックスを示しています。
+                持続可能な繁栄を維持するためには、道徳的な呼びかけに留まらず、「利益とコストが個人と全体で不均衡になる構造」をルール変更によって事前に排除することが不可欠です。
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- シミュレーター制御スクリプト -->
+    <script>
+        // 状態変数
+        let selfSheep = 1;
+        let othersSheep = 1;
+
+        const slideSelf = document.getElementById('slide-self-sheep');
+        const slideOthers = document.getElementById('slide-others-sheep');
+
+        const lblSelf = document.getElementById('val-self-sheep');
+        const lblOthers = document.getElementById('val-others-sheep');
+
+        const lblTotalSheep = document.getElementById('val-total-sheep');
+        const lblSheepVal = document.getElementById('val-sheep-val');
+        const lblSelfProfit = document.getElementById('val-self-profit');
+        const valSelfProfitWrapper = document.getElementById('val-self-profit-wrapper');
+
+        const pastureGround = document.getElementById('pasture-ground');
+        const gSheep = document.getElementById('group-sheep');
+
+        const statusBoard = document.getElementById('sim-status-board');
+        const statusDesc = document.getElementById('sim-status-desc');
+        const statusVal = document.getElementById('sim-status-val');
+
+        // スライダー値変更時
+        function onParamChange() {
+            selfSheep = parseInt(slideSelf.value);
+            othersSheep = parseInt(slideOthers.value);
+
+            lblSelf.textContent = selfSheep;
+            lblOthers.textContent = othersSheep;
+
+            calculateResults();
+        }
+
+        function calculateResults() {
+            // 全体の羊の数 = あなたの数 + 他の9人 * 各頭数
+            const totalSheep = selfSheep + 9 * othersSheep;
+            
+            // 羊1頭あたりの価値計算
+            // 適正上限10頭以下なら1頭100万円。
+            // 10頭を超えると草が減って痩せるため、1頭あたりの価値が急速に低下する。
+            // 25頭を超えると完全砂漠化で価値0。
+            let sheepVal = 100;
+            if (totalSheep > 10) {
+                sheepVal = Math.max(0, 100 - Math.round(6.7 * (totalSheep - 10)));
+            }
+
+            // あなたの利益 = 頭数 * 1頭価値
+            const selfProfit = selfSheep * sheepVal;
+
+            // ボード表示
+            lblTotalSheep.textContent = totalSheep;
+            lblSheepVal.textContent = sheepVal;
+            lblSelfProfit.textContent = selfProfit;
+
+            if (selfProfit > 0) {
+                valSelfProfitWrapper.className = 'res-val status-ok';
+            } else {
+                valSelfProfitWrapper.className = 'res-val status-warn';
+            }
+
+            // 牧場の背景色グラデーション（砂漠化表現）
+            // 10頭以下: #d3f9d8 (鮮やかな緑)
+            // 20頭: #e2d4b7 (黄土色っぽく荒れた色)
+            // 25頭以上: #e9ecef (灰色の死んだ土地)
+            let groundColor = '#d3f9d8';
+            if (totalSheep > 10 && totalSheep <= 20) {
+                const ratio = (totalSheep - 10) / 10;
+                // 緑から黄色への線形補間
+                const r = Math.round(211 + (226 - 211) * ratio);
+                const g = Math.round(249 - (249 - 212) * ratio);
+                const b = Math.round(216 - (216 - 183) * ratio);
+                groundColor = `rgb(${r}, ${g}, ${b})`;
+            } else if (totalSheep > 20) {
+                const ratio = Math.min(1.0, (totalSheep - 20) / 15);
+                // 黄土色から灰色への線形補間
+                const r = Math.round(226 - (226 - 222) * ratio);
+                const g = Math.round(212 - (212 - 226) * ratio);
+                const b = Math.round(183 + (230 - 183) * ratio);
+                groundColor = `rgb(${r}, ${g}, ${b})`;
+            }
+            pastureGround.setAttribute('fill', groundColor);
+
+            // 羊のドット描画
+            drawSheep(totalSheep);
+
+            // 診断
+            if (totalSheep <= 10) {
+                statusBoard.className = 'status-board';
+                statusVal.textContent = '持続可能な共栄';
+                statusDesc.textContent = '全体の放牧頭数が適正上限（10頭）以下です。牧草の再生力が上回っており、来年以降も安定して利益を得られます。';
+            } else if (selfSheep > 1 && othersSheep === 1) {
+                statusBoard.className = 'status-board';
+                statusVal.textContent = '利己的な利益独占（一時的）';
+                statusDesc.textContent = `あなただけが放牧数を増やしたため、あなたの利益は【${selfProfit}万円】へ跳ね上がりましたが、牧草の荒れ（損失）は10人で割り勘になり、他人が不利益を被っています。`;
+            } else if (totalSheep > 10 && totalSheep < 25) {
+                statusBoard.className = 'status-board active-warning';
+                statusVal.textContent = '共有地の荒廃（衰退期）';
+                statusDesc.textContent = `全員が利益を求めて放牧数を増やした結果、牧草が激減して羊が痩せ細り、1頭あたりの価値が【${sheepVal}万円】に激減しています。`;
+            } else {
+                statusBoard.className = 'status-board active-warning';
+                statusVal.textContent = '共有地の完全崩壊（砂漠化）';
+                statusDesc.textContent = `放牧頭数【${totalSheep}頭】。草は根こそぎ食べ尽くされ、牧場は完全な砂漠となり羊は全頭餓死しました。全員の利益が【0円】となり悲劇が完成しました。`;
+            }
+        }
+
+        // 羊のランダム配置
+        // 羊が全滅した場合は目を回したマークで描画
+        function drawSheep(total) {
+            gSheep.innerHTML = '';
+            
+            // 羊の最大描画数は適正に制限しつつ、表示上プロット
+            const drawCount = Math.min(total, 37);
+
+            // 毎回同じ配置になるよう疑似シード
+            let seed = 42;
+            function random() {
+                let x = Math.sin(seed++) * 10000;
+                return x - Math.floor(x);
+            }
+
+            const isDead = (total >= 25);
+
+            for (let i = 0; i < drawCount; i++) {
+                // 牧場内（x: 30〜210, y: 30〜170）にプロット
+                const x = 30 + random() * 180;
+                const y = 30 + random() * 140;
+
+                // あなたの羊（最初のselfSheep数分）は色を変える
+                const isSelf = (i < selfSheep);
+
+                const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                
+                if (isDead) {
+                    // 死んだ羊 (Xマークの目っぽく小さく)
+                    const line1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    line1.setAttribute('x1', x - 3);
+                    line1.setAttribute('y1', y - 3);
+                    line1.setAttribute('x2', x + 3);
+                    line1.setAttribute('y2', y + 3);
+                    line1.setAttribute('stroke', '#a0aec0');
+                    line1.setAttribute('stroke-width', '1');
+                    g.appendChild(line1);
+
+                    const line2 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    line2.setAttribute('x1', x + 3);
+                    line2.setAttribute('y1', y - 3);
+                    line2.setAttribute('x2', x - 3);
+                    line2.setAttribute('y2', y + 3);
+                    line2.setAttribute('stroke', '#a0aec0');
+                    line2.setAttribute('stroke-width', '1');
+                    g.appendChild(line2);
+                } else {
+                    // 通常の羊（白または金丸）
+                    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    circle.setAttribute('cx', x);
+                    circle.setAttribute('cy', y);
+                    circle.setAttribute('r', 5);
+                    if (isSelf) {
+                        circle.setAttribute('class', 'sheep-dot self-sheep');
+                    } else {
+                        circle.setAttribute('class', 'sheep-dot');
+                    }
+                    g.appendChild(circle);
+                }
+
+                gSheep.appendChild(g);
+            }
+        }
+
+        // 初期ロード
+        onParamChange();
+    </script>
+</body>
+</html>

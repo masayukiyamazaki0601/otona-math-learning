@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>イノベーションのジレンマ：正解を選び滅びる経営の数理 | Otona Math コラム</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .column-content {
+            background-color: var(--color-surface);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            margin-bottom: 40px;
+        }
+        .column-content p {
+            line-height: 2.1;
+            margin-bottom: 28px;
+        }
+        .section-header {
+            color: var(--color-brass);
+            margin-top: 40px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 10px;
+            font-size: 22px;
+        }
+        
+        /* Interactive Simulator Styles */
+        .interactive-simulator {
+            background-color: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        .simulator-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 15px;
+        }
+        .simulator-header h3 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            color: var(--color-ink);
+        }
+        .simulator-header p {
+            font-size: 14px;
+            color: var(--color-ink-soft);
+        }
+        
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        @media (max-width: 900px) {
+            .sim-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Control Panel */
+        .control-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .sim-state-card {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .sim-control-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--color-ink);
+            margin-bottom: 10px;
+        }
+        
+        /* Slider Group */
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 15px;
+        }
+        .slider-label-container {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--color-ink);
+        }
+        .sim-slider {
+            width: 100%;
+            height: 6px;
+            background: var(--color-paper);
+            border-radius: 3px;
+            outline: none;
+            accent-color: var(--color-brass);
+        }
+
+        /* SVG Visualization Container */
+        .chart-viz-box {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .chart-viz-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--color-ink-soft);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .chart-svg-container {
+            width: 100%;
+            height: 240px;
+            position: relative;
+        }
+        .chart-svg-container svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        /* Results Board */
+        .results-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            background: var(--color-paper);
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        @media (max-width: 600px) {
+            .results-board {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+        .res-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .res-label {
+            font-size: 13px;
+            color: var(--color-ink-soft);
+            margin-bottom: 4px;
+        }
+        .res-val {
+            font-size: 24px;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            color: var(--color-ink);
+        }
+        .res-val.status-warn { color: var(--color-red); }
+        .res-val.status-ok { color: #10b981; }
+
+        /* Status Board */
+        .status-board {
+            background: rgba(169, 120, 47, 0.05);
+            border: 1px solid rgba(169, 120, 47, 0.2);
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        .status-board.active-warning {
+            background: rgba(180, 67, 47, 0.06);
+            border-color: rgba(180, 67, 47, 0.3);
+        }
+        @media (max-width: 600px) {
+            .status-board {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+        .status-left {
+            display: flex;
+            flex-direction: column;
+        }
+        .status-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .status-board.active-warning .status-title {
+            color: var(--color-red);
+        }
+        .status-desc {
+            font-size: 12px;
+            color: var(--color-ink-soft);
+        }
+        .status-right {
+            display: flex;
+            align-items: center;
+        }
+        .status-stat-value {
+            font-family: var(--font-body);
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .status-board.active-warning .status-stat-value {
+            color: var(--color-red);
+        }
+
+        /* SVG Element Styling */
+        .chart-axis {
+            stroke: var(--color-paper-line);
+            stroke-width: 1;
+        }
+        .chart-grid {
+            stroke: #f1f3f5;
+            stroke-width: 1;
+            stroke-dasharray: 2 2;
+        }
+        .line-sus {
+            fill: none;
+            stroke: #3b5063;
+            stroke-width: 2.5;
+            transition: d 0.5s;
+        }
+        .line-dis {
+            fill: none;
+            stroke: var(--color-brass);
+            stroke-width: 2.5;
+            transition: d 0.5s;
+        }
+        .line-rival {
+            fill: none;
+            stroke: var(--color-red);
+            stroke-width: 2;
+            stroke-dasharray: 4 2;
+            transition: d 0.5s;
+        }
+        .line-need {
+            fill: none;
+            stroke: #adb5bd;
+            stroke-width: 1.5;
+            stroke-dasharray: 2 2;
+        }
+        .viz-label {
+            font-family: var(--font-body);
+            font-size: 9px;
+            fill: var(--color-ink-soft);
+        }
+        .legend-text {
+            font-family: var(--font-body);
+            font-size: 9px;
+            fill: var(--color-ink);
+        }
+        
+        /* Common Button Style */
+        .sim-btn {
+            background: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            color: var(--color-ink);
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: var(--radius-btn);
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+        }
+        .sim-btn:hover {
+            border-color: var(--color-ink);
+            background-color: #f7f7f7;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="../index.html">数学と統計学</a></li>
+                    <li><a href="index.html">コラム</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">コラム</a> &gt; イノベーションのジレンマ
+        </div>
+
+        <article class="column-content">
+            <h2 style="font-size: 28px; margin-bottom: 30px; line-height: 1.4;">イノベーションのジレンマ：<br>優秀な企業が「正解」を選び続けて滅びるメカニズム</h2>
+            
+            <p>
+                現代のビジネス理論において、最も多くの経営者に影響を与えた概念の一つが、クレイトン・クリステンセン教授が提唱した「イノベーションのジレンマ」です。
+                一般的に、企業が倒産したり市場での優位性を失ったりする原因は、経営者の判断ミスや技術力の低下、顧客ニーズの無視などにあると考えられています。
+            </p>
+            <p>
+                しかし、この理論が証明した事実は全く逆のものです。
+                <strong>「大企業が新興企業に敗北するのは、彼らが『優秀で、真面目で、顧客の声を熱心に聞き、利益の出る正しい判断』を完璧に行い続けた結果である」</strong>という矛盾を指摘しています。
+            </p>
+            <p>
+                なぜ、経営の原則に従って合理的に行動したはずの企業が滅んでしまうのか。
+                カメラメーカーを例にしたシミュレーションを用いて、そのメカニズムを解説します。
+            </p>
+
+            <h3 class="section-header">第1章：大企業における合理的な選択の罠</h3>
+            <p>
+                超一流のプロ用デジタルカメラを作っている大企業A社があると仮定します。
+                A社のカメラは画質が非常に良く、世界中のプロカメラマンから愛されており、莫大な利益を生み出しています。
+            </p>
+            <p>
+                ある日、社内の研究所で若手社員が「新しい技術」を発明しました。
+                それは、「画質はプロ用カメラの10分の1程度と低いが、小型で部品代も安いカメラ（スマートフォン搭載カメラの初期技術）」でした。
+            </p>
+            <p>
+                優秀な経営者は、合理的なデータに基づいてこの提案を却下します。却下の理由は以下の通りです。
+            </p>
+            <ul style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
+                <li><strong>顧客の要望</strong>：主要な優良顧客（プロカメラマン）は、このような低画質なカメラを求めておらず、さらなる高画質化を求めています。</li>
+                <li><strong>利益率の計算</strong>：プロ用カメラは高い利益を生みますが、チープな新技術製品は単価が低く利益額が極端に小さい状態です。</li>
+                <li><strong>市場の規模</strong>：低画質なカメラを購入する初期の顧客層は小さく、大企業が参入すべき規模に達していません。</li>
+            </ul>
+            <p>
+                経営資源を利益率の高い優良顧客へ集中するこの選択は、マーケティングや財務の観点から見れば100点満点の大正解です。
+            </p>
+
+            <h3 class="section-header">【体験】カメラ市場競争とイノベーション投資シミュレーター</h3>
+            <p>
+                プレイヤーは大企業A社のCEOとなり、毎期の研究開発（R&D）予算を「持続的技術（プロ用高画質カメラ）」と「破壊的技術（小型チープカメラ）」に分配します。
+                期が進むにつれて、プロと大衆それぞれの性能要求ラインに対し、自社製品およびライバルB社（破壊的技術に全振り）の性能がどう変化するかを観察してください。
+            </p>
+
+            <!-- シミュレーター容器 -->
+            <div class="interactive-simulator">
+                <div class="simulator-header">
+                    <h3>研究開発予算の投資配分シミュレーション</h3>
+                    <p>スライダーで「プロ用高画質（持続的）」と「小型チープ（破壊的）」への予算配分を決め、「次の期に進む」を押します。</p>
+                </div>
+                
+                <div class="sim-grid">
+                    <!-- 左：設定とコントロール -->
+                    <div class="control-panel">
+                        <div class="sim-state-card">
+                            <div class="sim-control-title">📅 現在の経営フェーズ</div>
+                            <div style="font-size: 13px; line-height: 1.6; color: var(--color-ink);">
+                                <ul>
+                                    <li>現在の期：<strong><span id="val-term">1</span> 期目</strong> / 5期</li>
+                                    <li>累計の経営純利益：<strong><span id="val-cum-profit">0</span> 億円</strong></li>
+                                    <li>株主からの支持率：<strong><span id="val-approval">100</span> %</strong></li>
+                                </ul>
+                            </div>
+                            <div style="margin-top:12px; font-size:11px; color:var(--color-ink-soft); line-height:1.5;" id="lbl-news-flash">
+                                【ニュース】シミュレーションを開始します。大企業A社のCEOとして予算の配分を決定してください。
+                            </div>
+                        </div>
+
+                        <div class="sim-state-card" id="card-inputs">
+                            <div class="sim-control-title">⚙️ 今期の研究開発費の配分</div>
+                            
+                            <div class="slider-group">
+                                <div class="slider-label-container">
+                                    <span>📸 プロ用高画質（持続的）への投資</span>
+                                    <span><span id="val-sus-ratio">80</span> %</span>
+                                </div>
+                                <input type="range" id="slide-sus-ratio" class="sim-slider" min="0" max="100" step="10" value="80" oninput="onParamChange()">
+                                <div class="slider-label-container" style="font-size:10px; color:var(--color-ink-soft); margin-top:2px;">
+                                    <span>(小型チープ（破壊的）への投資: <span id="val-dis-ratio">20</span> %)</span>
+                                </div>
+                            </div>
+
+                            <button id="btn-next" class="sim-btn" onclick="runNextTerm()">決算 ＆ 次の期へ進む ➔</button>
+                        </div>
+
+                        <div style="text-align: center;">
+                            <button class="sim-btn" onclick="resetSim()">🔄 シミュレーションをリセット</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 右：SVG可視化 -->
+                    <div class="chart-viz-box">
+                        <div class="chart-viz-title">
+                            <span>📈 技術性能と顧客要求の推移</span>
+                            <span style="font-family:var(--font-mono); font-size:10px; color:var(--color-ink-soft);">縦軸: 技術性能数値</span>
+                        </div>
+                        <div class="chart-svg-container">
+                            <svg id="svg-chart" viewBox="0 0 240 200">
+                                <!-- グリッドと軸 -->
+                                <line x1="30" y1="20" x2="30" y2="180" class="chart-axis" />
+                                <line x1="30" y1="180" x2="230" y2="180" class="chart-axis" />
+                                
+                                <line x1="30" y1="20" x2="230" y2="20" class="chart-grid" /> <!-- 150ライン -->
+                                <line x1="30" y1="100" x2="230" y2="100" class="chart-grid" /> <!-- 75ライン -->
+
+                                <text x="15" y="24" class="viz-label">150</text>
+                                <text x="20" y="104" class="viz-label">75</text>
+                                <text x="25" y="184" class="viz-label">0</text>
+
+                                <!-- 凡例 -->
+                                <line x1="40" y1="6" x2="55" y2="6" stroke="#3b5063" stroke-width="2" />
+                                <text x="58" y="9" class="legend-text">自社プロ用</text>
+                                
+                                <line x1="105" y1="6" x2="120" y2="6" stroke="var(--color-brass)" stroke-width="2" />
+                                <text x="123" y="9" class="legend-text">自社小型</text>
+
+                                <line x1="170" y1="6" x2="185" y2="6" stroke="var(--color-red)" stroke-width="1.5" stroke-dasharray="2 1" />
+                                <text x="188" y="9" class="legend-text">ライバル小型</text>
+
+                                <!-- 動的描画グループ -->
+                                <g id="group-needs"></g>
+                                <path id="path-sus" class="line-sus" />
+                                <path id="path-dis" class="line-dis" />
+                                <path id="path-rival" class="line-rival" />
+                                <g id="group-points"></g>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 結果ボード -->
+                <div class="results-board">
+                    <div class="res-box">
+                        <div class="res-label">今期の純利益</div>
+                        <div class="res-val" id="val-term-profit-wrapper"><span id="val-term-profit">0</span> 億円</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">自社のプロ市場シェア</div>
+                        <div class="res-val"><span id="val-pro-share">100</span> %</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">自社の大衆市場シェア</div>
+                        <div class="res-val"><span id="val-gen-share">0</span> %</div>
+                    </div>
+                </div>
+                
+                <!-- 判定ボード -->
+                <div id="sim-status-board" class="status-board">
+                    <div class="status-left">
+                        <div class="status-title">🚥 経営判断の評価</div>
+                        <div id="sim-status-desc" class="status-desc">スライダーで予算を調整し、決算を行ってください。</div>
+                    </div>
+                    <div class="status-right">
+                        <div id="sim-status-val" class="target-stat-value">分析中</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-header">第2章：見下していた「オモチャ」の急成長</h3>
+            <p>
+                A社が「画質が低く利益も出ないおもちゃ」として見捨てた新技術は、資金力の乏しい新興ベンチャー企業B社によって実用化され、品質を気にしない大衆（一般消費者）に向けて低価格で普及し始めました。
+                A社はこれを軽視し、自社の強みであるプロ用高画質カメラの改良（持続的イノベーション）を継続し、プロの顧客に寄り添い続けました。
+            </p>
+            <p>
+                数年後、事態は一変します。
+                新興企業B社の低価格カメラの画質は、技術開発によって毎年着実に向上していきました。
+                初期はおもちゃのレベルであった品質が、大衆の求める「日常記録に必要十分な画質ライン」を超えた瞬間、大衆は重く高価なA社のカメラに見向きもしなくなりました。
+            </p>
+            <p>
+                A社の技術力は世界最高でしたが、その高い画質は大衆にとっては過剰性能（オーバースペック）であり、価格に見合わないものとなっていたのです。
+                新興企業B社は一般市場を独占し、そこで得た莫大な利益をさらなる高度な技術開発へ再投資し、最終的にはA社の独占市場であったプロ用の製品領域にまで進出し、A社を駆逐してしまいました。
+            </p>
+
+            <h3 class="section-header">第3章：持続的イノベーション vs 破壊的イノベーション</h3>
+            <p>
+                クリステンセン教授は、このプロセスを説明するために、技術の進化パターンを2つに定義しました。
+            </p>
+            <p>
+                <strong>1. 持続的イノベーション</strong>：<br>
+                既存の顧客の要望を満たすために、製品の主要な性能をさらに向上させる進化です。
+                豊富な資金と優れた技術者を持つ大企業は、この性能競争において高い競争優位性を維持します。
+            </p>
+            <p>
+                <strong>2. 破壊的イノベーション</strong>：<br>
+                既存製品とは異なる新しい評価軸（性能は劣るが、圧倒的に小型、簡便、または安価）をもたらす進化です。
+                大企業の主要顧客はこれを好まないため、合理的な投資判断として放置されてしまいます。
+                しかし、この技術水準が大衆の要求ラインを突破した瞬間、既存の優良製品の市場を急速に破壊してしまいます。
+            </p>
+
+            <h3 class="section-header">第4章：大企業を縛る「合理性」のシステム</h3>
+            <p>
+                「脅威が予測できるなら、大企業も最初から新しい技術に投資すれば良いのではないか」という疑問が生じます。
+                しかし、大企業の強固な経営管理システムそのものが、この合理的なシフトを阻害します。
+            </p>
+            <p>
+                大企業には多くの給与支払いや、株主に対する年次の利益成長責任が存在します。
+                そのため、「まだ市場規模が不確定で、初期の利益率が極めて低い破壊的技術」に対し、エース人材や巨額の開発予算を投入する経営判断は、社内および株主総会において非合理的として拒絶されます。
+            </p>
+            <p>
+                「現在の主要顧客のニーズを追い、最も利益率の高い主力事業に資源を注ぐこと」こそが、大企業の組織にとって唯一評価される「正解」としてルール化されています。
+                この「正しい判断をし続けるがゆえに、結果的に自らの手で破滅を招いてしまう」構造が、イノベーションのジレンマの本質です。
+            </p>
+
+            <h3 class="section-header">まとめ</h3>
+            <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 20px; font-size: 15px; line-height: 1.8;">
+                イノベーションのジレンマは、「既存ビジネスにおける絶対的な合理性」が、環境構造の変革期においては企業を倒産に追いやる猛毒になり得る事実を示しています。
+                これを克服するためには、主力の高利益事業を自ら否定する覚悟を持ち、主力組織から完全に隔離された別組織として、チープで未成熟な破壊的新技術を育て続けるという、高度な二元化の経営管理が必要となります。
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- シミュレーター制御スクリプト -->
+    <script>
+        // 状態変数
+        let term = 1;
+        let cumProfit = 0;
+        let approval = 100;
+        
+        let A_sus_perf = [60];
+        let A_dis_perf = [10];
+        let B_dis_perf = [10];
+
+        const baseNeedGen = [30, 40, 50, 60, 70, 80];
+        const baseNeedPro = [80, 85, 90, 95, 100, 105];
+
+        const slideSusRatio = document.getElementById('slide-sus-ratio');
+        const lblSusRatio = document.getElementById('val-sus-ratio');
+        const lblDisRatio = document.getElementById('val-dis-ratio');
+
+        const lblTerm = document.getElementById('val-term');
+        const lblCumProfit = document.getElementById('val-cum-profit');
+        const lblApproval = document.getElementById('val-approval');
+        const lblNewsFlash = document.getElementById('lbl-news-flash');
+
+        const lblTermProfit = document.getElementById('val-term-profit');
+        const lblProShare = document.getElementById('val-pro-share');
+        const lblGenShare = document.getElementById('val-gen-share');
+        const valTermProfitWrapper = document.getElementById('val-term-profit-wrapper');
+
+        const btnNext = document.getElementById('btn-next');
+        const statusBoard = document.getElementById('sim-status-board');
+        const statusDesc = document.getElementById('sim-status-desc');
+        const statusVal = document.getElementById('sim-status-val');
+
+        const gNeeds = document.getElementById('group-needs');
+        const pathSus = document.getElementById('path-sus');
+        const pathDis = document.getElementById('path-dis');
+        const pathRival = document.getElementById('path-rival');
+        const gPoints = document.getElementById('group-points');
+
+        function resetSim() {
+            term = 1;
+            cumProfit = 0;
+            approval = 100;
+
+            A_sus_perf = [60];
+            A_dis_perf = [10];
+            B_dis_perf = [10];
+
+            slideSusRatio.disabled = false;
+            btnNext.disabled = false;
+            btnNext.style.opacity = 1;
+
+            slideSusRatio.value = 80;
+            lblSusRatio.textContent = '80';
+            lblDisRatio.textContent = '20';
+
+            lblTerm.textContent = term;
+            lblCumProfit.textContent = cumProfit;
+            lblApproval.textContent = approval;
+            lblNewsFlash.textContent = '【ニュース】シミュレーションを開始します。大企業A社のCEOとして予算の配分を決定してください。';
+
+            lblTermProfit.textContent = '0';
+            lblProShare.textContent = '100';
+            lblGenShare.textContent = '0';
+            valTermProfitWrapper.className = 'res-val';
+
+            statusBoard.className = 'status-board';
+            statusVal.textContent = '分析中';
+            statusDesc.textContent = 'スライダーで予算を調整し、決算を行ってください。';
+
+            drawCharts();
+        }
+
+        function onParamChange() {
+            const sus = parseInt(slideSusRatio.value);
+            lblSusRatio.textContent = sus;
+            lblDisRatio.textContent = 100 - sus;
+        }
+
+        // 次の期へ進む
+        function runNextTerm() {
+            if (term > 5) return;
+
+            const susRatio = parseInt(slideSusRatio.value);
+            const disRatio = 100 - susRatio;
+
+            // 今期の性能向上計算
+            // A社プロ用: 投資割合に応じて性能アップ
+            const currentSus = A_sus_perf[term - 1] + 24 * (susRatio / 100);
+            A_sus_perf.push(currentSus);
+
+            // A社小型: 投資割合に応じて性能アップ
+            const currentDis = A_dis_perf[term - 1] + 28 * (disRatio / 100);
+            A_dis_perf.push(currentDis);
+
+            // B社小型: 常に一定 (100%投資相当)
+            const currentRival = B_dis_perf[term - 1] + 16;
+            B_dis_perf.push(currentRival);
+
+            // 収益計算
+            let termProfit = 0;
+            let proShare = 100;
+            let genShare = 0;
+
+            const needGen = baseNeedGen[term];
+            const needPro = baseNeedPro[term];
+
+            // 1. プロ市場
+            // A社プロ性能がプロ要求を満たしていれば利益発生
+            if (currentSus >= needPro) {
+                termProfit += Math.round(80 * (susRatio / 100));
+            } else {
+                proShare = 50; // 性能不足
+                termProfit += Math.round(20 * (susRatio / 100));
+            }
+
+            // 2. 大衆市場
+            // もしライバルの小型カメラが大衆要求を満たしている場合
+            if (currentRival >= needGen) {
+                // 自社の小型カメラも大衆要求を満たしていれば、投資比率に応じたシェア獲得
+                if (currentDis >= needGen) {
+                    genShare = Math.round(100 * (disRatio / 100));
+                    termProfit += Math.round(150 * (disRatio / 100));
+                } else {
+                    // 自社の小型カメラが未完成なら、B社が市場を独占
+                    genShare = 0;
+                    termProfit += 0;
+                }
+            } else {
+                // どちらもまだ大衆要求を満たしていない（市場未成熟）
+                genShare = 0;
+            }
+
+            cumProfit += termProfit;
+
+            // 株主支持率計算
+            // 短期利益が極端に低い（プロ用を捨てた場合など）と下がり、利益が出れば上がる
+            let curApproval = 100;
+            if (susRatio < 40) {
+                curApproval = Math.max(10, Math.round(approval - 30 + termProfit / 5));
+            } else if (susRatio === 100 && term >= 4) {
+                // 後半に大衆市場を全て奪われると急落
+                curApproval = Math.max(0, Math.round(approval - 40));
+            } else {
+                curApproval = Math.min(100, Math.round(approval + (termProfit - 50) / 3));
+            }
+            approval = curApproval;
+
+            // UI更新
+            lblTermProfit.textContent = termProfit;
+            lblCumProfit.textContent = cumProfit;
+            lblApproval.textContent = approval;
+            lblProShare.textContent = proShare;
+            lblGenShare.textContent = genShare;
+
+            if (termProfit > 0) {
+                valTermProfitWrapper.className = 'res-val status-ok';
+            } else {
+                valTermProfitWrapper.className = 'res-val status-warn';
+            }
+
+            // ニュースと解説
+            let news = '';
+            if (term === 1) {
+                news = '【2期目開始】A社のプロ用カメラは安定した高収益。一方、ベンチャーのB社は小型カメラの発売を開始しました。';
+            } else if (term === 2) {
+                news = '【3期目開始】B社の小型カメラが安価な電子トイとして女子高生の間で流行し始めました。';
+            } else if (term === 3) {
+                news = '【4期目開始】大衆（一般消費者）のカメラ性能要求は毎年高まっており、B社の画質性能が大衆要求ラインに接近しています。';
+            } else if (term === 4) {
+                news = '【最終期開始】B社の小型カメラ（スマホ画質）が大衆要求ラインを超え、一般市場の爆発的購入が始まっています。';
+            }
+            
+            lblNewsFlash.textContent = news;
+
+            if (term < 5) {
+                term++;
+                lblTerm.textContent = term;
+                drawCharts();
+            } else {
+                finishSim();
+            }
+        }
+
+        // 終了診断
+        function finishSim() {
+            slideSusRatio.disabled = true;
+            btnNext.disabled = true;
+            btnNext.style.opacity = 0.5;
+
+            drawCharts();
+
+            // 最終診断
+            // 自社小型カメラ性能が最終期の一般要求(80)を超えているかどうか
+            const finalDis = A_dis_perf[5];
+            const finalSus = A_sus_perf[5];
+
+            if (finalDis >= 80) {
+                statusBoard.className = 'status-board';
+                statusVal.textContent = 'ジレンマの克服（両利きの経営）';
+                statusDesc.textContent = `プロ用カメラの最高品質を維持しつつ、小型カメラ（破壊的技術）にも十分投資した結果、大衆市場の防衛に成功し、累計利益は【${cumProfit}億円】となりました。`;
+            } else if (finalSus >= 140 && finalDis < 40) {
+                statusBoard.className = 'status-board active-warning';
+                statusVal.textContent = 'イノベーションのジレンマによる敗北';
+                statusDesc.textContent = `「大企業として正しい判断（プロ用特化）」を続けた結果、おもちゃと見下していたベンチャーの小型カメラ（スマホ）に大衆市場を全て奪われ、倒産の危機に瀕しています。`;
+            } else {
+                statusBoard.className = 'status-board active-warning';
+                statusVal.textContent = '中途半端な資源分散';
+                statusDesc.textContent = `どちらの技術も中途半端になり、プロ市場での信頼も薄れ、小型カメラの開発も大衆要求（80）に届かず、B社に大衆市場を独占されました。`;
+            }
+        }
+
+        // SVGグラフ描画
+        function drawCharts() {
+            gNeeds.innerHTML = '';
+            gPoints.innerHTML = '';
+
+            const startX = 30;
+            const endX = 220;
+            const zeroY = 180;
+            const maxVal = 150;
+            const scaleY = 160 / maxVal;
+            const stepX = (endX - startX) / 5;
+
+            // X軸目盛
+            for (let i = 0; i <= 5; i++) {
+                const x = startX + i * stepX;
+                const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                txt.setAttribute('x', x);
+                txt.setAttribute('y', 193);
+                txt.setAttribute('class', 'viz-label');
+                txt.setAttribute('text-anchor', 'middle');
+                txt.textContent = `${i}期`;
+                gNeeds.appendChild(txt);
+            }
+
+            // 要求ラインの描画 (プロ要求 & 大衆要求)
+            let dNeedPro = `M ${startX} ${zeroY - baseNeedPro[0] * scaleY}`;
+            let dNeedGen = `M ${startX} ${zeroY - baseNeedGen[0] * scaleY}`;
+
+            for (let i = 1; i <= 5; i++) {
+                dNeedPro += ` L ${startX + i * stepX} ${zeroY - baseNeedPro[i] * scaleY}`;
+                dNeedGen += ` L ${startX + i * stepX} ${zeroY - baseNeedGen[i] * scaleY}`;
+            }
+
+            const pathNeedPro = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            pathNeedPro.setAttribute('d', dNeedPro);
+            pathNeedPro.setAttribute('class', 'line-need');
+            gNeeds.appendChild(pathNeedPro);
+
+            const pathNeedGen = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            pathNeedGen.setAttribute('d', dNeedGen);
+            pathNeedGen.setAttribute('class', 'line-need');
+            gNeeds.appendChild(pathNeedGen);
+
+            // 要求ラインの文字ラベル
+            const lblNeedPro = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            lblNeedPro.setAttribute('x', endX - 10);
+            lblNeedPro.setAttribute('y', zeroY - baseNeedPro[5] * scaleY - 4);
+            lblNeedPro.setAttribute('class', 'viz-label');
+            lblNeedPro.textContent = 'プロ要求';
+            gNeeds.appendChild(lblNeedPro);
+
+            const lblNeedGen = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            lblNeedGen.setAttribute('x', endX - 10);
+            lblNeedGen.setAttribute('y', zeroY - baseNeedGen[5] * scaleY - 4);
+            lblNeedGen.setAttribute('class', 'viz-label');
+            lblNeedGen.textContent = '大衆要求';
+            gNeeds.appendChild(lblNeedGen);
+
+            // 自社プロ用 (sus) の描画
+            let dSus = `M ${startX} ${zeroY - A_sus_perf[0] * scaleY}`;
+            for (let i = 1; i < A_sus_perf.length; i++) {
+                dSus += ` L ${startX + i * stepX} ${zeroY - A_sus_perf[i] * scaleY}`;
+            }
+            pathSus.setAttribute('d', dSus);
+
+            // 自社小型 (dis) の描画
+            let dDis = `M ${startX} ${zeroY - A_dis_perf[0] * scaleY}`;
+            for (let i = 1; i < A_dis_perf.length; i++) {
+                dDis += ` L ${startX + i * stepX} ${zeroY - A_dis_perf[i] * scaleY}`;
+            }
+            pathDis.setAttribute('d', dDis);
+
+            // ライバル小型 (rival) の描画
+            let dRival = `M ${startX} ${zeroY - B_dis_perf[0] * scaleY}`;
+            for (let i = 1; i < B_dis_perf.length; i++) {
+                dRival += ` L ${startX + i * stepX} ${zeroY - B_dis_perf[i] * scaleY}`;
+            }
+            pathRival.setAttribute('d', dRival);
+
+            // 現在の期のプロット点
+            const currentIdx = A_sus_perf.length - 1;
+            const curX = startX + currentIdx * stepX;
+            
+            // 自社プロ点
+            const cSus = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            cSus.setAttribute('cx', curX);
+            cSus.setAttribute('cy', zeroY - A_sus_perf[currentIdx] * scaleY);
+            cSus.setAttribute('r', 4);
+            cSus.setAttribute('fill', '#3b5063');
+            gPoints.appendChild(cSus);
+
+            // 自社小型点
+            const cDis = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            cDis.setAttribute('cx', curX);
+            cDis.setAttribute('cy', zeroY - A_dis_perf[currentIdx] * scaleY);
+            cDis.setAttribute('r', 4);
+            cDis.setAttribute('fill', 'var(--color-brass)');
+            gPoints.appendChild(cDis);
+
+            // ライバル点
+            const cRival = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            cRival.setAttribute('cx', curX);
+            cRival.setAttribute('cy', zeroY - B_dis_perf[currentIdx] * scaleY);
+            cRival.setAttribute('r', 3);
+            cRival.setAttribute('fill', 'var(--color-red)');
+            gPoints.appendChild(cRival);
+        }
+
+        // 初期ロード
+        resetSim();
+    </script>
+</body>
+</html>
