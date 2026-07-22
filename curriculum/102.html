@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>複数要因を考慮する重回帰分析の行列表現 | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .concept-box {
+            background-color: var(--color-paper);
+            border: 2px solid var(--color-brass);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .math-display {
+            font-size: 20px;
+            font-family: var(--font-mono);
+            color: var(--color-ink);
+            margin: 15px 0;
+            overflow-x: auto;
+            text-align: center;
+        }
+        .interactive-tool {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        .tool-header {
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: var(--color-ink);
+            text-align: center;
+        }
+        .control-panel {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 25px;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: var(--font-mono);
+            font-size: 13px;
+            background-color: #fff;
+        }
+        .data-table th, .data-table td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+        .data-table th {
+            background-color: #f1f1f1;
+            font-weight: bold;
+        }
+        .input-val {
+            width: 60px;
+            padding: 4px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-align: center;
+            font-family: var(--font-mono);
+        }
+        .sim-board {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            width: 100%;
+            padding: 30px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            gap: 20px;
+        }
+        .formula-box {
+            font-family: var(--font-mono);
+            font-size: 15px;
+            background: #fdf2f0;
+            border: 1.5px solid #e74c3c;
+            padding: 15px;
+            border-radius: 6px;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第8章 機械学習とデータサイエンスの数学基礎 &gt; 単元102
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 08 / Unit 102</span>
+                <h2 class="lesson-title">複数要因を考慮する重回帰分析の行列表現</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>現実の要因は1つではない</h4>
+                    <p>前単元では、1つの要因から予測を行う「単回帰分析」を学びました。しかし実際のビジネスでは、売上に影響を与える要因は1つではありません。「広告費」だけでなく「店舗面積」や「競合店舗数」など、<strong>複数の要因（マルチ変数）を同時に考慮する</strong>必要があります。</p>
+                    <p>このように、複数の入力 $x_1, x_2, \dots$ から出力 $y$ を予測する手法を<strong>「重回帰分析（じゅうかいぎぶんせき）」</strong>と呼び、以下の数式モデルで表します。</p>
+                    
+                    <div class="math-display">
+                        $y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots + \beta_k x_k$
+                    </div>
+                    <p style="font-size:14px; text-align:center; color:#666;">（$\beta_0$ は切片、 $\beta_1, \beta_2$ らは各要因の影響度を表す「回帰係数」）</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>行列とベクトルによるシンプル表現</h4>
+                    <p>変数が3つ、4つと増えていくと、データごとの方程式をすべて並べて計算するのは非常に煩雑になります。そこで、第6章で学んだ<strong>「行列」と「ベクトル」</strong>の力を借ります。</p>
+                    <p>全データをまとめて次のような行列 $X$（デザイン行列）、パラメータベクトル $\vec{\beta}$、出力ベクトル $\vec{y}$ として定義します。</p>
+                    
+                    <div class="concept-box">
+                        <div class="math-display">
+                            $\mathbf{y} = \mathbf{X} \mathbf{\beta}$
+                        </div>
+                        <p style="font-size:13px; line-height:1.7; text-align:center; color:#666; margin-top:15px;">
+                            ※ $\mathbf{X}$ の第1列には切片 $\beta_0$ を掛けるための「1」を並べるのが数学的テクニックです。<br>
+                            これにより、何千件のデータ、何百個の変数があっても、上の短い行列の式1つで表現できます。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>数学の極致：正規方程式</h4>
+                    <p>重回帰分析において、誤差（残差平方和）を最小化するような最適な回帰係数ベクトル $\mathbf{\beta}$ を導き出すとき、行列計算を用いると以下の<strong>「正規方程式（Normal Equation）」</strong>が導かれます。</p>
+                    
+                    <div class="math-display">
+                        $\mathbf{X}^T \mathbf{X} \mathbf{\beta} = \mathbf{X}^T \mathbf{y}$
+                    </div>
+                    <p>この両辺に、左から $\mathbf{X}^T \mathbf{X}$ の逆行列を掛けることで、回帰係数を一発で算出する公式が完成します。</p>
+                    <div class="math-display">
+                        $\mathbf{\beta} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{y}$
+                    </div>
+                    <p style="font-size:14px; color:#666; text-align:center;">（$\mathbf{X}^T$ は行列 $\mathbf{X}$ の転置行列、$^{-1}$ は逆行列）</p>
+                </div>
+
+                <!-- Step 4 Interactive Tool -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>【体験】行列演算・重回帰シミュレーター</h4>
+                    <p>以下のデータテーブル（3店舗のデータ：売上 $y$、広告費 $x_1$、面積 $x_2$）の数値を変更してみてください。<br>
+                    入力したデータに基づいて、裏でリアルタイムに行列の転置 $\mathbf{X}^T$、行列の積 $\mathbf{X}^T \mathbf{X}$、および逆行列 $(\mathbf{X}^T \mathbf{X})^{-1}$ が計算され、最適パラメータ（切片 $\beta_0$、広告費の影響度 $\beta_1$、面積の影響度 $\beta_2$）が動的に算出される様子を体験できます。</p>
+                    
+                    <div class="interactive-tool">
+                        <div class="tool-header">
+                            店舗売上データの重回帰分析
+                        </div>
+                        
+                        <div class="control-panel">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>店舗</th>
+                                        <th>売上 $y$ (百万円)</th>
+                                        <th>広告費 $x_1$ (百万円)</th>
+                                        <th>店舗面積 $x_2$ (坪)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>A店</td>
+                                        <td><input type="number" id="y1" class="input-val" value="12"></td>
+                                        <td><input type="number" id="x11" class="input-val" value="2"></td>
+                                        <td><input type="number" id="x12" class="input-val" value="10"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>B店</td>
+                                        <td><input type="number" id="y2" class="input-val" value="18"></td>
+                                        <td><input type="number" id="x21" class="input-val" value="4"></td>
+                                        <td><input type="number" id="x22" class="input-val" value="15"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>C店</td>
+                                        <td><input type="number" id="y3" class="input-val" value="15"></td>
+                                        <td><input type="number" id="x31" class="input-val" value="3"></td>
+                                        <td><input type="number" id="x32" class="input-val" value="12"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="sim-board">
+                            <div style="font-size:14px; font-weight:bold; color:#333; margin-bottom:5px;">行列計算で算出された予測モデル</div>
+                            <div class="formula-box" id="formulaText">
+                                $y = 3.00 + 2.00 x_1 + 0.50 x_2$
+                            </div>
+                            
+                            <div style="width:100%; max-width:600px; font-size:13px; color:#666; line-height:1.6; margin-top:10px;">
+                                <strong>各パラメータの意味解釈：</strong><br>
+                                • **切片 $\beta_0$** (<span id="outB0" style="font-family:var(--font-mono); font-weight:bold; color:#e74c3c;">3.00</span>): 広告費も面積もゼロのときのベース売上（基礎売上）。<br>
+                                • **広告の係数 $\beta_1$** (<span id="outB1" style="font-family:var(--font-mono); font-weight:bold; color:#e74c3c;">2.00</span>): 面積を固定したまま、広告費を1百万円増やすと売上がどれくらい増えるか。<br>
+                                • **面積の係数 $\beta_2$** (<span id="outB2" style="font-family:var(--font-mono); font-weight:bold; color:#e74c3c;">0.50</span>): 広告費を固定したまま、面積を1坪増やすと売上がどれくらい増えるか。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】ビッグデータ時代と「逆行列の計算爆発」</h4>
+                    <p>この素晴らしい正規方程式には、現代のAIやデータサイエンス実務における「最大の泣き所」があります。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">サイズ $N$ の増加に対する $O(N^3)$ の壁</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            行列の逆行列を求める計算は、行列のサイズ（変数の数やデータ数）が大きくなると計算量が<strong>「変数の数の3乗（$O(N^3)$）」</strong>の比例で増加します。<br>
+                            変数が10個や100個程度であればパソコンで一瞬ですが、もし変数が10万個（AIの画像認識のピクセル数など）になると、逆行列の計算は現代のスーパーコンピュータを使っても不可能なほど天文学的な時間が必要になります。
+                        </p>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            そのため、データサイエンスの実務では、巨大なデータに対してはこの「一発で解ける行列の公式（正規方程式）」を直接使わず、前単元コラムで紹介した「最急降下法」のように、少しずつ値を動かして正解に近づいていく近似計算のアルゴリズムが主流となっています。数学的な美しさと、現実の計算負荷のトレードオフをどう抑えるかが、エンジニアリングの醍醐味です。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 5 Summary -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>まとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 15px; font-size: 14px; line-height: 1.7;">
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li><strong>重回帰分析</strong>：複数の要因 $x_1, x_2, \dots$ を同時に使って、目的の数値 $y$ を予測するモデル。</li>
+                            <li><strong>行列表現</strong>：データセットを行列 $\mathbf{X}$ とベクトル $\mathbf{\beta}$、$\mathbf{y}$ にまとめることで、数式を簡潔に表現・整理できる。</li>
+                            <li><strong>正規方程式</strong>：最小二乗法の行列形式。$\mathbf{\beta} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{y}$ によって最適なパラメータを一撃で算出する。</li>
+                            <li><strong>実務上の注意</strong>：変数が非常に多い場合、逆行列の計算負荷（3乗の法則）が爆発するため、近似アルゴリズム（最急降下法など）への切り替えが必要になる。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lesson-footer-nav" style="margin-top: 40px;">
+                    <a href="101.html" class="btn-secondary">&larr; 前の単元へ</a>
+                    <a href="index.html" class="btn-secondary">目次に戻る</a>
+                    <a href="103.html" class="btn btn-primary">次の単元へ &rarr;</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const y1 = document.getElementById('y1');
+        const y2 = document.getElementById('y2');
+        const y3 = document.getElementById('y3');
+        
+        const x11 = document.getElementById('x11');
+        const x12 = document.getElementById('x12');
+        
+        const x21 = document.getElementById('x21');
+        const x22 = document.getElementById('x22');
+        
+        const x31 = document.getElementById('x31');
+        const x32 = document.getElementById('x32');
+        
+        const formulaText = document.getElementById('formulaText');
+        const outB0 = document.getElementById('outB0');
+        const outB1 = document.getElementById('outB1');
+        const outB2 = document.getElementById('outB2');
+
+        const inputs = [y1, y2, y3, x11, x12, x21, x22, x31, x32];
+        inputs.forEach(input => {
+            input.addEventListener('input', updateReg);
+        });
+
+        // Basic 3x3 Matrix Inversion Helper
+        function invert3x3(M) {
+            let det = M[0][0] * (M[1][1] * M[2][2] - M[2][1] * M[1][2]) -
+                      M[0][1] * (M[1][0] * M[2][2] - M[1][2] * M[2][0]) +
+                      M[0][2] * (M[1][0] * M[2][1] - M[1][1] * M[2][0]);
+            
+            if (Math.abs(det) < 1e-5) return null; // Singular
+            
+            let invdet = 1.0 / det;
+            let R = [
+                [0, 0, 0],
+                [0, 0, 0],
+                [0, 0, 0]
+            ];
+            R[0][0] = (M[1][1] * M[2][2] - M[2][1] * M[1][2]) * invdet;
+            R[0][1] = (M[0][2] * M[2][1] - M[0][1] * M[2][2]) * invdet;
+            R[0][2] = (M[0][1] * M[1][2] - M[0][2] * M[1][1]) * invdet;
+            R[1][0] = (M[1][2] * M[2][0] - M[1][0] * M[2][2]) * invdet;
+            R[1][1] = (M[0][0] * M[2][2] - M[0][2] * M[2][0]) * invdet;
+            R[1][2] = (M[1][0] * M[0][2] - M[0][0] * M[1][2]) * invdet;
+            R[2][0] = (M[1][0] * M[2][1] - M[2][0] * M[1][1]) * invdet;
+            R[2][1] = (M[2][0] * M[0][1] - M[0][0] * M[2][1]) * invdet;
+            R[2][2] = (M[0][0] * M[1][1] - M[1][0] * M[0][1]) * invdet;
+            return R;
+        }
+
+        function updateReg() {
+            let Y = [
+                parseFloat(y1.value) || 0,
+                parseFloat(y2.value) || 0,
+                parseFloat(y3.value) || 0
+            ];
+            
+            // X matrix is 3x3 (constant 1 for intercept, x1, x2)
+            let X = [
+                [1, parseFloat(x11.value) || 0, parseFloat(x12.value) || 0],
+                [1, parseFloat(x21.value) || 0, parseFloat(x22.value) || 0],
+                [1, parseFloat(x31.value) || 0, parseFloat(x32.value) || 0]
+            ];
+
+            // In our case since we have 3 equations and 3 unknowns, X is square!
+            // Thus beta = X^-1 * Y
+            // Let's compute inverse of X
+            let invX = invert3x3(X);
+            
+            if (!invX) {
+                formulaText.innerHTML = "<span style='color:#e74c3c;'>エラー: データ同士の相関が高すぎる（または一致している）ため、逆行列を計算できません（多重共線性）。</span>";
+                outB0.textContent = "N/A";
+                outB1.textContent = "N/A";
+                outB2.textContent = "N/A";
+                return;
+            }
+
+            // Beta = invX * Y
+            let b0 = invX[0][0] * Y[0] + invX[0][1] * Y[1] + invX[0][2] * Y[2];
+            let b1 = invX[1][0] * Y[0] + invX[1][1] * Y[1] + invX[1][2] * Y[2];
+            let b2 = invX[2][0] * Y[0] + invX[2][1] * Y[1] + invX[2][2] * Y[2];
+            
+            outB0.textContent = b0.toFixed(2);
+            outB1.textContent = b1.toFixed(2);
+            outB2.textContent = b2.toFixed(2);
+            
+            let sign1 = b1 >= 0 ? "+" : "-";
+            let sign2 = b2 >= 0 ? "+" : "-";
+            
+            formulaText.innerHTML = `$y = ${b0.toFixed(2)} ${sign1} ${Math.abs(b1).toFixed(2)} x_1 ${sign2} ${Math.abs(b2).toFixed(2)} x_2$`;
+            
+            if(window.renderMathInElement) {
+                renderMathInElement(formulaText, {delimiters: [{left: '$', right: '$', display: false}]});
+            }
+        }
+
+        updateReg();
+        
+    </script>
+</body>
+</html>

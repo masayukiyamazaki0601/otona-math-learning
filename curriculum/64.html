@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>三角比の定義（サイン、コサイン、タンジェント） | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .concept-box {
+            background-color: var(--color-paper);
+            border: 2px solid var(--color-brass);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .ratio-def {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed #ccc;
+        }
+        .ratio-def:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .ratio-name {
+            font-size: 24px;
+            font-family: var(--font-mono);
+            color: var(--color-ink);
+            width: 140px;
+            font-weight: bold;
+        }
+        .ratio-desc {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        .interactive-tool {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .tool-header {
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: var(--color-ink);
+            text-align: center;
+        }
+        .control-panel {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .control-group {
+            background: var(--color-paper);
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 200px;
+        }
+        .control-group label {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .slider {
+            width: 100%;
+            accent-color: var(--color-brass);
+        }
+        
+        .sim-board {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            width: 100%;
+            padding: 30px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .triangle-container {
+            width: 300px;
+            height: 200px;
+            position: relative;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-start;
+            border-left: 1px dashed #ccc;
+            border-bottom: 1px dashed #ccc;
+        }
+        .triangle-svg {
+            overflow: visible;
+        }
+        .ratio-results {
+            display: flex;
+            gap: 30px;
+            width: 100%;
+            justify-content: center;
+        }
+        .res-box {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+            min-width: 140px;
+        }
+        .res-label {
+            font-family: var(--font-mono);
+            font-weight: bold;
+            font-size: 18px;
+            color: var(--color-ink);
+            margin-bottom: 5px;
+        }
+        .res-val {
+            font-size: 20px;
+            color: #e74c3c;
+            font-family: var(--font-mono);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第4章 高校数学への接続 &gt; 単元64
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 04 / Unit 64</span>
+                <h2 class="lesson-title">三角比の定義（サイン、コサイン、タンジェント）</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>直角三角形の「辺の比率」は、角度だけで決まる</h4>
+                    <p>高校数学で多くの人がつまずく「サイン・コサイン・タンジェント」。名前は呪文のように聞こえますが、その正体は単なる<strong>「直角三角形の2辺の長さの比率（割り算）」</strong>に過ぎません。</p>
+                    <p>図形がどれほど大きくても小さくても、<strong>「左下の角度」さえ同じであれば、辺の長さの比率は常に一定になる</strong>という図形の性質を利用したものが「三角比」です。</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>3つの魔法の言葉の定義</h4>
+                    <p>直角三角形において、一番長い斜めの辺を「斜辺（しゃへん）」、下の辺を「底辺（ていへん）」、縦の辺を「高さ（対辺）」と呼びます。左下の角度を $\theta$（シータ）としたとき、3つの三角比は次のように定義されます。</p>
+                    
+                    <div class="concept-box">
+                        <div class="ratio-def">
+                            <div class="ratio-name">$\sin \theta$<br><span style="font-size:14px; font-weight:normal;">(サイン)</span></div>
+                            <div class="ratio-desc">
+                                <strong>高さ $\div$ 斜辺</strong><br>
+                                斜辺に対する「高さ」の割合。坂道で言えば、進んだ距離に対して「どれくらい高く登ったか」を表します。
+                            </div>
+                        </div>
+                        <div class="ratio-def">
+                            <div class="ratio-name">$\cos \theta$<br><span style="font-size:14px; font-weight:normal;">(コサイン)</span></div>
+                            <div class="ratio-desc">
+                                <strong>底辺 $\div$ 斜辺</strong><br>
+                                斜辺に対する「底辺」の割合。坂道で言えば、進んだ距離に対して「どれくらい水平方向に進んだか」を表します。
+                            </div>
+                        </div>
+                        <div class="ratio-def">
+                            <div class="ratio-name">$\tan \theta$<br><span style="font-size:14px; font-weight:normal;">(タンジェント)</span></div>
+                            <div class="ratio-desc">
+                                <strong>高さ $\div$ 底辺</strong><br>
+                                底辺に対する「高さ」の割合。いわゆる坂道の「傾き（急激さ）」そのものを表します。
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p style="font-size: 14px; color: #666;">※覚え方：筆記体の頭文字を三角形になぞって覚える方法が有名です。<br>
+                    ・s（サイン）：斜辺から高さへなぞる<br>
+                    ・c（コサイン）：斜辺から底辺へなぞる<br>
+                    ・t（タンジェント）：底辺から高さへなぞる</p>
+                </div>
+
+                <!-- Step 3 Interactive Tool -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>【体験】三角比の普遍性シミュレーター</h4>
+                    <p>スライダーで三角形の「サイズ（斜辺の長さ）」を変えてみてください。<br>
+                    三角形が大きく（小さく）なっても、角度 $\theta$ が固定されていれば、3つの三角比の値は<strong>一切変化しない（普遍である）</strong>ことを確認しましょう。</p>
+                    
+                    <div class="interactive-tool">
+                        <div class="tool-header">
+                            角度 $\theta = 30^\circ$ の直角三角形
+                        </div>
+                        
+                        <div class="control-panel">
+                            <div class="control-group">
+                                <label>三角形のサイズ（斜辺の長さ）</label>
+                                <input type="range" id="slSize" class="slider" min="100" max="300" step="10" value="200">
+                                <div style="font-family: var(--font-mono); margin-top:5px; font-weight:bold;">斜辺 = <span id="valSize">200</span></div>
+                            </div>
+                        </div>
+
+                        <div class="sim-board">
+                            <div class="triangle-container">
+                                <svg width="300" height="200" id="triSvg" class="triangle-svg">
+                                    <polygon id="triPoly" points="0,200 200,200 200,84.5" fill="rgba(52, 152, 219, 0.2)" stroke="#3498db" stroke-width="2" />
+                                    <!-- Right angle mark -->
+                                    <polyline id="rightMark" points="190,200 190,190 200,190" fill="none" stroke="#333" stroke-width="1.5" />
+                                    <!-- Angle arc -->
+                                    <path id="angleArc" d="M 40,200 A 40,40 0 0,0 34.6,180" fill="none" stroke="#e74c3c" stroke-width="2" />
+                                    <text id="angleText" x="45" y="195" font-family="monospace" font-size="14" fill="#e74c3c">30°</text>
+                                    
+                                    <!-- Labels -->
+                                    <text id="lblHyp" x="100" y="130" font-family="sans-serif" font-size="14" font-weight="bold" fill="#333" transform="rotate(-30, 100, 130)">斜辺</text>
+                                    <text id="lblBase" x="100" y="215" font-family="sans-serif" font-size="14" font-weight="bold" fill="#333" text-anchor="middle">底辺</text>
+                                    <text id="lblHeight" x="210" y="142" font-family="sans-serif" font-size="14" font-weight="bold" fill="#333">高さ</text>
+                                </svg>
+                            </div>
+                            
+                            <div class="ratio-results">
+                                <div class="res-box">
+                                    <div class="res-label">$\sin 30^\circ = 0.500$</div>
+                                    <div style="font-size:16px; margin-top:10px;" id="calcSin"></div>
+                                </div>
+                                <div class="res-box">
+                                    <div class="res-label">$\cos 30^\circ = 0.866$</div>
+                                    <div style="font-size:16px; margin-top:10px;" id="calcCos"></div>
+                                </div>
+                                <div class="res-box">
+                                    <div class="res-label">$\tan 30^\circ = 0.577$</div>
+                                    <div style="font-size:16px; margin-top:10px;" id="calcTan"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <p style="font-size: 14px; color: var(--color-ink-light); margin-top: 20px;">辺の長さが変わっても、割り算の結果（比率）は絶対に揺るがないため、「30度といえばサインは必ず0.5」と辞書のように決めることができるのです。</p>
+                    </div>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】人間が「直接測れないもの」を測るための最強のツール</h4>
+                    <p>「サイン・コサインなんて実生活で使わない」というのは大きな誤解です。<br>
+                    三角比は、古くはピラミッドの建設や大航海時代の船の現在地特定、現代ではGPSや建築、ゲームの3Dグラフィックスまで、あらゆる場所で使われています。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">近づけない山の高さや川の幅を「角度」から暴く</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            例えば、向こう岸まで行くことができない幅の広い川があるとします。<br>
+                            この川の幅を測るために、川のこちらの岸に沿って $100\text{m}$ 歩き、そこから対岸の木を見上げます。その時の「角度（$\theta$）」を分度器のような機械（トランシット）で測ります。
+                        </p>
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 14px; text-align: left; margin-bottom: 12px; font-family: var(--font-mono);">
+                            角度が $30^\circ$ だった場合、タンジェントの性質を使います。<br>
+                            $\tan 30^\circ = \text{川の幅（高さ）} \div 100\text{m（底辺）}$<br>
+                            川の幅 $= 100\text{m} \times \tan 30^\circ$<br>
+                            $\approx 100 \times 0.577 = 57.7\text{m}$
+                        </div>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            このように、自分たちが歩ける地面の距離と「角度」さえわかれば、三角比を使うことで、レーザーやメジャーが届かない山の高さや星までの距離すらも計算で割り出すことができるのです。「三角比（三角関数）」は、人類が空間を支配するための最強のツールと言えます。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 5 Summary -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>まとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 15px; font-size: 14px; line-height: 1.7;">
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li>三角比とは、直角三角形における「辺の長さの比率」のことである。</li>
+                            <li><strong>$\sin \theta$（サイン）</strong>：高さ $\div$ 斜辺</li>
+                            <li><strong>$\cos \theta$（コサイン）</strong>：底辺 $\div$ 斜辺</li>
+                            <li><strong>$\tan \theta$（タンジェント）</strong>：高さ $\div$ 底辺</li>
+                            <li>角度が同じなら、三角形の大きさが変わっても三角比の値は常に同じになる。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lesson-footer-nav" style="margin-top: 40px;">
+                    <a href="63.html" class="btn-secondary">&larr; 前の単元へ</a>
+                    <a href="index.html" class="btn-secondary">目次に戻る</a>
+                    <a href="65.html" class="btn btn-primary">次の単元へ &rarr;</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const slSize = document.getElementById('slSize');
+        const valSize = document.getElementById('valSize');
+        
+        const triPoly = document.getElementById('triPoly');
+        const rightMark = document.getElementById('rightMark');
+        const angleArc = document.getElementById('angleArc');
+        const angleText = document.getElementById('angleText');
+        
+        const lblHyp = document.getElementById('lblHyp');
+        const lblBase = document.getElementById('lblBase');
+        const lblHeight = document.getElementById('lblHeight');
+
+        const valSin = document.getElementById('valSin');
+        const valCos = document.getElementById('valCos');
+        const valTan = document.getElementById('valTan');
+        const calcSin = document.getElementById('calcSin');
+        const calcCos = document.getElementById('calcCos');
+        const calcTan = document.getElementById('calcTan');
+
+        function updateSim() {
+            let size = parseFloat(slSize.value);
+            valSize.textContent = size;
+
+            // angle is 30 deg
+            // sin(30) = 0.5, cos(30) = sqrt(3)/2 ~ 0.866
+            let height = size * 0.5;
+            let base = size * Math.sqrt(3) / 2;
+
+            // Draw from bottom-left (0, 200)
+            let p1x = 0;
+            let p1y = 200;
+            let p2x = base;
+            let p2y = 200;
+            let p3x = base;
+            let p3y = 200 - height;
+
+            triPoly.setAttribute("points", `${p1x},${p1y} ${p2x},${p2y} ${p3x},${p3y}`);
+            
+            rightMark.setAttribute("points", `${p2x-10},${p2y} ${p2x-10},${p2y-10} ${p2x},${p2y-10}`);
+            
+            // Labels positions
+            lblHyp.setAttribute("x", base/2 - 10);
+            lblHyp.setAttribute("y", 200 - height/2 - 10);
+            // reset rotation transform center
+            lblHyp.setAttribute("transform", `rotate(-30, ${base/2}, ${200 - height/2})`);
+            
+            lblBase.setAttribute("x", base/2);
+            
+            lblHeight.setAttribute("x", base + 10);
+            lblHeight.setAttribute("y", 200 - height/2 + 5);
+
+            // Calculate and display values
+            calcSin.innerHTML = `$= \\frac{${height.toFixed(1)}}{${size.toFixed(1)}}$`;
+            calcCos.innerHTML = `$= \\frac{${base.toFixed(1)}}{${size.toFixed(1)}}$`;
+            calcTan.innerHTML = `$= \\frac{${height.toFixed(1)}}{${base.toFixed(1)}}$`;
+            
+            if(window.renderMathInElement) {
+                renderMathInElement(calcSin, {delimiters: [{left: '$', right: '$', display: false}]});
+                renderMathInElement(calcCos, {delimiters: [{left: '$', right: '$', display: false}]});
+                renderMathInElement(calcTan, {delimiters: [{left: '$', right: '$', display: false}]});
+            }
+        }
+
+        slSize.addEventListener('input', updateSim);
+        updateSim();
+        
+        // Render math in HTML for static elements
+        if(window.renderMathInElement) {
+            renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});
+        }
+    </script>
+
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>

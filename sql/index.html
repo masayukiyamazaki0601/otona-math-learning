@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL＆データベース・データ基盤カリキュラム | Otona Math & Stats</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math & Stats</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="../curriculum/index.html">数学</a></li>
+                    <li><a href="../statistics/index.html">統計学</a></li>
+                    <li><a href="../python/index.html">Python</a></li>
+                    <li><a href="index.html">SQL</a></li>
+                    <li><a href="../datascience/index.html">データサイエンス</a></li>
+                    <li><a href="../ml/index.html">機械学習</a></li>
+                    <li><a href="../mba/index.html">MBA</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main class="container" style="padding: 100px 24px; min-height: 60vh;">
+        <h2 class="section-title text-center" style="margin-bottom: 60px;">SQL＆データベース・データ基盤カリキュラム（全50単元）</h2>
+        <div class="curriculum-toc">
+<div class="toc-chapter">
+    <h3 class="toc-chapter-title"><span class="chapter-num">Chapter 01</span> SQLの基本操作とRDBMSの基礎 <span class="unit-count">(15 units)</span></h3>
+    <ul class="toc-unit-list">
+        <li><a href="#"><span class="unit-num">01</span> なぜデータ分析にSQLが必要なのか？（RDBMSとExcelの限界）</a></li>
+        <li><a href="#"><span class="unit-num">02</span> 開発環境準備：Dockerを用いたPostgreSQL/MySQL環境構築</a></li>
+        <li><a href="#"><span class="unit-num">03</span> RDBの構造：テーブル、行、列、主キー（PK）の定義</a></li>
+        <li><a href="#"><span class="unit-num">04</span> 最初のデータ抽出：SELECT文と特定のカラム指定</a></li>
+        <li><a href="#"><span class="unit-num">05</span> フィルタリング①：WHERE句を用いた数値・文字列の条件絞り込み</a></li>
+        <li><a href="#"><span class="unit-num">06</span> フィルタリング②：AND, OR, NOTを用いた条件の組み合わせ</a></li>
+        <li><a href="#"><span class="unit-num">07</span> フィルタリング③：LIKE演算子を用いた曖昧検索とワイルドカード</a></li>
+        <li><a href="#"><span class="unit-num">08</span> 並び替えと件数制限：ORDER BY句とLIMIT句の使い方</a></li>
+        <li><a href="#"><span class="unit-num">09</span> 重複データの排除：DISTINCT句を用いたユニーク値抽出</a></li>
+        <li><a href="#"><span class="unit-num">10</span> 算術演算とエイリアス：AS句による命名と四則計算</a></li>
+        <li><a href="#"><span class="unit-num">11</span> NULLの扱い：IS NULL/IS NOT NULLとCOALESCE関数</a></li>
+        <li><a href="#"><span class="unit-num">12</span> 集計関数の基本：COUNT、SUM、AVG、MAX、MINの活用</a></li>
+        <li><a href="#"><span class="unit-num">13</span> グループ集計：GROUP BY句によるセグメント単位の分析</a></li>
+        <li><a href="#"><span class="unit-num">14</span> 集計結果の絞り込み：HAVING句とWHERE句の明確な使い分け</a></li>
+        <li><a href="#"><span class="unit-num">15</span> 条件分岐クエリ：CASE式を用いたデータ分類とフラグ付与</a></li>
+    </ul>
+</div>
+<div class="toc-chapter">
+    <h3 class="toc-chapter-title"><span class="chapter-num">Chapter 02</span> 高度なSQLと集計分析（実務データ抽出） <span class="unit-count">(15 units)</span></h3>
+    <ul class="toc-unit-list">
+        <li><a href="#"><span class="unit-num">16</span> テーブル結合①：INNER JOINによる複数データの内部結合</a></li>
+        <li><a href="#"><span class="unit-num">17</span> テーブル結合②：LEFT/RIGHT JOINによる外部結合の制御</a></li>
+        <li><a href="#"><span class="unit-num">18</span> テーブル結合③：FULL OUTER JOINと自己結合（SELF JOIN）</a></li>
+        <li><a href="#"><span class="unit-num">19</span> 集合演算子：UNION、UNION ALL、INTERSECT、EXCEPT</a></li>
+        <li><a href="#"><span class="unit-num">20</span> サブクエリ（副問合せ）①：WHERE句内の条件判定（IN/EXISTS）</a></li>
+        <li><a href="#"><span class="unit-num">21</span> サブクエリ（副問合せ）②：FROM句・SELECT句内のインラインビュー</a></li>
+        <li><a href="#"><span class="unit-num">22</span> 共通テーブル式（CTE）：WITH句を用いた構造化と可読性の向上</a></li>
+        <li><a href="#"><span class="unit-num">23</span> 文字列操作：CONCAT、SUBSTRING、REPLACE、型変換</a></li>
+        <li><a href="#"><span class="unit-num">24</span> 日付時刻関数：期間算出と特定日付要素の抽出（EXTRACT）</a></li>
+        <li><a href="#"><span class="unit-num">25</span> データ型キャスト：CAST関数を用いた安全な型変更</a></li>
+        <li><a href="#"><span class="unit-num">26</span> Window関数①：ROW_NUMBER、RANK、DENSE_RANKの順位判定</a></li>
+        <li><a href="#"><span class="unit-num">27</span> Window関数②：LAG、LEADを用いた時系列レコード比較</a></li>
+        <li><a href="#"><span class="unit-num">28</span> Window関数③：OVER句を組み合わせた累積和・移動平均算出</a></li>
+        <li><a href="#"><span class="unit-num">29</span> データの縦横変換：PIVOTとUNPIVOTによるクロス集計</a></li>
+        <li><a href="#"><span class="unit-num">30</span> 実務演習：購買データからのリピート率・累積購入額の算出</a></li>
+    </ul>
+</div>
+<div class="toc-chapter">
+    <h3 class="toc-chapter-title"><span class="chapter-num">Chapter 03</span> データベース設計とモデリング <span class="unit-count">(10 units)</span></h3>
+    <ul class="toc-unit-list">
+        <li><a href="#"><span class="unit-num">31</span> データベース設計：概念・論理・物理設計のステップ</a></li>
+        <li><a href="#"><span class="unit-num">32</span> ER図（Entity-Relationship Diagram）の設計と多重度関係</a></li>
+        <li><a href="#"><span class="unit-num">33</span> データの正規化①：第1正規形・第2正規形による重複排除</a></li>
+        <li><a href="#"><span class="unit-num">34</span> データの正規化②：第3正規形（依存性排除）と非正規化の検討</a></li>
+        <li><a href="#"><span class="unit-num">35</span> データ整合性：一意制約、外部キー制約（FK）、CHECK制約</a></li>
+        <li><a href="#"><span class="unit-num">36</span> 検索高速化：インデックス（索引）の仕組みとB-Tree構造</a></li>
+        <li><a href="#"><span class="unit-num">37</span> パフォーマンス改善：EXPLAIN（実行計画）によるクエリ最適化</a></li>
+        <li><a href="#"><span class="unit-num">38</span> トランザクション制御：ACID特性とCOMMIT/ROLLBACK</a></li>
+        <li><a href="#"><span class="unit-num">39</span> 同時実行とロック：排他制御とデッドロックの回避技術</a></li>
+        <li><a href="#"><span class="unit-num">40</span> 仮想テーブル：ビュー（View）と物理保存（MView）の使い分け</a></li>
+    </ul>
+</div>
+<div class="toc-chapter">
+    <h3 class="toc-chapter-title"><span class="chapter-num">Chapter 04</span> モダンデータインフラとDWH（BigQuery/Snowflake） <span class="unit-count">(10 units)</span></h3>
+    <ul class="toc-unit-list">
+        <li><a href="#"><span class="unit-num">41</span> 分析インフラ全体像：データレイク、DWH、データマートの役割</a></li>
+        <li><a href="#"><span class="unit-num">42</span> 列指向型DWH：BigQueryとSnowflakeの仕組みと検索の数理</a></li>
+        <li><a href="#"><span class="unit-num">43</span> 高速・格安クエリ：パーティショニングとクラスタリングの設計</a></li>
+        <li><a href="#"><span class="unit-num">44</span> 非構造化データ：JSON・STRUCT・ARRAY型の処理（UNNEST）</a></li>
+        <li><a href="#"><span class="unit-num">45</span> データパイプライン：ETL/ELT処理の基礎とロードの自動化</a></li>
+        <li><a href="#"><span class="unit-num">46</span> データ変革：dbt（data build tool）を用いたデータ変換と管理</a></li>
+        <li><a href="#"><span class="unit-num">47</span> ガバナンス：データカタログとメタデータ管理のベストプラクティス</a></li>
+        <li><a href="#"><span class="unit-num">48</span> BIツール接続：Tableau/Looker等の接続とマート設計ルール</a></li>
+        <li><a href="#"><span class="unit-num">49</span> 非関係型DB：NoSQLデータベースとRDBの特性比較</a></li>
+        <li><a href="#"><span class="unit-num">50</span> 総括：データ収集からデータ活用・モデルデプロイまでの全体アーキテクチャ</a></li>
+    </ul>
+</div>
+</div>
+    </main>
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math & Stats</div>
+                <p>大人のためのやり直し数理プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math & Stats.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

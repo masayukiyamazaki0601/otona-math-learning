@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>微分の基礎（平均変化率と瞬間変化率） | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .concept-box {
+            background-color: var(--color-paper);
+            border: 2px solid var(--color-brass);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .vs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .vs-item {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        .math-display {
+            font-size: 20px;
+            font-family: var(--font-mono);
+            color: var(--color-ink);
+            margin: 15px 0;
+            overflow-x: auto;
+            text-align: center;
+        }
+        .interactive-tool {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .tool-header {
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: var(--color-ink);
+            text-align: center;
+        }
+        .control-panel {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .control-group {
+            background: var(--color-paper);
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 300px;
+        }
+        .slider {
+            width: 100%;
+            accent-color: var(--color-brass);
+            margin-top: 10px;
+        }
+        .sim-board {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            width: 100%;
+            padding: 30px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            gap: 20px;
+        }
+        .chart-container {
+            width: 100%;
+            max-width: 500px;
+            aspect-ratio: 1 / 1;
+            background: #fafafa;
+            border-left: 2px solid #333;
+            border-bottom: 2px solid #333;
+            position: relative;
+            overflow: hidden;
+        }
+        .axis-label-x {
+            position: absolute;
+            bottom: 5px;
+            right: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #666;
+            font-family: var(--font-mono);
+        }
+        .axis-label-y {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #666;
+            font-family: var(--font-mono);
+        }
+        .stat-results {
+            background: #fdf2f0;
+            border: 2px solid #e74c3c;
+            border-radius: 6px;
+            padding: 20px;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .stat-box {
+            background: #fff;
+            border: 1px solid #e74c3c;
+            border-radius: 4px;
+            padding: 10px;
+        }
+        .stat-title {
+            font-size: 12px;
+            color: #666;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .stat-val {
+            font-size: 18px;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            color: #333;
+        }
+        .focus-text {
+            font-size: 16px;
+            font-weight: bold;
+            color: #e74c3c;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第6章 発展・高度な教養 &gt; 単元88
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 06 / Unit 88</span>
+                <h2 class="lesson-title">微分の基礎（平均変化率と瞬間変化率）</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>「微分」とは、一言でいえば「傾き」を求めること</h4>
+                    <p>高校数学最大の壁とも言われる「微分（びぶん）」ですが、その本質は非常にシンプルです。<br>
+                    微分とは、<strong>「グラフの傾き（変化のスピード）」をピンポイントで求めるための強力なツール</strong>です。ビジネスにおいて「売上の成長スピードが上がっているか、鈍化しているか」を分析する上で欠かせない概念です。</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>平均変化率（Average Rate of Change）</h4>
+                    <p>微分を理解するために、まずは「大まかなスピード」から考えます。グラフ上の2点を結んだ直線の傾きを<strong>「平均変化率」</strong>と呼びます。</p>
+                    
+                    <div class="vs-grid">
+                        <div class="vs-item" style="border-top: 4px solid #3498db;">
+                            <h5 style="margin-top:0; color:#3498db;">平均変化率（大まかなスピード）</h5>
+                            <p style="font-size:13px; line-height:1.5;">「東京から500km先の大阪まで、2時間かけて移動した。だから平均時速は250kmだ」というような、2点間の結果だけで割り出した大まかな計算。<br>道中には渋滞もあればスピードを出しすぎた瞬間もありますが、それらは無視されます。</p>
+                        </div>
+                        <div class="vs-item" style="border-top: 4px solid #e74c3c;">
+                            <h5 style="margin-top:0; color:#e74c3c;">瞬間変化率（ピンポイントのスピード）</h5>
+                            <p style="font-size:13px; line-height:1.5;">「名古屋を通過している<strong>"まさに今この瞬間"</strong>のスピードメーターは時速何kmを指しているか？」というピンポイントのスピード。この「ある瞬間の変化の勢い」を求める操作こそが<strong>「微分」</strong>です。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>平均から「瞬間」へ。極限（$\lim$）の魔法</h4>
+                    <p>「平均変化率」から「瞬間変化率（微分）」へ移行するために、前単元で学んだ<strong>「極限（$\lim$）」</strong>を使います。</p>
+                    <p>点Aと点Bを結んで「平均」を求めていた状態から、<strong>点Bを点Aに限りなく近づけていきます。</strong>すると、2点間の距離がゼロに収束した究極の瞬間、その直線はグラフの一点のみに触れる<strong>「接線（せっせん）」</strong>へと変化します。<br>
+                    この接線の傾きこそが、その瞬間の変化のスピード（微分係数）なのです。</p>
+                </div>
+
+                <!-- Step 4 Interactive Tool -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>【体験】平均から瞬間へ・微分シミュレーター</h4>
+                    <p>二次関数のグラフ $y = x^2$ において、「固定された点A（$x=1$）」と「動かせる点B」があります。<br>
+                    スライダーで点Bを点Aに限りなく近づけてみましょう。「2点を結ぶ直線（割線）」が、点Aのみに接する「接線」へと進化し、傾き（変化のスピード）が<strong>「2」</strong>という値に収束していく過程をアニメーションで体験できます。</p>
+                    
+                    <div class="interactive-tool">
+                        <div class="tool-header">
+                            点Bを点Aに近づけ、「瞬間変化率」を求める
+                        </div>
+                        
+                        <div class="control-panel">
+                            <div class="control-group">
+                                <label style="font-weight:bold;">点Bの $x$ 座標: <span id="lblB" style="color:var(--color-brass); font-family:var(--font-mono); font-size:18px;">3.00</span></label>
+                                <input type="range" id="slB" class="slider" min="1.01" max="4.00" step="0.01" value="3.00" direction="rtl">
+                                <div style="font-size:12px; color:#666; margin-top:5px;">※左に動かして、点A（$x=1$）に近づける</div>
+                            </div>
+                        </div>
+
+                        <div class="sim-board">
+                            <div class="chart-container">
+                                <div class="axis-label-x">$x$</div>
+                                <div class="axis-label-y">$y$</div>
+                                
+                                <svg id="curveSvg" width="100%" height="100%" viewBox="0 0 500 500" preserveAspectRatio="none">
+                                    <!-- Axes -->
+                                    <line x1="0" y1="500" x2="500" y2="500" stroke="#333" stroke-width="2" />
+                                    <line x1="0" y1="0" x2="0" y2="500" stroke="#333" stroke-width="2" />
+                                    
+                                    <!-- Parabola generated by JS -->
+                                    <path id="pathGraph" fill="none" stroke="#ccc" stroke-width="3" />
+                                    
+                                    <!-- Line through A and B -->
+                                    <line id="lineSecant" x1="0" y1="0" x2="500" y2="0" stroke="#e74c3c" stroke-width="2" />
+                                    
+                                    <!-- Point A (Fixed at x=1) -->
+                                    <circle id="ptA" cx="0" cy="0" r="6" fill="#3498db" />
+                                    <text id="txtA" x="0" y="0" font-size="14" font-weight="bold" fill="#3498db">A</text>
+                                    
+                                    <!-- Point B (Moving) -->
+                                    <circle id="ptB" cx="0" cy="0" r="6" fill="#e74c3c" />
+                                    <text id="txtB" x="0" y="0" font-size="14" font-weight="bold" fill="#e74c3c">B</text>
+                                </svg>
+                            </div>
+                            
+                            <div class="stat-results">
+                                <div class="focus-text" id="statusText">現在は「平均変化率（2点間の傾き）」です</div>
+                                <div class="stat-grid">
+                                    <div class="stat-box">
+                                        <div class="stat-title">点Aと点Bの $x$ の距離</div>
+                                        <div class="stat-val" id="valDist">2.00</div>
+                                    </div>
+                                    <div class="stat-box" style="border-color: #3498db;">
+                                        <div class="stat-title">直線の傾き（変化率）</div>
+                                        <div class="stat-val" id="valSlope" style="color: #3498db;">4.00</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】ビジネスにおける「微分的思考」</h4>
+                    <p>微分の「傾き（変化の勢い）を見る」という思考は、経営判断に不可欠です。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">「売上の絶対値」ではなく「成長の勢い」を評価する</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            例えば、ある部門の売上が「1億円」だとします。これは関数の「絶対値（$y$座標）」を見ている状態です。しかし、経営者が知るべきなのは「その1億円が、先月から急激に伸びて到達したもの（傾きがプラスで急）なのか、それとも先月の1.2億円から落ち込んで1億円になったのか（傾きがマイナス）なのか」です。
+                        </p>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            微分的思考を持つ人は、「現在の数字（絶対値）」よりも<strong>「今この瞬間の変化のスピードと方向（微分の傾き）」</strong>を重視します。傾きがプラスであれば、放置しても来月はさらに売上が伸びると予測でき、逆に傾きがマイナスに転じた瞬間に、いち早くテコ入れの経営判断を下すことができるのです。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 5 Summary -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>まとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 15px; font-size: 14px; line-height: 1.7;">
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li><strong>微分</strong>：グラフの「ある瞬間の傾き（瞬間変化率）」を求める操作のこと。</li>
+                            <li><strong>平均変化率</strong>：2点を結んだ直線の傾き。「大まかな平均スピード」。</li>
+                            <li><strong>瞬間変化率</strong>：極限（$\lim$）を使い、2点間の距離をゼロに近づけたときの傾き。グラフの「接線」となる。</li>
+                            <li>ビジネスにおいて、現在の絶対値だけでなく「変化の勢い（微分値）」を注視することが、未来予測と迅速な軌道修正の鍵となる。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lesson-footer-nav" style="margin-top: 40px;">
+                    <a href="87.html" class="btn-secondary">&larr; 前の単元へ</a>
+                    <a href="index.html" class="btn-secondary">目次に戻る</a>
+                    <a href="89.html" class="btn btn-primary">次の単元へ &rarr;</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const slB = document.getElementById('slB');
+        const lblB = document.getElementById('lblB');
+        
+        const pathGraph = document.getElementById('pathGraph');
+        const lineSecant = document.getElementById('lineSecant');
+        
+        const ptA = document.getElementById('ptA');
+        const txtA = document.getElementById('txtA');
+        const ptB = document.getElementById('ptB');
+        const txtB = document.getElementById('txtB');
+        
+        const valDist = document.getElementById('valDist');
+        const valSlope = document.getElementById('valSlope');
+        const statusText = document.getElementById('statusText');
+
+        // Function y = x^2
+        // X domain: 0 to 4
+        // Y range: 0 to 16
+        
+        const SVG_W = 500;
+        const SVG_H = 500;
+        
+        function mapX(xVal) {
+            return (xVal / 4.0) * SVG_W;
+        }
+        function mapY(yVal) {
+            // y goes from 0 to 16
+            // 0 is bottom (500), 16 is top (0)
+            return SVG_H - (yVal / 16.0) * SVG_H;
+        }
+
+        // Draw Parabola
+        let pts = "";
+        for(let x=0; x<=4; x+=0.1) {
+            pts += `${mapX(x)},${mapY(x*x)} `;
+        }
+        pathGraph.setAttribute("d", "M " + pts.replace(/,/g, ' ').split(' ').reduce((acc, v, i) => {
+            if(i%2===0) acc += (i>0?" L ":"") + v;
+            else acc += "," + v;
+            return acc;
+        }, ""));
+
+        // Fixed Point A at x=1
+        let aX = 1;
+        let aY = 1; // 1^2
+        ptA.setAttribute("cx", mapX(aX));
+        ptA.setAttribute("cy", mapY(aY));
+        txtA.setAttribute("x", mapX(aX) - 20);
+        txtA.setAttribute("y", mapY(aY) - 10);
+
+        function updateSim() {
+            let bX = parseFloat(slB.value);
+            let bY = bX * bX;
+            
+            lblB.textContent = bX.toFixed(2);
+            
+            // Move Point B
+            ptB.setAttribute("cx", mapX(bX));
+            ptB.setAttribute("cy", mapY(bY));
+            txtB.setAttribute("x", mapX(bX) + 10);
+            txtB.setAttribute("y", mapY(bY) + 20);
+            
+            // Calculate Slope m = (bY - aY) / (bX - aX)
+            let dx = bX - aX;
+            let dy = bY - aY;
+            let slope = dy / dx;
+            
+            // Update stats
+            valDist.textContent = dx.toFixed(2);
+            valSlope.textContent = slope.toFixed(2);
+            
+            if (dx < 0.02) {
+                statusText.innerHTML = "極限まで接近！<br>ほぼ「瞬間変化率（接線の傾き）」です！";
+                statusText.style.color = "#3498db";
+            } else {
+                statusText.innerHTML = "現在は「平均変化率（2点間の傾き）」です";
+                statusText.style.color = "#e74c3c";
+            }
+            
+            // Draw Secant Line passing through A and B
+            // y - aY = slope * (x - aX)
+            // Let's find y at x=0 and x=4 to draw the line across the SVG
+            let yAt0 = slope * (0 - aX) + aY;
+            let yAt4 = slope * (4 - aX) + aY;
+            
+            lineSecant.setAttribute("x1", mapX(0));
+            lineSecant.setAttribute("y1", mapY(yAt0));
+            lineSecant.setAttribute("x2", mapX(4));
+            lineSecant.setAttribute("y2", mapY(yAt4));
+        }
+
+        slB.addEventListener('input', updateSim);
+        updateSim();
+        
+    </script>
+
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>

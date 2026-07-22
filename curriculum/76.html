@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>データの散らばり（分散の概念） | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .concept-box {
+            background-color: var(--color-paper);
+            border: 2px solid var(--color-brass);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .math-display {
+            font-size: 20px;
+            font-family: var(--font-mono);
+            color: var(--color-ink);
+            margin: 15px 0;
+            overflow-x: auto;
+            text-align: center;
+        }
+        .interactive-tool {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .tool-header {
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: var(--color-ink);
+            text-align: center;
+        }
+        .control-panel {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            width: 100%;
+            justify-content: center;
+        }
+        .control-group {
+            background: var(--color-paper);
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 250px;
+        }
+        .slider {
+            width: 100%;
+            accent-color: var(--color-brass);
+            margin-top: 10px;
+        }
+        .sim-board {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            width: 100%;
+            padding: 30px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            gap: 20px;
+        }
+        .scale-container {
+            width: 100%;
+            max-width: 600px;
+            height: 100px;
+            position: relative;
+            background: #fafafa;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            margin-top: 20px;
+        }
+        .scale-line {
+            position: absolute;
+            top: 50%;
+            left: 5%;
+            right: 5%;
+            height: 2px;
+            background-color: #333;
+            transform: translateY(-50%);
+        }
+        .scale-tick {
+            position: absolute;
+            top: 50%;
+            width: 2px;
+            height: 10px;
+            background-color: #333;
+            transform: translate(-50%, -50%);
+        }
+        .scale-label {
+            position: absolute;
+            top: 60%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            font-family: var(--font-mono);
+            color: #666;
+        }
+        .mean-marker {
+            position: absolute;
+            top: 20%;
+            bottom: 20%;
+            width: 2px;
+            background-color: #e74c3c;
+            transform: translateX(-50%);
+            z-index: 1;
+        }
+        .mean-label {
+            position: absolute;
+            top: 5%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+        .data-point {
+            position: absolute;
+            top: 50%;
+            width: 16px;
+            height: 16px;
+            background-color: #3498db;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            opacity: 0.8;
+            border: 2px solid #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        .calc-panel {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 20px;
+            width: 100%;
+            max-width: 600px;
+        }
+        .calc-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #ccc;
+        }
+        .calc-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #ccc;
+        }
+        .calc-label {
+            font-size: 14px;
+            color: #333;
+            font-weight: bold;
+        }
+        .calc-val {
+            font-family: var(--font-mono);
+            font-weight: bold;
+            color: #e74c3c;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第5章 実践・ビジネス数学 &gt; 単元76
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 05 / Unit 76</span>
+                <h2 class="lesson-title">データの散らばり（分散の概念）</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>「平均60点」でも、クラスの雰囲気は全く違う</h4>
+                    <p>代表値（平均など）は便利ですが、それだけでは見えない大きな罠があります。それは<strong>「データの散らばり具合（ばらつき）」</strong>がわからないことです。</p>
+                    <p>例えば、クラス全員が「60点」をとったテストの平均は60点です。一方、クラスの半分が「0点」で、残り半分が「120点」をとったテストの平均も同じく60点になります。<br>平均点は同じでも、クラスの学力の状況は全く異なります。この「ばらつき」を数字で表すための指標が<strong>「分散（ぶんさん）」</strong>です。</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>偏差（へんさ）の合計は必ず「ゼロ」になる</h4>
+                    <p>ばらつきを計算するために、まずは一人一人のデータが「平均からどれくらい離れているか」を計算します。これを<strong>「偏差（へんさ）」</strong>と呼びます。（計算式：データ － 平均値）</p>
+                    <p>平均より高い人はプラスの偏差、低い人はマイナスの偏差になります。<br>
+                    ところが、この「全員分の偏差」を足し合わせると、プラスとマイナスが綺麗に相殺し合って、<strong>どんなデータであっても必ず合計が「0」になってしまう</strong>という問題が発生します。これではばらつきのスコアになりません。</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>マイナスを消す魔法「2乗」＝ 分散の誕生</h4>
+                    <p>合計がゼロになってしまう問題を解決するために、数学者たちは<strong>「全員の偏差をそれぞれ2乗してプラスに変換してから、足し合わせて平均をとる」</strong>という手法を編み出しました。<br>
+                    こうして生まれた「ばらつきの指標」が<strong>「分散（Variance）」</strong>です。</p>
+                    
+                    <div class="concept-box">
+                        <h5 style="margin-top:0; color:var(--color-brass);">分散の求め方</h5>
+                        <div class="math-display">
+                            $\text{分散} = \frac{(\text{偏差}_1)^2 + (\text{偏差}_2)^2 + \dots + (\text{偏差}_n)^2}{データの個数}$
+                        </div>
+                        <p style="font-size:14px; color:#666; margin:0; text-align:center;">※分散が大きいほど「データが散らばっている」、ゼロに近いほど「平均の近くに密集している」ことを意味します。</p>
+                    </div>
+                </div>
+
+                <!-- Step 4 Interactive Tool -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>【体験】ばらつきシミュレーター</h4>
+                    <p>5つのデータ点があります。スライダーを右に動かすと、データが平均（中心）から左右に遠ざかり、「ばらつき（散らばり）」が大きくなります。<br>
+                    散らばりが大きくなるにつれて、「偏差の2乗」が急激に増大し、結果として<strong>分散の数値が跳ね上がっていく様子</strong>を視覚的に体験しましょう。</p>
+                    
+                    <div class="interactive-tool">
+                        <div class="tool-header">
+                            データ点の散らばりと「分散」の計算
+                        </div>
+                        
+                        <div class="control-panel">
+                            <div class="control-group">
+                                <label>散らばり具合（スプレッド）: <span id="lblSpread" style="color:var(--color-brass); font-family:var(--font-mono); font-size:18px;">0</span></label>
+                                <input type="range" id="slSpread" class="slider" min="0" max="40" step="1" value="0">
+                            </div>
+                        </div>
+
+                        <div class="sim-board">
+                            <div class="scale-container">
+                                <div class="scale-line"></div>
+                                <!-- Ticks -->
+                                <div class="scale-tick" style="left: 10%;"></div><div class="scale-label" style="left: 10%;">10</div>
+                                <div class="scale-tick" style="left: 50%;"></div><div class="scale-label" style="left: 50%;">50</div>
+                                <div class="scale-tick" style="left: 90%;"></div><div class="scale-label" style="left: 90%;">90</div>
+                                
+                                <div class="mean-marker" style="left: 50%;"></div>
+                                <div class="mean-label" style="left: 50%;">平均: 50</div>
+                                
+                                <!-- Data points -->
+                                <div class="data-point" id="pt1"></div>
+                                <div class="data-point" id="pt2"></div>
+                                <div class="data-point" id="pt3"></div>
+                                <div class="data-point" id="pt4"></div>
+                                <div class="data-point" id="pt5"></div>
+                            </div>
+                            
+                            <div class="calc-panel">
+                                <div class="calc-row">
+                                    <div class="calc-label">5つのデータ (値)</div>
+                                    <div class="calc-val" id="valData" style="color:#333; font-size:16px;">50, 50, 50, 50, 50</div>
+                                </div>
+                                <div class="calc-row">
+                                    <div class="calc-label">各偏差 (データ - 平均)</div>
+                                    <div class="calc-val" id="valDev" style="color:#666; font-size:16px;">0, 0, 0, 0, 0</div>
+                                </div>
+                                <div class="calc-row">
+                                    <div class="calc-label">各偏差の2乗 (プラス化)</div>
+                                    <div class="calc-val" id="valSq" style="color:#3498db; font-size:16px;">0, 0, 0, 0, 0</div>
+                                </div>
+                                <div class="calc-row">
+                                    <div class="calc-label">分散 (2乗の平均)</div>
+                                    <div class="calc-val" id="valVariance" style="font-size:24px;">0.0</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】なぜ絶対値ではなく「2乗」するのか？</h4>
+                    <p>マイナスを消すだけなら、「絶対値（マイナスの符号を取るだけ）」でも良い気がしますよね。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">「外れ値」を厳しく評価する2乗の性質</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            絶対値ではなくわざわざ2乗する最大の理由は、<strong>「平均から遠く離れた値（極端な値）に、より重いペナルティを与えるため」</strong>です。<br>
+                            例えば偏差が「2」なら2乗して「4」ですが、偏差が「10」に広がると2乗して「100」になります。遠くに離れるほど雪だるま式にスコアが大きくなるため、「ばらつき」を非常に敏感に察知できる優れた指標になるのです。
+                        </p>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            また、絶対値はグラフがV字型に折れ曲がってしまい「微分（計算）」ができないという数学的な欠点がありますが、2乗（$x^2$）であれば滑らかなU字カーブになり、コンピュータを用いた高度な最適化計算や機械学習と非常に相性が良いという実務的な理由もあります。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 5 Summary -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>まとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 15px; font-size: 14px; line-height: 1.7;">
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li>平均値だけではデータの「ばらつき具合」まではわからない。</li>
+                            <li><strong>偏差</strong>：各データが平均からどれくらい離れているか。足すと必ず0になる。</li>
+                            <li><strong>分散</strong>：偏差を「2乗」して平均をとったもの。データが散らばっているほど大きな数値になる。</li>
+                            <li>あえて2乗することで、平均から遠く離れた値（外れ値）の存在をより強調して評価することができる。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lesson-footer-nav" style="margin-top: 40px;">
+                    <a href="75.html" class="btn-secondary">&larr; 前の単元へ</a>
+                    <a href="index.html" class="btn-secondary">目次に戻る</a>
+                    <a href="77.html" class="btn btn-primary">次の単元へ &rarr;</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const slSpread = document.getElementById('slSpread');
+        const lblSpread = document.getElementById('lblSpread');
+        
+        const pt1 = document.getElementById('pt1');
+        const pt2 = document.getElementById('pt2');
+        const pt3 = document.getElementById('pt3');
+        const pt4 = document.getElementById('pt4');
+        const pt5 = document.getElementById('pt5');
+        
+        const valData = document.getElementById('valData');
+        const valDev = document.getElementById('valDev');
+        const valSq = document.getElementById('valSq');
+        const valVariance = document.getElementById('valVariance');
+
+        function updateSim() {
+            let spread = parseInt(slSpread.value);
+            lblSpread.textContent = spread;
+            
+            // Base mean is 50.
+            // We have 5 points.
+            // Spread determines how far they go from the mean.
+            let mean = 50;
+            let d1 = mean - spread;       // far left
+            let d2 = mean - (spread/2);   // mid left
+            let d3 = mean;                // center
+            let d4 = mean + (spread/2);   // mid right
+            let d5 = mean + spread;       // far right
+            
+            let dataArr = [d1, d2, d3, d4, d5];
+            
+            // Map 0-100 to 10%-90% on the scale visually
+            // width is 80% (from 10% to 90%). 0 is 10%, 100 is 90%.
+            function getLeftPct(val) {
+                return 10 + (val / 100) * 80;
+            }
+            
+            pt1.style.left = getLeftPct(d1) + "%";
+            pt2.style.left = getLeftPct(d2) + "%";
+            pt3.style.left = getLeftPct(d3) + "%";
+            pt4.style.left = getLeftPct(d4) + "%";
+            pt5.style.left = getLeftPct(d5) + "%";
+            
+            // Calculate Devs
+            let devs = dataArr.map(x => x - mean);
+            // Calculate Squares
+            let sqs = devs.map(x => x * x);
+            // Calculate Variance
+            let variance = sqs.reduce((a,b) => a+b, 0) / 5;
+            
+            // Update Text
+            valData.textContent = dataArr.map(x => x.toFixed(1)).join(", ");
+            valDev.textContent = devs.map(x => (x > 0 ? "+" : "") + x.toFixed(1)).join(", ");
+            valSq.textContent = sqs.map(x => x.toFixed(1)).join(", ");
+            valVariance.textContent = variance.toFixed(1);
+        }
+
+        slSpread.addEventListener('input', updateSim);
+        updateSim();
+        
+    </script>
+
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>

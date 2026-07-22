@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>最小二乗法による単回帰分析の仕組み | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .concept-box {
+            background-color: var(--color-paper);
+            border: 2px solid var(--color-brass);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .math-display {
+            font-size: 20px;
+            font-family: var(--font-mono);
+            color: var(--color-ink);
+            margin: 15px 0;
+            overflow-x: auto;
+            text-align: center;
+        }
+        .interactive-tool {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        .tool-header {
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: var(--color-ink);
+            text-align: center;
+        }
+        .control-panel {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .control-group {
+            background: var(--color-paper);
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 230px;
+        }
+        .slider {
+            width: 100%;
+            accent-color: var(--color-brass);
+            margin-top: 10px;
+        }
+        .sim-board {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            width: 100%;
+            padding: 30px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            gap: 20px;
+        }
+        .chart-container {
+            width: 100%;
+            max-width: 400px;
+            aspect-ratio: 1 / 1;
+            background: #fafafa;
+            border: 1px solid #ccc;
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-results {
+            background: #fdf2f0;
+            border: 2px solid #e74c3c;
+            border-radius: 6px;
+            padding: 20px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .score-val {
+            font-size: 28px;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            color: #e74c3c;
+        }
+        .best-status {
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第8章 機械学習とデータサイエンスの数学基礎 &gt; 単元101
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 08 / Unit 101</span>
+                <h2 class="lesson-title">最小二乗法による単回帰分析の仕組み</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>データを予測する直線を引く「単回帰分析」</h4>
+                    <p>データサイエンスや機械学習の最も基礎的な予測モデルが<strong>「単回帰分析（たんかいぎぶんせき）」</strong>です。</p>
+                    <p>これは、散布図の上にプロットされたデータに対して、全体の傾向を代表するような<strong>一本の直線 $y = ax + b$</strong> を引く作業です。たとえば、「広告費（$x$）を増やすと、売上（$y$）がどれくらい増えるか」を数式化して予測する際に利用します。</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>「最もフィットする」とはどういうことか？（最小二乗法）</h4>
+                    <p>デタラメに線を引くのではなく、数学的に最も完璧なフィット線を決定するためのアプローチが<strong>「最小二乗法（さいしょうにじょうほう / Least Squares Method）」</strong>です。</p>
+                    <p>実際のデータの点と、予測直線との縦方向のズレのことを<strong>「残差（ざんさ）」</strong>と呼びます。この残差をそれぞれ<strong>二乗した値の合計（残差平方和）が、最も小さくなるように</strong>直線の傾き $a$ と切片 $b$ を決定します。</p>
+                    
+                    <div class="concept-box">
+                        <div class="math-display">
+                            $\text{残差平方和} = \sum_{i=1}^{n} (y_i - (a x_i + b))^2$
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>なぜ「二乗」するのか？</h4>
+                    <p>なぜ残差をそのまま足し算せず、「二乗」してから足すのでしょうか。これには2つの数学的な理由があります。</p>
+                    <ul style="line-height:1.8;">
+                        <li><strong>プラスとマイナスの相殺を防ぐ</strong>：直線より上にある点の残差はプラス、下にある点の残差はマイナスになります。そのまま足すと、大きなズレがあっても互いに打ち消し合ってゼロになってしまいます。二乗することで、すべてのズレをプラスのペナルティとして正しく蓄積します。</li>
+                        <li><strong>大きなズレ（外れ値）へのペナルティを重くする</strong>：ズレが「2」なら二乗で「4」、「4」なら二乗で「16」と、大きくズレているデータに対して大きな責任（ペナルティ）を課すことで、全体的にバランスの取れた線を引くことができます。</li>
+                    </ul>
+                </div>
+
+                <!-- Step 4 Interactive Tool -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>【体験】最小二乗法直観ビジュアライザー</h4>
+                    <p>グリッド上に4つの青いデータ点があります。スライダーを動かして、赤色で描かれた直線の「傾き $a$」と「切片 $b$」を動かしてみてください。<br>
+                    直線とデータ点の間に「残差の二乗」の大きさを表す赤い正方形が描かれます。このすべての正方形の面積（残差平方和）が最小（<strong>1.5</strong> 付近）になる「ベストフィット」の直線を探索してみましょう。</p>
+                    
+                    <div class="interactive-tool">
+                        <div class="tool-header">
+                            予測直線：$y = a x + b$ の決定
+                        </div>
+                        
+                        <div class="control-panel">
+                            <div class="control-group">
+                                <label style="font-weight:bold;">傾き $a$: <span id="lblA" style="color:var(--color-brass); font-family:var(--font-mono); font-size:18px;">1.0</span></label>
+                                <input type="range" id="slA" class="slider" min="-1.0" max="3.0" step="0.1" value="1.0">
+                            </div>
+                            <div class="control-group">
+                                <label style="font-weight:bold;">切片 $b$: <span id="lblB" style="color:var(--color-brass); font-family:var(--font-mono); font-size:18px;">0.0</span></label>
+                                <input type="range" id="slB" class="slider" min="-2.0" max="4.0" step="0.1" value="0.0">
+                            </div>
+                        </div>
+
+                        <div class="sim-board">
+                            <div class="chart-container">
+                                <svg id="gridSvg" width="100%" height="100%" viewBox="0 0 300 300">
+                                    <!-- Grid and dynamic items generated by JS -->
+                                </svg>
+                            </div>
+                            
+                            <div class="stat-results">
+                                <div style="font-size:13px; font-weight:bold; color:#666; margin-bottom:5px;">残差の二乗の合計（残差平方和）</div>
+                                <div class="score-val" id="valScore">0.00</div>
+                                <div class="best-status" id="txtStatus" style="color:#e74c3c;">もう少し調整してください</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】AI（ディープラーニング）における「損失関数」との繋がり</h4>
+                    <p>最小二乗法の考え方は、最先端の人工知能（AI）の学習アルゴリズムと完全に同一です。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">誤差を最小化することが「AIの学習」そのもの</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            ディープラーニングなどのAIモデルに画像や文章を学習させる際、AIが出力した予測値と、実際の正解ラベルとの間の「ズレ（誤差）」を計算します。この誤差を評価する関数のことを<strong>「損失関数（Loss Function）」</strong>と呼び、その最も代表的な指標が、最小二乗法と全く同じである**「平均二乗誤差（MSE：Mean Squared Error）」**です。
+                        </p>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            AIが学習によって「賢くなる」というのは、何億個もあるパラメータ（傾きや切片）を少しずつ調整し、この二乗誤差の総和（損失）をゼロに近づけていくプロセスそのものです。100年以上前に考案された最小二乗法の基礎は、形を変えて現代のAIを動かすコアエンジンとして脈々と受け継がれています。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 5 Summary -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>まとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 15px; font-size: 14px; line-height: 1.7;">
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li><strong>単回帰分析</strong>：散布図のデータに対して、傾向を示す最良の予測直線 $y = ax + b$ を引くこと。</li>
+                            <li><strong>最小二乗法</strong>：実際のデータと予測直線とのズレである「残差」の二乗和（残差平方和）を最小にする傾きと切片を求める手法。</li>
+                            <li><strong>二乗する理由</strong>：プラスとマイナスの相殺を防ぎ、大きなズレ（外れ値）に対する重いペナルティを設定するため。</li>
+                            <li><strong>AIへの接続</strong>：AIの学習時に使用される「損失関数（平均二乗誤差）」も、最小二乗法のコンセプトそのものである。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lesson-footer-nav" style="margin-top: 40px;">
+                    <a href="100.html" class="btn-secondary">&larr; 前の単元へ</a>
+                    <a href="index.html" class="btn-secondary">目次に戻る</a>
+                    <a href="102.html" class="btn btn-primary">次の単元へ &rarr;</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const slA = document.getElementById('slA');
+        const slB = document.getElementById('slB');
+        
+        const lblA = document.getElementById('lblA');
+        const lblB = document.getElementById('lblB');
+        
+        const gridSvg = document.getElementById('gridSvg');
+        const valScore = document.getElementById('valScore');
+        const txtStatus = document.getElementById('txtStatus');
+
+        // Coordinate space: x from 0 to 6, y from 0 to 6
+        // SVG size: 300x300
+        const SVG_SZ = 300;
+        const SCALE = SVG_SZ / 6; // 1 unit = 50px
+
+        // Fixed data points (x, y)
+        const points = [
+            {x: 1, y: 1.5},
+            {x: 2, y: 3.5},
+            {x: 4, y: 3.0},
+            {x: 5, y: 5.0}
+        ];
+
+        // Theoretical best: a = 0.72, b = 1.09, residual sum = ~1.44
+
+        function mapX(x) {
+            return x * SCALE;
+        }
+        function mapY(y) {
+            // SVG Y axis goes down
+            return SVG_SZ - y * SCALE;
+        }
+
+        function drawBaseGrid() {
+            let html = '';
+            // Axes and grid lines
+            for (let i = 0; i <= 6; i++) {
+                let pos = i * SCALE;
+                html += `<line x1="${pos}" y1="0" x2="${pos}" y2="${SVG_SZ}" stroke="#eee" stroke-width="1" />`;
+                html += `<line x1="0" y1="${pos}" x2="${SVG_SZ}" y2="${pos}" stroke="#eee" stroke-width="1" />`;
+            }
+            return html;
+        }
+
+        function updateSim() {
+            let a = parseFloat(slA.value);
+            let b = parseFloat(slB.value);
+            
+            lblA.textContent = a.toFixed(1);
+            lblB.textContent = b.toFixed(1);
+            
+            let svgHtml = drawBaseGrid();
+            
+            let residualSum = 0;
+            
+            // Draw residual squares
+            points.forEach(p => {
+                // predicted y = a * x + b
+                let predY = a * p.x + b;
+                let residual = p.y - predY;
+                
+                residualSum += residual * residual;
+                
+                // SVG positions
+                let px = mapX(p.x);
+                let py = mapY(p.y);
+                let predY_svg = mapY(predY);
+                
+                let size = Math.abs(residual) * SCALE;
+                
+                // Left top coordinate of the square
+                let sqX = px;
+                let sqY = Math.min(py, predY_svg);
+                
+                // Draw square (red transparent filled, red border)
+                svgHtml += `<rect x="${sqX}" y="${sqY}" width="${size}" height="${size}" fill="rgba(231, 76, 60, 0.15)" stroke="#e74c3c" stroke-width="1.5" stroke-dasharray="3,2" />`;
+                // Draw vertical residual line
+                svgHtml += `<line x1="${px}" y1="${py}" x2="${px}" y2="${predY_svg}" stroke="#e74c3c" stroke-width="2.5" />`;
+            });
+            
+            // Draw prediction line: y = a*x + b
+            // points at x=0 and x=6
+            let yAt0 = b;
+            let yAt6 = a * 6 + b;
+            svgHtml += `<line x1="${mapX(0)}" y1="${mapY(yAt0)}" x2="${mapX(6)}" y2="${mapY(yAt6)}" stroke="#e74c3c" stroke-width="3" />`;
+            
+            // Draw raw data points (blue dots)
+            points.forEach(p => {
+                svgHtml += `<circle cx="${mapX(p.x)}" cy="${mapY(p.y)}" r="6" fill="#3498db" stroke="#fff" stroke-width="1.5" />`;
+            });
+            
+            gridSvg.innerHTML = svgHtml;
+            
+            valScore.textContent = residualSum.toFixed(2);
+            
+            // Update status text based on how close they are to the minimum (~1.44)
+            if (residualSum < 1.6) {
+                txtStatus.textContent = "素晴らしい！ 最小二乗のベストフィット直線をほぼ再現できています。";
+                txtStatus.style.color = "#2ecc71";
+            } else if (residualSum < 3.0) {
+                txtStatus.textContent = "かなり近づいています。もう少し微調整してください。";
+                txtStatus.style.color = "#e67e22";
+            } else {
+                txtStatus.textContent = "残差の正方形が大きいです。傾きと切片を調整してください。";
+                txtStatus.style.color = "#e74c3c";
+            }
+        }
+
+        slA.addEventListener('input', updateSim);
+        slB.addEventListener('input', updateSim);
+        updateSim();
+        
+    </script>
+</body>
+</html>

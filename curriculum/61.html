@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>対数の定義と指数の逆演算 | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .interactive-board {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .board-header {
+            font-size: 18px;
+            margin-bottom: 25px;
+            color: var(--color-ink);
+            text-align: center;
+        }
+        .equation-box {
+            background: #fff;
+            border: 2px solid var(--color-brass);
+            border-radius: 8px;
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            margin-bottom: 30px;
+            min-height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .math-expr {
+            font-size: 40px;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            transition: all 0.5s ease-in-out;
+        }
+        .btn-toggle {
+            background: var(--color-brass);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: opacity 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .btn-toggle:hover {
+            opacity: 0.9;
+        }
+        .parts-label {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 20px;
+        }
+        .part-badge {
+            background: var(--color-paper);
+            border: 1px solid var(--color-paper-line);
+            padding: 5px 15px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .color-base { color: #e74c3c; font-weight: bold; }
+        .color-exp { color: #3498db; font-weight: bold; }
+        .color-val { color: #2ecc71; font-weight: bold; }
+        .rule-box {
+            background-color: var(--color-paper);
+            border-left: 4px solid var(--color-brass);
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第4章 高校数学への接続 &gt; 単元61
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 04 / Unit 61</span>
+                <h2 class="lesson-title">対数の定義と指数の逆演算</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>「何乗すればいいのか？」という逆の視点</h4>
+                    <p>これまでの単元で学んだ「指数」は、例えば「$2$ を $3$ 乗するといくつになるか？（答え：$8$）」という計算でした。<br>
+                    では、視点を逆転させてみましょう。<strong>「$2$ を【何乗】すれば $8$ になるか？」</strong></p>
+                    <p>答えはもちろん「$3$ 乗」です。この「何乗すればいいか（指数）」を求めるための新しい数学の記号が、高校数学で登場する最大の山場とも言える<strong>「対数（$\log$：ログ）」</strong>です。</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>対数（$\log$）の定義</h4>
+                    <p>対数の記号 $\log$ を使うと、先ほどの「$2$ を何乗すれば $8$ になるか」という疑問は、次のような数式で表現できます。</p>
+                    
+                    <div class="rule-box">
+                        <div style="font-family: var(--font-mono); font-size: 22px; text-align: center; margin: 15px 0;">
+                            $\log_2 8 = 3$
+                        </div>
+                    </div>
+                    
+                    <p>この式の意味は、<strong>「ベース（底）である $2$ を、$3$ 乗すると $8$ になる」</strong>ということです。<br>
+                    つまり、<strong>$2^3 = 8$</strong> という指数の方程式と、<strong>$\log_2 8 = 3$</strong> という対数の方程式は、全く同じ事実を違う角度から書いているに過ぎません。対数は指数の「逆算（逆演算）」なのです。</p>
+                </div>
+
+                <!-- Step 3 Interactive Tool -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>【体験】指数・対数 視点切り替えシミュレーター</h4>
+                    <p>指数と対数が「全く同じ関係」であることを視覚的に確認しましょう。<br>下のボタンを押して、「指数の視点」と「対数の視点」を切り替えてみてください。数字の役割（色）は変わりません。</p>
+                    
+                    <div class="interactive-board">
+                        <div class="parts-label">
+                            <span class="part-badge"><span class="color-base">赤：底（ベース）</span></span>
+                            <span class="part-badge"><span class="color-exp">青：指数（何乗か）</span></span>
+                            <span class="part-badge"><span class="color-val">緑：結果（真数）</span></span>
+                        </div>
+
+                        <div class="equation-box">
+                            <div class="math-expr" id="mathDisplay">
+                                <!-- JS will render KaTeX here -->
+                            </div>
+                        </div>
+
+                        <button class="btn-toggle" id="btnToggle">視点を切り替える (⇄)</button>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>対数の専門用語：「底」と「真数」</h4>
+                    <p>対数 $\log_a M = p$ において、文字にはそれぞれ名前と「条件」がついています。</p>
+                    <ul style="padding-left: 20px; line-height: 1.8;">
+                        <li><strong>$a$ のことを「底（てい）」と呼びます。</strong><br>
+                            底は必ず「$0$ より大きく（正の数）、かつ $1$ ではない」という条件（底の条件）があります。$1$ を何乗しても $1$ のままなので、基準として使えないためです。
+                        </li>
+                        <li><strong>$M$ のことを「真数（しんすう）」と呼びます。</strong><br>
+                            プラスの数を何乗しても結果は必ずプラスになるため、真数 $M$ は必ず「$0$ より大きい（正の数）」という条件（真数条件）があります。
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】現代社会は「$\log$（対数）」で溢れている</h4>
+                    <p>「$\log$ なんて一生使わない」と思うかもしれませんが、実は私たちの身の回りには、対数（$\log$）を使ったスケール（ものさし）が溢れています。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">桁違いの数値を「人間が理解しやすい数字」に圧縮する</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            対数（$\log$）の最大の強みは、「何乗か？」という指数部分だけを取り出すことで、<strong>「$1,000,000$（百万）」という巨大な数字を「$6$（$10^6$の$6$）」という小さな数字に圧縮できる</strong>点にあります。
+                        </p>
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 14px; text-align: left; margin-bottom: 12px; font-family: var(--font-mono);">
+                            代表的な対数スケールの例：<br>
+                            ・<strong>地震のマグニチュード（M）</strong>：Mが $1$ 増えると、地震のエネルギーは実は約 $32$ 倍（$10^{1.5}$ 倍）になります。M6 と M8 ではエネルギーが $1,000$ 倍違います。<br>
+                            ・<strong>音の大きさ（デシベル：dB）</strong>：$20\text{dB}$ 上がると、実際の音のエネルギーは $100$ 倍になっています。<br>
+                            ・<strong>酸性・アルカリ性（pH）</strong>：pHが $1$ 違うと、水素イオン濃度は $10$ 倍違います。
+                        </div>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            もし対数がなければ、天気予報で「本日の地震のエネルギーは $2,000,000,000,000$ ジュールでした」と報道しなければなりません。<br>
+                            対数は、宇宙規模の巨大な数字やミクロの数字を、人間が直感的に扱える「$1$ から $10$ くらいの数字」に変換してくれる、人類の偉大な発明なのです。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 5 Summary -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>まとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 15px; font-size: 14px; line-height: 1.7;">
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li>対数（$\log$）は「指数の逆算」である。「何乗すればその数になるか」を求める。</li>
+                            <li><strong>$a^p = M \iff \log_a M = p$</strong> （両者は全く同じ事実を表す）。</li>
+                            <li>右下の小さな数を「底（てい）」、大きな数を「真数（しんすう）」と呼ぶ。</li>
+                            <li>対数を使うことで、天文学的な数字を扱いやすい小さな数字（指数部分）に圧縮できる。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lesson-footer-nav" style="margin-top: 40px;">
+                    <a href="60.html" class="btn-secondary">&larr; 前の単元へ</a>
+                    <a href="index.html" class="btn-secondary">目次に戻る</a>
+                    <a href="62.html" class="btn btn-primary">次の単元へ &rarr;</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const btnToggle = document.getElementById('btnToggle');
+        const mathDisplay = document.getElementById('mathDisplay');
+        
+        let isLogView = false;
+        
+        // Use KaTeX color macros
+        // \textcolor{#e74c3c}{2} = base
+        // \textcolor{#3498db}{3} = exp
+        // \textcolor{#2ecc71}{8} = val
+
+        function renderMath() {
+            let texString = "";
+            if (!isLogView) {
+                // Exponential view: 2^3 = 8
+                texString = `\\textcolor{#e74c3c}{2}^{\\textcolor{#3498db}{3}} = \\textcolor{#2ecc71}{8}`;
+            } else {
+                // Logarithmic view: log_2 8 = 3
+                texString = `\\log_{\\textcolor{#e74c3c}{2}} \\textcolor{#2ecc71}{8} = \\textcolor{#3498db}{3}`;
+            }
+
+            mathDisplay.innerHTML = `$${texString}$`;
+            
+            if(window.renderMathInElement) {
+                renderMathInElement(mathDisplay, {
+                    delimiters: [{left: '$', right: '$', display: false}],
+                    trust: true // needed for \textcolor in some configurations
+                });
+            }
+        }
+
+        btnToggle.addEventListener('click', () => {
+            // Add a small fade effect
+            mathDisplay.style.opacity = '0';
+            setTimeout(() => {
+                isLogView = !isLogView;
+                renderMath();
+                mathDisplay.style.opacity = '1';
+            }, 250);
+        });
+        
+        // init
+        renderMath();
+    </script>
+
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}], trust: true});"></script>
+</body>
+</html>

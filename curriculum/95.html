@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>行列の定義と基礎演算（和・差・積） | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .concept-box {
+            background-color: var(--color-paper);
+            border: 2px solid var(--color-brass);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .math-display {
+            font-size: 20px;
+            font-family: var(--font-mono);
+            color: var(--color-ink);
+            margin: 15px 0;
+            overflow-x: auto;
+            text-align: center;
+        }
+        .matrix-bracket {
+            display: inline-flex;
+            align-items: center;
+            border-left: 2px solid #333;
+            border-right: 2px solid #333;
+            border-radius: 4px;
+            padding: 0 8px;
+            margin: 0 4px;
+        }
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 5px;
+            text-align: center;
+        }
+        .matrix-cell {
+            padding: 6px;
+            font-family: var(--font-mono);
+            font-size: 16px;
+            min-width: 35px;
+        }
+        .interactive-tool {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .tool-header {
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: var(--color-ink);
+            text-align: center;
+        }
+        .control-panel {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
+            width: 100%;
+            max-width: 600px;
+        }
+        .matrix-input-box {
+            background: var(--color-paper);
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            text-align: center;
+        }
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .num-input {
+            width: 100%;
+            padding: 6px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 16px;
+            text-align: center;
+        }
+        .sim-board {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            width: 100%;
+            padding: 30px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            gap: 20px;
+        }
+        .calc-mode-select {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .btn-mode {
+            background-color: #f8f9fa;
+            color: #333;
+            border: 2px solid #ccc;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        .btn-mode.active {
+            background-color: var(--color-brass);
+            border-color: var(--color-brass);
+            color: #fff;
+        }
+        .display-formula {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            font-size: 20px;
+            gap: 10px;
+            width: 100%;
+            max-width: 600px;
+        }
+        .matrix-disp {
+            border-left: 2px solid #333;
+            border-right: 2px solid #333;
+            border-radius: 6px;
+            padding: 5px 10px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px 15px;
+            background: #fafafa;
+        }
+        .formula-detail {
+            background: #fdf2f0;
+            border: 1px solid #e74c3c;
+            border-radius: 6px;
+            padding: 15px;
+            width: 100%;
+            max-width: 600px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第6章 発展・高度な教養 &gt; 単元95
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 06 / Unit 95</span>
+                <h2 class="lesson-title">行列の定義と基礎演算（和・差・積）</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>データを格子状にまとめる「行列」</h4>
+                    <p>現代のITやAI技術、3Dグラフィックス、さらには経済モデルなどで最も広く使われている数学のツールが<strong>「行列（ぎょうれつ / Matrix）」</strong>です。</p>
+                    <p>行列とは、複数の数字を<strong>格子状（縦と横）に並べたもの</strong>です。大量のデータをバラバラに計算するのではなく、1つの箱（行列）にまとめ、まとめて一瞬で一括処理（足し算や掛け算）するために使われます。</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>基本用語「行（Row）」と「列（Column）」</h4>
+                    <p>行列のサイズは「行数 × 列数」で表します。この「行」と「列」は非常に間違いやすいので、漢字の形状で覚えるのが王道です。</p>
+                    <div style="background:#f8f9fa; border:1px solid #ddd; padding:15px; border-radius:6px; margin:15px 0;">
+                        <ul style="margin:0; padding-left:20px; line-height:1.8;">
+                            <li><strong>行（ぎょう）</strong>：横の並び。（漢字の「<strong>行</strong>」の横棒＝「二」の部分に注目）。</li>
+                            <li><strong>列（れつ）</strong>：縦の並び。（漢字の「<strong>列</strong>」の縦棒＝「り」の部分に注目）。</li>
+                        </ul>
+                    </div>
+                    <p>例えば、横2列・縦2行の並びを「$2 \times 2$ 行列（あるいは2行2列の正方行列）」と呼びます。</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>行列の足し算・引き算・掛け算（積）</h4>
+                    <p>行列同士の計算にはルールがあります。</p>
+                    <ul style="line-height:1.8;">
+                        <li><strong>和・差（足し算・引き算）</strong>：同じ場所にある要素同士を単純に足し算（引き算）します。</li>
+                        <li><strong>積（掛け算）</strong>：左側の行列の<strong>「行（横）」</strong>と、右側の行列の<strong>「列（縦）」</strong>を取り出し、要素同士を掛けて足し合わせる（内積と同じ操作）という特殊なルールで計算します。</li>
+                    </ul>
+                    <p>※行列の掛け算は順番が非常に重要であり、一般的に $A \times B$ と $B \times A$ は同じ結果になりません（交換法則が成り立たない）。</p>
+                </div>
+
+                <!-- Step 4 Interactive Tool -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>【体験】$2 \times 2$ 行列の演算シミュレーター</h4>
+                    <p>2つの行列 $A$ と $B$ の数値を自由に変更し、計算モード（和・差・積）を切り替えてみてください。<br>
+                    行列の要素同士がどのように計算され、最終的な行列が生まれるかのプロセスと結果がリアルタイムで表示されます。</p>
+                    
+                    <div class="interactive-tool">
+                        <div class="tool-header">
+                            2行2列の行列演算
+                        </div>
+                        
+                        <div class="control-panel">
+                            <div class="matrix-input-box">
+                                <span style="font-weight:bold; color:#3498db;">行列 $A$</span>
+                                <div class="input-grid">
+                                    <input type="number" id="inA11" class="num-input" value="2">
+                                    <input type="number" id="inA12" class="num-input" value="3">
+                                    <input type="number" id="inA21" class="num-input" value="1">
+                                    <input type="number" id="inA22" class="num-input" value="4">
+                                </div>
+                            </div>
+                            <div class="matrix-input-box">
+                                <span style="font-weight:bold; color:#e74c3c;">行列 $B$</span>
+                                <div class="input-grid">
+                                    <input type="number" id="inB11" class="num-input" value="5">
+                                    <input type="number" id="inB12" class="num-input" value="1">
+                                    <input type="number" id="inB21" class="num-input" value="0">
+                                    <input type="number" id="inB22" class="num-input" value="2">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="calc-mode-select">
+                            <button class="btn-mode" id="btnPlus">和 (A + B)</button>
+                            <button class="btn-mode" id="btnMinus">差 (A - B)</button>
+                            <button class="btn-mode active" id="btnMul">積 (A × B)</button>
+                        </div>
+
+                        <div class="sim-board">
+                            <div class="display-formula">
+                                <div class="matrix-disp" id="dispMatA">
+                                    <div>2</div><div>3</div>
+                                    <div>1</div><div>4</div>
+                                </div>
+                                <div id="dispOp" style="font-size:24px; font-weight:bold; color:#666;">×</div>
+                                <div class="matrix-disp" id="dispMatB">
+                                    <div>5</div><div>1</div>
+                                    <div>0</div><div>2</div>
+                                </div>
+                                <div style="font-size:24px; font-weight:bold; color:#666;">＝</div>
+                                <div class="matrix-disp" id="dispMatAns" style="border-color:#2ecc71; background:#ebf9f1; font-weight:bold;">
+                                    <div>10</div><div>8</div>
+                                    <div>5</div><div>9</div>
+                                </div>
+                            </div>
+                            
+                            <div class="formula-detail" id="calcProcess">
+                                <!-- Process will be shown here by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】3DグラフィックスやAIを裏で支える「行列」の力</h4>
+                    <p>なぜコンピュータの世界ではこれほどまでに行列が重視されるのでしょうか。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">「回転」「移動」「拡大」を掛け算一発で処理する</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            3DゲームやVR空間では、何万個もの「3次元座標データ（ベクトル）」が瞬時に動いています。<br>
+                            カメラの向きが変わるたびにすべての点を回転させ、移動させなければなりません。この「座標変換」を処理するとき、<strong>変換用の「行列」を用意し、座標ベクトルに掛け算するだけ</strong>で、平行移動や回転が一瞬で行えます。
+                        </p>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            AIの深層学習（ディープラーニング）も同様です。ニューラルネットワークの計算は、入力データ（行列）に重みパラメータ（行列）を掛け算し続ける巨大な「行列演算の塊」です。GPUというPCパーツがAI開発に必須なのは、この単純で膨大な行列の掛け算を、何千個も同時に並列処理することに特化した計算機だからなのです。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 5 Summary -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>まとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 15px; font-size: 14px; line-height: 1.7;">
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li><strong>行列</strong>：数値を格子状（縦・横）に並べた箱。データを一括処理するためのもの。</li>
+                            <li><strong>行と列</strong>：「行」は横方向の並び、「列」は縦方向の並び。</li>
+                            <li><strong>演算ルール</strong>：足し算・引き算は各要素同士。掛け算は「左の行」と「右の列」を掛け合わせて足す特殊なルール。</li>
+                            <li><strong>応用</strong>：3Dグラフィックスの移動・回転や、AI（ディープラーニング）の並列演算処理のほぼ全てが行列の積で実行されている。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lesson-footer-nav" style="margin-top: 40px;">
+                    <a href="94.html" class="btn-secondary">&larr; 前の単元へ</a>
+                    <a href="index.html" class="btn-secondary">目次に戻る</a>
+                    <a href="../index.html" class="btn btn-primary">第6章を修了する（ホームへ）</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Inputs
+        const inA11 = document.getElementById('inA11');
+        const inA12 = document.getElementById('inA12');
+        const inA21 = document.getElementById('inA21');
+        const inA22 = document.getElementById('inA22');
+        
+        const inB11 = document.getElementById('inB11');
+        const inB12 = document.getElementById('inB12');
+        const inB21 = document.getElementById('inB21');
+        const inB22 = document.getElementById('inB22');
+        
+        // Buttons
+        const btnPlus = document.getElementById('btnPlus');
+        const btnMinus = document.getElementById('btnMinus');
+        const btnMul = document.getElementById('btnMul');
+        
+        // Displays
+        const dispMatA = document.getElementById('dispMatA');
+        const dispMatB = document.getElementById('dispMatB');
+        const dispMatAns = document.getElementById('dispMatAns');
+        const dispOp = document.getElementById('dispOp');
+        const calcProcess = document.getElementById('calcProcess');
+
+        let mode = 'mul'; // 'plus', 'minus', 'mul'
+
+        btnPlus.addEventListener('click', () => { mode = 'plus'; setActiveBtn(btnPlus); updateCalc(); });
+        btnMinus.addEventListener('click', () => { mode = 'minus'; setActiveBtn(btnMinus); updateCalc(); });
+        btnMul.addEventListener('click', () => { mode = 'mul'; setActiveBtn(btnMul); updateCalc(); });
+
+        [inA11, inA12, inA21, inA22, inB11, inB12, inB21, inB22].forEach(input => {
+            input.addEventListener('input', updateCalc);
+        });
+
+        function setActiveBtn(activeBtn) {
+            [btnPlus, btnMinus, btnMul].forEach(btn => btn.classList.remove('active'));
+            activeBtn.classList.add('active');
+        }
+
+        function updateCalc() {
+            let a11 = parseFloat(inA11.value) || 0;
+            let a12 = parseFloat(inA12.value) || 0;
+            let a21 = parseFloat(inA21.value) || 0;
+            let a22 = parseFloat(inA22.value) || 0;
+            
+            let b11 = parseFloat(inB11.value) || 0;
+            let b12 = parseFloat(inB12.value) || 0;
+            let b21 = parseFloat(inB21.value) || 0;
+            let b22 = parseFloat(inB22.value) || 0;
+            
+            // Update A and B displays
+            dispMatA.innerHTML = `<div>${a11}</div><div>${a12}</div><div>${a21}</div><div>${a22}</div>`;
+            dispMatB.innerHTML = `<div>${b11}</div><div>${b12}</div><div>${b21}</div><div>${b22}</div>`;
+            
+            let ans11, ans12, ans21, ans22;
+            let procHtml = "";
+            
+            if (mode === 'plus') {
+                dispOp.textContent = "＋";
+                ans11 = a11 + b11;
+                ans12 = a12 + b12;
+                ans21 = a21 + b21;
+                ans22 = a22 + b22;
+                
+                procHtml = `
+                    <strong>足し算の計算プロセス（要素ごとの和）:</strong><br>
+                    • 左上: ${a11} + ${b11} = ${ans11}<br>
+                    • 右上: ${a12} + ${b12} = ${ans12}<br>
+                    • 左下: ${a21} + ${b21} = ${ans21}<br>
+                    • 右下: ${a22} + ${b22} = ${ans22}
+                `;
+            } else if (mode === 'minus') {
+                dispOp.textContent = "－";
+                ans11 = a11 - b11;
+                ans12 = a12 - b12;
+                ans21 = a21 - b21;
+                ans22 = a22 - b22;
+                
+                procHtml = `
+                    <strong>引き算の計算プロセス（要素ごとの差）:</strong><br>
+                    • 左上: ${a11} - ${b11} = ${ans11}<br>
+                    • 右上: ${a12} - ${b12} = ${ans12}<br>
+                    • 左下: ${a21} - ${b21} = ${ans21}<br>
+                    • 右下: ${a22} - ${b22} = ${ans22}
+                `;
+            } else {
+                dispOp.textContent = "×";
+                // Matrix Multiplication: row of A x col of B
+                ans11 = a11 * b11 + a12 * b21;
+                ans12 = a11 * b12 + a12 * b22;
+                ans21 = a21 * b11 + a22 * b21;
+                ans22 = a21 * b12 + a22 * b22;
+                
+                procHtml = `
+                    <strong>掛け算の計算プロセス（行×列のクロス掛け）:</strong><br>
+                    • 左上: (${a11} × ${b11}) + (${a12} × ${b21}) = ${a11*b11} + ${a12*b21} = ${ans11}<br>
+                    • 右上: (${a11} × ${b12}) + (${a12} × ${b22}) = ${a11*b12} + ${a12*b22} = ${ans12}<br>
+                    • 左下: (${a21} × ${b11}) + (${a22} × ${b21}) = ${a21*b11} + ${a22*b21} = ${ans21}<br>
+                    • 右下: (${a21} × ${b12}) + (${a22} × ${b22}) = ${a21*b12} + ${a22*b22} = ${ans22}
+                `;
+            }
+            
+            dispMatAns.innerHTML = `<div>${ans11}</div><div>${ans12}</div><div>${ans21}</div><div>${ans22}</div>`;
+            calcProcess.innerHTML = procHtml;
+        }
+
+        updateCalc();
+        
+    </script>
+</body>
+</html>

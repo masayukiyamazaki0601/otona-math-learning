@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>一次関数のグラフ（傾きと切片） | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .interactive-graph-container {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 8px;
+            padding: 24px;
+            margin: 30px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .graph-header {
+            font-size: 24px;
+            font-family: var(--font-mono);
+            color: var(--color-ink);
+            margin-bottom: 20px;
+        }
+        .controls {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 30px;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: var(--color-paper);
+            padding: 15px 25px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            min-width: 200px;
+        }
+        .control-group label {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--color-ink);
+        }
+        .control-group input[type="range"] {
+            width: 100%;
+            accent-color: var(--color-brass);
+        }
+        .value-display {
+            font-family: var(--font-mono);
+            font-size: 18px;
+            margin-top: 10px;
+            color: var(--color-brass);
+            font-weight: bold;
+        }
+        svg {
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .axis {
+            stroke: #333;
+            stroke-width: 1.5;
+        }
+        .grid {
+            stroke: #e0e0e0;
+            stroke-width: 1;
+        }
+        .line-graph {
+            stroke: var(--color-brass);
+            stroke-width: 3;
+            stroke-linecap: round;
+        }
+        .point {
+            fill: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第4章 高校数学への接続 &gt; 単元54
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 04 / Unit 54</span>
+                <h2 class="lesson-title">一次関数のグラフ（傾きと切片）</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>一次関数の基本形 $y = ax + b$</h4>
+                    <p>ビジネスの現場では、売上予測やコスト計算など、数値を予測・分析する場面が多々あります。その際、最も基本となる数学のツールが「一次関数」です。</p>
+                    <p>一次関数は必ず <strong>$y = ax + b$</strong> という形で表されます。<br>この式は、直線上のすべての点 $(x, y)$ の関係を示しており、式に含まれる $a$ と $b$ という2つの文字が、直線の形（性質）を決定づけます。</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>「傾き」 $a$ とは何か？（変化の割合）</h4>
+                    <p>$y = ax + b$ の <strong>$a$</strong> を「<strong>傾き（変化の割合）</strong>」と呼びます。</p>
+                    <p>傾きは、「$x$ が $1$ 増えたとき、$y$ がどれだけ増える（または減る）か」を表しています。<br>ビジネスで言えば、「商品を1個多く売ったときの利益の増加分（限界利益）」や、「社員が1人増えたときの人件費の増加率」に該当します。</p>
+                    <ul style="padding-left: 20px; line-height: 1.8;">
+                        <li><strong>$a > 0$（プラス）の場合</strong>：右上がりの直線。$x$ が増えれば $y$ も増える（比例的な成長）。</li>
+                        <li><strong>$a < 0$（マイナス）の場合</strong>：右下がりの直線。$x$ が増えれば $y$ は減る（資産の減価償却など）。</li>
+                        <li><strong>$a$ の絶対値が大きいほど</strong>、直線の傾きは急激になります（変化が激しい）。</li>
+                    </ul>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>「切片」 $b$ とは何か？（初期値）</h4>
+                    <p>$y = ax + b$ の <strong>$b$</strong> を「<strong>切片（せっぺん）</strong>」と呼びます。より正確には「$y$ 切片」です。</p>
+                    <p>切片は、「$x = 0$ のときの $y$ の値」を表します。グラフ上では、直線が縦軸（$y$ 軸）と交わる点の高さを意味します。</p>
+                    <p>ビジネスで言えば、「商品をまだ1つも売っていない（$x=0$）時点での初期費用（固定費）」や、「プロジェクト開始時点でのベースラインの数値」に該当します。<br>切片が大きければグラフ全体が上に平行移動し、小さければ下に平行移動します。</p>
+                </div>
+
+                <!-- Step 4 Interactive Graph -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>【体験】一次関数シミュレーター</h4>
+                    <p>実際に $a$（傾き）と $b$（切片）の値をスライダーで動かして、グラフがどのように変化するかを確認してみましょう。<br>右上がり・右下がりの変化や、グラフの上下移動を体感してください。</p>
+                    
+                    <div class="interactive-graph-container">
+                        <div class="graph-header" id="equationDisplay">$y = 1x + 0$</div>
+                        
+                        <div class="controls">
+                            <div class="control-group">
+                                <label for="sliderA">傾き $a$（変化の割合）</label>
+                                <input type="range" id="sliderA" min="-5" max="5" step="0.5" value="1">
+                                <div class="value-display">$a = $ <span id="valA">1</span></div>
+                            </div>
+                            <div class="control-group">
+                                <label for="sliderB">切片 $b$（初期値）</label>
+                                <input type="range" id="sliderB" min="-10" max="10" step="1" value="0">
+                                <div class="value-display">$b = $ <span id="valB">0</span></div>
+                            </div>
+                        </div>
+
+                        <svg width="400" height="400" id="graphSvg" viewBox="0 0 400 400">
+                            <!-- Grid and Axes will be drawn by JS -->
+                        </svg>
+                        
+                        <p style="font-size: 14px; margin-top: 15px; color: var(--color-ink-light);">赤色の点は「$y$切片（$x=0$のときの$y$）」を示しています。</p>
+                    </div>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】ビジネス分析の王道「損益分岐点（CVP）分析」と一次関数</h4>
+                    <p>一次関数の「傾き」と「切片」は、企業の利益計画を立てる「損益分岐点分析（CVP分析）」において、そのまま直接応用されます。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">総費用を一次関数で表す</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            企業が製品を生産・販売する際の「総費用」は、以下の式で表すことができます。<br>
+                            <strong>総費用 ＝ （製品1個あたりの変動費） $\times$ 販売数量 ＋ 固定費</strong>
+                        </p>
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 14px; text-align: left; margin-bottom: 12px; font-family: var(--font-mono);">
+                            これを数学の言葉に翻訳すると：<br>
+                            $y$（総費用） $= a$（変動費：傾き） $\times x$（数量） $+ b$（固定費：切片）
+                        </div>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            家賃や基本給などの「固定費」が切片 $b$ になり、材料費などの「変動費」が傾き $a$ になります。<br>
+                            経営者は、この費用の一次関数のグラフと、売上の一次関数のグラフ（$y = \text{販売単価} \times x$）を描き、2つの直線が交わる点（損益分岐点）を計算することで、「いくつ売れば黒字になるか」を正確に予測しているのです。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 5 Summary -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>まとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 15px; font-size: 14px; line-height: 1.7;">
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li>一次関数は <strong>$y = ax + b$</strong> で表される。</li>
+                            <li><strong>$a$（傾き）</strong>はグラフの角度を決め、ビジネスでは「変化率」や「変動費」を表す。</li>
+                            <li><strong>$b$（切片）</strong>はグラフの基準となる高さを決め、ビジネスでは「初期値」や「固定費」を表す。</li>
+                            <li>一次関数を理解することで、コスト予測や成長予測を数学的にモデリングできるようになる。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lesson-footer-nav" style="margin-top: 40px;">
+                    <a href="53.html" class="btn-secondary">&larr; 前の単元へ</a>
+                    <a href="index.html" class="btn-secondary">目次に戻る</a>
+                    <a href="55.html" class="btn btn-primary">次の単元へ &rarr;</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const sliderA = document.getElementById('sliderA');
+        const sliderB = document.getElementById('sliderB');
+        const valA = document.getElementById('valA');
+        const valB = document.getElementById('valB');
+        const eqDisplay = document.getElementById('equationDisplay');
+        const svg = document.getElementById('graphSvg');
+        
+        const width = 400;
+        const height = 400;
+        const scale = 20; // pixels per unit
+        const originX = width / 2;
+        const originY = height / 2;
+
+        function drawGrid() {
+            let gridHtml = '';
+            // Draw grid lines
+            for(let i = 0; i <= width; i += scale) {
+                gridHtml += `<line x1="${i}" y1="0" x2="${i}" y2="${height}" class="grid" />`;
+                gridHtml += `<line x1="0" y1="${i}" x2="${width}" y2="${i}" class="grid" />`;
+            }
+            // Draw Axes
+            gridHtml += `<line x1="${originX}" y1="0" x2="${originX}" y2="${height}" class="axis" />`;
+            gridHtml += `<line x1="0" y1="${originY}" x2="${width}" y2="${originY}" class="axis" />`;
+            
+            // Labels (optional, keeping it simple)
+            gridHtml += `<text x="${originX + 10}" y="15" font-size="12" fill="#333">y</text>`;
+            gridHtml += `<text x="${width - 15}" y="${originY - 10}" font-size="12" fill="#333">x</text>`;
+            
+            return gridHtml;
+        }
+
+        function drawGraph() {
+            const a = parseFloat(sliderA.value);
+            const b = parseFloat(sliderB.value);
+            
+            valA.textContent = a;
+            valB.textContent = b;
+            
+            const signB = b >= 0 ? '+' : '-';
+            const absB = Math.abs(b);
+            
+            eqDisplay.innerHTML = `$y = ${a}x ${signB} ${absB}$`;
+            
+            if(window.renderMathInElement) {
+                renderMathInElement(eqDisplay, {delimiters: [{left: '$', right: '$', display: false}]});
+            }
+
+            // Calculate line coordinates
+            // Left edge: x = -10 (in units) -> Math X
+            const mathX1 = - (width / 2) / scale;
+            const mathY1 = a * mathX1 + b;
+            
+            // Right edge: x = 10 (in units)
+            const mathX2 = (width / 2) / scale;
+            const mathY2 = a * mathX2 + b;
+            
+            // Convert to SVG coordinates
+            const svgX1 = originX + (mathX1 * scale);
+            const svgY1 = originY - (mathY1 * scale);
+            const svgX2 = originX + (mathX2 * scale);
+            const svgY2 = originY - (mathY2 * scale);
+
+            // Intercept point
+            const intX = originX;
+            const intY = originY - (b * scale);
+
+            let content = drawGrid();
+            content += `<line x1="${svgX1}" y1="${svgY1}" x2="${svgX2}" y2="${svgY2}" class="line-graph" />`;
+            content += `<circle cx="${intX}" cy="${intY}" r="5" class="point" />`;
+            
+            svg.innerHTML = content;
+        }
+
+        sliderA.addEventListener('input', drawGraph);
+        sliderB.addEventListener('input', drawGraph);
+        
+        // Initial draw
+        drawGraph();
+    </script>
+
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>

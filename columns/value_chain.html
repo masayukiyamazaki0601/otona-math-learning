@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>バリューチェーン分析 | Otona Math コラム</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .column-content {
+            background-color: var(--color-surface);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            margin-bottom: 40px;
+        }
+        .section-header {
+            color: var(--color-brass);
+            margin-top: 40px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 10px;
+            font-size: 22px;
+        }
+        
+        /* Interactive Tool Styles */
+        .interactive-simulator {
+            background-color: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        .simulator-header {
+            font-size: 20px;
+            text-align: center;
+            margin-bottom: 25px;
+            color: var(--color-ink);
+        }
+        .stages-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .stage-row {
+            display: grid;
+            grid-template-columns: 150px 1fr 1fr;
+            gap: 20px;
+            align-items: center;
+            background: #fff;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 6px;
+        }
+        .stage-name {
+            font-weight: bold;
+            color: #333;
+        }
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .slider-group label {
+            font-size: 13px;
+            margin-bottom: 5px;
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+        }
+        .slider-group input[type="range"] {
+            width: 100%;
+        }
+        .cost-range { accent-color: #e74c3c; }
+        .value-range { accent-color: #3498db; }
+        
+        .results-board {
+            display: flex;
+            justify-content: space-between;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+            text-align: center;
+        }
+        .res-box { flex: 1; }
+        .res-label { font-size: 14px; color: #666; margin-bottom: 5px; }
+        .res-val { font-size: 28px; font-family: var(--font-mono); font-weight: bold; }
+        .val-cost { color: #e74c3c; }
+        .val-price { color: #3498db; }
+        .val-profit { color: #2ecc71; }
+        
+        .bar-chart-container {
+            margin-top: 30px;
+            width: 100%;
+            height: 60px;
+            background: #eee;
+            border-radius: 4px;
+            display: flex;
+            overflow: hidden;
+            border: 1px solid #ccc;
+            position: relative;
+        }
+        .bar-segment {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            transition: width 0.3s;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .chart-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="../curriculum/index.html">カリキュラム</a></li>
+                    <li><a href="index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">コラム</a> &gt; バリューチェーン分析
+        </div>
+
+        <article class="column-content">
+            <h2 style="font-size: 28px; margin-bottom: 30px; line-height: 1.4;">バリューチェーン分析とは何か？<br>〜利益の源泉をあぶり出す分解手法〜</h2>
+            
+            <h3 class="section-header">バリューチェーンの基本的な考え方</h3>
+            <p>会社が商品を作ってお客さんに届けるまでには、いくつもの作業が順番に行われています。原材料を仕入れる、工場で製品を作る、倉庫に保管する、お店やインターネットで販売する、お客さんにアフターサービスを提供する。こうした一連の流れを<strong>「バリューチェーン（価値連鎖）」</strong>と呼びます。</p>
+            <p>バリューチェーン分析とは、この一連の作業をひとつひとつに分解して、<strong>「どの作業でどれくらいお金がかかっているか（コスト）」「どの作業がお客さんにとっての価値を生み出しているか（付加価値）」</strong>を調べる方法です。</p>
+
+            <h3 class="section-header">【体験】パン屋さんのバリューチェーン・シミュレーター</h3>
+            <p>バリューチェーンを視覚的に理解するために、パン屋さんの経営をシミュレーションしてみましょう。<br>
+            各工程の「コスト（費用）」と「生み出した価値（売価への上乗せ分）」をスライダーで変更してみてください。どの工程が利益の源泉になっているかが一目でわかります。</p>
+
+            <div class="interactive-simulator">
+                <div class="simulator-header">パン1個あたりのコストと付加価値</div>
+                
+                <div class="stages-container">
+                    <!-- Stage 1 -->
+                    <div class="stage-row">
+                        <div class="stage-name">① 原材料仕入れ</div>
+                        <div class="slider-group">
+                            <label>コスト <span id="vC1">20</span>円</label>
+                            <input type="range" id="slC1" class="cost-range" min="5" max="50" step="1" value="20">
+                        </div>
+                        <div class="slider-group">
+                            <label>生み出した価値 <span id="vV1">30</span>円</label>
+                            <input type="range" id="slV1" class="value-range" min="10" max="60" step="1" value="30">
+                        </div>
+                    </div>
+                    <!-- Stage 2 -->
+                    <div class="stage-row">
+                        <div class="stage-name">② 工場での製造</div>
+                        <div class="slider-group">
+                            <label>コスト <span id="vC2">40</span>円</label>
+                            <input type="range" id="slC2" class="cost-range" min="10" max="80" step="1" value="40">
+                        </div>
+                        <div class="slider-group">
+                            <label>生み出した価値 <span id="vV2">50</span>円</label>
+                            <input type="range" id="slV2" class="value-range" min="20" max="100" step="1" value="50">
+                        </div>
+                    </div>
+                    <!-- Stage 3 -->
+                    <div class="stage-row">
+                        <div class="stage-name">③ 倉庫・輸送</div>
+                        <div class="slider-group">
+                            <label>コスト <span id="vC3">15</span>円</label>
+                            <input type="range" id="slC3" class="cost-range" min="5" max="40" step="1" value="15">
+                        </div>
+                        <div class="slider-group">
+                            <label>生み出した価値 <span id="vV3">10</span>円</label>
+                            <input type="range" id="slV3" class="value-range" min="0" max="30" step="1" value="10">
+                        </div>
+                    </div>
+                    <!-- Stage 4 -->
+                    <div class="stage-row">
+                        <div class="stage-name">④ 店舗・接客</div>
+                        <div class="slider-group">
+                            <label>コスト <span id="vC4">25</span>円</label>
+                            <input type="range" id="slC4" class="cost-range" min="10" max="60" step="1" value="25">
+                        </div>
+                        <div class="slider-group">
+                            <label>生み出した価値 <span id="vV4">60</span>円</label>
+                            <input type="range" id="slV4" class="value-range" min="10" max="100" step="1" value="60">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="results-board">
+                    <div class="res-box">
+                        <div class="res-label">合計コスト（原価）</div>
+                        <div class="res-val val-cost"><span id="totCost">0</span>円</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">販売価格（総価値）</div>
+                        <div class="res-val val-price"><span id="totPrice">0</span>円</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">最終利益</div>
+                        <div class="res-val val-profit"><span id="totProfit">0</span>円</div>
+                    </div>
+                </div>
+
+                <h4 style="margin-top:30px; text-align:center;">利益の構成（付加価値の割合）</h4>
+                <div class="bar-chart-container" id="barChart">
+                    <!-- JS will fill this -->
+                </div>
+                <div class="chart-labels">
+                    <span>仕入れ</span>
+                    <span>製造</span>
+                    <span>輸送</span>
+                    <span>接客・ブランド</span>
+                </div>
+            </div>
+
+            <h3 class="section-header">コスト分析と利益分析</h3>
+            <p><strong>コスト分析</strong>とは、それぞれの作業にどれだけの費用がかかっているかを調べることです。<br>
+            上記のシミュレーターでは、赤色のスライダーがこれにあたります。仕入れ、製造の機械や人件費、保管・輸送費、店舗の維持費などをすべて足すことで、パン1個を作るための合計コストがわかります。どの作業に一番お金がかかっているかを知ることで、無駄な部分を減らす工夫ができます。</p>
+            
+            <p><strong>利益分析</strong>とは、売った値段からコストを引いて、儲けがどの工程から生み出されているかを調べることです。<br>
+            「どの作業が一番利益を生み出しているか」を細かく分ける視点が重要です。例えば、シミュレーター上で「店舗・接客」の生み出す価値を大きくしてみてください。原材料や製造ではあまり利益が出ていなくても、<strong>お店での素晴らしい接客やブランドの力によって高く売れている場合、その部分が利益の最大の源になっている</strong>と判断できます。</p>
+
+            <h3 class="section-header">バリューチェーン分析をする理由</h3>
+            <p>会社全体として「パンが1個売れたら50円儲かる」という最終結果だけを見ていても、どこを改善すればよいかはわかりません。作業をひとつずつ分けてコストと利益を調べることで、次のようなことが見えてきます。</p>
+            <ul style="padding-left: 20px; line-height: 1.8;">
+                <li><strong>コストがかかりすぎている作業はどこか？</strong>（例：輸送費を削れないか）</li>
+                <li><strong>本当の利益を生み出している作業はどこか？</strong>（例：うちの強みは実は「接客」だった）</li>
+                <li><strong>ライバル会社と比べて強みがある作業はどこか？</strong></li>
+            </ul>
+            <p>この情報をもとに、会社は「コストを減らす」「利益が出ている部分（強み）にさらにお金をかけて強化する」といった高度な経営判断を行うことができるようになります。</p>
+
+            <h3 class="section-header">まとめ</h3>
+            <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 20px; font-size: 15px; line-height: 1.8;">
+                バリューチェーン分析とは、商品ができるまでの作業を細かく分解し、コストと利益を作業ごとに調べるフレームワークです。全体をどんぶり勘定で見るのではなく、一連の連鎖（チェーン）を解きほぐすことで、会社は隠れた無駄を見つけたり、本当の強みをさらに伸ばしたりすることができます。
+            </div>
+
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const colors = ['#f39c12', '#9b59b6', '#34495e', '#1abc9c'];
+        
+        function updateSim() {
+            let totalCost = 0;
+            let totalPrice = 0;
+            let vals = [];
+
+            for(let i=1; i<=4; i++) {
+                let c = parseInt(document.getElementById('slC'+i).value);
+                let v = parseInt(document.getElementById('slV'+i).value);
+                
+                document.getElementById('vC'+i).textContent = c;
+                document.getElementById('vV'+i).textContent = v;
+                
+                totalCost += c;
+                totalPrice += v;
+                vals.push(v);
+            }
+            
+            let profit = totalPrice - totalCost;
+            
+            document.getElementById('totCost').textContent = totalCost;
+            document.getElementById('totPrice').textContent = totalPrice;
+            document.getElementById('totProfit').textContent = profit;
+            
+            let profitEl = document.getElementById('totProfit');
+            if(profit < 0) {
+                profitEl.style.color = '#e74c3c';
+            } else {
+                profitEl.style.color = '#2ecc71';
+            }
+
+            // Update bar chart
+            let barContainer = document.getElementById('barChart');
+            barContainer.innerHTML = '';
+            
+            for(let i=0; i<4; i++) {
+                let widthPct = (vals[i] / totalPrice) * 100;
+                let div = document.createElement('div');
+                div.className = 'bar-segment';
+                div.style.width = widthPct + '%';
+                div.style.backgroundColor = colors[i];
+                if(widthPct > 5) {
+                    div.textContent = vals[i] + '円';
+                }
+                barContainer.appendChild(div);
+            }
+        }
+
+        for(let i=1; i<=4; i++) {
+            document.getElementById('slC'+i).addEventListener('input', updateSim);
+            document.getElementById('slV'+i).addEventListener('input', updateSim);
+        }
+        
+        updateSim();
+    </script>
+</body>
+</html>

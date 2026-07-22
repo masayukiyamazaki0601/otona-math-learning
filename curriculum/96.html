@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>表計算ソフト（Excel等）を用いた基本計算関数 | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .concept-box {
+            background-color: var(--color-paper);
+            border: 2px solid var(--color-brass);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .vs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .vs-item {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        .interactive-tool {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        .tool-header {
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: var(--color-ink);
+            text-align: center;
+        }
+        .sheet-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: var(--font-mono);
+            font-size: 14px;
+            margin-bottom: 20px;
+            background-color: #fff;
+        }
+        .sheet-table th, .sheet-table td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+        .sheet-table th {
+            background-color: #f1f1f1;
+            font-weight: bold;
+        }
+        .sheet-table td.header-col {
+            background-color: #f1f1f1;
+            font-weight: bold;
+            width: 40px;
+        }
+        .formula-input-container {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 20px;
+        }
+        .formula-input {
+            flex: 1;
+            padding: 10px;
+            font-family: var(--font-mono);
+            font-size: 16px;
+            border: 2px solid var(--color-brass);
+            border-radius: 6px;
+        }
+        .btn-calc {
+            background-color: var(--color-brass);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .btn-calc:hover {
+            opacity: 0.9;
+        }
+        .preset-select {
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-family: var(--font-mono);
+            font-size: 14px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 500px;
+        }
+        .result-box {
+            background: #ebf9f1;
+            border: 2px solid #2ecc71;
+            border-radius: 6px;
+            padding: 15px;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            font-family: var(--font-mono);
+            font-size: 18px;
+            font-weight: bold;
+            color: #27ae60;
+        }
+        .error-box {
+            background: #fdf2f0;
+            border: 2px solid #e74c3c;
+            border-radius: 6px;
+            padding: 15px;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            font-family: var(--font-mono);
+            font-size: 16px;
+            font-weight: bold;
+            color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第7章 学習支援とツール活用 &gt; 単元96
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 07 / Unit 96</span>
+                <h2 class="lesson-title">表計算ソフトを用いた基本計算関数</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>数学を「実務」に翻訳する最強の道具</h4>
+                    <p>第7章（最終章）では、これまで学んできた数学の理論を、実務で実際に使いこなすためのデジタルツールの活用法を学びます。<br>
+                    その筆頭が、ExcelやGoogleスプレッドシートなどの<strong>「表計算ソフト」</strong>です。</p>
+                    <p>紙とペンで複雑な数式を計算する必要はありません。表計算ソフトの「関数」は、数学の理論を実務データに対して一瞬で実行してくれる強力な武器です。</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>基本関数の「数学的意味」</h4>
+                    <p>ビジネスで毎日のように使う関数には、それぞれ明確な数学的背景があります。</p>
+                    
+                    <div class="vs-grid">
+                        <div class="vs-item" style="border-top: 4px solid #3498db;">
+                            <h5 style="margin-top:0; color:#3498db;">SUM / AVERAGE / ROUND</h5>
+                            <p style="font-size:13px; line-height:1.5;">
+                                • <strong>SUM</strong>：総和（$\sum$）。指定範囲の数値をすべて足し合わせる。<br>
+                                • <strong>AVERAGE</strong>：算術平均（$\bar{x}$）。総和を個数で割る。<br>
+                                • <strong>ROUND</strong>：四捨五入（端数処理）。数値を指定した桁数に丸める。
+                            </p>
+                        </div>
+                        <div class="vs-item" style="border-top: 4px solid #e74c3c;">
+                            <h5 style="margin-top:0; color:#e74c3c;">条件付き計算（IF / SUMIF / COUNTIF）</h5>
+                            <p style="font-size:13px; line-height:1.5;">
+                                • <strong>IF</strong>：命題論理。条件が「真（True）」か「偽（False）」かで処理を分岐する。<br>
+                                • <strong>SUMIF / COUNTIF</strong>：集合と論理。特定の条件（集合）に合致するデータだけの合計や件数を集計する。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 Interactive Tool -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>【体験】簡易スプレッドシート・関数シミュレーター</h4>
+                    <p>以下の売上管理テーブルをもとに、関数を計算してみましょう。<br>
+                    セレクトボックスから実行したい関数を選択するか、インプットボックスに数式を直接入力（半角大文字）して「実行」ボタンを押してください。関数が解析され、正しい集計結果がリアルタイムに表示されます。</p>
+                    
+                    <div class="interactive-tool">
+                        <div class="tool-header">
+                            売上データテーブル
+                        </div>
+                        
+                        <table class="sheet-table">
+                            <thead>
+                                <tr>
+                                    <th class="header-col"></th>
+                                    <th>A (担当者)</th>
+                                    <th>B (商品カテゴリ)</th>
+                                    <th>C (売上額 / 万円)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="header-col">1</td>
+                                    <td>佐藤</td>
+                                    <td>PC</td>
+                                    <td>150</td>
+                                </tr>
+                                <tr>
+                                    <td class="header-col">2</td>
+                                    <td>鈴木</td>
+                                    <td>スマホ</td>
+                                    <td>80</td>
+                                </tr>
+                                <tr>
+                                    <td class="header-col">3</td>
+                                    <td>佐藤</td>
+                                    <td>スマホ</td>
+                                    <td>120</td>
+                                </tr>
+                                <tr>
+                                    <td class="header-col">4</td>
+                                    <td>高橋</td>
+                                    <td>PC</td>
+                                    <td>200</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <select id="presetSelect" class="preset-select">
+                            <option value="">-- よく使われる関数式を選択（プリセット） --</option>
+                            <option value="=SUM(C1:C4)">売上の合計を求める: =SUM(C1:C4)</option>
+                            <option value="=AVERAGE(C1:C4)">売上の平均を求める: =AVERAGE(C1:C4)</option>
+                            <option value='=SUMIF(A1:A4, "佐藤", C1:C4)'>佐藤の売上合計を求める: =SUMIF(A1:A4, "佐藤", C1:C4)</option>
+                            <option value='=COUNTIF(B1:B4, "PC")'>PCカテゴリの件数を求める: =COUNTIF(B1:B4, "PC")</option>
+                        </select>
+
+                        <div class="formula-input-container">
+                            <input type="text" id="txtFormula" class="formula-input" value="=SUM(C1:C4)" placeholder="=SUM(C1:C4)">
+                            <button id="btnCalc" class="btn-calc">実行</button>
+                        </div>
+
+                        <div id="outputBox" class="result-box">
+                            計算結果: 550
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】「関数を組む」ことは「論理を組む」こと</h4>
+                    <p>Excelの数式を入力する作業は、実はプログラミングそのものです。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">関数型プログラミング言語としてのスプレッドシート</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            Excelで複雑な条件分岐を行うために、`=IF(AND(A1>=80, B1="合格"), "採用", "不採用")` のような長い数式を書くことがあります。<br>
+                            これは、数学でいう「論理積（AND）」や「命題の真偽」の組み合わせであり、プログラミングにおける関数型言語の書き方そのものです。
+                        </p>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            「どのようなデータ（入力）に対して、どの関数（写像）を適用すれば、目的の数値（出力）が得られるか」を順序立てて設計する力は、数学的思考力そのものです。Excelの関数をマスターすることは、データサイエンスやプログラミング言語を学ぶための最良の架け橋（ステップ）となります。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 4 Summary -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>まとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 15px; font-size: 14px; line-height: 1.7;">
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li>表計算ソフト（Excel等）は、実務データに対して数学の概念を適用・自動計算するための最強のツール。</li>
+                            <li><strong>SUM</strong> は総和（$\sum$）、<strong>AVERAGE</strong> は平均（$\bar{x}$）といった統計数学の基礎に対応している。</li>
+                            <li><strong>IF / SUMIF / COUNTIF</strong> などの条件付き関数は、集合や命題論理の概念をビジネスデータに適用したものである。</li>
+                            <li>関数を組み合わせて複雑な数式を設計することは、プログラミングやデータサイエンスの思考のトレーニングになる。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lesson-footer-nav" style="margin-top: 40px;">
+                    <a href="95.html" class="btn-secondary">&larr; 前の単元へ</a>
+                    <a href="index.html" class="btn-secondary">目次に戻る</a>
+                    <a href="97.html" class="btn btn-primary">次の単元へ &rarr;</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const presetSelect = document.getElementById('presetSelect');
+        const txtFormula = document.getElementById('txtFormula');
+        const btnCalc = document.getElementById('btnCalc');
+        const outputBox = document.getElementById('outputBox');
+
+        // Target sales data
+        const data = [
+            { name: "佐藤", cat: "PC", val: 150 },
+            { name: "鈴木", cat: "スマホ", val: 80 },
+            { name: "佐藤", cat: "スマホ", val: 120 },
+            { name: "高橋", cat: "PC", val: 200 }
+        ];
+
+        presetSelect.addEventListener('change', () => {
+            if (presetSelect.value) {
+                txtFormula.value = presetSelect.value;
+                evaluateFormula();
+            }
+        });
+
+        btnCalc.addEventListener('click', evaluateFormula);
+
+        function evaluateFormula() {
+            let rawInput = txtFormula.value.trim();
+            if (!rawInput.startsWith('=')) {
+                showError("エラー: 数式は '=' から始めてください。");
+                return;
+            }
+            
+            let formula = rawInput.substring(1).toUpperCase();
+            
+            try {
+                // simple parse logic
+                if (formula.startsWith('SUM(C1:C4)')) {
+                    let total = data.reduce((acc, row) => acc + row.val, 0);
+                    showResult("計算結果: " + total);
+                } else if (formula.startsWith('AVERAGE(C1:C4)')) {
+                    let total = data.reduce((acc, row) => acc + row.val, 0);
+                    let avg = total / data.length;
+                    showResult("計算結果: " + avg);
+                } else if (formula.includes('SUMIF(')) {
+                    // Expecting SUMIF(A1:A4, "佐藤", C1:C4) or SUMIF(A1:A4,"佐藤",C1:C4)
+                    let match = formula.match(/SUMIF\(A1:A4\s*,\s*"([^"]+)"\s*,\s*C1:C4\)/);
+                    if (match) {
+                        let nameCond = match[1];
+                        let sum = data.filter(row => row.name.toUpperCase() === nameCond.toUpperCase())
+                                      .reduce((acc, row) => acc + row.val, 0);
+                        showResult(`計算結果: ${sum}`);
+                    } else {
+                        showError('エラー: 構文が違います。例: =SUMIF(A1:A4, "佐藤", C1:C4)');
+                    }
+                } else if (formula.includes('COUNTIF(')) {
+                    // Expecting COUNTIF(B1:B4, "PC")
+                    let match = formula.match(/COUNTIF\(B1:B4\s*,\s*"([^"]+)"\)/);
+                    if (match) {
+                        let catCond = match[1];
+                        let count = data.filter(row => row.cat.toUpperCase() === catCond.toUpperCase()).length;
+                        showResult(`計算結果: ${count}`);
+                    } else {
+                        showError('エラー: 構文が違います。例: =COUNTIF(B1:B4, "PC")');
+                    }
+                } else {
+                    showError('エラー: 未対応の数式です。SUM、AVERAGE、SUMIF、COUNTIFなどの基本関数をお試しください。');
+                }
+            } catch (e) {
+                showError("エラー: 数式の解析に失敗しました。");
+            }
+        }
+
+        function showResult(text) {
+            outputBox.textContent = text;
+            outputBox.className = "result-box";
+        }
+
+        function showError(text) {
+            outputBox.textContent = text;
+            outputBox.className = "error-box";
+        }
+        
+    </script>
+</body>
+</html>

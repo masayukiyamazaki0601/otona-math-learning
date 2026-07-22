@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>微分積分学の基本定理 | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .concept-box {
+            background-color: var(--color-paper);
+            border: 2px solid var(--color-brass);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .math-display {
+            font-size: 22px;
+            font-family: var(--font-mono);
+            color: var(--color-ink);
+            margin: 15px 0;
+            overflow-x: auto;
+            text-align: center;
+        }
+        .interactive-tool {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .tool-header {
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: var(--color-ink);
+            text-align: center;
+        }
+        .control-panel {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .control-group {
+            background: var(--color-paper);
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 200px;
+        }
+        .slider {
+            width: 100%;
+            accent-color: var(--color-brass);
+            margin-top: 10px;
+        }
+        .sim-board {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            width: 100%;
+            padding: 30px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            gap: 20px;
+        }
+        .graphs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 100%;
+            max-width: 600px;
+        }
+        .graph-box {
+            text-align: center;
+        }
+        .chart-container {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            background: #fafafa;
+            border-left: 2px solid #333;
+            border-bottom: 2px solid #333;
+            position: relative;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        .axis-label-x {
+            position: absolute;
+            bottom: 5px;
+            right: 10px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #666;
+            font-family: var(--font-mono);
+        }
+        .axis-label-y {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #666;
+            font-family: var(--font-mono);
+        }
+        .stat-results {
+            background: #fdf2f0;
+            border: 2px solid #e74c3c;
+            border-radius: 6px;
+            padding: 20px;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+        .stat-comparison {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        .comp-val {
+            font-size: 24px;
+            font-family: var(--font-mono);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第6章 発展・高度な教養 &gt; 単元92
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 06 / Unit 92</span>
+                <h2 class="lesson-title">微分積分学の基本定理</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>別々に生まれた「微分」と「積分」の邂逅</h4>
+                    <p>数学の歴史において、「傾き」を求める微分と、「面積」を求める積分は、全く異なる目的のために別々の歴史を歩んでいました。<br>
+                    しかし17世紀、アイザック・ニュートンとゴットフリート・ライプニッツという二人の天才が、驚くべき事実を発見します。<br>
+                    <strong>「微分と積分は、完全に表裏一体（逆の関係）である」</strong>ということです。この大発見を<strong>「微分積分学の基本定理」</strong>と呼びます。</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>定理がもたらした「計算の劇的シンプル化」</h4>
+                    <p>この基本定理のおかげで、曲線の面積を求めるための「区分求積法（無限の短冊の足し算）」という超ハードな極限計算を行う必要がなくなりました。<br>
+                    元の関数 $f(x)$ を積分した式（原始関数 $F(x)$）を作り、そこに区間の端の値 $a, b$ を代入して引き算するだけで面積が求まってしまうのです。</p>
+                    
+                    <div class="concept-box">
+                        <div class="math-display">
+                            $\int_{a}^{b} f(x) \,dx = F(b) - F(a)$
+                        </div>
+                        <p style="margin-top:15px; font-size:14px; text-align:center;">
+                            ※ ここで $F'(x) = f(x)$ です。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 3 Interactive Tool -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>【体験】微積分の繋がりビジュアライザー</h4>
+                    <p>関数 $f(x) = 2x$ と、その積分した関数 $F(x) = x^2$ のグラフを左右に並べました。<br>
+                    左側の $f(x)$ グラフで、定積分の区間 $[a, b]$ をスライダーで動かしてみましょう。<br>
+                    左側の「面積の大きさ」が、右側のグラフの「終点と始点の高さの差 $F(b) - F(a)$」と<strong>全く同じ数値</strong>になる神秘的な繋がりを視覚的に体験してください。</p>
+                    
+                    <div class="interactive-tool">
+                        <div class="tool-header">
+                            左の面積 $\int_{a}^{b} 2x \,dx$ ＝ 右の差 $F(b) - F(a)$
+                        </div>
+                        
+                        <div class="control-panel">
+                            <div class="control-group">
+                                <label style="font-weight:bold;">始点 $a$: <span id="lblA" style="color:var(--color-brass); font-family:var(--font-mono); font-size:18px;">1.0</span></label>
+                                <input type="range" id="slA" class="slider" min="0" max="3" step="0.5" value="1">
+                            </div>
+                            <div class="control-group">
+                                <label style="font-weight:bold;">終点 $b$: <span id="lblB" style="color:var(--color-brass); font-family:var(--font-mono); font-size:18px;">3.0</span></label>
+                                <input type="range" id="slB" class="slider" min="1" max="4" step="0.5" value="3">
+                            </div>
+                        </div>
+
+                        <div class="sim-board">
+                            <div class="graphs-grid">
+                                <!-- Left Graph f(x) = 2x -->
+                                <div class="graph-box">
+                                    <div style="font-size:14px; font-weight:bold;">元の関数 $f(x) = 2x$</div>
+                                    <div class="chart-container">
+                                        <div class="axis-label-x">$x$</div>
+                                        <div class="axis-label-y">$y$</div>
+                                        <svg width="100%" height="100%" viewBox="0 0 250 250" preserveAspectRatio="none">
+                                            <!-- Shade Area -->
+                                            <polygon id="shadeArea" fill="rgba(231, 76, 60, 0.4)" stroke="#e74c3c" stroke-width="2" />
+                                            <!-- Line y=2x -->
+                                            <line x1="0" y1="250" x2="250" y2="0" stroke="#333" stroke-width="3" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                
+                                <!-- Right Graph F(x) = x^2 -->
+                                <div class="graph-box">
+                                    <div style="font-size:14px; font-weight:bold;">積分関数 $F(x) = x^2$</div>
+                                    <div class="chart-container">
+                                        <div class="axis-label-x">$x$</div>
+                                        <div class="axis-label-y">$y$</div>
+                                        <svg width="100%" height="100%" viewBox="0 0 250 250" preserveAspectRatio="none">
+                                            <!-- Parabola F(x)=x^2 -->
+                                            <path id="parabolaPath" fill="none" stroke="#333" stroke-width="3" />
+                                            <!-- Height Difference Line -->
+                                            <line id="heightDiffLine" x1="0" y1="0" x2="0" y2="0" stroke="#3498db" stroke-width="4" />
+                                            <!-- Dots at a and b -->
+                                            <circle id="dotA" cx="0" cy="0" r="5" fill="#3498db" />
+                                            <circle id="dotB" cx="0" cy="0" r="5" fill="#3498db" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-results">
+                                <div class="stat-comparison">
+                                    <div>
+                                        <div style="font-size:12px; color:#666;">左グラフの面積（定積分）</div>
+                                        <div class="comp-val" id="valArea" style="color:#e74c3c;">8.00</div>
+                                    </div>
+                                    <div style="font-size:32px; color:#666;">＝</div>
+                                    <div>
+                                        <div style="font-size:12px; color:#666;">右グラフの高さの差 $F(b) - F(a)$</div>
+                                        <div class="comp-val" id="valDiff" style="color:#3498db;">8.00</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】「日々の勢い」の合計が、「最終到達点」を決める</h4>
+                    <p>この基本定理は、ビジネスパーソンのキャリアや日々の仕事の姿勢に重要な教訓を与えてくれます。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">「日々の変化率」を積分すると、「人生の差」になる</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            基本定理が示している数式 $\int_{a}^{b} f(x) \,dx = F(b) - F(a)$ を言葉で解釈すると、<strong>「毎日の『成長スピード（微分値 $f(x)$）』を一定期間にわたって積み上げ（積分）たら、最終的な『能力の差（$F(b) - F(a)$）』になる」</strong>ということです。
+                        </p>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            日々の成長速度（傾き）がわずかであっても、それを期間 $a$ から $b$ までサボらず積分し続けることで、期間の終わり（時点 $b$）にはスタート地点（時点 $a$）からの圧倒的な高さの差（成長）として蓄積されます。<br>
+                            日々の改善（微分）と、長期的な資産形成（積分）が基本定理によって美しく繋がっているように、私たちの努力のプロセスと結果もまた、論理的・数学的に直結しているのです。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 4 Summary -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>まとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 15px; font-size: 14px; line-height: 1.7;">
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li><strong>微分積分学の基本定理</strong>：別個に発展した「微分（傾き）」と「積分（面積）」が、実は互いに逆演算の関係にあるという大発見。</li>
+                            <li><strong>定積分の簡易化</strong>：定理により、面倒な区分求積法の極限計算をせずとも、原始関数 $F(x)$ の引き算だけで簡単に面積が求まる。</li>
+                            <li><strong>ビジネスへの応用</strong>：基本定理は、「毎日の瞬間的な改善の積み重ね（積分）」が、そのまま「長期的な到達点の差」になるというビジネスの基本思想を数学的に証明している。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lesson-footer-nav" style="margin-top: 40px;">
+                    <a href="91.html" class="btn-secondary">&larr; 前の単元へ</a>
+                    <a href="index.html" class="btn-secondary">目次に戻る</a>
+                    <a href="93.html" class="btn btn-primary">次の単元へ &rarr;</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const slA = document.getElementById('slA');
+        const slB = document.getElementById('slB');
+        const lblA = document.getElementById('lblA');
+        const lblB = document.getElementById('lblB');
+        
+        const shadeArea = document.getElementById('shadeArea');
+        const parabolaPath = document.getElementById('parabolaPath');
+        const heightDiffLine = document.getElementById('heightDiffLine');
+        
+        const dotA = document.getElementById('dotA');
+        const dotB = document.getElementById('dotB');
+        
+        const valArea = document.getElementById('valArea');
+        const valDiff = document.getElementById('valDiff');
+
+        // Coordinate System Left (f(x) = 2x)
+        // x goes from 0 to 4
+        // y goes from 0 to 8
+        // SVG dimensions: 250 x 250
+        function mapLeftX(xVal) {
+            return (xVal / 4.0) * 250;
+        }
+        function mapLeftY(yVal) {
+            return 250 - (yVal / 8.0) * 250;
+        }
+
+        // Coordinate System Right (F(x) = x^2)
+        // x goes from 0 to 4
+        // y goes from 0 to 16
+        function mapRightX(xVal) {
+            return (xVal / 4.0) * 250;
+        }
+        function mapRightY(yVal) {
+            return 250 - (yVal / 16.0) * 250;
+        }
+
+        // Draw Static Parabola on Right Graph
+        let ptsPara = "";
+        for(let x=0; x<=4; x+=0.1) {
+            ptsPara += `${mapRightX(x)},${mapRightY(x*x)} `;
+        }
+        parabolaPath.setAttribute("d", "M " + ptsPara.replace(/,/g, ' ').split(' ').reduce((acc, v, i) => {
+            if(i%2===0) acc += (i>0?" L ":"") + v;
+            else acc += "," + v;
+            return acc;
+        }, ""));
+
+        function updateSim() {
+            let a = parseFloat(slA.value);
+            let b = parseFloat(slB.value);
+            
+            // Validate: dynamic range adjustment
+            if (a >= b) {
+                b = a + 0.5;
+                slB.value = b;
+            }
+            
+            lblA.textContent = a.toFixed(1);
+            lblB.textContent = b.toFixed(1);
+            
+            // --- Left Graph: Draw Trapezoid Shade Area ---
+            // Vertices: (a, 0), (a, 2a), (b, 2b), (b, 0)
+            let p1x = mapLeftX(a), p1y = mapLeftY(0);
+            let p2x = mapLeftX(a), p2y = mapLeftY(2*a);
+            let p3x = mapLeftX(b), p3y = mapLeftY(2*b);
+            let p4x = mapLeftX(b), p4y = mapLeftY(0);
+            
+            shadeArea.setAttribute("points", `${p1x},${p1y} ${p2x},${p2y} ${p3x},${p3y} ${p4x},${p4y}`);
+            
+            // --- Right Graph: Heights and Dots ---
+            let fa = a * a;
+            let fb = b * b;
+            
+            // Move Dots
+            dotA.setAttribute("cx", mapRightX(a));
+            dotA.setAttribute("cy", mapRightY(fa));
+            dotB.setAttribute("cx", mapRightX(b));
+            dotB.setAttribute("cy", mapRightY(fb));
+            
+            // Draw Height Difference line at x = b
+            heightDiffLine.setAttribute("x1", mapRightX(b));
+            heightDiffLine.setAttribute("y1", mapRightY(fa));
+            heightDiffLine.setAttribute("x2", mapRightX(b));
+            heightDiffLine.setAttribute("y2", mapRightY(fb));
+            
+            // --- Calculation values ---
+            // Left Integral Area: [x^2]_a^b = b^2 - a^2
+            let areaVal = b*b - a*a;
+            let diffVal = fb - fa;
+            
+            valArea.textContent = areaVal.toFixed(2);
+            valDiff.textContent = diffVal.toFixed(2);
+        }
+
+        slA.addEventListener('input', updateSim);
+        slB.addEventListener('input', updateSim);
+        updateSim();
+        
+    </script>
+
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>

@@ -10,19 +10,22 @@
 <body>
     <header class="header">
         <div class="header-inner container">
-            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math & Stats</a></h1>
             <nav class="nav">
                 <ul>
-                    <li><a href="index.html">カリキュラム</a></li>
-                    <li><a href="../columns/index.html">コラム</a></li>
-                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
-                    <li><a href="../schools/index.html">スクール比較</a></li>
+                    <li><a href="index.html">数学</a></li>
+                    <li><a href="../statistics/index.html">統計学</a></li>
+                    <li><a href="../python/index.html">Python</a></li>
+                    <li><a href="../sql/index.html">SQL</a></li>
+                    <li><a href="../datascience/index.html">データサイエンス</a></li>
+                    <li><a href="../ml/index.html">機械学習</a></li>
+                    <li><a href="../mba/index.html">MBA</a></li>
                 </ul>
             </nav>
         </div>
     </header>
     <main class="container" style="padding: 100px 24px; min-height: 60vh;">
-        <h2 class="section-title text-center" style="margin-bottom: 60px;">カリキュラム（全100単元）</h2>
+        <h2 class="section-title text-center" style="margin-bottom: 60px;">カリキュラム（全300単元）</h2>
         <div class="curriculum-toc">
 <div class="toc-chapter" id="ch01">
     <h3 class="toc-chapter-title"><span class="chapter-num">Chapter 01</span> 導入と学習準備 <span class="unit-count">(5 units)</span></h3>
@@ -92,71 +95,371 @@
         <li><a href="48.html"><span class="unit-num">48</span> 平方根（ルート）の概念と性質</a></li>
         <li><a href="49.html"><span class="unit-num">49</span> 平方根の四則演算</a></li>
         <li><a href="50.html"><span class="unit-num">50</span> 分母の有理化の手順</a></li>
-        <li><a href="#"><span class="unit-num">51</span> 二次方程式の解法（因数分解の利用）</a></li>
+        <li><a href="51.html"><span class="unit-num">51</span> 二次方程式の解法（因数分解の利用）</a></li>
         <li><a href="52.html"><span class="unit-num">52</span> 二次方程式の解の公式</a></li>
         <li><a href="53.html"><span class="unit-num">53</span> 関数の定義と記法（$y=f(x)$）</a></li>
-        <li><a href="#"><span class="unit-num">54</span> 一次関数のグラフ（傾きと切片）</a></li>
-        <li><a href="#"><span class="unit-num">55</span> 二次関数のグラフ（放物線）</a></li>
-        <li><a href="#"><span class="unit-num">56</span> 平方完成と頂点座標の算出</a></li>
-        <li><a href="#"><span class="unit-num">57</span> 二次関数の最大値・最小値の判定</a></li>
-        <li><a href="#"><span class="unit-num">58</span> 指数の拡張（ゼロ乗、負の整数乗）</a></li>
-        <li><a href="#"><span class="unit-num">59</span> 指数法則を用いた計算</a></li>
-        <li><a href="#"><span class="unit-num">60</span> 累乗根と有理数の指数（分数指数）</a></li>
-        <li><a href="#"><span class="unit-num">61</span> 対数の定義と指数の逆演算</a></li>
-        <li><a href="#"><span class="unit-num">62</span> 対数の性質と基本計算</a></li>
-        <li><a href="#"><span class="unit-num">63</span> 常用対数とスケールの把握</a></li>
-        <li><a href="#"><span class="unit-num">64</span> 三角比の定義（サイン、コサイン、タンジェント）</a></li>
-        <li><a href="#"><span class="unit-num">65</span> 有名角（30度、45度、60度）の三角比</a></li>
-        <li><a href="#"><span class="unit-num">66</span> 単位円による三角比の拡張</a></li>
-        <li><a href="#"><span class="unit-num">67</span> 正弦定理とその応用</a></li>
-        <li><a href="#"><span class="unit-num">68</span> 余弦定理とその応用</a></li>
-        <li><a href="#"><span class="unit-num">69</span> 場合の数：和の法則と積の法則</a></li>
-        <li><a href="#"><span class="unit-num">70</span> 順列（P）と組合せ（C）の概念と計算</a></li>
+        <li><a href="54.html"><span class="unit-num">54</span> 一次関数のグラフ（傾きと切片）</a></li>
+        <li><a href="55.html"><span class="unit-num">55</span> 二次関数のグラフ（放物線）</a></li>
+        <li><a href="56.html"><span class="unit-num">56</span> 平方完成と頂点座標の算出</a></li>
+        <li><a href="57.html"><span class="unit-num">57</span> 二次関数の最大値・最小値の判定</a></li>
+        <li><a href="58.html"><span class="unit-num">58</span> 指数の拡張（ゼロ乗、負の整数乗）</a></li>
+        <li><a href="59.html"><span class="unit-num">59</span> 指数法則を用いた計算</a></li>
+        <li><a href="60.html"><span class="unit-num">60</span> 累乗根と有理数の指数（分数指数）</a></li>
+        <li><a href="61.html"><span class="unit-num">61</span> 対数の定義と指数の逆演算</a></li>
+        <li><a href="62.html"><span class="unit-num">62</span> 対数の性質と基本計算</a></li>
+        <li><a href="63.html"><span class="unit-num">63</span> 常用対数とスケールの把握</a></li>
+        <li><a href="64.html"><span class="unit-num">64</span> 三角比の定義（サイン、コサイン、タンジェント）</a></li>
+        <li><a href="65.html"><span class="unit-num">65</span> 有名角（30度、45度、60度）の三角比</a></li>
+        <li><a href="66.html"><span class="unit-num">66</span> 単位円による三角比の拡張</a></li>
+        <li><a href="67.html"><span class="unit-num">67</span> 正弦定理とその応用</a></li>
+        <li><a href="68.html"><span class="unit-num">68</span> 余弦定理とその応用</a></li>
+        <li><a href="69.html"><span class="unit-num">69</span> 場合の数：和の法則と積の法則</a></li>
+        <li><a href="70.html"><span class="unit-num">70</span> 順列（P）と組合せ（C）の概念と計算</a></li>
     </ul>
 </div>
 <div class="toc-chapter">
     <h3 class="toc-chapter-title"><span class="chapter-num">Chapter 05</span> 実践・ビジネス数学 <span class="unit-count">(15 units)</span></h3>
     <ul class="toc-unit-list">
-        <li><a href="#"><span class="unit-num">71</span> 確率の基本概念と計算手法</a></li>
-        <li><a href="#"><span class="unit-num">72</span> 独立試行と乗法定理</a></li>
-        <li><a href="#"><span class="unit-num">73</span> 条件付き確率とベイズの定理</a></li>
-        <li><a href="#"><span class="unit-num">74</span> データ分析の基礎（度数分布表とヒストグラム）</a></li>
-        <li><a href="#"><span class="unit-num">75</span> 代表値の使い分け（平均値、中央値、最頻値）</a></li>
-        <li><a href="#"><span class="unit-num">76</span> データの散らばり（分散の概念）</a></li>
-        <li><a href="#"><span class="unit-num">77</span> 標準偏差によるリスクとばらつきの評価</a></li>
-        <li><a href="#"><span class="unit-num">78</span> 正規分布の性質と68-95-99.7ルール</a></li>
-        <li><a href="#"><span class="unit-num">79</span> 相関関係と散布図の作成</a></li>
-        <li><a href="#"><span class="unit-num">80</span> 相関係数の解釈と擬似相関への注意</a></li>
-        <li><a href="#"><span class="unit-num">81</span> 命題と真偽、必要条件と十分条件</a></li>
-        <li><a href="#"><span class="unit-num">82</span> 逆・裏・対偶の関係性</a></li>
-        <li><a href="#"><span class="unit-num">83</span> 背理法を用いた論理的証明</a></li>
-        <li><a href="#"><span class="unit-num">84</span> 金融計算基礎（単利と複利）</a></li>
-        <li><a href="#"><span class="unit-num">85</span> 現在価値と将来価値、割引率の概念</a></li>
+        <li><a href="71.html"><span class="unit-num">71</span> 確率の基本概念と計算手法</a></li>
+        <li><a href="72.html"><span class="unit-num">72</span> 独立試行と乗法定理</a></li>
+        <li><a href="73.html"><span class="unit-num">73</span> 条件付き確率とベイズの定理</a></li>
+        <li><a href="74.html"><span class="unit-num">74</span> データ分析の基礎（度数分布表とヒストグラム）</a></li>
+        <li><a href="75.html"><span class="unit-num">75</span> 代表値の使い分け（平均値、中央値、最頻値）</a></li>
+        <li><a href="76.html"><span class="unit-num">76</span> データの散らばり（分散の概念）</a></li>
+        <li><a href="77.html"><span class="unit-num">77</span> 標準偏差によるリスクとばらつきの評価</a></li>
+        <li><a href="78.html"><span class="unit-num">78</span> 正規分布の性質と68-95-99.7ルール</a></li>
+        <li><a href="79.html"><span class="unit-num">79</span> 相関関係と散布図の作成</a></li>
+        <li><a href="80.html"><span class="unit-num">80</span> 相関係数の解釈と擬似相関への注意</a></li>
+        <li><a href="81.html"><span class="unit-num">81</span> 命題と真偽、必要条件と十分条件</a></li>
+        <li><a href="82.html"><span class="unit-num">82</span> 逆・裏・対偶の関係性</a></li>
+        <li><a href="83.html"><span class="unit-num">83</span> 背理法を用いた論理的証明</a></li>
+        <li><a href="84.html"><span class="unit-num">84</span> 金融計算基礎（単利と複利）</a></li>
+        <li><a href="85.html"><span class="unit-num">85</span> 現在価値と将来価値、割引率の概念</a></li>
     </ul>
 </div>
 <div class="toc-chapter">
     <h3 class="toc-chapter-title"><span class="chapter-num">Chapter 06</span> 発展・高度な教養 <span class="unit-count">(10 units)</span></h3>
     <ul class="toc-unit-list">
-        <li><a href="#"><span class="unit-num">86</span> 数列の基礎（等差数列と等比数列）</a></li>
-        <li><a href="#"><span class="unit-num">87</span> 極限（lim）と連続性の概念</a></li>
-        <li><a href="#"><span class="unit-num">88</span> 微分の基礎（平均変化率と瞬間変化率）</a></li>
-        <li><a href="#"><span class="unit-num">89</span> 導関数の計算と関数の増減判定</a></li>
-        <li><a href="#"><span class="unit-num">90</span> 積分の基礎（不定積分と定積分）</a></li>
-        <li><a href="#"><span class="unit-num">91</span> 積分を用いた面積の算出</a></li>
-        <li><a href="#"><span class="unit-num">92</span> 微分積分学の基本定理</a></li>
-        <li><a href="#"><span class="unit-num">93</span> ベクトルの概念と成分表示</a></li>
-        <li><a href="#"><span class="unit-num">94</span> ベクトルの内積計算と直交条件</a></li>
-        <li><a href="#"><span class="unit-num">95</span> 行列の定義と基礎演算（和・差・積）</a></li>
+        <li><a href="86.html"><span class="unit-num">86</span> 数列の基礎（等差数列と等比数列）</a></li>
+        <li><a href="87.html"><span class="unit-num">87</span> 極限（lim）と連続性の概念</a></li>
+        <li><a href="88.html"><span class="unit-num">88</span> 微分の基礎（平均変化率と瞬間変化率）</a></li>
+        <li><a href="89.html"><span class="unit-num">89</span> 導関数の計算と関数の増減判定</a></li>
+        <li><a href="90.html"><span class="unit-num">90</span> 積分の基礎（不定積分と定積分）</a></li>
+        <li><a href="91.html"><span class="unit-num">91</span> 積分を用いた面積の算出</a></li>
+        <li><a href="92.html"><span class="unit-num">92</span> 微分積分学の基本定理</a></li>
+        <li><a href="93.html"><span class="unit-num">93</span> ベクトルの概念と成分表示</a></li>
+        <li><a href="94.html"><span class="unit-num">94</span> ベクトルの内積計算と直交条件</a></li>
+        <li><a href="95.html"><span class="unit-num">95</span> 行列の定義と基礎演算（和・差・積）</a></li>
     </ul>
 </div>
 <div class="toc-chapter">
     <h3 class="toc-chapter-title"><span class="chapter-num">Chapter 07</span> 学習支援とツール活用 <span class="unit-count">(5 units)</span></h3>
     <ul class="toc-unit-list">
-        <li><a href="#"><span class="unit-num">96</span> 表計算ソフト（Excel等）を用いた基本計算関数</a></li>
-        <li><a href="#"><span class="unit-num">97</span> 表計算ソフトによるグラフ作成と可視化</a></li>
-        <li><a href="#"><span class="unit-num">98</span> 表計算ソフトによる統計分析（平均、標準偏差、相関係数）</a></li>
-        <li><a href="#"><span class="unit-num">99</span> 学びを実務に直結させるケーススタディ</a></li>
-        <li><a href="#"><span class="unit-num">100</span> 継続学習に向けたリソース案内と次のステップ</a></li>
+        <li><a href="96.html"><span class="unit-num">96</span> 表計算ソフト（Excel等）を用いた基本計算関数</a></li>
+        <li><a href="97.html"><span class="unit-num">97</span> 表計算ソフトによるグラフ作成と可視化</a></li>
+        <li><a href="98.html"><span class="unit-num">98</span> 表計算ソフトによる統計分析（平均、標準偏差、相関係数）</a></li>
+        <li><a href="99.html"><span class="unit-num">99</span> 学びを実務に直結させるケーススタディ</a></li>
+        <li><a href="100.html"><span class="unit-num">100</span> 継続学習に向けたリソース案内と次のステップ</a></li>
+    </ul>
+</div>
+<div class="toc-chapter">
+    <h3 class="toc-chapter-title"><span class="chapter-num">Chapter 08</span> 機械学習とデータサイエンスの数学基礎 <span class="unit-count">(10 units)</span></h3>
+    <ul class="toc-unit-list">
+        <li><a href="101.html"><span class="unit-num">101</span> 最小二乗法による単回帰分析の仕組み</a></li>
+        <li><a href="102.html"><span class="unit-num">102</span> 複数要因を考慮する重回帰分析の行列表現</a></li>
+        <li><a href="103.html"><span class="unit-num">103</span> 分類問題の王道：ロジスティック回帰とシグモイド関数</a></li>
+        <li><a href="#"><span class="unit-num">104</span> 決定木モデルと情報エントロピー（乱雑さの定量化）</a></li>
+        <li><a href="#"><span class="unit-num">105</span> 次元削減（PCA）と固有値・固有ベクトルの幾何学的意味</a></li>
+        <li><a href="#"><span class="unit-num">106</span> ベクトル間の距離（ユークリッド、マンハッタン、マハラノビス）</a></li>
+        <li><a href="#"><span class="unit-num">107</span> 最急降下法による関数最適化（勾配と学習率）</a></li>
+        <li><a href="#"><span class="unit-num">108</span> ニューラルネットワークの順伝播（行列の内積と活性化関数）</a></li>
+        <li><a href="#"><span class="unit-num">109</span> 誤差逆伝播法と微分の連鎖律（チェーンルール）</a></li>
+        <li><a href="#"><span class="unit-num">110</span> 过学習の防止と正則化（L1・L2正則化の数理）</a></li>
+    </ul>
+</div>
+<div class="toc-chapter">
+    <h3 class="toc-chapter-title"><span class="chapter-num">Chapter 09</span> 高度な金融数理とリスク管理 <span class="unit-count">(10 units)</span></h3>
+    <ul class="toc-unit-list">
+        <li><a href="#"><span class="unit-num">111</span> 連続複利と自然対数の底（ネイピア数 e）のビジネス展開</a></li>
+        <li><a href="#"><span class="unit-num">112</span> 債券価格の算出とデュレーション（金利感応度）</a></li>
+        <li><a href="#"><span class="unit-num">113</span> ポートフォリオ理論：期待収益率と共分散によるリスク分散</a></li>
+        <li><a href="#"><span class="unit-num">114</span> シャープレシオによる投資効率性の定量的評価</a></li>
+        <li><a href="#"><span class="unit-num">115</span> 正規分布の応用：バリュー・アット・リスク（VaR）の計算</a></li>
+        <li><a href="#"><span class="unit-num">116</span> ランダムウォーク理論と金融市場のランダム性</a></li>
+        <li><a href="#"><span class="unit-num">117</span> オプション取引の基礎とコール・プットオプションの権利価値</a></li>
+        <li><a href="#"><span class="unit-num">118</span> ブラック・ショールズ方程式の概要と偏微分の直感的意味</a></li>
+        <li><a href="#"><span class="unit-num">119</span> 不良債権と信用リスク評価の確率モデル（デフォルト確率）</a></li>
+        <li><a href="#"><span class="unit-num">120</span> 実物投資の判断基準：リアルオプション（経営の柔軟性の価値）</a></li>
+    </ul>
+</div>
+<div class="toc-chapter">
+    <h3 class="toc-chapter-title"><span class="chapter-num">Chapter 10</span> 意思決定とアルゴリズムの数理 <span class="unit-count">(10 units)</span></h3>
+    <ul class="toc-unit-list">
+        <li><a href="#"><span class="unit-num">121</span> ゲーム理論の基礎：ナッシュ均衡と囚人のジレンマ</a></li>
+        <li><a href="#"><span class="unit-num">122</span> ゼロサムゲームとミニマックス法（意思決定の最悪回避ルール）</a></li>
+        <li><a href="#"><span class="unit-num">123</span> ネットワーク分析：中心性指標とSNS上の影響力評価</a></li>
+        <li><a href="#"><span class="unit-num">124</span> マルコフ連鎖：現在の状態から未来の遷移確率を予測する</a></li>
+        <li><a href="#"><span class="unit-num">125</span> キューイング理論（待ち行列理論）：コールセンターや店舗の最適化</a></li>
+        <li><a href="#"><span class="unit-num">126</span> 線形計画法（リニアプログラミング）：限られた資源での利益最大化</a></li>
+        <li><a href="#"><span class="unit-num">127</span> 意思決定木（デシジョンツリー）と期待値による選択の数値評価</a></li>
+        <li><a href="#"><span class="unit-num">128</span> 暗号技術の数学：素因数分解とRSA暗号の仕組み</a></li>
+        <li><a href="#"><span class="unit-num">129</span> 動的計画法（DP）：問題を部分問題に分割して解く最適化</a></li>
+        <li><a href="#"><span class="unit-num">130</span> 数値シミュレーション：モンテカルロ法による不確実性の推計</a></li>
+    </ul>
+</div>
+<div class="toc-chapter">
+    <h3 class="toc-chapter-title"><span class="chapter-num">Chapter 11</span> 微積分学の応用と多変数解析 <span class="unit-count">(10 units)</span></h3>
+    <ul class="toc-unit-list">
+        <li><a href="#"><span class="unit-num">131</span> 偏微分の基礎：複数変数の中である1つの変数だけの傾きを追う</a></li>
+        <li><a href="#"><span class="unit-num">132</span> 全微分の概念と多変数関数の近似式</a></li>
+        <li><a href="#"><span class="unit-num">133</span> 多変数関数の最大・最小とラグランジュの未定乗数法</a></li>
+        <li><a href="#"><span class="unit-num">134</span> 重積分の基礎：2次元領域上の面積と体積の算出</a></li>
+        <li><a href="#"><span class="unit-num">135</span> ガウス積分：正規分布の標準化で使われる特殊な積分公式</a></li>
+        <li><a href="#"><span class="unit-num">136</span> 微分方程式の基本：物理的現象や人口推移を表す方程式</a></li>
+        <li><a href="#"><span class="unit-num">137</span> 線形常微分方程式の解法と指数関数の役割</a></li>
+        <li><a href="#"><span class="unit-num">138</span> テイラー展開とマクローリン展開：複雑な関数を多項式に近似する</a></li>
+        <li><a href="#"><span class="unit-num">139</span> フーリエ解析の直感的理解：複雑な波形を単純な周波数成分に分解する</a></li>
+        <li><a href="#"><span class="unit-num">140</span> ラプラス変換の概念と微分方程式の代数演算化</a></li>
+    </ul>
+</div>
+<div class="toc-chapter">
+    <h3 class="toc-chapter-title"><span class="chapter-num">Chapter 12</span> 線形代数学の深化と多次元空間 <span class="unit-count">(10 units)</span></h3>
+    <ul class="toc-unit-list">
+        <li><a href="#"><span class="unit-num">141</span> ベクトル空間の基底と次元（情報の自由度の数理）</a></li>
+        <li><a href="#"><span class="unit-num">142</span> 線形写像の幾何学的イメージと行列による表現</a></li>
+        <li><a href="#"><span class="unit-num">143</span> 行列式の性質と座標変換における面積・体積の変化比率</a></li>
+        <li><a href="#"><span class="unit-num">144</span> 逆行列の存在条件と正則行列（行列式が0でない意味）</a></li>
+        <li><a href="#"><span class="unit-num">145</span> 行列の対角化：複雑な行列の累乗計算を劇的にシンプル化する</a></li>
+        <li><a href="#"><span class="unit-num">146</span> 直交行列の定義と回転写像（ベクトルの長さを保つ変換）</a></li>
+        <li><a href="#"><span class="unit-num">147</span> 二次形式と行列の半正定値性（多変数関数の凹凸判定）</a></li>
+        <li><a href="#"><span class="unit-num">148</span> 特異値分解（SVD）：あらゆる行列を分解する行列解析の王様</a></li>
+        <li><a href="#"><span class="unit-num">149</span> ベクトル数理の応用：レコメンドで使われる低ランク近似の仕組み</a></li>
+        <li><a href="#"><span class="unit-num">150</span> カーネル法と高次元写像（線形分離不能なデータを分離する）</a></li>
+    </ul>
+</div>
+<div class="toc-chapter">
+    <h3 class="toc-chapter-title"><span class="chapter-num">Chapter 13</span> 確率統計学の応用とベイズモデリング <span class="unit-count">(10 units)</span></h3>
+    <ul class="toc-unit-list">
+        <li><a href="#"><span class="unit-num">151</span> 確率変数の期待値と分散の数学的性質</a></li>
+        <li><a href="#"><span class="unit-num">152</span> 二項分布とポアソン分布（稀に起こるイベントの確率モデル）</a></li>
+        <li><a href="#"><span class="unit-num">153</span> 大数の法則と中心極限定理（サンプルを増やすと正規分布に近づく理由）</a></li>
+        <li><a href="#"><span class="unit-num">154</span> 推測統計の基礎：点推定と区間推定（信頼区間の算出）</a></li>
+        <li><a href="#"><span class="unit-num">155</span> 仮説検定の枠組み：帰無仮説と対立仮説、p値の正しい解釈</a></li>
+        <li><a href="#"><span class="unit-num">156</span> t検定とF検定（2つのグループの平均・分散の差の検証）</a></li>
+        <li><a href="#"><span class="unit-num">157</span> カイ二乗検定（クロス集計表における関連性の有無の判定）</a></li>
+        <li><a href="#"><span class="unit-num">158</span> 最尤推定法：手元のデータから最適なパラメータを逆算する</a></li>
+        <li><a href="#"><span class="unit-num">159</span> ベイズ統計学の深化：事前確率から事後確率への更新プロセス</a></li>
+        <li><a href="#"><span class="unit-num">160</span> MCMC法（マルコフ連鎖モンテカルロ法）と複雑な確率分布のサンプリング</a></li>
+    </ul>
+</div>
+<div class="toc-chapter">
+    <h3 class="toc-chapter-title"><span class="chapter-num">Chapter 14</span> 最適化数理とアルゴリズム最適化 <span class="unit-count">(10 units)</span></h3>
+    <ul class="toc-unit-list">
+        <li><a href="#"><span class="unit-num">161</span> 非線形計画法と局所最適解（ローカルミニマ）の壁</a></li>
+        <li><a href="#"><span class="unit-num">162</span> 凸最適化問題の美しさと大局的最適解の保証</a></li>
+        <li><a href="#"><span class="unit-num">163</span> ネットワークフロー最大化（物流や情報通信のボトルネック特定）</a></li>
+        <li><a href="#"><span class="unit-num">164</span> 巡回セールスマン問題と組み合わせ最適化の爆発性</a></li>
+        <li><a href="#"><span class="unit-num">165</span> 遺伝的アルゴリズム（GA）：自然淘汰を模倣した近似最適化</a></li>
+        <li><a href="#"><span class="unit-num">166</span> 強化学習の数理：マルコフ決定過程とQ学習の仕組み</a></li>
+        <li><a href="#"><span class="unit-num">167</span> カルマンフィルタ：ノイズ混じりの観測データから真の状態を推定する</a></li>
+        <li><a href="#"><span class="unit-num">168</span> 動的価格設定（ダイナミックプライシング）の数理モデル</a></li>
+        <li><a href="#"><span class="unit-num">169</span> サプライチェーンマネジメント（SCM）における在庫最適化モデル</a></li>
+        <li><a href="#"><span class="unit-num">170</span> 感度分析（パラメータ変化が最適解に与える影響評価）</a></li>
+    </ul>
+</div>
+<div class="toc-chapter">
+    <h3 class="toc-chapter-title"><span class="chapter-num">Chapter 15</span> 離散数学とコンピュータサイエンスの基礎 <span class="unit-count">(10 units)</span></h3>
+    <ul class="toc-unit-list">
+        <li><a href="#"><span class="unit-num">171</span> 集合論の深化：ド・モルガンの法則と真理値表の応用</a></li>
+        <li><a href="#"><span class="unit-num">172</span> グラフ理論の基礎：ノードとエッジ、木構造の数理</a></li>
+        <li><a href="#"><span class="unit-num">173</span> 探索アルゴリズム（幅優先・深さ優先）と最短経路問題（ダイクストラ法）</a></li>
+        <li><a href="#"><span class="unit-num">174</span> ソートアルゴリズム（クイックソート、マージソート）の計算量（O記法）</a></li>
+        <li><a href="#"><span class="unit-num">175</span> ブール代数と論理回路（コンピュータ内部の演算処理）</a></li>
+        <li><a href="#"><span class="unit-num">176</span> 有限オートマトンと状態遷移による制御の設計</a></li>
+        <li><a href="#"><span class="unit-num">177</span> 再帰関数の定義と数学的帰納法による証明の類似性</a></li>
+        <li><a href="#"><span class="unit-num">178</span> ハッシュ関数と一方向性の数理（セキュリティ・暗号の基礎）</a></li>
+        <li><a href="#"><span class="unit-num">179</span> 情報理論：シャノンの定理とデータ圧縮の限界値</a></li>
+        <li><a href="#"><span class="unit-num">180</span> 計算複雑性理論（P対NP問題の直感的理解）</a></li>
+    </ul>
+</div>
+<div class="toc-chapter">
+    <h3 class="toc-chapter-title"><span class="chapter-num">Chapter 16</span> フラクタル、カオス理論と非線形数理 <span class="unit-count">(10 units)</span></h3>
+    <ul class="toc-unit-list">
+        <li><a href="#"><span class="unit-num">181</span> カオス理論の基礎：初期値への極端な敏感さ（バタフライ効果）</a></li>
+        <li><a href="#"><span class="unit-num">182</span> ロジスティック写像と人口モデルに見る複雑系の分岐図</a></li>
+        <li><a href="#"><span class="unit-num">183</span> フラクタル幾何学の美：自己相似性と次元の拡張（分数次元）</a></li>
+        <li><a href="#"><span class="unit-num">184</span> コッホ雪片とマンデルブロ集合の定義と構造</a></li>
+        <li><a href="#"><span class="unit-num">185</span> 非線形ダイナミクスと相平面上のアトラクターの軌道</a></li>
+        <li><a href="#"><span class="unit-num">186</span> セルオートマトン：単純なルールから生まれる複雑なパターン（ライフゲーム）</a></li>
+        <li><a href="#"><span class="unit-num">187</span> べき乗則（パレートの法則）と複雑ネットワークのスケールフリー性</a></li>
+        <li><a href="#"><span class="unit-num">188</span> 自己組織化とチューリングパターン（生物の模様が生まれる数理）</a></li>
+        <li><a href="#"><span class="unit-num">189</span> 同期現象の数理（メトロノームやホタルの発光の同期）</a></li>
+        <li><a href="#"><span class="unit-num">190</span> 破綻の数理：カタストロフィー理論とシステム崩壊の臨界点</a></li>
+    </ul>
+</div>
+<div class="toc-chapter">
+    <h3 class="toc-chapter-title"><span class="chapter-num">Chapter 17</span> 数学で理解する物理・量子力学の数理 <span class="unit-count">(10 units)</span></h3>
+    <ul class="toc-unit-list">
+        <li><a href="#"><span class="unit-num">191</span> 古典力学の数理：ニュートンの運動方程式と微分積分による記述</a></li>
+        <li><a href="#"><span class="unit-num">192</span> 特殊相対性理論の数学：ローレンツ変換と光速不変の原理</a></li>
+        <li><a href="#"><span class="unit-num">193</span> 一般相対性理論の数学的入口：アインシュタインの方程式と空間の歪み</a></li>
+        <li><a href="#"><span class="unit-num">194</span> 量子力学の数学的枠組み：ヒルベルト空間と複素ベクトル</a></li>
+        <li><a href="#"><span class="unit-num">195</span> 波動関数の定義とシュレーディンガー方程式の直感的意味</a></li>
+        <li><a href="#"><span class="unit-num">196</span> 不確定性原理：位置と運動量を同時に決定できない複素数理の制約</a></li>
+        <li><a href="#"><span class="unit-num">197</span> 量子ビットと量子重ね合わせの行列表現（古典ビットとの違い）</a></li>
+        <li><a href="#"><span class="unit-num">198</span> 量子もつれ（エンタングルメント）の数式モデル</a></li>
+        <li><a href="#"><span class="unit-num">199</span> 量子アルゴリズムの基礎：ショアのアルゴリズム（素因数分解の超高速化）</a></li>
+        <li><a href="#"><span class="unit-num">200</span> 大人のための宇宙と物理の数理の総括</a></li>
+    </ul>
+</div>
+<div class="toc-chapter">
+    <h3 class="toc-chapter-title"><span class="chapter-num">Chapter 18</span> 最先端のAI技術とディープラーニングの数学 <span class="unit-count">(10 units)</span></h3>
+    <ul class="toc-unit-list">
+        <li><a href="#"><span class="unit-num">201</span> トランスフォーマーモデルと自己注意機構（Self-Attention）の行列演算</a></li>
+        <li><a href="#"><span class="unit-num">202</span> 自然言語処理（NLP）とワード埋め込み（Word2Vec）の空間ベクトル</a></li>
+        <li><a href="#"><span class="unit-num">203</span> 生成AI（GAN）のミニマックス対戦ゲームと数理モデル</a></li>
+        <li><a href="#"><span class="unit-num">204</span> 拡散モデル（Diffusion Models）の確率的ノイズ除去プロセス</a></li>
+        <li><a href="#"><span class="unit-num">205</span> 大規模言語モデル（LLM）のパラメータ数と行列サイズの関係</a></li>
+        <li><a href="#"><span class="unit-num">206</span> AIの評価指標：混同行列と精度、再現率、F1スコアの数学</a></li>
+        <li><a href="#"><span class="unit-num">207</span> ROC曲線とAUC（モデルの識別能の定量的評価）</a></li>
+        <li><a href="#"><span class="unit-num">208</span> 畳み込みニューラルネットワーク（CNN）の画像フィルタ行列演算</a></li>
+        <li><a href="#"><span class="unit-num">209</span> リカレントニューラルネットワーク（RNN）と時間変化の再帰数理</a></li>
+        <li><a href="#"><span class="unit-num">210</span> AIの倫理と公平性の数理的定義（偏りの定量化）</a></li>
+    </ul>
+</div>
+<div class="toc-chapter">
+    <h3 class="toc-chapter-title"><span class="chapter-num">Chapter 19</span> 経済・ミクロマクロ経済 of 動的数理 <span class="unit-count">(10 units)</span></h3>
+    <ul class="toc-unit-list">
+        <li><a href="#"><span class="unit-num">211</span> 効用関数と限界効用逓減の法則（ミクロ経済の微分的基礎）</a></li>
+        <li><a href="#"><span class="unit-num">212</span> 無差別曲線と予算制約線（最適な消費選択の幾何学）</a></li>
+        <li><a href="#"><span class="unit-num">213</span> 生産関数とコブ＝ダグラス型関数の偏微分特性</a></li>
+        <li><a href="#"><span class="unit-num">214</span> 市場均衡と価格弾力性の数式モデル</a></li>
+        <li><a href="#"><span class="unit-num">215</span> IS-LMモデル：財市場と貨幣市場の同時均衡を表す連立方程式</a></li>
+        <li><a href="#"><span class="unit-num">216</span> 動的マクロ経済学：成長モデル（ソロー・モデル）の微分方程式</a></li>
+        <li><a href="#"><span class="unit-num">217</span> インフレーションとフィリップス曲線の統計的評価</a></li>
+        <li><a href="#"><span class="unit-num">218</span> 国際貿易モデル（比較優位の原則）の一次不等式表現</a></li>
+        <li><a href="#"><span class="unit-num">219</span> 外部性と市場の失敗（ピグー税による最適化）</a></li>
+        <li><a href="#"><span class="unit-num">220</span> 経済予測のための時系列分析モデル（ARIMAモデル）</a></li>
+    </ul>
+</div>
+<div class="toc-chapter">
+    <h3 class="toc-chapter-title"><span class="chapter-num">Chapter 20</span> 経営データ分析とビジネス統計実践 <span class="unit-count">(10 units)</span></h3>
+    <ul class="toc-unit-list">
+        <li><a href="#"><span class="unit-num">221</span> A/Bテストの統計的検定とサンプルサイズ設計（検出力の数理）</a></li>
+        <li><a href="#"><span class="unit-num">222</span> コホート分析：時間経過によるユーザー維持率（リテンション）の計算</a></li>
+        <li><a href="#"><span class="unit-num">223</span> 顧客生涯価値（LTV）と解約率（チャーンレート）の等比級数モデル</a></li>
+        <li><a href="#"><span class="unit-num">224</span> 重回帰分析における多重共線性（マルチコ）の検知と行列の行列式</a></li>
+        <li><a href="#"><span class="unit-num">225</span> クラスタリング：K-means法による顧客セグメンテーションの仕組み</a></li>
+        <li><a href="#"><span class="unit-num">226</span> 主成分分析による顧客アンケート結果の次元圧縮</a></li>
+        <li><a href="#"><span class="unit-num">227</span> 時系列売上予測の季節調整モデル（古典的分解法）</a></li>
+        <li><a href="#"><span class="unit-num">228</span> パレート分析（ABC分析）とべき乗則による売上集中度の定量化</a></li>
+        <li><a href="#"><span class="unit-num">229</span> ロジスティック回帰を用いた離脱予測モデルの構築</a></li>
+        <li><a href="#"><span class="unit-num">230</span> ベイズ統計による広告効果のA/Bテストモデル</a></li>
+    </ul>
+</div>
+<div class="toc-chapter">
+    <h3 class="toc-chapter-title"><span class="chapter-num">Chapter 21</span> オペレーションズ・リサーチと数理最適化 <span class="unit-count">(10 units)</span></h3>
+    <ul class="toc-unit-list">
+        <li><a href="#"><span class="unit-num">231</span> 整数計画法：変数が「整数」である場合の最適化の難しさと解法</a></li>
+        <li><a href="#"><span class="unit-num">232</span> 二次計画法：目的関数が二次式である場合の最適化モデル</a></li>
+        <li><a href="#"><span class="unit-num">233</span> 動的計画法（ナップサック問題）の再帰的定式化</a></li>
+        <li><a href="#"><span class="unit-num">234</span> ダイクストラ法と A* アルゴリズムによる最短経路探索</a></li>
+        <li><a href="#"><span class="unit-num">235</span> プロジェクト管理（PERT/CPM）とクリティカルパスの数理</a></li>
+        <li><a href="#"><span class="unit-num">236</span> 在庫モデル：経済的発注量（EOQ）を微分で求める公式</a></li>
+        <li><a href="#"><span class="unit-num">237</span> シミュレーション：工場ラインのボトルネックを探る待ち行列シミュレーション</a></li>
+        <li><a href="#"><span class="unit-num">238</span> 多目的最適化とパレート最適（対立する目標の妥協点設計）</a></li>
+        <li><a href="#"><span class="unit-num">239</span> 遺伝的アルゴリズムによる配車ルート（VRP）の最適設計</a></li>
+        <li><a href="#"><span class="unit-num">240</span> モンテカルロ法を用いたサプライチェーンの欠品リスク評価</a></li>
+    </ul>
+</div>
+<div class="toc-chapter">
+    <h3 class="toc-chapter-title"><span class="chapter-num">Chapter 22</span> 情報理論と現代のデジタル技術の数理 <span class="unit-count">(10 units)</span></h3>
+    <ul class="toc-unit-list">
+        <li><a href="#"><span class="unit-num">241</span> 情報エントロピー：データに含まれる情報量の数学的定義</a></li>
+        <li><a href="#"><span class="unit-num">242</span> ハフマン符号：データ圧縮の仕組みと木構造の応用</a></li>
+        <li><a href="#"><span class="unit-num">243</span> エラー訂正符号：通信ノイズからデータを復元するパリティチェック</a></li>
+        <li><a href="#"><span class="unit-num">244</span> 暗号の数理：RSA暗号の鍵生成におけるオイラーの定理</a></li>
+        <li><a href="#"><span class="unit-num">245</span> 楕円曲線暗号（ECC）：ブロックチェーンや決済で使われる高度な幾何学</a></li>
+        <li><a href="#"><span class="unit-num">246</span> ブロックチェーンのハッシュ鎖と難解パズル（Proof of Work）の確率</a></li>
+        <li><a href="#"><span class="unit-num">247</span> ゼロ知識証明：秘密の情報を明かさずに証明する確率的プロトコル</a></li>
+        <li><a href="#"><span class="unit-num">248</span> グラフデータベースの数理（関係性のデータモデリング）</a></li>
+        <li><a href="#"><span class="unit-num">249</span> 量子コンピュータのゲート演算（ヒルベルト空間での複素行列積）</a></li>
+        <li><a href="#"><span class="unit-num">250</span> 量子フーリエ変換の仕組みと暗号解読へのアプローチ</a></li>
+    </ul>
+</div>
+<div class="toc-chapter">
+    <h3 class="toc-chapter-title"><span class="chapter-num">Chapter 23</span> 非線形力学とカオス・複雑系の数理 <span class="unit-count">(10 units)</span></h3>
+    <ul class="toc-unit-list">
+        <li><a href="#"><span class="unit-num">251</span> バタフライ効果：非線形方程式における初期値鋭敏性の実証</a></li>
+        <li><a href="#"><span class="unit-num">252</span> ロジスティック写像とフェイゲンバウム定数（カオスへの分岐）</a></li>
+        <li><a href="#"><span class="unit-num">253</span> アトラクターとストレンジアトラクター（ローレンツ方程式の軌道）</a></li>
+        <li><a href="#"><span class="unit-num">254</span> 複素数平面上のカオス：ジュリア集合とマンデルブロ集合の数理</a></li>
+        <li><a href="#"><span class="unit-num">255</span> フラクタル次元：コッホ曲線や海岸線が「分数次元」になる理由</a></li>
+        <li><a href="#"><span class="unit-num">256</span> セルオートマトン：単純なルールから生命的な振る舞い（ライフゲーム）を再現する</a></li>
+        <li><a href="#"><span class="unit-num">257</span> スケールフリーネットワーク：ハブ駅やインターネットの連結構造</a></li>
+        <li><a href="#"><span class="unit-num">258</span> 反応拡散系：動物の縞模様（ゼブラパターン）を決める微分方程式</a></li>
+        <li><a href="#"><span class="unit-num">259</span> 結合振動子モデル：数千の個体が同期する蔵本モデルの数理</a></li>
+        <li><a href="#"><span class="unit-num">260</span> クリティカリティ（臨界状態）：システムが突然破綻するカタストロフィー理論</a></li>
+    </ul>
+</div>
+<div class="toc-chapter">
+    <h3 class="toc-chapter-title"><span class="chapter-num">Chapter 24</span> 高度な微積分学と微分方程式 <span class="unit-count">(10 units)</span></h3>
+    <ul class="toc-unit-list">
+        <li><a href="#"><span class="unit-num">261</span> 偏微分と勾配ベクトル（Gradient）の幾何学的空間</a></li>
+        <li><a href="#"><span class="unit-num">262</span> 方向微分係数と多変数関数の最大傾斜方向</a></li>
+        <li><a href="#"><span class="unit-num">263</span> ヤコビ行列（ヤコビアン）：多変数写像における局所的な線形近似</a></li>
+        <li><a href="#"><span class="unit-num">264</span> ラグランジュの未定乗数法による制約条件付き極値問題</a></li>
+        <li><a href="#"><span class="unit-num">265</span> 重積分における変数変換（極座標変換とヤコビアンの適用）</a></li>
+        <li><a href="#"><span class="unit-num">266</span> 常微分方程式の数値解法（ルンゲ・クッタ法）</a></li>
+        <li><a href="#"><span class="unit-num">267</span> 偏微分方程式の基本：熱伝導方程式と波動方程式の直感的意味</a></li>
+        <li><a href="#"><span class="unit-num">268</span> デルタ関数：物理的衝撃や確率密度を表す超関数の概念</a></li>
+        <li><a href="#"><span class="unit-num">269</span> フーリエ級数展開：あらゆる周期関数を三角関数の和で表す</a></li>
+        <li><a href="#"><span class="unit-num">270</span> ラプラス変換：時間領域の微分方程式を S 領域の代数式に変換して解く</a></li>
+    </ul>
+</div>
+<div class="toc-chapter">
+    <h3 class="toc-chapter-title"><span class="chapter-num">Chapter 25</span> 高度な線形代数学と多次元空間 <span class="unit-count">(10 units)</span></h3>
+    <ul class="toc-unit-list">
+        <li><a href="#"><span class="unit-num">271</span> ベクトル空間の同型写像と基底変換行列</a></li>
+        <li><a href="#"><span class="unit-num">272</span> 内積空間と正規直交基底（グラム・シュミットの直交化法）</a></li>
+        <li><a href="#"><span class="unit-num">273</span> 行列のエルミート共役とユニタリ行列（複素数ベクトルの保存）</a></li>
+        <li><a href="#"><span class="unit-num">274</span> 二次形式の標準化と主軸定理（楕円や双曲線の座標変換）</a></li>
+        <li><a href="#"><span class="unit-num">275</span> ジョルダン標準形：対角化できない行列の極限構造</a></li>
+        <li><a href="#"><span class="unit-num">276</span> 特異値分解（SVD）による画像の低ランク圧縮アルゴリズム</a></li>
+        <li><a href="#"><span class="unit-num">277</span> カーネルトリック：低次元から高次元への暗黙の写像</a></li>
+        <li><a href="#"><span class="unit-num">278</span> テンソル積の基礎：行列をさらに多次元化したテンソルの演算</a></li>
+        <li><a href="#"><span class="unit-num">279</span> グラフの隣接行列：ウェブページのネットワーク構造を表現する</a></li>
+        <li><a href="#"><span class="unit-num">280</span> ページランクアルゴリズム：Google創業者による行列の定常分布問題</a></li>
+    </ul>
+</div>
+<div class="toc-chapter">
+    <h3 class="toc-chapter-title"><span class="chapter-num">Chapter 26</span> 推測統計学と現代ベイズモデリングの極み <span class="unit-count">(10 units)</span></h3>
+    <ul class="toc-unit-list">
+        <li><a href="#"><span class="unit-num">281</span> 確率変数の同時確率密度関数と周辺確率分布</a></li>
+        <li><a href="#"><span class="unit-num">282</span> 大数の法則と中心極限定理の数学的証明のアプローチ</a></li>
+        <li><a href="#"><span class="unit-num">283</span> 推定量の望ましい性質（不偏性、一致性、有効性）</a></li>
+        <li><a href="#"><span class="unit-num">284</span> フィッシャー情報量とクラメール・ラオの不等式（推定精度の限界）</a></li>
+        <li><a href="#"><span class="unit-num">285</span> 仮説検定における検出力（1-β）と第一種・第二種の誤り</a></li>
+        <li><a href="#"><span class="unit-num">286</span> 一元配置分散分析（ANOVA）：複数グループの平均値の同時比較</a></li>
+        <li><a href="#"><span class="unit-num">287</span> 一般化線形モデル（GLM）：ポアソン回帰やロジスティック回帰の包括モデル</a></li>
+        <li><a href="#"><span class="unit-num">288</span> 最尤法とベイズ推定の対比（点推定と分布推定の根本的違い）</a></li>
+        <li><a href="#"><span class="unit-num">289</span> 事後分布の近似解法：変分推論（VI）の数学的基礎</a></li>
+        <li><a href="#"><span class="unit-num">290</span> カルバック・ライブラー情報量（KLダイバージェンス）による確率分布の乖離測定</a></li>
+    </ul>
+</div>
+<div class="toc-chapter">
+    <h3 class="toc-chapter-title"><span class="chapter-num">Chapter 27</span> 現代の物理宇宙と量子計算の数理 <span class="unit-count">(10 units)</span></h3>
+    <ul class="toc-unit-list">
+        <li><a href="#"><span class="unit-num">291</span> ハミルトン力学：最小作用の原理と変分法の美</a></li>
+        <li><a href="#"><span class="unit-num">292</span> 電磁気学のマクスウェル方程式とベクトルの回転・発散（Rot/Div）</a></li>
+        <li><a href="#"><span class="unit-num">293</span> ローレンツ変換とミンコフスキー空間（時間と空間の幾何学）</a></li>
+        <li><a href="#"><span class="unit-num">294</span> 一般相対性理論のアインシュタインテンソルと空間の曲率計算</a></li>
+        <li><a href="#"><span class="unit-num">295</span> 量子力学のヒルベルト空間における固有値問題と確率解釈</a></li>
+        <li><a href="#"><span class="unit-num">296</span> シュレーディンガー方程式の分離変数を解く（エネルギー固有状態）</a></li>
+        <li><a href="#"><span class="unit-num">297</span> ブラケット記法と演算子の物理的意味（物理量のエルミート演算子化）</a></li>
+        <li><a href="#"><span class="unit-num">298</span> 量子もつれ（EPR相関）とベルの不等式の破れの数式</a></li>
+        <li><a href="#"><span class="unit-num">299</span> 量子誤り訂正コード（Shorコード）の数理的保護の仕組み</a></li>
+        <li><a href="#"><span class="unit-num">300</span> 大人のための宇宙・量子数理の最終総括（300単元の到達点）</a></li>
     </ul>
 </div>
 </div>
@@ -165,8 +468,8 @@
     <footer class="footer">
         <div class="container footer-inner">
             <div class="footer-left">
-                <div class="footer-logo">Otona Math</div>
-                <p>大人のためのやり直し数学プラットフォーム</p>
+                <div class="footer-logo">Otona Math & Stats</div>
+                <p>大人のためのやり直し数理プラットフォーム</p>
             </div>
             <div class="footer-right">
                 <p class="copyright">&copy; 2026 Otona Math.</p>

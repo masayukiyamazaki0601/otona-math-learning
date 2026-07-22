@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中学生の数学（座標）でわかる！BCGマトリクス | Otona Math コラム</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .column-content {
+            background-color: var(--color-surface);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            margin-bottom: 40px;
+        }
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: 50px 1fr 1fr;
+            grid-template-rows: 1fr 1fr 50px;
+            gap: 5px;
+            width: 100%;
+            max-width: 600px;
+            margin: 40px auto;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid #ccc;
+        }
+        .y-axis-label {
+            grid-column: 1;
+            grid-row: 1 / 3;
+            writing-mode: vertical-rl;
+            text-align: center;
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: rotate(180deg);
+        }
+        .x-axis-label {
+            grid-column: 2 / 4;
+            grid-row: 3;
+            text-align: center;
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .quadrant {
+            padding: 30px 20px;
+            text-align: center;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .q-star { background: linear-gradient(135deg, #f1c40f, #f39c12); }
+        .q-question { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .q-cow { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+        .q-dog { background: linear-gradient(135deg, #95a5a6, #7f8c8d); }
+        
+        .q-icon { font-size: 40px; margin-bottom: 10px; }
+        .q-title { font-size: 20px; margin-bottom: 5px; }
+        .q-desc { font-size: 13px; font-weight: normal; opacity: 0.9; }
+        
+        .point-box {
+            background-color: var(--color-paper);
+            border-left: 4px solid var(--color-brass);
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        h3 {
+            color: var(--color-brass);
+            margin-top: 40px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="../curriculum/index.html">カリキュラム</a></li>
+                    <li><a href="index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">コラム</a> &gt; BCGマトリクス
+        </div>
+
+        <article class="column-content">
+            <h2 style="font-size: 28px; margin-bottom: 30px; line-height: 1.4;">中学生の数学「座標」でわかる！<br>世界の大企業が使う戦略図「BCGマトリクス」</h2>
+            
+            <p>中学生の数学で習う「X軸」と「Y軸」が交差するグラフ（座標）。<br>
+            「これ、将来何の役に立つの？」と思ったことはありませんか？</p>
+            <p>実は、世界中の大企業の社長たちが集まる戦略会議では、まさにこの「X軸とY軸」を使った図を用いて、何億円というお金の使い道を決めています。その代表格が<strong>「BCGマトリクス」</strong>と呼ばれるものです。</p>
+
+            <h3>会社の商品を「座標」に置くゲーム</h3>
+            <p>会社にはいろんな商品があります。任天堂なら「Switchの本体」「マリオの新作ソフト」「昔からある花札」などです。<br>
+            社長の悩みは<strong>「どっちの商品に、いくらお金（宣伝費や開発費）をかければいいのか？」</strong>ということです。</p>
+            <p>そこで、商品をわかりやすく分類するために、以下の2つの軸でグラフ（座標）を作ります。</p>
+            
+            <div class="point-box">
+                <ul style="margin:0; padding-left:20px; line-height: 1.8;">
+                    <li><strong>Y軸（縦）：世の中のブーム度（市場成長率）</strong><br>上に行くほど世の中で大流行していて、下に行くほどブームが落ち着いている。</li>
+                    <li><strong>X軸（横）：クラスでの人気度（市場シェア）</strong><br>右に行くほど自分が一番人気で、左に行くほどライバルに負けている。<br>
+                    <span style="font-size:12px; color:#666;">（※実際のビジネス書ではX軸の左右が逆で描かれることが多いですが、数学のグラフに合わせて「右がプラス（高い）」で解説します）</span></li>
+                </ul>
+            </div>
+
+            <p>このX軸とY軸を引くと、画面が<strong>4つのエリア（第1象限〜第4象限）</strong>に分かれますよね。<br>
+            それぞれに面白いニックネームがついています。</p>
+
+            <div class="matrix-grid">
+                <div class="y-axis-label">世の中のブーム度（成長率）高 →</div>
+                
+                <!-- Top Left: Question Mark (Low share, High growth) -->
+                <div class="quadrant q-question">
+                    <div class="q-icon">❓</div>
+                    <div class="q-title">問題児<br>(Question)</div>
+                    <div class="q-desc">大流行中なのに<br>ウチのは売れてない</div>
+                </div>
+                
+                <!-- Top Right: Star (High share, High growth) -->
+                <div class="quadrant q-star">
+                    <div class="q-icon">⭐</div>
+                    <div class="q-title">花形<br>(Star)</div>
+                    <div class="q-desc">大流行中で<br>ウチのが一番人気！</div>
+                </div>
+                
+                <!-- Bottom Left: Dog (Low share, Low growth) -->
+                <div class="quadrant q-dog">
+                    <div class="q-icon">🐶</div>
+                    <div class="q-title">負け犬<br>(Dog)</div>
+                    <div class="q-desc">ブームも去ったし<br>ウチのは売れてない</div>
+                </div>
+                
+                <!-- Bottom Right: Cash Cow (High share, Low growth) -->
+                <div class="quadrant q-cow">
+                    <div class="q-icon">🐮</div>
+                    <div class="q-title">金のなる木<br>(Cash Cow)</div>
+                    <div class="q-desc">ブームは去ったけど<br>ウチのが定番で売れ続ける</div>
+                </div>
+                
+                <div class="x-axis-label">← 低　ウチの商品の人気度（シェア）　高 →</div>
+            </div>
+
+            <h3>4つのキャラクターとお金の使い方</h3>
+            
+            <p><strong>⭐ 花形（スター）：右上</strong><br>
+            世の中で大流行していて、しかも自分たちの商品が一番人気です。売上はすごいですが、ライバルも必死に追いかけてくるので、宣伝や開発に<strong>莫大なお金がかかります</strong>。まさにクラスの主役です。</p>
+
+            <p><strong>🐮 金のなる木（キャッシュカウ）：右下</strong><br>
+            ブームは落ち着きましたが、「定番」としてずっと売れ続けています。ライバルも諦めているので、宣伝費をかけなくても自動的にお金が入ってきます。<strong>会社にとって一番ありがたい「お小遣い箱」</strong>です。</p>
+
+            <p><strong>❓ 問題児（クエスチョンマーク）：左上</strong><br>
+            世の中では大流行しているのに、自分たちの商品はイマイチ売れていません。ここから頑張ってお金をかけて「花形」に育てるか、諦めるか。<strong>社長の決断が一番難しいポジション</strong>です。</p>
+
+            <p><strong>🐶 負け犬（ドッグ）：左下</strong><br>
+            世の中のブームも去り、自分たちも勝てていません。悲しいですが、ここにお金をかけても無駄なので、<strong>撤退（やめる）</strong>という決断をします。</p>
+
+            <h3>お金の「引越し」ストーリー</h3>
+            <p>会社の必勝パターンはこうです。</p>
+            <ol style="line-height: 1.8;">
+                <li>まず、<strong>「金のなる木」</strong>が稼ぎ出してくれた大量のお金を回収します。</li>
+                <li>そのお金を、これからの流行に乗っている<strong>「問題児」</strong>に全額つぎ込みます。</li>
+                <li>問題児が人気者になり、右に移動して<strong>「花形」</strong>になります。</li>
+                <li>やがてブームが去り、花形が下に移動して新たな<strong>「金のなる木」</strong>になります。</li>
+            </ol>
+            
+            <div class="point-box">
+                <p style="margin:0; font-weight:bold; color:var(--color-ink);">
+                    数学の「座標」は、ただの点の集まりではありません。<br>
+                    点を打つことで、「この商品は今どこにいて、次どこへ行くべきか」という未来の地図を描くことができるのです。
+                </p>
+            </div>
+
+            <p>次に数学の授業で座標のグラフを書くときは、「この右上が『花形』で、左下が『負け犬』だな」と想像してみてください。少しだけ、社長の気分が味わえるはずです。</p>
+
+            <div style="text-align: center; margin-top: 50px;">
+                <a href="../curriculum/index.html" class="btn btn-primary">数学カリキュラムを学ぶ</a>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

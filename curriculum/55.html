@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>二次関数のグラフ（放物線） | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .interactive-graph-container {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 8px;
+            padding: 24px;
+            margin: 30px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .graph-header {
+            font-size: 24px;
+            font-family: var(--font-mono);
+            color: var(--color-ink);
+            margin-bottom: 20px;
+        }
+        .controls {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 30px;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: var(--color-paper);
+            padding: 15px 25px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            min-width: 200px;
+        }
+        .control-group label {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--color-ink);
+        }
+        .control-group input[type="range"] {
+            width: 100%;
+            accent-color: var(--color-brass);
+        }
+        .value-display {
+            font-family: var(--font-mono);
+            font-size: 18px;
+            margin-top: 10px;
+            color: var(--color-brass);
+            font-weight: bold;
+        }
+        svg {
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .axis {
+            stroke: #333;
+            stroke-width: 1.5;
+        }
+        .grid {
+            stroke: #e0e0e0;
+            stroke-width: 1;
+        }
+        .line-graph {
+            stroke: var(--color-brass);
+            stroke-width: 3;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第4章 高校数学への接続 &gt; 単元55
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 04 / Unit 55</span>
+                <h2 class="lesson-title">二次関数のグラフ（放物線）</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>一直線ではない「加速する変化」</h4>
+                    <p>前回の単元で学んだ一次関数は「一定の割合で変化する直線」でした。<br>しかし現実のビジネスや物理現象では、常に一定のペースで変化するものばかりではありません。</p>
+                    <p>例えば、「商品の価格を下げると売上個数は増えるが、下げすぎると利益が赤字になる」といった現象や、重力による落下運動などは、二次関数 <strong>$y = ax^2 + bx + c$</strong> によって表されます。<br>このグラフは直線ではなく、美しいカーブを描く<strong>「放物線（ほうぶつせん）」</strong>となります。</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>係数 $a$ が決める「グラフの向きと開き具合」</h4>
+                    <p>二次関数 $y = ax^2$ の最も重要な要素は、先頭の係数 <strong>$a$</strong> です。</p>
+                    <ul style="padding-left: 20px; line-height: 1.8;">
+                        <li><strong>$a > 0$（プラス）の場合</strong>：グラフは下に向かって凸（U字型）になります。これを「下に凸（したにとつ）」と呼びます。</li>
+                        <li><strong>$a < 0$（マイナス）の場合</strong>：グラフは上に向かって凸（逆U字型）になります。これを「上に凸（うえにとつ）」と呼びます。</li>
+                        <li><strong>$a$ の絶対値が大きいほど</strong>、グラフの開き具合は狭く（急激に）なります。</li>
+                    </ul>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>定数項 $c$ による「上下の移動」</h4>
+                    <p>式に定数 $c$ を加えた <strong>$y = ax^2 + c$</strong> を考えてみましょう。<br>
+                    この $c$ の役割は、一次関数の切片（$b$）と全く同じです。グラフの形を変えずに、放物線全体をそのまま上（または下）に平行移動させます。</p>
+                </div>
+
+                <!-- Step 4 Interactive Graph -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>【体験】二次関数シミュレーター</h4>
+                    <p>以下のシミュレーターで、$y = ax^2 + c$ のグラフの動きを確認してみましょう。<br>$a$ の値をプラスからマイナスに変更したときの「反転」や、$a$ の大きさによる「開き具合」の変化に注目してください。</p>
+                    
+                    <div class="interactive-graph-container">
+                        <div class="graph-header" id="equationDisplay">$y = 1x^2 + 0$</div>
+                        
+                        <div class="controls">
+                            <div class="control-group">
+                                <label for="sliderA">係数 $a$（開き具合・向き）</label>
+                                <input type="range" id="sliderA" min="-3" max="3" step="0.2" value="1">
+                                <div class="value-display">$a = $ <span id="valA">1</span></div>
+                            </div>
+                            <div class="control-group">
+                                <label for="sliderC">定数 $c$（上下移動）</label>
+                                <input type="range" id="sliderC" min="-10" max="10" step="1" value="0">
+                                <div class="value-display">$c = $ <span id="valC">0</span></div>
+                            </div>
+                        </div>
+
+                        <svg width="400" height="400" id="graphSvg" viewBox="0 0 400 400">
+                            <!-- Grid and Axes will be drawn by JS -->
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】AI・機械学習を支える「最小値を探す」という概念</h4>
+                    <p>二次関数のグラフである「放物線」は、現代のAI（人工知能）やデータサイエンスの領域において、最も重要な役割を果たしている数学的概念の一つです。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">AIは「誤差の二次関数」の底（最小値）を探している</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            機械学習の目的は、予測と実際のデータとの「誤差」をできるだけ小さくすることです。このとき、誤差を計算する代表的な方法として「最小二乗法」が用いられます。誤差を2乗する（二次関数にする）ことで、グラフは必ず「下に凸の放物線」になります。
+                        </p>
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 14px; text-align: left; margin-bottom: 12px; font-family: var(--font-mono);">
+                            ・誤差関数（損失関数）： $y = ax^2 + bx + c$ の形になる<br>
+                            ・勾配降下法： 放物線の斜面を少しずつ下り、最も誤差が小さくなる「谷の底（頂点）」を見つけ出すアルゴリズム
+                        </div>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            つまり、ChatGPTのような巨大なAIモデルの学習プロセスも、根本を辿れば<strong>「超多次元空間に描かれた巨大な二次関数の、一番下（最小値）を探す作業」</strong>の繰り返しなのです。二次関数は、AIが賢くなるための道標として機能しています。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 5 Summary -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>まとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 15px; font-size: 14px; line-height: 1.7;">
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li>二次関数のグラフは<strong>「放物線」</strong>と呼ばれるカーブを描く。</li>
+                            <li>$x^2$ の係数 $a$ がプラスなら「下に凸」、マイナスなら「上に凸」になる。</li>
+                            <li>係数 $a$ の絶対値が大きいほど、グラフの開きは狭くなる。</li>
+                            <li>定数項 $c$ は、グラフを上下に平行移動させる役割を持つ。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lesson-footer-nav" style="margin-top: 40px;">
+                    <a href="54.html" class="btn-secondary">&larr; 前の単元へ</a>
+                    <a href="index.html" class="btn-secondary">目次に戻る</a>
+                    <a href="56.html" class="btn btn-primary">次の単元へ &rarr;</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const sliderA = document.getElementById('sliderA');
+        const sliderC = document.getElementById('sliderC');
+        const valA = document.getElementById('valA');
+        const valC = document.getElementById('valC');
+        const eqDisplay = document.getElementById('equationDisplay');
+        const svg = document.getElementById('graphSvg');
+        
+        const width = 400;
+        const height = 400;
+        const scale = 20; // pixels per unit
+        const originX = width / 2;
+        const originY = height / 2;
+
+        function drawGrid() {
+            let gridHtml = '';
+            for(let i = 0; i <= width; i += scale) {
+                gridHtml += `<line x1="${i}" y1="0" x2="${i}" y2="${height}" class="grid" />`;
+                gridHtml += `<line x1="0" y1="${i}" x2="${width}" y2="${i}" class="grid" />`;
+            }
+            gridHtml += `<line x1="${originX}" y1="0" x2="${originX}" y2="${height}" class="axis" />`;
+            gridHtml += `<line x1="0" y1="${originY}" x2="${width}" y2="${originY}" class="axis" />`;
+            
+            gridHtml += `<text x="${originX + 10}" y="15" font-size="12" fill="#333">y</text>`;
+            gridHtml += `<text x="${width - 15}" y="${originY - 10}" font-size="12" fill="#333">x</text>`;
+            
+            return gridHtml;
+        }
+
+        function drawGraph() {
+            const a = parseFloat(sliderA.value);
+            const c = parseFloat(sliderC.value);
+            
+            valA.textContent = a.toFixed(1);
+            valC.textContent = c;
+            
+            // Equation formatting
+            let eqText = '';
+            if (a === 0) {
+                eqText = `$y = ${c}$`;
+            } else {
+                let aStr = a === 1 ? '' : (a === -1 ? '-' : a);
+                let cStr = c === 0 ? '' : (c > 0 ? `+ ${c}` : `- ${Math.abs(c)}`);
+                eqText = `$y = ${aStr}x^2 ${cStr}$`;
+            }
+            eqDisplay.innerHTML = eqText;
+            
+            if(window.renderMathInElement) {
+                renderMathInElement(eqDisplay, {delimiters: [{left: '$', right: '$', display: false}]});
+            }
+
+            // Draw parabola path
+            let pathD = "";
+            let started = false;
+
+            // Loop through x values
+            for(let px = 0; px <= width; px += 2) {
+                // convert pixel x to math x
+                let mathX = (px - originX) / scale;
+                // calculate math y
+                let mathY = a * (mathX * mathX) + c;
+                // convert math y to pixel y
+                let py = originY - (mathY * scale);
+                
+                // Only draw points that are reasonably within or near bounds to prevent huge svg strings
+                if (py > -100 && py < height + 100) {
+                    if (!started) {
+                        pathD += `M ${px} ${py} `;
+                        started = true;
+                    } else {
+                        pathD += `L ${px} ${py} `;
+                    }
+                } else {
+                    started = false;
+                }
+            }
+
+            let content = drawGrid();
+            if (pathD !== "") {
+                content += `<path d="${pathD}" class="line-graph" />`;
+            }
+            
+            svg.innerHTML = content;
+        }
+
+        sliderA.addEventListener('input', drawGraph);
+        sliderC.addEventListener('input', drawGraph);
+        
+        drawGraph();
+    </script>
+
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>

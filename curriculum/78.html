@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>正規分布の性質と68-95-99.7ルール | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .concept-box {
+            background-color: var(--color-paper);
+            border: 2px solid var(--color-brass);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .rule-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .rule-item {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+        .rule-sigma {
+            font-size: 24px;
+            font-weight: bold;
+            font-family: var(--font-mono);
+            color: #3498db;
+        }
+        .rule-pct {
+            font-size: 32px;
+            font-weight: bold;
+            font-family: var(--font-mono);
+            color: #e74c3c;
+            margin: 10px 0;
+        }
+        .interactive-tool {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .tool-header {
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: var(--color-ink);
+            text-align: center;
+        }
+        .control-panel {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            width: 100%;
+            justify-content: center;
+        }
+        .control-group {
+            background: var(--color-paper);
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 250px;
+        }
+        .slider {
+            width: 100%;
+            accent-color: var(--color-brass);
+            margin-top: 10px;
+        }
+        .sim-board {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            width: 100%;
+            padding: 30px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            gap: 20px;
+        }
+        .chart-container {
+            width: 100%;
+            max-width: 600px;
+            height: 300px;
+            position: relative;
+        }
+        .stat-results {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .stat-box {
+            text-align: center;
+            background: #fdf2f0;
+            border: 2px solid #e74c3c;
+            border-radius: 6px;
+            padding: 15px 30px;
+        }
+        .stat-title {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .stat-val {
+            font-size: 36px;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第5章 実践・ビジネス数学 &gt; 単元78
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 05 / Unit 78</span>
+                <h2 class="lesson-title">正規分布の性質と68-95-99.7ルール</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>自然界と人間社会を支配する「ベルカーブ」</h4>
+                    <p>身長、体重、テストの点数、工場の製品サイズなど、世の中の多くのデータはヒストグラムにすると<strong>「真ん中（平均）が一番高く、左右対称になだらかに広がる釣鐘（ベル）のような形」</strong>になります。<br>
+                    この理想的な分布の形を<strong>「正規分布（せいきぶんぷ / Normal Distribution）」</strong>と呼びます。</p>
+                    <p>統計学において、対象のデータがこの正規分布に従っているとみなすことができれば、前回の単元で学んだ「標準偏差（$\sigma$）」を使って、強力な未来予測が可能になります。</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>魔法の法則「68 - 95 - 99.7ルール」</h4>
+                    <p>データが正規分布に従うとき、平均値と標準偏差（$\sigma$）の間には、<strong>絶対に崩れない数学的な比率（ルール）</strong>が存在します。</p>
+                    
+                    <div class="rule-grid">
+                        <div class="rule-item">
+                            <div class="rule-sigma">$\pm 1\sigma$</div>
+                            <div style="font-size:12px; color:#666;">（平均から標準偏差1個分）</div>
+                            <div class="rule-pct">68<span style="font-size:18px;">%</span></div>
+                            <div style="font-size:13px; line-height:1.4;">全体の約3分の2の人が<br>この範囲に収まる。</div>
+                        </div>
+                        <div class="rule-item">
+                            <div class="rule-sigma">$\pm 2\sigma$</div>
+                            <div style="font-size:12px; color:#666;">（平均から標準偏差2個分）</div>
+                            <div class="rule-pct">95<span style="font-size:18px;">%</span></div>
+                            <div style="font-size:13px; line-height:1.4;">全体のほとんど（20人に19人）が<br>この範囲に収まる。</div>
+                        </div>
+                        <div class="rule-item">
+                            <div class="rule-sigma">$\pm 3\sigma$</div>
+                            <div style="font-size:12px; color:#666;">（平均から標準偏差3個分）</div>
+                            <div class="rule-pct">99.7<span style="font-size:18px;">%</span></div>
+                            <div style="font-size:13px; line-height:1.4;">この範囲を外れるのは<br>「1000人に3人」の異常値。</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>品質管理と「シックス・シグマ」</h4>
+                    <p>このルールはビジネス、特に製造業の品質管理で重宝されます。例えば工場の機械で部品を作る際、サイズのばらつき（$\sigma$）を計算し、「$\pm 3\sigma$」の外側にある部品は「規格外（不良品）」として弾く、といった基準値として使われます。</p>
+                    <p>さらにこれを極限まで追求し、「$\pm 6\sigma$」（不良品率を100万個に3.4個レベルまで減らす）を目標とする経営手法が、モトローラやGEが提唱して世界中に広まった<strong>「シックス・シグマ」</strong>です。名前の由来はここから来ています。</p>
+                </div>
+
+                <!-- Step 4 Interactive Tool -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>【体験】正規分布と確率シミュレーター</h4>
+                    <p>平均（真ん中）から「何$\sigma$（標準偏差何個分）」離れた範囲を指定するかをスライダーで変更してみてください。<br>
+                    正規分布のベルカーブ上で該当する面積が塗りつぶされ、その範囲にデータが存在する確率（パーセンテージ）が即座に計算されます。</p>
+                    
+                    <div class="interactive-tool">
+                        <div class="tool-header">
+                            $\pm Z\sigma$ の範囲にデータが含まれる確率
+                        </div>
+                        
+                        <div class="control-panel">
+                            <div class="control-group">
+                                <label style="font-weight:bold;">指定する範囲: 平均から <span id="lblZ" style="color:var(--color-brass); font-family:var(--font-mono); font-size:18px;">1.0</span> $\sigma$</label>
+                                <input type="range" id="slZ" class="slider" min="0" max="4.0" step="0.1" value="1.0">
+                            </div>
+                        </div>
+
+                        <div class="sim-board">
+                            <div class="chart-container" id="curveChart">
+                                <!-- SVG generated by JS -->
+                            </div>
+                            
+                            <div class="stat-results">
+                                <div class="stat-box">
+                                    <div class="stat-title">指定範囲内にデータが収まる確率</div>
+                                    <div class="stat-val" id="valProb">68.27 %</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】「パレートの法則」と正規分布の限界</h4>
+                    <p>自然界の多くは正規分布に従いますが、現代のビジネスやネット社会においては<strong>「正規分布が全く通用しないデータ」</strong>が溢れています。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">「べき乗則」と勝者総取りの世界</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            例えば、「国民の年収」「企業の売上」「YouTuberの再生回数」などは正規分布にはなりません。平均の近くに多くの人が集まるベルカーブではなく、「2割の人が全体の8割の富（再生数）を独占し、残りの8割の人は限りなくゼロに近い位置に這いつくばる」という、L字型の極端なグラフになります。
+                        </p>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            これを<strong>「べき乗則（あるいはパレートの法則）」</strong>と呼びます。「このデータは平均を中心に左右対称に広がっている（正規分布）」という前提で分析を始めてしまうと、一部の突出した外れ値を見落とし、致命的な経営判断ミスを引き起こすため注意が必要です。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 5 Summary -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>まとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 15px; font-size: 14px; line-height: 1.7;">
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li><strong>正規分布</strong>：平均を中心に左右対称に広がる釣鐘型（ベルカーブ）の分布。</li>
+                            <li><strong>68-95-99.7ルール</strong>：正規分布において、$\pm 1\sigma$ に約68%、$\pm 2\sigma$ に約95%、$\pm 3\sigma$ に約99.7%のデータが収まるという絶対法則。</li>
+                            <li>この法則があるため、標準偏差（$\sigma$）を計算するだけで「全体の何％がその基準を満たしているか」が数学的に予測できる。</li>
+                            <li>ただし、所得や売上など「べき乗則（勝者総取り）」に従うデータには正規分布のルールは適用できないため見極めが必要。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lesson-footer-nav" style="margin-top: 40px;">
+                    <a href="77.html" class="btn-secondary">&larr; 前の単元へ</a>
+                    <a href="index.html" class="btn-secondary">目次に戻る</a>
+                    <a href="79.html" class="btn btn-primary">次の単元へ &rarr;</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const slZ = document.getElementById('slZ');
+        const lblZ = document.getElementById('lblZ');
+        const curveChart = document.getElementById('curveChart');
+        const valProb = document.getElementById('valProb');
+
+        // Standard Normal Distribution PDF
+        function pdf(x) {
+            return (1 / Math.sqrt(2 * Math.PI)) * Math.exp(-0.5 * x * x);
+        }
+
+        // Error function approximation to calculate CDF
+        // CDF(x) = probability that value <= x
+        function cdf(x) {
+            // constants
+            let a1 =  0.254829592;
+            let a2 = -0.284496736;
+            let a3 =  1.421413741;
+            let a4 = -1.453152027;
+            let a5 =  1.061405429;
+            let p  =  0.3275911;
+
+            let sign = 1;
+            if (x < 0) sign = -1;
+            x = Math.abs(x) / Math.sqrt(2.0);
+
+            let t = 1.0 / (1.0 + p * x);
+            let y = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-x * x);
+
+            return 0.5 * (1.0 + sign * y);
+        }
+
+        function drawCurve() {
+            let zVal = parseFloat(slZ.value);
+            lblZ.textContent = zVal.toFixed(1);
+            
+            // Calculate probability area between -z and +z
+            let prob = cdf(zVal) - cdf(-zVal);
+            valProb.textContent = (prob * 100).toFixed(2) + " %";
+
+            // Draw SVG
+            // Canvas bounds: x from -4 to 4. Width 600, Height 300
+            // y max is pdf(0) = ~0.3989. We scale it so 0.45 is top.
+            
+            let w = 600;
+            let h = 300;
+            let margin = 20;
+            let chartW = w - margin*2;
+            let chartH = h - margin*2;
+            
+            function mapX(val) {
+                // val goes -4 to 4 -> 0 to 1
+                let norm = (val + 4) / 8;
+                return margin + norm * chartW;
+            }
+            
+            function mapY(val) {
+                // val goes 0 to 0.45
+                let norm = val / 0.45;
+                return h - margin - norm * chartH;
+            }
+
+            let svgHtml = `<svg width="100%" height="100%" viewBox="0 0 ${w} ${h}">`;
+            
+            // Draw baseline
+            svgHtml += `<line x1="${margin}" y1="${h-margin}" x2="${w-margin}" y2="${h-margin}" stroke="#333" stroke-width="2" />`;
+            
+            // Draw axis ticks & labels
+            for(let i=-4; i<=4; i++) {
+                let tx = mapX(i);
+                let ty = h - margin;
+                svgHtml += `<line x1="${tx}" y1="${ty}" x2="${tx}" y2="${ty+5}" stroke="#333" stroke-width="1" />`;
+                if(i !== 0) {
+                    svgHtml += `<text x="${tx}" y="${ty+18}" font-size="12" fill="#666" text-anchor="middle" font-family="monospace">${i > 0 ? '+'+i : i}σ</text>`;
+                } else {
+                    svgHtml += `<text x="${tx}" y="${ty+18}" font-size="12" fill="#333" text-anchor="middle" font-weight="bold">平均</text>`;
+                }
+            }
+
+            // Generate Path for full curve
+            let pathD = `M ${mapX(-4)} ${mapY(0)}`;
+            let pts = [];
+            for(let x=-4; x<=4; x+=0.1) {
+                pts.push({x: x, y: pdf(x)});
+                pathD += ` L ${mapX(x)} ${mapY(pdf(x))}`;
+            }
+            pathD += ` L ${mapX(4)} ${mapY(0)}`;
+            
+            // Generate Path for filled area
+            let fillD = `M ${mapX(-zVal)} ${mapY(0)}`;
+            for(let x=-zVal; x<=zVal; x+=0.05) {
+                // to avoid floating point overshoot
+                if(x > zVal) x = zVal; 
+                fillD += ` L ${mapX(x)} ${mapY(pdf(x))}`;
+            }
+            fillD += ` L ${mapX(zVal)} ${mapY(0)} Z`;
+
+            // Add filled area first (so it's under the line)
+            if(zVal > 0) {
+                svgHtml += `<path d="${fillD}" fill="rgba(231, 76, 60, 0.3)" />`;
+                // Add vertical bounds
+                svgHtml += `<line x1="${mapX(-zVal)}" y1="${mapY(0)}" x2="${mapX(-zVal)}" y2="${mapY(pdf(-zVal))}" stroke="#e74c3c" stroke-width="2" stroke-dasharray="4,2" />`;
+                svgHtml += `<line x1="${mapX(zVal)}" y1="${mapY(0)}" x2="${mapX(zVal)}" y2="${mapY(pdf(zVal))}" stroke="#e74c3c" stroke-width="2" stroke-dasharray="4,2" />`;
+            }
+
+            // Add main curve line
+            svgHtml += `<path d="${pathD}" fill="none" stroke="#3498db" stroke-width="3" />`;
+            
+            svgHtml += `</svg>`;
+            curveChart.innerHTML = svgHtml;
+        }
+
+        slZ.addEventListener('input', drawCurve);
+        drawCurve();
+        
+    </script>
+
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>

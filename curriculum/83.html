@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>背理法を用いた論理的証明 | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .concept-box {
+            background-color: var(--color-paper);
+            border: 2px solid var(--color-brass);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .math-display {
+            font-size: 20px;
+            font-family: var(--font-mono);
+            color: var(--color-ink);
+            margin: 15px 0;
+            overflow-x: auto;
+            text-align: center;
+        }
+        .interactive-tool {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .tool-header {
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: var(--color-ink);
+            text-align: center;
+        }
+        .sim-board {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            width: 100%;
+            padding: 30px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            gap: 20px;
+        }
+        .logic-step {
+            width: 100%;
+            max-width: 500px;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-left: 4px solid #ccc;
+            opacity: 0.3;
+            transition: all 0.5s ease;
+        }
+        .logic-step.active {
+            opacity: 1;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .logic-step-title {
+            font-weight: bold;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .logic-step-text {
+            font-size: 16px;
+            color: #333;
+            font-weight: bold;
+        }
+        
+        .step-assume { border-left-color: #3498db; }
+        .step-deduce { border-left-color: #f1c40f; }
+        .step-contradict { border-left-color: #e74c3c; background: #fdf2f0; }
+        .step-conclude { border-left-color: #2ecc71; background: #ebf9f1; }
+
+        .btn-next {
+            background-color: var(--color-brass);
+            color: white;
+            font-size: 16px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+        .btn-next:hover {
+            background-color: #a67c00;
+        }
+        .btn-next:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第6章 論理と集合 &gt; 単元83
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 06 / Unit 83</span>
+                <h2 class="lesson-title">背理法を用いた論理的証明</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>正面突破が難しい「悪魔の証明」</h4>
+                    <p>数学やビジネスの議論において、ある主張を正面から「正しい」と証明するのが非常に困難なケースがあります。特に「〜ではない」「〜は存在しない」ということを直接証明するのは、「悪魔の証明」と呼ばれるほど難しいタスクです。</p>
+                    <p>そんなときに絶大な威力を発揮する、論理学の「裏技」的な証明アプローチが<strong>「背理法（はいりほう）」</strong>です。</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>あえて「逆」を仮定して、自滅させる</h4>
+                    <p>背理法のロジックは非常にシンプルかつ強烈です。</p>
+                    <div class="concept-box">
+                        <ol style="margin: 0; padding-left: 20px; line-height:1.7;">
+                            <li>証明したいことの<strong>「逆（反対）」をあえて正しいと仮定</strong>する。</li>
+                            <li>その仮定に基づいて、論理的に推理を進める。</li>
+                            <li>推理を進めると、どこかで<strong>「絶対にありえない矛盾（破綻）」</strong>にぶつかる。</li>
+                            <li>矛盾が起きた原因は「最初の仮定が間違っていたから」である。</li>
+                            <li>よって、仮定の反対である「最初の主張は正しい」と証明される。</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>歴史上最も有名な背理法「$\sqrt{2}$ は無理数である」</h4>
+                    <p>高校数学で背理法といえば、「$\sqrt{2}$ が無理数（分数で表せない数）であることの証明」です。<br>
+                    無限に続く少数が分数にならないことを直接証明するのは不可能に近いため、あえて<strong>「$\sqrt{2}$ が分数（有理数）であると仮定」</strong>して計算をスタートします。</p>
+                    <p>すると計算を進めるうちに、「この分数は、分子も分母も永遠に2で割り切れてしまう（＝これ以上約分できない分数だという大前提と矛盾する）」という論理の破綻にぶつかります。この矛盾により、「分数であるという仮定が間違っていた」＝「$\sqrt{2}$ は無理数である」ことが証明されるのです。</p>
+                </div>
+
+                <!-- Step 4 Interactive Tool -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>【体験】背理法・裁判官シミュレーター</h4>
+                    <p>あなたが弁護士となり、<strong>「容疑者Xは犯人ではない」</strong>ということを背理法を使って裁判官に証明してみましょう。<br>
+                    ボタンを押して、論理のステップを1つずつ進めてください。</p>
+                    
+                    <div class="interactive-tool">
+                        <div class="tool-header">
+                            証明の目標：「容疑者Xは犯人ではない」
+                        </div>
+                        
+                        <div class="sim-board">
+                            <div class="logic-step step-assume" id="step1">
+                                <div class="logic-step-title">① 逆を仮定する</div>
+                                <div class="logic-step-text">あえて「容疑者Xが犯人である」と仮定しましょう。</div>
+                            </div>
+                            
+                            <div class="logic-step step-deduce" id="step2">
+                                <div class="logic-step-title">② 論理的に推理する</div>
+                                <div class="logic-step-text">犯行時刻は「昨日の午後3時」であり、現場は「東京」でした。つまり仮定が正しければ、Xは午後3時に東京にいなければなりません。</div>
+                            </div>
+                            
+                            <div class="logic-step step-contradict" id="step3">
+                                <div class="logic-step-title">③ 矛盾（破綻）を発見する</div>
+                                <div class="logic-step-text">しかし、パスポートの記録により、Xは同時刻に「ハワイ」に入国していたことが確定しています。「Xが同時に東京とハワイに存在する」という矛盾が生じます。</div>
+                            </div>
+                            
+                            <div class="logic-step step-conclude" id="step4">
+                                <div class="logic-step-title">④ 結論（証明完了）</div>
+                                <div class="logic-step-text">この矛盾が生じた原因は「Xが犯人である」という最初の仮定が間違っていたからです。よって、「容疑者Xは犯人ではない」ことが証明されました。</div>
+                            </div>
+                            
+                            <button class="btn-next" id="btnNext">次のステップへ (推理を進める)</button>
+                            <button class="btn-next" id="btnReset" style="display:none; background-color:#666;">リセット</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】会議で使える「あえて乗っかる」議論術</h4>
+                    <p>背理法のロジックは、ビジネスの会議で強硬な反対意見を論破する際にも非常に有効です。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">相手の案を仮定して、自滅を待つ</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            会議で明らかに非現実的なアイデアを出して譲らない人がいたとします。これを頭ごなしに否定すると感情的な対立を生んでしまいます。そこで背理法を使い、<strong>「なるほど、ではあえてあなたの案を採用したと仮定しましょう」</strong>と乗っかってみます。
+                        </p>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            「その場合、Aの工程とBの工程が必要になり、人員計算をすると…（推理）、結果として来期予算を3倍もオーバーしてしまうことになります（矛盾・破綻）。つまり、この案を採用するのは現実的に不可能ですね（結論）。」<br>
+                            このように、相手の主張を一旦受け入れてから論理的に破綻させる手法は、相手も感情的に反発しづらいため、ビジネスの現場で極めて強力な「大人の論破術」となります。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 5 Summary -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>まとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 15px; font-size: 14px; line-height: 1.7;">
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li>正面から証明するのが難しい命題に対し、「逆」を仮定して矛盾を導き出す手法が<strong>背理法</strong>である。</li>
+                            <li>推論の途中で「絶対にありえない矛盾」が生じれば、最初の仮定が間違っていたことの証明になる。</li>
+                            <li>無理数の証明のような数学の世界だけでなく、アリバイ証明やビジネスの議論など、相手の主張の破綻を客観的に示すための強力なロジックとして活用できる。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lesson-footer-nav" style="margin-top: 40px;">
+                    <a href="82.html" class="btn-secondary">&larr; 前の単元へ</a>
+                    <a href="index.html" class="btn-secondary">目次に戻る</a>
+                    <a href="84.html" class="btn btn-primary">次の単元へ &rarr;</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const steps = [
+            document.getElementById('step1'),
+            document.getElementById('step2'),
+            document.getElementById('step3'),
+            document.getElementById('step4')
+        ];
+        const btnNext = document.getElementById('btnNext');
+        const btnReset = document.getElementById('btnReset');
+        let currentStep = 0;
+
+        btnNext.addEventListener('click', () => {
+            if(currentStep < steps.length) {
+                steps[currentStep].classList.add('active');
+                currentStep++;
+                
+                if(currentStep === steps.length) {
+                    btnNext.style.display = 'none';
+                    btnReset.style.display = 'block';
+                }
+            }
+        });
+
+        btnReset.addEventListener('click', () => {
+            currentStep = 0;
+            steps.forEach(step => step.classList.remove('active'));
+            btnNext.style.display = 'block';
+            btnReset.style.display = 'none';
+        });
+        
+    </script>
+
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>

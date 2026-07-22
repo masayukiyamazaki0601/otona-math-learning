@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>継続学習に向けたリソース案内と次のステップ | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .concept-box {
+            background-color: var(--color-paper);
+            border: 2px solid var(--color-brass);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .vs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .vs-item {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        .interactive-tool {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        .tool-header {
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: var(--color-ink);
+            text-align: center;
+        }
+        .control-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+            width: 100%;
+            max-width: 500px;
+        }
+        .select-group {
+            display: flex;
+            flex-direction: column;
+            background: var(--color-paper);
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+        }
+        .select-group label {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .select-box {
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+        .btn-diagnose {
+            background-color: var(--color-brass);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 18px;
+            transition: background 0.2s;
+        }
+        .btn-diagnose:hover {
+            opacity: 0.9;
+        }
+        .result-box {
+            background: #ebf9f1;
+            border: 2px solid #2ecc71;
+            border-radius: 6px;
+            padding: 20px;
+            width: 100%;
+            max-width: 500px;
+            display: none;
+        }
+        .rec-item {
+            margin-top: 15px;
+            background: #fff;
+            padding: 15px;
+            border-radius: 4px;
+            border-left: 4px solid #2ecc71;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第7章 学習支援とツール活用 &gt; 単元100
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 07 / Unit 100</span>
+                <h2 class="lesson-title">継続学習に向けたリソース案内と次のステップ</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>祝・100単元完走！ここから始まる数学の旅</h4>
+                    <p>おめでとうございます！ 小学校算数の基礎から始まり、高校数学の微積分・ベクトル・行列、そしてビジネス統計やファイナンスの基礎まで、全100単元のカリキュラムをすべて修了いたしました。</p>
+                    <p>基礎知識はすべて揃いました。しかし、数学の本当の面白さは<strong>「現実の課題に自分で適用し、学び続けること」</strong>にあります。本単元は、100単元のゴールであると同時に、あなたの自律的な数学の旅のスタート地点です。</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>キャリアに応じた「次のターゲット」</h4>
+                    <p>100単元を終えたあなたが、次にどの方向に進むべきか、キャリア別のロードマップです。</p>
+                    
+                    <div class="vs-grid">
+                        <div class="vs-item" style="border-top: 4px solid #3498db;">
+                            <h5 style="margin-top:0; color:#3498db;">データ分析・AI志望</h5>
+                            <p style="font-size:13px; line-height:1.5;">多変数の微積分、線形代数の抽象的理解（次元の拡張）、確率統計の基礎から機械学習モデリングへとステップアップしましょう。</p>
+                        </div>
+                        <div class="vs-item" style="border-top: 4px solid #e74c3c;">
+                            <h5 style="margin-top:0; color:#e74c3c;">ファイナンス・投資志望</h5>
+                            <p style="font-size:13px; line-height:1.5;">複利計算から連続複利へ、そしてオプション価格決定理論（ブラック・ショールズ方程式）に必要な確率微分方程式の世界へと進みます。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 Interactive Tool -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>【体験】パーソナライズ学習ロードマップ診断</h4>
+                    <p>あなたの興味のあるビジネス領域と、次に重視したいスキルレベルを選択して「ロードマップを診断」ボタンを押してください。<br>
+                    あなた専用の「次に読むべきおすすめの書籍」や「取り組むべき次の学習ステップ」が自動的にレコメンドされます。</p>
+                    
+                    <div class="interactive-tool">
+                        <div class="tool-header">
+                            Next Step 診断ツール
+                        </div>
+                        
+                        <div class="control-panel">
+                            <div class="select-group">
+                                <label>興味のある領域は？</label>
+                                <select id="selDomain" class="select-box">
+                                    <option value="ds">データサイエンス / AI・機械学習</option>
+                                    <option value="fin">金融・ファイナンス・企業評価</option>
+                                    <option value="biz">ビジネス管理 / マーケティング / 経営戦略</option>
+                                </select>
+                            </div>
+                            <div class="select-group">
+                                <label>次の学習のアプローチは？</label>
+                                <select id="selApproach" class="select-box">
+                                    <option value="book">信頼できる良書で深く学びたい（書籍派）</option>
+                                    <option value="code">プログラミング（Python/Excel）を交えて動かしたい（実践派）</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button id="btnDiagnose" class="btn-diagnose">ロードマップを診断する</button>
+
+                        <div id="resultBox" class="result-box">
+                            <h5 style="margin-top:0; color:#27ae60; font-size:18px;">あなたにおすすめのネクストステップ</h5>
+                            <div id="resultContent"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】数学を学ぶとは「世界の解像度を上げること」</h4>
+                    <p>数学を学び直す前と今とでは、あなたの周りにある情報の見え方が変わっているはずです。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">世界の見え方が変わる知的武器</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            ニュースで見るグラフの「Y軸の罠」に気づけること、ビジネス計画書で「複利の効果」を概算できること、AI技術のニュースを聞いたときに「ベクトルの内積を使っているのだな」とイメージできること。<br>
+                            これらはすべて、数学を学ぶことであなたの「世界の解像度」が上がった証拠です。
+                        </p>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            数学は、他人の意見やあいまいな直感に惑わされず、自分の頭で論理的に事実を切り拓くための最強の知的武器です。この100単元で得た知識と自信を胸に、ぜひご自身の仕事や人生で「数学」を道具として使い倒し、学び続けてください。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 4 Summary -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>まとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 15px; font-size: 14px; line-height: 1.7;">
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li><strong>100単元の修了</strong>：大人のためのやり直し数学のロードマップは完了。基本のパーツは揃いました。</li>
+                            <li><strong>次のステップ</strong>：データサイエンス、ファイナンス、ビジネス戦略など、自身のキャリア目標に沿った応用領域へ進む。</li>
+                            <li><strong>継続学習</strong>：数学は世界の解像度を上げる一生モノの知的武器であり、学び続けること自体が強力な知的生産性に繋がる。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lesson-footer-nav" style="margin-top: 40px;">
+                    <a href="99.html" class="btn-secondary">&larr; 前の単元へ</a>
+                    <a href="index.html" class="btn-secondary">目次に戻る（完走）</a>
+                    <a href="../index.html" class="btn btn-primary">ホームに戻る</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const selDomain = document.getElementById('selDomain');
+        const selApproach = document.getElementById('selApproach');
+        const btnDiagnose = document.getElementById('btnDiagnose');
+        const resultBox = document.getElementById('resultBox');
+        const resultContent = document.getElementById('resultContent');
+
+        btnDiagnose.addEventListener('click', () => {
+            let domain = selDomain.value;
+            let approach = selApproach.value;
+            
+            let recHtml = "";
+            
+            if (domain === 'ds') {
+                if (approach === 'book') {
+                    recHtml = `
+                        <p style="font-size:14px; line-height:1.6; margin:0 0 10px 0;">
+                            データサイエンスの数学を体系的に深めるためには、線形代数と多変数微積分の基礎書籍がおすすめです。
+                        </p>
+                        <div class="rec-item">
+                            <strong style="color:#27ae60;">おすすめ書籍:『プログラミングのための線形代数』</strong><br>
+                            <span style="font-size:12px; color:#666;">（平岡和幸・堀玄 著 / オーム社）</span><br>
+                            行列やベクトルの幾何学的イメージを、プログラミングやデータサイエンスの視点から非常に分かりやすく直感解説した名著です。
+                        </div>
+                    `;
+                } else {
+                    recHtml = `
+                        <p style="font-size:14px; line-height:1.6; margin:0 0 10px 0;">
+                            数式をコードで動かして検証したいあなたには、Pythonを用いた統計・機械学習ライブラリの習得が最短ルートです。
+                        </p>
+                        <div class="rec-item">
+                            <strong style="color:#27ae60;">ネクストアクション: Pythonでの統計・線形代数実装</strong><br>
+                            <span style="font-size:12px; color:#666;">（NumPy / Pandas / Scikit-learn の習得）</span><br>
+                            今回学んだ相関係数や行列計算を、Pythonを使って数万行のデータに対して実行するコーディングスキルを身につけましょう。
+                        </div>
+                    `;
+                }
+            } else if (domain === 'fin') {
+                if (approach === 'book') {
+                    recHtml = `
+                        <p style="font-size:14px; line-height:1.6; margin:0 0 10px 0;">
+                            ファイナンス数理を深めるためには、現在価値（PV）の応用から確率モデルへと進むのが王道です。
+                        </p>
+                        <div class="rec-item">
+                            <strong style="color:#27ae60;">おすすめ書籍:『金融工学入門』</strong><br>
+                            <span style="font-size:12px; color:#666;">（野口悠紀雄 著 / ダイヤモンド社）</span><br>
+                            ポートフォリオ理論やデリバティブなど、割引率や確率を現実の金融取引や資産設計にどう応用するかを体系的に学べるロングセラー本です。
+                        </div>
+                    `;
+                } else {
+                    recHtml = `
+                        <p style="font-size:14px; line-height:1.6; margin:0 0 10px 0;">
+                            実務でファイナンスを使い倒したいあなたには、表計算ソフトを使った詳細な財務シミュレーションモデル（モデリング）の構築をおすすめします。
+                        </p>
+                        <div class="rec-item">
+                            <strong style="color:#27ae60;">ネクストアクション: Excel財務モデリングの構築</strong><br>
+                            <span style="font-size:12px; color:#666;">（コーポレートファイナンス、バリュエーション実務）</span><br>
+                            割引率や将来キャッシュフローをスプレッドシート上で複雑な関数を用いて連結し、企業の買収価格算出（DCF法）や事業価値評価を再現するトレーニングが最適です。
+                        </div>
+                    `;
+                }
+            } else { // biz
+                if (approach === 'book') {
+                    recHtml = `
+                        <p style="font-size:14px; line-height:1.6; margin:0 0 10px 0;">
+                            意思決定や問題解決（ロジカルシンキング）に役立つビジネス数学を深めるには、思考法のトレーニング書籍が適しています。
+                        </p>
+                        <div class="rec-item">
+                            <strong style="color:#27ae60;">おすすめ書籍:『地頭力を鍛える』</strong><br>
+                            <span style="font-size:12px; color:#666;">（細谷功 著 / 東洋経済新報社）</span><br>
+                            フェルミ推定（概算）を通じて、限られたデータから仮説を立て、数学的な構造化を行って問題解決をする思考技術を学べるベストセラー本です。
+                        </div>
+                    `;
+                } else {
+                    recHtml = `
+                        <p style="font-size:14px; line-height:1.6; margin:0 0 10px 0;">
+                            マーケティングや経営戦略に活かしたいあなたには、Excelでのデータ可視化ダッシュボードの構築やA/Bテストの統計検証（仮説検定）が役立ちます。
+                        </p>
+                        <div class="rec-item">
+                            <strong style="color:#27ae60;">ネクストアクション: 統計的仮説検定の学習</strong><br>
+                            <span style="font-size:12px; color:#666;">（A/Bテストの検証・ビジネスでの効果測定）</span><br>
+                            施策の効果が「ただの偶然（ばらつき）」なのか「統計的に意味のある差」なのかを検証する「仮説検定」の理論を実務データに応用しましょう。
+                        </div>
+                    `;
+                }
+            }
+            
+            resultContent.innerHTML = recHtml;
+            resultBox.style.display = "block";
+        });
+        
+    </script>
+</body>
+</html>

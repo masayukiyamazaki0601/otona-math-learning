@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>累乗根と有理数の指数（分数指数） | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .interactive-board {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .board-header {
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: var(--color-ink);
+            text-align: center;
+        }
+        .controls-wrapper {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        .control-unit {
+            background: var(--color-paper);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 200px;
+        }
+        .control-unit label {
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .slider-group {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .slider-group input[type="range"] {
+            flex-grow: 1;
+            margin-right: 15px;
+            accent-color: var(--color-brass);
+        }
+        .val-display {
+            font-family: var(--font-mono);
+            font-weight: bold;
+            width: 25px;
+            text-align: right;
+            color: var(--color-brass);
+        }
+        .math-result-box {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            width: 100%;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.03);
+        }
+        .math-line {
+            font-size: 26px;
+            font-family: var(--font-mono);
+            margin: 10px 0;
+        }
+        .rule-box {
+            background-color: var(--color-paper);
+            border-left: 4px solid var(--color-brass);
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .rule-box h5 {
+            margin-top: 0;
+            color: var(--color-brass);
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第4章 高校数学への接続 &gt; 単元60
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 04 / Unit 60</span>
+                <h2 class="lesson-title">累乗根と有理数の指数（分数指数）</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>ルート（根号）と指数の不思議な関係</h4>
+                    <p>中学校で学んだ「平方根（ルート：$\sqrt{\quad}$）」。例えば $\sqrt{9} = 3$ というように、「2乗するとその数になる元の数」を表す記号でした。<br>
+                    実は、高校数学において、このルートは独立した記号ではなく<strong>「指数の仲間（分数指数）」</strong>として完全に統合されます。</p>
+                    <p>指数の肩に「分数」が乗るという、一見すると奇妙な概念ですが、前回の「指数法則」を使うことで、驚くほど美しくルートの性質と一致することが証明できます。</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>なぜ $\frac{1}{2}$ 乗が「ルート」になるのか？</h4>
+                    <p>もし $9^{\frac{1}{2}}$ という数が存在するとしたら、それはどんな数でしょうか？<br>
+                    前回学んだ【累乗の法則】（ $(a^m)^n = a^{m \times n}$ ）を使って、この数を2乗してみましょう。</p>
+                    
+                    <div class="rule-box">
+                        <h5>分数指数と指数法則の融合</h5>
+                        <div style="font-family: var(--font-mono); font-size: 16px; line-height: 2;">
+                            $(9^{\frac{1}{2}})^2 = 9^{\frac{1}{2} \times 2} = 9^1 = 9$<br>
+                        </div>
+                        <p style="margin-top: 10px; font-size: 14px;">
+                            「2乗すると $9$ になる数」ということは、つまり<strong> $\sqrt{9}$ と全く同じ意味</strong>であることがわかります。
+                        </p>
+                    </div>
+                    
+                    <p>したがって、<strong>$a^{\frac{1}{2}} = \sqrt{a}$</strong> と定義することができます。同様に、「3乗すると元に戻る数（立方根）」は $a^{\frac{1}{3}} = \sqrt[3]{a}$ と定義されます。</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>分数指数の一般ルール</h4>
+                    <p>この考え方をさらに拡張すると、分母が「ルート（根号）」、分子が「累乗（何乗するか）」を表すという強力なルールが完成します。</p>
+                    
+                    <div class="rule-box">
+                        <div style="font-family: var(--font-mono); font-size: 20px; text-align: center; margin: 15px 0;">
+                            $a^{\frac{m}{n}} = \sqrt[n]{a^m}$
+                        </div>
+                        <p style="text-align: center; font-size: 14px; margin-bottom: 0;">
+                            （分母 $n$ は「$n$ 乗根」を表し、分子 $m$ は「$a$ の $m$ 乗」を表す）
+                        </p>
+                    </div>
+                    <p>このルールによって、面倒なルートの掛け算や割り算も、すべて「分数の足し算・引き算」へと変換して計算できるようになります。</p>
+                </div>
+
+                <!-- Step 4 Interactive Tool -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>【体験】分数指数と累乗根の変換シミュレーター</h4>
+                    <p>底を $64$ としたとき、分数指数 $\frac{m}{n}$ がルート（累乗根）としてどのように表現され、最終的にどんな値になるかを確認してみましょう。<br>
+                    分母（ルート）と分子（乗数）をスライダーで動かしてみてください。</p>
+                    
+                    <div class="interactive-board">
+                        <div class="board-header">
+                            計算式： $64^{\frac{m}{n}}$
+                        </div>
+                        
+                        <div class="controls-wrapper">
+                            <div class="control-unit">
+                                <label>分子 $m$（〜乗）</label>
+                                <div class="slider-group">
+                                    <input type="range" id="slM" min="1" max="5" step="1" value="1">
+                                    <div class="val-display" id="valM">1</div>
+                                </div>
+                            </div>
+                            <div class="control-unit">
+                                <label>分母 $n$（〜乗根）</label>
+                                <div class="slider-group">
+                                    <input type="range" id="slN" min="1" max="6" step="1" value="2">
+                                    <div class="val-display" id="valN">2</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="math-result-box">
+                            <div class="math-line" id="mathFraction"></div>
+                            <div class="math-line" id="mathRoot" style="color: #666; font-size: 22px;"></div>
+                            <div class="math-line" id="mathFinal" style="color: var(--color-brass); font-weight: bold; font-size: 32px;"></div>
+                        </div>
+                        <p style="font-size: 14px; color: var(--color-ink-light); margin-top: 15px;">※ $64 = 2^6$ であるため、計算結果が整数にならない場合（無理数）は小数で近似値を示します。</p>
+                    </div>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】データ分析の現場で活躍する「分数指数（べき乗変換）」</h4>
+                    <p>分数指数は、データサイエンスの世界において非常に実用的な道具として活用されています。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">偏ったデータを「扱いやすい形」に整える</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            ビジネスの現場で集めたデータ（例：年収分布、ウェブサイトの滞在時間など）は、一部の極端な値（超富裕層や長時間滞在者）に引っ張られ、グラフが右側に長く裾を引く「歪んだ分布」になることが多々あります。<br>
+                            このままでは統計分析やAIの機械学習がうまく機能しません。
+                        </p>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            そこで、すべてのデータに対して「分数指数」を掛けます（例：データを $\frac{1}{2}$ 乗する＝ルートをとる、あるいは $\frac{1}{3}$ 乗するなど）。
+                        </p>
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 14px; text-align: left; margin-bottom: 12px; font-family: var(--font-mono);">
+                            ・ $10,000$ の $\frac{1}{2}$ 乗 $\rightarrow 100$<br>
+                            ・ $1,000,000$ の $\frac{1}{2}$ 乗 $\rightarrow 1,000$
+                        </div>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            極端に大きい数字ほど強く圧縮されるため、いびつだったデータ分布が、分析しやすい綺麗な「正規分布（左右対称の釣り鐘型）」に近づきます。<br>
+                            これを統計学では「べき乗変換（Box-Cox変換など）」と呼びます。分数指数は、AIがデータを正しく解釈するための「フィルター」として活躍しているのです。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 5 Summary -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>まとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 15px; font-size: 14px; line-height: 1.7;">
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li>分数指数は「ルート（根号）」を表す数学の表現である。</li>
+                            <li><strong>$a^{\frac{1}{n}} = \sqrt[n]{a}$</strong> （分母 $n$ が「〜乗根」を表す）。</li>
+                            <li><strong>$a^{\frac{m}{n}} = \sqrt[n]{a^m}$</strong> （分子 $m$ が「〜乗」を表す）。</li>
+                            <li>分数指数を導入することで、ルートの計算もすべて「指数の足し引き」として統一的に処理できる。</li>
+                            <li>データサイエンスでは、データの偏りを補正するための変換技術（べき乗変換）として応用されている。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lesson-footer-nav" style="margin-top: 40px;">
+                    <a href="59.html" class="btn-secondary">&larr; 前の単元へ</a>
+                    <a href="index.html" class="btn-secondary">目次に戻る</a>
+                    <a href="61.html" class="btn btn-primary">次の単元へ &rarr;</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const slM = document.getElementById('slM');
+        const slN = document.getElementById('slN');
+        const valM = document.getElementById('valM');
+        const valN = document.getElementById('valN');
+        
+        const mathFraction = document.getElementById('mathFraction');
+        const mathRoot = document.getElementById('mathRoot');
+        const mathFinal = document.getElementById('mathFinal');
+
+        function gcd(a, b) {
+            return b === 0 ? a : gcd(b, a % b);
+        }
+
+        function updateBoard() {
+            let m = parseInt(slM.value);
+            let n = parseInt(slN.value);
+            
+            valM.textContent = m;
+            valN.textContent = n;
+
+            // Fraction simplification
+            let d = gcd(m, n);
+            let sm = m / d;
+            let sn = n / d;
+
+            let fractionStr = `$= 64^{\\frac{${m}}{${n}}}$`;
+            if (d !== 1 && sn !== 1) {
+                fractionStr += ` = 64^{\\frac{${sm}}{${sn}}}$`;
+            } else if (sn === 1) {
+                fractionStr += ` = 64^{${sm}}`;
+            }
+
+            // Root String
+            let rootStr = "";
+            if (sn === 1) {
+                rootStr = `$= 64^{${sm}}$`;
+            } else {
+                let nStr = sn === 2 ? "" : `[${sn}]`; // omit 2 for square root
+                let mStr = sm === 1 ? "64" : `64^{${sm}}`;
+                rootStr = `$= \\sqrt${nStr}{${mStr}}$`;
+            }
+
+            // Actual Value calculation
+            // 64 = 2^6
+            let exp = 6 * m / n;
+            let resultVal = Math.pow(2, exp);
+            
+            let finalStr = "";
+            if (Number.isInteger(resultVal)) {
+                finalStr = `$= ${resultVal}$`;
+            } else {
+                finalStr = `$\\approx ${resultVal.toFixed(3)}$`;
+            }
+
+            mathFraction.innerHTML = fractionStr;
+            mathRoot.innerHTML = rootStr;
+            mathFinal.innerHTML = finalStr;
+
+            if(window.renderMathInElement) {
+                renderMathInElement(mathFraction, {delimiters: [{left: '$', right: '$', display: false}]});
+                renderMathInElement(mathRoot, {delimiters: [{left: '$', right: '$', display: false}]});
+                renderMathInElement(mathFinal, {delimiters: [{left: '$', right: '$', display: false}]});
+            }
+        }
+
+        slM.addEventListener('input', updateBoard);
+        slN.addEventListener('input', updateBoard);
+        
+        updateBoard();
+    </script>
+
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>

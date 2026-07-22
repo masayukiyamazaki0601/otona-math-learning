@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>データの種類（尺度）：名義・順序・間隔・比率 | Otona Math & Stats</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .concept-box {
+            background-color: var(--color-paper);
+            border: 2px solid var(--color-brass);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .scale-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        .scale-table th, .scale-table td {
+            border: 1px solid var(--color-paper-line);
+            padding: 12px;
+            text-align: left;
+        }
+        .scale-table th {
+            background-color: var(--color-surface);
+            font-weight: bold;
+        }
+        .interactive-tool {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        .tool-header {
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: var(--color-ink);
+            text-align: center;
+        }
+        .selector-panel {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn-select {
+            background-color: var(--color-paper);
+            border: 1px solid var(--color-brass);
+            color: var(--color-ink);
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-select.active {
+            background-color: var(--color-brass);
+            color: #fff;
+        }
+        .sim-board {
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 600px;
+            padding: 30px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            gap: 20px;
+        }
+        .checker-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .checker-label {
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .checker-status {
+            font-family: var(--font-mono);
+            font-weight: bold;
+            font-size: 13px;
+            padding: 4px 10px;
+            border-radius: 4px;
+        }
+        .status-ok {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status-ng {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .explanation-box {
+            font-size: 13px;
+            line-height: 1.6;
+            color: #555;
+            background: #fcfcfc;
+            border: 1px dashed #ccc;
+            padding: 15px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math & Stats</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="../curriculum/index.html">数学カリキュラム</a></li>
+                    <li><a href="index.html">統計学カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">統計学カリキュラム</a> &gt; 第1章 記述統計学の基礎 &gt; 単元02
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 01 / Unit 02</span>
+                <h2 class="lesson-title">データの種類（尺度）：名義・順序・間隔・比率</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>すべての数字を同じように計算してはいけない</h4>
+                    <p>統計分析を始める前に、扱うデータが**「どのような性質の数字なのか」**を理解する必要があります。</p>
+                    <p>例えば、売上の平均値を計算することには意味がありますが、顧客の血液型（A型=1, B型=2...）の平均値を計算して「平均は1.7型」などと主張することは数学的にナンセンスです。データにはそれぞれ許された数学的操作の限界があります。これを分類したものが<strong>「データの4尺度（しゃくど）」</strong>です。</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>データの4つの尺度と分類</h4>
+                    <p>統計学者スティーヴンズは、データをその性質に応じて以下の4つの階層に分類しました。下のものほど、高度な計算（足し算や掛け算）が可能になります。</p>
+                    
+                    <table class="scale-table">
+                        <thead>
+                            <tr>
+                                <th>尺度名</th>
+                                <th>定義</th>
+                                <th>実例</th>
+                                <th>可能な演算</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>名義尺度</strong> (Nominal)</td>
+                                <td>単なる分類のためのラベル。順序や数値的な意味はない。</td>
+                                <td>血液型、性別、都道府県、社員番号</td>
+                                <td>イコール判定（分類・カウント）</td>
+                            </tr>
+                            <tr>
+                                <td><strong>順序尺度</strong> (Ordinal)</td>
+                                <td>順序や大小関係に意味はあるが、その間隔は等しくない。</td>
+                                <td>5段階の満足度、顧客ランク、順位</td>
+                                <td>大小比較（順序づけ）</td>
+                            </tr>
+                            <tr>
+                                <td><strong>間隔尺度</strong> (Interval)</td>
+                                <td>数値の間隔に意味があるが、絶対的なゼロ（原点）がない。</td>
+                                <td>摂氏温度、西暦、IQ（知能指数）</td>
+                                <td>足し算・引き算</td>
+                            </tr>
+                            <tr>
+                                <td><strong>比率尺度</strong> (Ratio)</td>
+                                <td>絶対的なゼロがあり、「2倍」などの比率に意味がある。</td>
+                                <td>売上高、身長、広告費、来店数</td>
+                                <td>すべての四則演算（掛け算・割り算）</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>なぜ絶対的なゼロ（原点）が重要か？</h4>
+                    <p>「間隔尺度」と「比率尺度」の最大の違いは、数値が「0」のときの意味です。</p>
+                    <ul style="line-height:1.8;">
+                        <li><strong>間隔尺度（例：摂氏温度）</strong>：気温 $0^\circ\text{C}$ は「熱（分子運動）がゼロ」という意味ではありません。単に水が凍る基準点をゼロと決めただけです。そのため、「$10^\circ\text{C}$ から $20^\circ\text{C}$ へ上がると2倍暑い」という掛け算の主張はできません（※華氏や絶対温度で計算すると比率が変わるため）。</li>
+                        <li><strong>比率尺度（例：売上）</strong>：売上「0円」は文字通り売上が存在しない（絶対的な無）を意味します。そのため、「売上が10万円から20万円に増えたら2倍になった」と正しく掛け算で表現できます。</li>
+                    </ul>
+                </div>
+
+                <!-- Step 4 Interactive Tool -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>【体験】尺度判定＆演算チェッカー</h4>
+                    <p>ボタンをクリックして、異なる実例データを選択してください。<br>
+                    それぞれのデータに対して、どのような統計量（集計、大小比較、平均、比率）を計算しても数学的に破綻しないかをチェッカーが自動判定し、理由を解説します。</p>
+                    
+                    <div class="interactive-tool">
+                        <div class="tool-header">
+                            データの種類に応じた演算判定
+                        </div>
+                        
+                        <div class="selector-panel">
+                            <button class="btn-select active" data-scale="nominal">都道府県 (名義)</button>
+                            <button class="btn-select" data-scale="ordinal">満足度5段階 (順序)</button>
+                            <button class="btn-select" data-scale="interval">摂氏温度 (間隔)</button>
+                            <button class="btn-select" data-scale="ratio">売上高 (比率)</button>
+                        </div>
+
+                        <div class="sim-board">
+                            <div class="checker-row">
+                                <span class="checker-label">① グループ分類・カウント（最頻値の算出）</span>
+                                <span class="checker-status status-ok" id="chkCount">可能</span>
+                            </div>
+                            <div class="checker-row">
+                                <span class="checker-label">② 大小比較・並び替え（中央値の算出）</span>
+                                <span class="checker-status" id="chkCompare">可能</span>
+                            </div>
+                            <div class="checker-row">
+                                <span class="checker-label">③ 足し算・引き算（平均値・標準偏差の算出）</span>
+                                <span class="checker-status" id="chkMean">可能</span>
+                            </div>
+                            <div class="checker-row">
+                                <span class="checker-label">④ 掛け算・割り算（「2倍」などの比率の表現）</span>
+                                <span class="checker-status" id="chkRatio">可能</span>
+                            </div>
+                            
+                            <div class="explanation-box" id="scaleExpl">
+                                都道府県コード（東京=13, 大阪=27等）は単なるラベルです。「東京＋大阪」のような足し算や、平均値を求める計算には全く意味がありません。可能なのは「どの都道府県の人が最も多いか」といった最頻値（カウント）のみです。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】アンケートの「5段階評価」の平均値は計算していいのか？</h4>
+                    <p>実務のアンケート調査で最もよく見かける「大変満足(5)〜大変不満(1)」の5段階評価データ。実務ではよく「今回の満足度の平均は3.8点」のように平均値を計算していますが、これは数理統計学的に正しいのでしょうか？</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">「順序尺度」を「間隔尺度」と見なす実務の妥協</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            厳密に言えば、満足度などの意識評価は「順序尺度」です。「満足(4)」と「普通(3)」の間の『心の距離』と、「普通(3)」と「不満(2)」の間の『心の距離』が完全に同じ幅である保証はありません。<br>
+                            したがって、これを足し算して平均値を求めることは、数学的には厳密には誤りです。
+                        </p>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            しかしビジネス実務においては、この心の距離がほぼ等しい（間隔尺度である）と仮定（妥協）して、全体の傾向をすばやく把握するために平均値を算出することが広く許容されています。ただし、厳密な分析や学術研究では、平均値ではなく「中央値」を用いたり、順序に依存しない「ノンパラメトリック検定」という統計手法を用いて、データの階層性を正しく扱うことが求められます。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 5 Summary -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>まとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 15px; font-size: 14px; line-height: 1.7;">
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li><strong>データの4尺度</strong>：名義・順序・間隔・比率の順で、数値が持つ情報量が多くなり、許される数学的演算が増える。</li>
+                            <li><strong>名義・順序（質的データ）</strong>：平均値の算出には適さず、主に最頻値や中央値で代表させるべきデータ。</li>
+                            <li><strong>間隔・比率（量的データ）</strong>：平均や標準偏差の算出が可能。比率尺度のみが「2倍」といった掛け算・割り算を適用できる。</li>
+                            <li><strong>実務上の割り切り</strong>：アンケートの5段階評価（順序尺度）は、実務上は「間隔尺度」と見なして平均値を出すことが多いが、性質を理解して解釈する必要がある。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lesson-footer-nav" style="margin-top: 40px;">
+                    <a href="01.html" class="btn-secondary">&larr; 前の単元へ</a>
+                    <a href="index.html" class="btn-secondary">統計学目次に戻る</a>
+                    <a href="03.html" class="btn btn-primary">次の単元へ &rarr;</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math & Stats</div>
+                <p>大人のためのやり直し数理プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math & Stats.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const btnSelects = document.querySelectorAll('.btn-select');
+        
+        const chkCount = document.getElementById('chkCount');
+        const chkCompare = document.getElementById('chkCompare');
+        const chkMean = document.getElementById('chkMean');
+        const chkRatio = document.getElementById('chkRatio');
+        const scaleExpl = document.getElementById('scaleExpl');
+
+        const scaleData = {
+            nominal: {
+                count: { ok: true, text: "可能" },
+                compare: { ok: false, text: "不可" },
+                mean: { ok: false, text: "不可" },
+                ratio: { ok: false, text: "不可" },
+                expl: "都道府県（名義尺度）は単なるラベルやカテゴリです。データのイコール判定（分類・カウント）のみが可能です。「東京＋大阪」のような足し算や、平均値を求める計算には全く意味がありません。統計量としては『最も人数が多い都道府県』を表す最頻値のみが計算できます。"
+            },
+            ordinal: {
+                count: { ok: true, text: "可能" },
+                compare: { ok: true, text: "可能" },
+                mean: { ok: false, text: "不可（実務上妥協する場合を除く）" },
+                ratio: { ok: false, text: "不可" },
+                expl: "満足度5段階評価（順序尺度）は、順序関係（大変満足 ＞ 満足）には意味がありますが、その間隔（大変満足と満足の心の距離と、普通と不満の心の距離）が等しいとは限りません。そのため、大小比較や中央値（真ん中の順位の値）の算出はできますが、厳密な足し算や平均値の計算は数理統計学的には不可とされます。"
+            },
+            interval: {
+                count: { ok: true, text: "可能" },
+                compare: { ok: true, text: "可能" },
+                mean: { ok: true, text: "可能" },
+                ratio: { ok: false, text: "不可" },
+                expl: "摂氏温度（間隔尺度）は、目盛りの間隔が等しいため、足し算や引き算、および平均値・標準偏差の算出が可能です（10℃と20℃の差は、20℃と30℃の差と同一の熱エネルギー差）。しかし、「0℃」は絶対的な原点（熱が存在しない点）ではないため、「20℃は10℃の2倍暑い」という比率の計算はできません。"
+            },
+            ratio: {
+                count: { ok: true, text: "可能" },
+                compare: { ok: true, text: "可能" },
+                mean: { ok: true, text: "可能" },
+                ratio: { ok: true, text: "可能" },
+                expl: "売上高（比率尺度）は、絶対的な原点「0円（無）」が存在し、間隔も等しいため、すべての四則演算が可能です。「売上平均値」の計算はもちろん、「売上が先月の2倍になった（割り算）」という比率の表現も数学的に完全に正しく定義できます。"
+            }
+        };
+
+        function updateChecker(scaleKey) {
+            const data = scaleData[scaleKey];
+            
+            // Update UI status
+            autoSetStatus(chkCount, data.count);
+            autoSetStatus(chkCompare, data.compare);
+            autoSetStatus(chkMean, data.mean);
+            autoSetStatus(chkRatio, data.ratio);
+            
+            // Update explanation text
+            scaleExpl.textContent = data.expl;
+        }
+
+        function autoSetStatus(element, statusObj) {
+            element.textContent = statusObj.text;
+            if (statusObj.ok) {
+                element.className = "checker-status status-ok";
+            } else {
+                element.className = "checker-status status-ng";
+            }
+        }
+
+        btnSelects.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                btnSelects.forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                
+                const scaleKey = e.target.getAttribute('data-scale');
+                updateChecker(scaleKey);
+            });
+        });
+
+        // Initialize with nominal
+        updateChecker('nominal');
+        
+    </script>
+</body>
+</html>

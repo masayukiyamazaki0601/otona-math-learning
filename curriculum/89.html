@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>導関数の計算と関数の増減判定 | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .concept-box {
+            background-color: var(--color-paper);
+            border: 2px solid var(--color-brass);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .math-display {
+            font-size: 20px;
+            font-family: var(--font-mono);
+            color: var(--color-ink);
+            margin: 15px 0;
+            overflow-x: auto;
+            text-align: center;
+        }
+        .interactive-tool {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .tool-header {
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: var(--color-ink);
+            text-align: center;
+        }
+        .control-panel {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .control-group {
+            background: var(--color-paper);
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 250px;
+        }
+        .slider {
+            width: 100%;
+            accent-color: var(--color-brass);
+            margin-top: 10px;
+        }
+        .sim-board {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            width: 100%;
+            padding: 30px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            gap: 20px;
+        }
+        .chart-container {
+            width: 100%;
+            max-width: 500px;
+            aspect-ratio: 4 / 3;
+            background: #fafafa;
+            border-left: 2px solid #333;
+            border-bottom: 2px solid #333;
+            position: relative;
+            overflow: hidden;
+        }
+        .axis-label-x {
+            position: absolute;
+            bottom: 5px;
+            right: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #666;
+            font-family: var(--font-mono);
+        }
+        .axis-label-y {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #666;
+            font-family: var(--font-mono);
+        }
+        .stat-results {
+            background: #fdf2f0;
+            border: 2px solid #e74c3c;
+            border-radius: 6px;
+            padding: 20px;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+        .trend-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+            font-size: 18px;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+        .trend-up { background-color: #e74c3c; }   /* Plus / Increase */
+        .trend-down { background-color: #3498db; } /* Minus / Decrease */
+        .trend-zero { background-color: #2ecc71; } /* Zero / Peak */
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第6章 発展・高度な教養 &gt; 単元89
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 06 / Unit 89</span>
+                <h2 class="lesson-title">導関数の計算と関数の増減判定</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>魔法の式「導関数（$f'(x)$）」</h4>
+                    <p>前単元では極限（$\lim$）を使ってある特定の点の「瞬間変化率（傾き）」を求めました。しかし、毎回極限の計算をするのは非常に面倒です。<br>
+                    そこで、<strong>「$x$ に好きな数字を入れるだけで、その場所の傾きを一発で教えてくれる魔法の計算式」</strong>を作ります。これを<strong>「導関数（どうかんすう）」</strong>と呼び、元の関数 $f(x)$ にダッシュをつけて <strong>$f'(x)$</strong> と表します。</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>極限計算をスキップする「微分の公式」</h4>
+                    <p>先人たちの努力により、面倒な極限計算をスキップできるシンプルな公式が発見されています。高校数学において、関数を微分して導関数を作るルールはこれだけ覚えれば十分です。</p>
+                    
+                    <div class="concept-box">
+                        <div class="math-display">
+                            $f(x) = x^n \implies f'(x) = n \cdot x^{n-1}$
+                        </div>
+                        <p style="margin-top:15px; font-size:14px; text-align:center;">
+                            （ルール：「右上の小さな数字（指数）」を前に下ろして掛け算し、右上の数字は1つ減らす）
+                        </p>
+                    </div>
+                    <p>例：$f(x) = x^3$ ならば、$f'(x) = 3x^2$ となります。<br>
+                    この $3x^2$ という式に、$x=2$ を代入すれば、グラフの $x=2$ の地点での「傾き（変化の勢い）」が $12$ であることが一瞬でわかります。</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>導関数の「符号」で未来のトレンドを判定する</h4>
+                    <p>導関数 $f'(x)$ は、単なる数字遊びではありません。関数の<strong>「増減（トレンド）」</strong>を判定するための強力なレーダーになります。</p>
+                    <ul style="line-height:1.8;">
+                        <li><strong>$f'(x) > 0$（プラス）</strong>：元のグラフは「増加（右肩上がり）」している。</li>
+                        <li><strong>$f'(x) < 0$（マイナス）</strong>：元のグラフは「減少（右肩下がり）」している。</li>
+                        <li><strong>$f'(x) = 0$（ゼロ）</strong>：傾きが平らになる瞬間。ここがグラフの<strong>頂上（極大）</strong>または<strong>谷底（極小）</strong>になる。</li>
+                    </ul>
+                </div>
+
+                <!-- Step 4 Interactive Tool -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>【体験】導関数と増減判定シミュレーター</h4>
+                    <p>三次関数 $f(x) = x^3 - 3x$ のグラフ上を、スライダーを使って移動してみましょう。<br>
+                    現在の位置での「接線」が引かれ、その傾き（導関数 $f'(x) = 3x^2 - 3$ の値）が計算されます。傾きの「符号（プラス・マイナス・ゼロ）」によって、現在のビジネス（グラフ）が成長中なのか、衰退中なのか、それともピーク（頂点）に達したのかが判定されます。</p>
+                    
+                    <div class="interactive-tool">
+                        <div class="tool-header">
+                            $y = x^3 - 3x$ の接線とトレンド判定
+                        </div>
+                        
+                        <div class="control-panel">
+                            <div class="control-group">
+                                <label style="font-weight:bold;">現在地（$x$ 座標）: <span id="lblX" style="color:var(--color-brass); font-family:var(--font-mono); font-size:18px;">-2.0</span></label>
+                                <input type="range" id="slX" class="slider" min="-2.5" max="2.5" step="0.1" value="-2.0">
+                            </div>
+                        </div>
+
+                        <div class="sim-board">
+                            <div class="chart-container">
+                                <div class="axis-label-x">$x$</div>
+                                <div class="axis-label-y">$y$</div>
+                                
+                                <svg id="curveSvg" width="100%" height="100%" viewBox="0 0 500 375" preserveAspectRatio="none">
+                                    <!-- Axes -->
+                                    <line x1="0" y1="187.5" x2="500" y2="187.5" stroke="#ccc" stroke-width="2" /> <!-- x axis -->
+                                    <line x1="250" y1="0" x2="250" y2="375" stroke="#ccc" stroke-width="2" /> <!-- y axis -->
+                                    
+                                    <!-- Function graph generated by JS -->
+                                    <path id="pathGraph" fill="none" stroke="#666" stroke-width="3" />
+                                    
+                                    <!-- Tangent Line -->
+                                    <line id="lineTangent" x1="0" y1="0" x2="500" y2="0" stroke="#f1c40f" stroke-width="3" stroke-dasharray="6,4" />
+                                    
+                                    <!-- Current Point -->
+                                    <circle id="ptCurrent" cx="0" cy="0" r="8" fill="#e74c3c" />
+                                </svg>
+                            </div>
+                            
+                            <div class="stat-results">
+                                <div style="font-size:14px; font-weight:bold; color:#333; margin-bottom:5px;">導関数の値（傾き） $f'(x)$</div>
+                                <div id="valSlope" style="font-size:28px; font-weight:bold; font-family:var(--font-mono); color:#333;">0.00</div>
+                                <div class="trend-badge" id="badgeTrend">増加トレンド (上昇中)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】限界利益（Marginal Profit）と微分の関係</h4>
+                    <p>経済学や経営学の本を読むと、「限界（Marginal）」という言葉が頻出します。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">経済学の「限界」＝ 数学の「微分」</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            限界利益（Marginal Profit）とは、「生産量をあと1単位だけ増やしたとき、利益はどれだけ増えるか」を表す指標です。これは数学における<strong>「微分の傾き」と全く同じ概念</strong>です。
+                        </p>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            製品を作れば作るほど売上は上がりますが、残業代や物流費などのコストも上昇し、ある地点から利益の伸び（傾き）は鈍化します。そして<strong>「傾きがゼロ（$f'(x) = 0$）」になった瞬間が、利益の最大化ポイント（極大値）</strong>です。これ以上生産を増やすと傾きがマイナスになり、作れば作るほど赤字になります。経済学における利益最大化の理論は、すべてこの微分の計算の上に成り立っています。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 5 Summary -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>まとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 15px; font-size: 14px; line-height: 1.7;">
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li><strong>導関数 $f'(x)$</strong>：好きな $x$ を代入するだけで、その瞬間の「傾き」を出してくれる関数。</li>
+                            <li><strong>微分の公式</strong>：$x^n$ を微分すると $n \cdot x^{n-1}$ になる。</li>
+                            <li>導関数がプラスなら「増加」、マイナスなら「減少」。</li>
+                            <li><strong>$f'(x) = 0$</strong> となる瞬間が、グラフの頂上（極大値）または谷底（極小値）であり、ビジネスの利益最大化ポイントなどを探る際に利用される。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lesson-footer-nav" style="margin-top: 40px;">
+                    <a href="88.html" class="btn-secondary">&larr; 前の単元へ</a>
+                    <a href="index.html" class="btn-secondary">目次に戻る</a>
+                    <a href="90.html" class="btn btn-primary">次の単元へ &rarr;</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const slX = document.getElementById('slX');
+        const lblX = document.getElementById('lblX');
+        
+        const pathGraph = document.getElementById('pathGraph');
+        const lineTangent = document.getElementById('lineTangent');
+        const ptCurrent = document.getElementById('ptCurrent');
+        
+        const valSlope = document.getElementById('valSlope');
+        const badgeTrend = document.getElementById('badgeTrend');
+
+        // Function y = x^3 - 3x
+        // X domain: -3 to 3
+        // Y range: -10 to 10
+        
+        const SVG_W = 500;
+        const SVG_H = 375;
+        
+        function mapX(xVal) {
+            // -3 -> 0, 3 -> 500
+            return ((xVal + 3) / 6.0) * SVG_W;
+        }
+        function mapY(yVal) {
+            // -10 -> 375, 10 -> 0
+            return SVG_H - ((yVal + 10) / 20.0) * SVG_H;
+        }
+
+        // Draw Graph
+        let pts = "";
+        for(let x=-3; x<=3; x+=0.1) {
+            let y = Math.pow(x, 3) - 3 * x;
+            pts += `${mapX(x)},${mapY(y)} `;
+        }
+        pathGraph.setAttribute("d", "M " + pts.replace(/,/g, ' ').split(' ').reduce((acc, v, i) => {
+            if(i%2===0) acc += (i>0?" L ":"") + v;
+            else acc += "," + v;
+            return acc;
+        }, ""));
+
+        function updateSim() {
+            let x = parseFloat(slX.value);
+            lblX.textContent = x.toFixed(1);
+            
+            // Current point
+            let y = Math.pow(x, 3) - 3 * x;
+            ptCurrent.setAttribute("cx", mapX(x));
+            ptCurrent.setAttribute("cy", mapY(y));
+            
+            // Derivative (Slope): y' = 3x^2 - 3
+            let slope = 3 * Math.pow(x, 2) - 3;
+            
+            valSlope.textContent = (slope > 0 ? "+" : "") + slope.toFixed(2);
+            
+            // Trend badge
+            if(Math.abs(slope) < 0.1) {
+                // Nearly zero
+                badgeTrend.textContent = "転換点（傾きゼロ）";
+                badgeTrend.className = "trend-badge trend-zero";
+            } else if (slope > 0) {
+                badgeTrend.textContent = "増加トレンド（右肩上がり）";
+                badgeTrend.className = "trend-badge trend-up";
+            } else {
+                badgeTrend.textContent = "減少トレンド（右肩下がり）";
+                badgeTrend.className = "trend-badge trend-down";
+            }
+            
+            // Tangent line equation: Y - y = slope * (X - x)
+            // Let's draw it from X = x-2 to X = x+2
+            let x1 = x - 2;
+            let y1 = slope * (x1 - x) + y;
+            let x2 = x + 2;
+            let y2 = slope * (x2 - x) + y;
+            
+            lineTangent.setAttribute("x1", mapX(x1));
+            lineTangent.setAttribute("y1", mapY(y1));
+            lineTangent.setAttribute("x2", mapX(x2));
+            lineTangent.setAttribute("y2", mapY(y2));
+        }
+
+        slX.addEventListener('input', updateSim);
+        updateSim();
+        
+    </script>
+
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>

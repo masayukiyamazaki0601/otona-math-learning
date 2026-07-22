@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>順列（P）と組合せ（C）の概念と計算 | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .concept-box {
+            background-color: var(--color-paper);
+            border: 2px solid var(--color-brass);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .vs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .vs-item {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+        .math-display {
+            font-size: 20px;
+            font-family: var(--font-mono);
+            color: var(--color-ink);
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+        .interactive-tool {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .tool-header {
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: var(--color-ink);
+            text-align: center;
+        }
+        .control-panel {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .control-group {
+            background: var(--color-paper);
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 200px;
+        }
+        .slider {
+            width: 100%;
+            accent-color: var(--color-brass);
+            margin-top: 10px;
+        }
+        .sim-board {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            width: 100%;
+            padding: 30px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .result-container {
+            display: flex;
+            gap: 30px;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .res-box {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 20px;
+            text-align: center;
+            min-width: 220px;
+            flex: 1;
+        }
+        .res-title {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: var(--color-ink);
+        }
+        .res-math {
+            font-size: 16px;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        .res-val {
+            font-size: 24px;
+            font-family: var(--font-mono);
+            font-weight: bold;
+        }
+        .color-p { color: #e74c3c; }
+        .color-c { color: #3498db; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第4章 高校数学への接続 &gt; 単元70
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 04 / Unit 70</span>
+                <h2 class="lesson-title">順列（P）と組合せ（C）の概念と計算</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>「順番に意味があるか、ないか」の決定的な違い</h4>
+                    <p>確率を計算する上で、最も多くの人が混乱するのが<strong>「順列（P）」</strong>と<strong>「組合せ（C）」</strong>の違いです。<br>
+                    この2つは「全体の中からいくつかを選ぶ」という点では同じですが、<strong>「選んだあとの並べ方（順番）に意味があるかどうか」</strong>で明確に区別されます。</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>PとCの具体的な違いと計算式</h4>
+                    
+                    <div class="concept-box vs-grid">
+                        <div class="vs-item">
+                            <h5 style="margin-top:0; color:#e74c3c;">順列（Permutation / P）</h5>
+                            <p style="font-weight:bold; font-size:16px;">「選んで、並べる」</p>
+                            <p style="font-size:13px; text-align:left; line-height:1.6;">
+                                <strong>順番に意味がある</strong>状態です。<br>
+                                例：「5人からリレーの第1走者、第2走者、第3走者を選ぶ」<br>
+                                （A君が1走になるのと3走になるのは全く別の出来事としてカウントする）
+                            </p>
+                            <div class="math-display">
+                                ${}_5 \mathrm{P} _3 = 5 \times 4 \times 3$
+                            </div>
+                            <p style="font-size:12px; color:#666;">（最初の選択肢が5、次が4、次が3と掛け算するだけ）</p>
+                        </div>
+                        
+                        <div class="vs-item">
+                            <h5 style="margin-top:0; color:#3498db;">組合せ（Combination / C）</h5>
+                            <p style="font-weight:bold; font-size:16px;">「ただ選ぶだけ」</p>
+                            <p style="font-size:13px; text-align:left; line-height:1.6;">
+                                <strong>順番に意味がない</strong>状態です。<br>
+                                例：「5人から掃除当番を3人選ぶ」<br>
+                                （A君・B君・C君が選ばれれば、誰が最初に呼ばれても結局同じチームになる）
+                            </p>
+                            <div class="math-display">
+                                ${}_5 \mathrm{C} _3 = \frac{5 \times 4 \times 3}{3 \times 2 \times 1}$
+                            </div>
+                            <p style="font-size:12px; color:#666;">（Pを計算したあと、並び順のダブり「$3!$」で割り算して消す）</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 Interactive Tool -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>【体験】順列と組合せの数シミュレーター</h4>
+                    <p>「$N$ 個の中から $R$ 個を選ぶ」とき、順番を区別する「順列（$\mathrm{P}$）」と、順番を区別しない「組合せ（$\mathrm{C}$）」で、計算結果がどれくらい違ってくるかを確認しましょう。</p>
+                    <p>組合せ（$\mathrm{C}$）は並び順のダブりを割り算で削るため、必ず順列（$\mathrm{P}$）よりも少なくなります。</p>
+                    
+                    <div class="interactive-tool">
+                        <div class="tool-header">
+                            全体 $N$ 個から $R$ 個を選ぶ場合の数
+                        </div>
+                        
+                        <div class="control-panel">
+                            <div class="control-group">
+                                <label>全体の数 ($N$): <span id="lblN" style="color:var(--color-brass); font-family:var(--font-mono); font-size:18px;">10</span></label>
+                                <input type="range" id="slN" class="slider" min="2" max="15" step="1" value="10">
+                            </div>
+                            <div class="control-group">
+                                <label>選ぶ数 ($R$): <span id="lblR" style="color:var(--color-brass); font-family:var(--font-mono); font-size:18px;">3</span></label>
+                                <input type="range" id="slR" class="slider" min="1" max="10" step="1" value="3">
+                            </div>
+                        </div>
+
+                        <div class="sim-board">
+                            <div class="result-container">
+                                <div class="res-box">
+                                    <div class="res-title color-p">順番に意味がある（順列）</div>
+                                    <div class="res-math" id="mathP"></div>
+                                    <div class="res-val color-p" id="valP"></div>
+                                </div>
+                                <div class="res-box">
+                                    <div class="res-title color-c">ただ選ぶだけ（組合せ）</div>
+                                    <div class="res-math" id="mathC"></div>
+                                    <div class="res-val color-c" id="valC"></div>
+                                </div>
+                            </div>
+                            <p id="msgError" style="color:#e74c3c; font-weight:bold; margin-top:20px; display:none;">※「選ぶ数 ($R$)」は「全体の数 ($N$)」以下にしてください。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】宝くじの確率はどう計算されているか？</h4>
+                    <p>世の中のギャンブルの確率は、ほぼすべてこの「組合せ（$\mathrm{C}$）」の計算で設定されています。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">「ロト6」の1等の当せん確率</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            ロト6は「1から43までの数字の中から、異なる6個の数字を選ぶ」という宝くじです。<br>
+                            選んだ6つの数字が、抽選された6つの数字と（順番関係なく）すべて一致すれば1等となります。
+                        </p>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            順番は関係ないので「ただ選ぶだけ」の組合せ（$\mathrm{C}$）を使います。<br>
+                            全パターンは <strong>${}_{43} \mathrm{C} _6$</strong> となります。<br>
+                            計算すると、$\frac{43 \times 42 \times 41 \times 40 \times 39 \times 38}{6 \times 5 \times 4 \times 3 \times 2 \times 1} = 6,096,454$ 通りです。
+                        </p>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            つまり、ロト6の1等が当たる確率は「約600万分の1」です。順列と組合せの計算式を知っていれば、胴元（主催者）がどのように確率をコントロールしているかが手にとるようにわかるのです。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 5 Summary -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>まとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 15px; font-size: 14px; line-height: 1.7;">
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li><strong>順列（$\mathrm{P}$）</strong>：選んで並べる。順番に意味がある場合。単純に掛け算をしていく。</li>
+                            <li><strong>組合せ（$\mathrm{C}$）</strong>：ただ選ぶだけ。順番に意味がない場合。順列を計算したあと、並び順のダブり（階乗）で割り算をする。</li>
+                            <li>この2つを見分けるだけで、日常の確率の計算や統計データの見方が劇的に変わる。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lesson-footer-nav" style="margin-top: 40px;">
+                    <a href="69.html" class="btn-secondary">&larr; 前の単元へ</a>
+                    <a href="index.html" class="btn-primary">カリキュラム目次に戻る</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const slN = document.getElementById('slN');
+        const slR = document.getElementById('slR');
+        
+        const lblN = document.getElementById('lblN');
+        const lblR = document.getElementById('lblR');
+        
+        const mathP = document.getElementById('mathP');
+        const mathC = document.getElementById('mathC');
+        const valP = document.getElementById('valP');
+        const valC = document.getElementById('valC');
+        const msgError = document.getElementById('msgError');
+
+        // Factorial helper
+        function fact(num) {
+            if (num <= 1) return 1;
+            let res = 1;
+            for(let i=2; i<=num; i++) res *= i;
+            return res;
+        }
+
+        // Permutation helper P(n, r)
+        function calcP(n, r) {
+            if (r > n || r < 0) return 0;
+            let res = 1;
+            for(let i=0; i<r; i++) {
+                res *= (n - i);
+            }
+            return res;
+        }
+
+        // Combination helper C(n, r)
+        function calcC(n, r) {
+            if (r > n || r < 0) return 0;
+            return calcP(n, r) / fact(r);
+        }
+
+        function updateSim() {
+            let n = parseInt(slN.value);
+            let r = parseInt(slR.value);
+            
+            lblN.textContent = n;
+            lblR.textContent = r;
+            
+            if (r > n) {
+                // Invalid
+                msgError.style.display = 'block';
+                mathP.innerHTML = "";
+                mathC.innerHTML = "";
+                valP.textContent = "-";
+                valC.textContent = "-";
+                return;
+            } else {
+                msgError.style.display = 'none';
+            }
+            
+            let pVal = calcP(n, r);
+            let cVal = calcC(n, r);
+            
+            // Build KaTeX formulas
+            // P string
+            let strP_num = "";
+            for(let i=0; i<r; i++) {
+                strP_num += (n - i);
+                if (i < r - 1) strP_num += " \\times ";
+            }
+            if(r === 0) strP_num = "1"; // Edge case
+            
+            // C string (denominator)
+            let strC_den = "";
+            for(let i=r; i>=1; i--) {
+                strC_den += i;
+                if (i > 1) strC_den += " \\times ";
+            }
+            if(r === 0 || r === 1) strC_den = "1";
+            
+            mathP.innerHTML = `$\\begin{aligned} {}_{${n}}\\mathrm{P}_{${r}} &= ${strP_num} \\end{aligned}$`;
+            
+            if (r === 0 || r === 1) {
+                mathC.innerHTML = `$\\begin{aligned} {}_{${n}}\\mathrm{C}_{${r}} &= ${strP_num} \\end{aligned}$`;
+            } else {
+                mathC.innerHTML = `$\\begin{aligned} {}_{${n}}\\mathrm{C}_{${r}} &= \\frac{${strP_num}}{${strC_den}} \\end{aligned}$`;
+            }
+            
+            valP.textContent = `${pVal.toLocaleString()} 通り`;
+            valC.textContent = `${cVal.toLocaleString()} 通り`;
+
+            if(window.renderMathInElement) {
+                renderMathInElement(mathP, {delimiters: [{left: '$', right: '$', display: false}]});
+                renderMathInElement(mathC, {delimiters: [{left: '$', right: '$', display: false}]});
+            }
+        }
+
+        slN.addEventListener('input', updateSim);
+        slR.addEventListener('input', updateSim);
+        
+        // Ensure max constraint dynamically
+        slN.addEventListener('change', () => {
+            if (parseInt(slR.value) > parseInt(slN.value)) {
+                slR.value = slN.value;
+            }
+            slR.max = slN.value; // optionally limit the slider
+            updateSim();
+        });
+
+        updateSim();
+        
+    </script>
+
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>

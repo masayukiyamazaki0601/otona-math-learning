@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>逆・裏・対偶の関係性 | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .concept-box {
+            background-color: var(--color-paper);
+            border: 2px solid var(--color-brass);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .math-display {
+            font-size: 20px;
+            font-family: var(--font-mono);
+            color: var(--color-ink);
+            margin: 15px 0;
+            overflow-x: auto;
+            text-align: center;
+        }
+        .interactive-tool {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .tool-header {
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: var(--color-ink);
+            text-align: center;
+        }
+        .control-panel {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn-logic {
+            background-color: #f8f9fa;
+            color: #333;
+            border: 2px solid #ccc;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+        .btn-logic:hover {
+            background-color: #eee;
+        }
+        .btn-logic.active {
+            background-color: var(--color-brass);
+            border-color: var(--color-brass);
+            color: #fff;
+        }
+        .sim-board {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            width: 100%;
+            padding: 30px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            gap: 20px;
+        }
+        .proposition-box {
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            padding: 20px;
+            background: #fdf2f0;
+            border: 2px solid #e74c3c;
+            border-radius: 8px;
+            position: relative;
+        }
+        .prop-title {
+            font-size: 14px;
+            color: #e74c3c;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .prop-text {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            line-height: 1.5;
+        }
+        .truth-badge {
+            position: absolute;
+            top: -15px;
+            right: 20px;
+            background: #2ecc71;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .truth-badge.false {
+            background: #95a5a6;
+        }
+        .explanation-text {
+            width: 100%;
+            max-width: 500px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #666;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid var(--color-brass);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第6章 論理と集合 &gt; 単元82
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 06 / Unit 82</span>
+                <h2 class="lesson-title">逆・裏・対偶の関係性</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>命題の3つの変形パターン</h4>
+                    <p>元の命題「$p$ ならば $q$」に対して、言葉の順番を入れ替えたり、否定（〜でない）をつけたりすることで、全く新しい3つの命題を作ることができます。<br>
+                    これを<strong>「逆（ぎゃく）」「裏（うら）」「対偶（たいぐう）」</strong>と呼びます。</p>
+                    
+                    <div class="concept-box">
+                        <ul style="margin: 0; padding-left: 20px; line-height:1.7;">
+                            <li><strong>元の命題</strong>：$p \implies q$（$p$ならば$q$）</li>
+                            <li><strong>逆（ぎゃく）</strong>：$q \implies p$（前後を入れ替える）</li>
+                            <li><strong>裏（うら）</strong>：$\text{not } p \implies \text{not } q$（前後の位置はそのままで、両方否定する）</li>
+                            <li><strong>対偶（たいぐう）</strong>：$\text{not } q \implies \text{not } p$（前後を入れ替えて、さらに両方否定する）</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>最強の法則「対偶の真偽は、元の命題と必ず一致する」</h4>
+                    <p>この3つの変形の中で、最も重要でビジネスでも使えるのが<strong>「対偶（たいぐう）」</strong>です。<br>
+                    論理学には、<strong>「元の命題が正しい（真）ならば、その対偶も100%絶対に正しい（真）になる」</strong>という絶対法則があります。</p>
+                    <p>逆に言えば、「逆」と「裏」は、元の命題が正しくても間違っている（偽）になることがよくあります。<br>
+                    多くの人が議論の中で、この「逆」や「裏」を正しいと思い込んでしまうことで、論理の飛躍や誤解が生まれます。</p>
+                </div>
+
+                <!-- Step 3 Interactive Tool -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>【体験】逆・裏・対偶シミュレーター</h4>
+                    <p>元の命題「犬ならば哺乳類である（真）」を基準とします。<br>
+                    ボタンを押して「逆」「裏」「対偶」に変形させたとき、文章がどう変わるか、そしてそれが「真（正しい）」か「偽（間違っている）」かを確認してみましょう。</p>
+                    
+                    <div class="interactive-tool">
+                        <div class="tool-header">
+                            命題の変形と真偽の判定
+                        </div>
+                        
+                        <div class="control-panel">
+                            <button class="btn-logic active" id="btnBase">元の命題</button>
+                            <button class="btn-logic" id="btnInverse">逆 (ぎゃく)</button>
+                            <button class="btn-logic" id="btnConverse">裏 (うら)</button>
+                            <button class="btn-logic" id="btnContra">対偶 (たいぐう)</button>
+                        </div>
+
+                        <div class="sim-board">
+                            <div class="proposition-box" id="propBox">
+                                <div class="truth-badge" id="truthBadge">真 (TRUE)</div>
+                                <div class="prop-title" id="propTitle">元の命題 ($p \implies q$)</div>
+                                <div class="prop-text" id="propText">犬 ならば 哺乳類である。</div>
+                            </div>
+                            
+                            <div class="explanation-text" id="expText">
+                                この命題は例外なく成立するため「真」です。（犬という枠は、完全に哺乳類という大きな枠の中に収まっています）
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】クレーム対応を乗り切る「対偶」の論理</h4>
+                    <p>対偶の「元の命題と真偽が一致する」という性質は、ビジネスの交渉やクレーム対応において、相手の隠れた意図（矛盾）を暴くのに役立ちます。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">「誠意を見せろ！」の矛盾を突く</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            悪質なクレーマーが「金銭を要求しているわけではないが、誠意を見せろ」と言ってきたとします。もしこの要求の本質が「誠意を見せる＝お金を払う」という命題（暗黙の要求）であるならば、その対偶をとってみましょう。
+                        </p>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            対偶は<strong>「お金を払わない ならば 誠意を見せたことにならない」</strong>となります。<br>
+                            相手に「つまり、金銭を支払わなければ誠意を見せたことにはならない、という意味でしょうか？」と対偶を用いて確認することで、「金銭を要求しているわけではない」という建前と矛盾していることを論理的に浮き彫りにし、相手の不当な要求（恐喝）を牽制することができます。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 5 Summary -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>まとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 15px; font-size: 14px; line-height: 1.7;">
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li>元の命題 $p \implies q$ に対し、言葉の入れ替えと否定の組み合わせで「逆・裏・対偶」が作れる。</li>
+                            <li><strong>逆（$q \implies p$）</strong>と<strong>裏（$\text{not } p \implies \text{not } q$）</strong>は、元の命題が真であっても、真になるとは限らない（偽になることが多い）。</li>
+                            <li><strong>対偶（$\text{not } q \implies \text{not } p$）</strong>は、元の命題と<strong>必ず真偽が一致</strong>する。</li>
+                            <li>一見わかりにくい命題に出会った時は、「対偶」に変換してみると本質が見えやすくなる。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lesson-footer-nav" style="margin-top: 40px;">
+                    <a href="81.html" class="btn-secondary">&larr; 前の単元へ</a>
+                    <a href="index.html" class="btn-secondary">目次に戻る</a>
+                    <a href="83.html" class="btn btn-primary">次の単元へ &rarr;</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const btnBase = document.getElementById('btnBase');
+        const btnInverse = document.getElementById('btnInverse');
+        const btnConverse = document.getElementById('btnConverse');
+        const btnContra = document.getElementById('btnContra');
+        
+        const propTitle = document.getElementById('propTitle');
+        const propText = document.getElementById('propText');
+        const expText = document.getElementById('expText');
+        const truthBadge = document.getElementById('truthBadge');
+        
+        const btns = [btnBase, btnInverse, btnConverse, btnContra];
+
+        function setActive(btn) {
+            btns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        btnBase.addEventListener('click', () => {
+            setActive(btnBase);
+            propTitle.innerHTML = `元の命題 ($p \\implies q$)`;
+            propText.innerHTML = `犬 ならば 哺乳類である。`;
+            truthBadge.textContent = "真 (TRUE)";
+            truthBadge.className = "truth-badge";
+            expText.innerHTML = `この命題は例外なく成立するため「真」です。（犬という枠は、完全に哺乳類という大きな枠の中に収まっています）`;
+            if(window.renderMathInElement) renderMathInElement(propTitle, {delimiters: [{left: '$', right: '$', display: false}]});
+        });
+
+        btnInverse.addEventListener('click', () => {
+            setActive(btnInverse);
+            propTitle.innerHTML = `逆 ($q \\implies p$)`;
+            propText.innerHTML = `哺乳類 ならば 犬である。`;
+            truthBadge.textContent = "偽 (FALSE)";
+            truthBadge.className = "truth-badge false";
+            expText.innerHTML = `【矢印を逆にする】<br>哺乳類の中には人間やネコもいるため、「哺乳類なら必ず犬だ」とは言えません。よってこれは<strong>「偽（間違い）」</strong>です。<br>元の命題が真でも、「逆」は必ずしも真になりません。`;
+            if(window.renderMathInElement) renderMathInElement(propTitle, {delimiters: [{left: '$', right: '$', display: false}]});
+        });
+
+        btnConverse.addEventListener('click', () => {
+            setActive(btnConverse);
+            propTitle.innerHTML = `裏 ($\\text{not } p \\implies \\text{not } q$)`;
+            propText.innerHTML = `犬でない ならば 哺乳類ではない。`;
+            truthBadge.textContent = "偽 (FALSE)";
+            truthBadge.className = "truth-badge false";
+            expText.innerHTML = `【両方を否定する】<br>「犬でない（ネコなど）」であっても、哺乳類であるケースは存在します。よってこれも<strong>「偽（間違い）」</strong>です。<br>元の命題が真でも、「裏」は必ずしも真になりません。`;
+            if(window.renderMathInElement) renderMathInElement(propTitle, {delimiters: [{left: '$', right: '$', display: false}]});
+        });
+
+        btnContra.addEventListener('click', () => {
+            setActive(btnContra);
+            propTitle.innerHTML = `対偶 ($\\text{not } q \\implies \\text{not } p$)`;
+            propText.innerHTML = `哺乳類でない ならば 犬ではない。`;
+            truthBadge.textContent = "真 (TRUE)";
+            truthBadge.className = "truth-badge";
+            expText.innerHTML = `【逆にして、両方否定する】<br>そもそも哺乳類でない生き物（トカゲや魚など）は、絶対に犬ではありません。よってこれは<strong>「真」</strong>です。<br><strong>『元の命題が真なら、その対偶も絶対に真になる』</strong>という論理学の強力な法則が働いています。`;
+            if(window.renderMathInElement) renderMathInElement(propTitle, {delimiters: [{left: '$', right: '$', display: false}]});
+        });
+        
+    </script>
+
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>

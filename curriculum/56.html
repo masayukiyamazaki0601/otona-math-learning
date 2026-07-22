@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>平方完成と頂点座標の算出 | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .interactive-tool {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 8px;
+            padding: 24px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        .tool-header {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: var(--color-ink);
+        }
+        .equation-step {
+            font-size: 24px;
+            font-family: var(--font-mono);
+            margin: 15px 0;
+            padding: 15px;
+            background: var(--color-paper);
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+            min-height: 40px;
+            transition: all 0.3s;
+        }
+        .btn-action {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: var(--color-brass);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn-action:hover {
+            opacity: 0.9;
+        }
+        .vertex-highlight {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .explanation-text {
+            font-size: 15px;
+            color: var(--color-ink-light);
+            margin-top: 10px;
+            min-height: 45px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第4章 高校数学への接続 &gt; 単元56
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 04 / Unit 56</span>
+                <h2 class="lesson-title">平方完成と頂点座標の算出</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>なぜ式を変形するのか？</h4>
+                    <p>二次関数 $y = ax^2 + bx + c$ を見たとき、一目で「グラフの底（または頂上）がどこにあるか」を把握することはできません。<br>
+                    ビジネスにおいても、「利益が最大になる価格はいくらか」「コストが最小になる生産量はどこか」という<strong>「頂点の位置」</strong>を知ることが最重要課題になります。</p>
+                    <p>そこで、式を <strong>$y = a(x - p)^2 + q$</strong> という形にパズルゲームのように変形します。<br>
+                    この変形作業を<strong>「平方完成（へいほうかんせい）」</strong>と呼びます。</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>頂点の座標 $(p, q)$ が意味するもの</h4>
+                    <p>平方完成によって $y = a(x - p)^2 + q$ の形を作ることができれば、グラフの頂点が <strong>$(p, q)$</strong> であることが即座にわかります。</p>
+                    <ul style="padding-left: 20px; line-height: 1.8;">
+                        <li>$(x - p)^2$ の部分は必ず $0$ 以上の値になります（実数を2乗するとマイナスにならないため）。</li>
+                        <li>したがって、$x = p$ のとき、この2乗部分が $0$ になり、$y$ の値は $q$ になります。</li>
+                        <li>これが放物線の一番底（下に凸の場合）あるいは一番頂上（上に凸の場合）となるのです。</li>
+                    </ul>
+                </div>
+
+                <!-- Step 3 Interactive Tool -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>【体験】平方完成ステップシミュレーター</h4>
+                    <p>式 $y = x^2 + 6x + 5$ を例に、平方完成のプロセスを段階的に確認してみましょう。「次へ」ボタンを押して式の変形を追ってください。</p>
+                    
+                    <div class="interactive-tool">
+                        <div class="tool-header">目標： $y = x^2 + 6x + 5$ の頂点を求める</div>
+                        
+                        <div id="eqDisplay" class="equation-step">
+                            $y = x^2 + 6x + 5$
+                        </div>
+                        <div id="expDisplay" class="explanation-text">
+                            最初の式です。このままでは頂点がわかりません。
+                        </div>
+                        
+                        <button id="nextBtn" class="btn-action">次のステップへ</button>
+                        <button id="resetBtn" class="btn-action" style="background-color:#7f8c8d; display:none;">最初から</button>
+                    </div>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】ビジネスにおける「最適化問題」と平方完成</h4>
+                    <p>平方完成によって「関数の頂点」を求める作業は、実社会における<strong>「最適化問題（Optimization Problem）」</strong>の第一歩です。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">利益を最大化する価格設定（プライシング）</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            例えば、商品を安くすればたくさん売れますが、1個あたりの利益は減ります。逆に高くすれば1個の利益は増えますが、売れる数は減ります。<br>
+                            この関係式を立てると、利益を表す関数は「上に凸の二次関数」になります。
+                        </p>
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 14px; text-align: left; margin-bottom: 12px; font-family: var(--font-mono);">
+                            例：利益 $y = -2x^2 + 400x - 5000$<br>
+                            （$x$ は商品の販売価格）
+                        </div>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            この式のままでは「いくらで売れば最も儲かるか」はわかりません。しかし平方完成を行って頂点を求めれば、「価格が100円のときに利益が最大になる」といった戦略的な意思決定が即座に下せるようになります。<br>
+                            私たちが学んでいるこの式の変形は、ビジネスの現場で「最適解」を導き出すための強力な武器なのです。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 4 Summary -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>まとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 15px; font-size: 14px; line-height: 1.7;">
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li>二次関数の頂点を求めるために、式を <strong>$y = a(x - p)^2 + q$</strong> の形に変形することを「平方完成」と呼ぶ。</li>
+                            <li>この形に変形できれば、即座に頂点の座標が <strong>$(p, q)$</strong> であることがわかる。</li>
+                            <li>頂点を求めることは、ビジネスやデータ分析において「利益の最大化」や「コストの最小化（最適化）」を行うための基礎となる。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lesson-footer-nav" style="margin-top: 40px;">
+                    <a href="55.html" class="btn-secondary">&larr; 前の単元へ</a>
+                    <a href="index.html" class="btn-secondary">目次に戻る</a>
+                    <a href="57.html" class="btn btn-primary">次の単元へ &rarr;</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const steps = [
+            {
+                eq: "$y = x^2 + 6x + 5$",
+                exp: "最初の式です。このままでは頂点がわかりません。"
+            },
+            {
+                eq: "$y = (x^2 + 6x) + 5$",
+                exp: "$x$ が含まれる項だけを（カッコ）でくくります。"
+            },
+            {
+                eq: "$y = (x^2 + 6x + 9 - 9) + 5$",
+                exp: "カッコの中に $x$ の係数（$6$）の半分の2乗（$3^2 = 9$）を足して引きます。値は変わりません。"
+            },
+            {
+                eq: "$y = (x^2 + 6x + 9) - 9 + 5$",
+                exp: "マイナスの部分（$-9$）をカッコの外に出します。"
+            },
+            {
+                eq: "$y = (x + 3)^2 - 9 + 5$",
+                exp: "カッコの中を $(x + a)^2$ の形に因数分解します。"
+            },
+            {
+                eq: "$y = (x + 3)^2 - 4$",
+                exp: "カッコの外の数字を計算します。これで平方完成が完了しました！"
+            },
+            {
+                eq: "頂点は $(-3, -4)$",
+                exp: "式が $y = (x - p)^2 + q$ の形になったので、頂点が $(-3, -4)$ であることがわかります。"
+            }
+        ];
+
+        let currentStep = 0;
+        const eqDisplay = document.getElementById('eqDisplay');
+        const expDisplay = document.getElementById('expDisplay');
+        const nextBtn = document.getElementById('nextBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        function updateStep() {
+            eqDisplay.innerHTML = steps[currentStep].eq;
+            expDisplay.innerHTML = steps[currentStep].exp;
+            
+            if(window.renderMathInElement) {
+                renderMathInElement(eqDisplay, {delimiters: [{left: '$', right: '$', display: false}]});
+                renderMathInElement(expDisplay, {delimiters: [{left: '$', right: '$', display: false}]});
+            }
+
+            if (currentStep === steps.length - 1) {
+                nextBtn.style.display = 'none';
+                resetBtn.style.display = 'inline-block';
+                eqDisplay.style.backgroundColor = 'rgba(46, 196, 182, 0.1)';
+                eqDisplay.style.borderColor = '#2ec4b6';
+            } else {
+                nextBtn.style.display = 'inline-block';
+                resetBtn.style.display = 'none';
+                eqDisplay.style.backgroundColor = 'var(--color-paper)';
+                eqDisplay.style.borderColor = '#e0e0e0';
+            }
+        }
+
+        nextBtn.addEventListener('click', () => {
+            if (currentStep < steps.length - 1) {
+                currentStep++;
+                updateStep();
+            }
+        });
+
+        resetBtn.addEventListener('click', () => {
+            currentStep = 0;
+            updateStep();
+        });
+        
+        // Initial render
+        updateStep();
+    </script>
+
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>

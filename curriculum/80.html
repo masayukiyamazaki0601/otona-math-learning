@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>相関係数の解釈と擬似相関への注意 | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .concept-box {
+            background-color: var(--color-paper);
+            border: 2px solid var(--color-brass);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .math-display {
+            font-size: 20px;
+            font-family: var(--font-mono);
+            color: var(--color-ink);
+            margin: 15px 0;
+            overflow-x: auto;
+            text-align: center;
+        }
+        .interactive-tool {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .tool-header {
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: var(--color-ink);
+            text-align: center;
+        }
+        .sim-board {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            width: 100%;
+            padding: 30px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            gap: 20px;
+        }
+        .chart-container {
+            width: 100%;
+            max-width: 500px;
+            aspect-ratio: 16 / 9;
+            background: #fafafa;
+            border-left: 2px solid #333;
+            border-bottom: 2px solid #333;
+            position: relative;
+        }
+        .axis-label-x {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+            font-weight: bold;
+            color: #666;
+        }
+        .axis-label-y {
+            position: absolute;
+            top: 50%;
+            left: -40px;
+            transform: translateY(-50%) rotate(-90deg);
+            font-size: 14px;
+            font-weight: bold;
+            color: #666;
+        }
+        .scatter-pt {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.5s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        /* Default color */
+        .color-normal { background-color: #3498db; }
+        /* Hidden factor colors */
+        .color-factor-1 { background-color: #3498db; } /* Spring: normal */
+        .color-factor-2 { background-color: #f1c40f; } /* Summer: high */
+        .color-factor-3 { background-color: #e74c3c; } /* Winter/Christmas: very high */
+
+        .stat-results {
+            background: #fdf2f0;
+            border: 2px solid #e74c3c;
+            border-radius: 6px;
+            padding: 20px;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+        .btn-reveal {
+            background-color: #e74c3c;
+            color: white;
+            font-size: 16px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+        .btn-reveal:hover {
+            background-color: #c0392b;
+        }
+        .hidden-truth {
+            display: none;
+            margin-top: 15px;
+            text-align: left;
+            font-size: 14px;
+            line-height: 1.7;
+            background: #fff;
+            padding: 15px;
+            border: 1px dashed #ccc;
+            border-radius: 6px;
+        }
+        .legend-area {
+            display: none;
+            width: 100%;
+            max-width: 500px;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .legend-color {
+            width: 12px; height: 12px; border-radius: 50%; margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第5章 実践・ビジネス数学 &gt; 単元80
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 05 / Unit 80</span>
+                <h2 class="lesson-title">相関係数の解釈と擬似相関への注意</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>相関係数（$r$）による客観的評価</h4>
+                    <p>前単元では散布図で関係性を「目」で確認しましたが、これでは「なんとなく右肩上がりだ」といった主観的な評価になってしまいます。<br>
+                    そこで、相関の強さを <strong>$-1$ から $1$ までの数字</strong> で客観的に評価したものを<strong>「相関係数（$r$）」</strong>と呼びます。</p>
+                    
+                    <div class="concept-box">
+                        <ul style="margin: 0; padding-left: 20px; line-height:1.7;">
+                            <li><strong>$0.7 \sim 1.0$</strong>：強い正の相関</li>
+                            <li><strong>$0.4 \sim 0.7$</strong>：中程度の正の相関</li>
+                            <li><strong>$-0.3 \sim 0.3$ 程度</strong>：ほとんど相関なし（無相関）</li>
+                        </ul>
+                    </div>
+                    <p>ただし、相関係数はあくまで「直線的な関係」しか測れません。例えば「ストレス」と「仕事のパフォーマンス」のように、「適度なストレスで最高潮になるが、高すぎると下がる」といった<strong>U字型の関係にある場合、関係性が強くても相関係数はゼロ</strong>になってしまいます。</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>データ分析最大の罠「擬似相関」</h4>
+                    <p>そして、相関係数を使う上で絶対に陥ってはいけない最大の罠があります。それは<strong>「相関関係があるからといって、因果関係（原因と結果）があるとは限らない」</strong>ということです。</p>
+                    <p>有名な例として、「アイスクリームの売上」と「水難事故の件数」には非常に強い正の相関があります。では、「水難事故を減らすためにアイスの販売を禁止すべき」でしょうか？<br>
+                    当然違います。背後に<strong>「気温が高い」という第3の要因（交絡因子）</strong>が隠れており、それが両方を引き上げているだけなのです。<br>
+                    このように、直接の因果関係がないのに相関関係があるように見える現象を<strong>「擬似相関（ぎじそうかん）」</strong>と呼びます。</p>
+                </div>
+
+                <!-- Step 3 Interactive Tool -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>【体験】擬似相関・錯覚シミュレーター</h4>
+                    <p>ある会社の毎月の「広告費」と「売上」の散布図です。見事な右肩上がりで、相関係数も高い数値（0.8）を示しています。これを見たら、社長は「よし！来月はもっと広告費を増やそう！」と言うでしょう。</p>
+                    <p>しかし、本当に広告のおかげで売上が上がっているのでしょうか？<br>
+                    ボタンを押して、<strong>背後に隠れていた第3の要因（季節・イベント）</strong>の色分けを明らかにしてみましょう。</p>
+                    
+                    <div class="interactive-tool">
+                        <div class="tool-header">
+                            「広告費」と「売上」の散布図
+                        </div>
+                        
+                        <div class="sim-board">
+                            <div class="chart-container" id="scatterArea">
+                                <div class="axis-label-x">広告費</div>
+                                <div class="axis-label-y">売上</div>
+                                <!-- Dots generated by JS -->
+                            </div>
+                            
+                            <div class="legend-area" id="legendArea">
+                                <div class="legend-item"><div class="legend-color color-factor-1"></div>通常月 (2〜11月)</div>
+                                <div class="legend-item"><div class="legend-color color-factor-2"></div>年末 (12月)</div>
+                                <div class="legend-item"><div class="legend-color color-factor-3"></div>正月 (1月)</div>
+                            </div>
+                            
+                            <div class="stat-results">
+                                <div style="font-size:16px; font-weight:bold; color:#333; margin-bottom:5px;">相関係数（$r$）</div>
+                                <div style="font-size:28px; font-weight:bold; color:#e74c3c; font-family:var(--font-mono);">0.82 (強い正の相関)</div>
+                                
+                                <button class="btn-reveal" id="btnReveal">背後に隠れた「本当の原因」を見る</button>
+                                
+                                <div class="hidden-truth" id="hiddenTruth">
+                                    <strong style="color:#e74c3c;">【種明かし】</strong><br>
+                                    色分けして見ると、「通常月（青）」の集団の中では、広告費と売上に<strong>全く相関がない（バラバラ）</strong>ことがわかります。<br>
+                                    単に、「お正月（赤）」や「年末（黄）」といった<strong>特定のイベント月に、会社が習慣的に広告費を増やし、同時に季節要因で商品が売れていた（交絡因子）だけ</strong>だったのです。<br>
+                                    これに気づかず通常月に広告費だけを増やしても、売上は全く上がりません。
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】AIも騙される擬似相関の罠</h4>
+                    <p>ビッグデータとAIの時代になり、擬似相関の危険性はかつてないほど高まっています。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">「相関」を見つけるAI、「因果」を考える人間</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            AI（機械学習）は膨大なデータの中から「相関関係」を見つけ出す天才ですが、<strong>「なぜそうなるのか（因果関係のロジック）」を理解しているわけではありません。</strong>
+                        </p>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            そのため、AIに分析を丸投げすると「ニコラス・ケイジの映画出演本数と、プールで溺死した人の数に強い相関がある」といった、完全に偶然の一致によるバカげた擬似相関を「重要な発見」として提示してくることがあります。<br>
+                            出てきた相関関係に対して「これは本当に因果関係があるのか？ 第3の要因が隠れていないか？」と疑い、ビジネスのロジックで最終判断を下すことこそが、人間に求められるデータ分析の必須スキルです。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 5 Summary -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>まとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 15px; font-size: 14px; line-height: 1.7;">
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li><strong>相関係数（$r$）</strong>：相関の強さを -1 から 1 の数字で客観的に表したもの。直線的な関係しか測れない点に注意。</li>
+                            <li><strong>相関関係 $\neq$ 因果関係</strong>：データが連動しているからといって、一方が原因とは限らない。</li>
+                            <li><strong>擬似相関</strong>：第3の要因（交絡因子）が背後に隠れており、見かけ上だけ相関があるように見える現象。</li>
+                            <li>AI時代こそ、算出された相関関係を鵜呑みにせず、「因果」のロジックを人間が検証することが重要。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lesson-footer-nav" style="margin-top: 40px;">
+                    <a href="79.html" class="btn-secondary">&larr; 前の単元へ</a>
+                    <a href="index.html" class="btn-secondary">目次に戻る</a>
+                    <a href="81.html" class="btn btn-primary">次の単元へ &rarr;</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const scatterArea = document.getElementById('scatterArea');
+        const btnReveal = document.getElementById('btnReveal');
+        const hiddenTruth = document.getElementById('hiddenTruth');
+        const legendArea = document.getElementById('legendArea');
+
+        // We will generate 3 clusters of data to simulate confounding variable
+        // Cluster 1 (Normal months): low ad spend, low sales, NO correlation
+        // Cluster 2 (December): medium ad spend, medium sales, NO correlation
+        // Cluster 3 (January): high ad spend, high sales, NO correlation
+        
+        // Overall, they form a line (strong positive correlation)
+        
+        let ptsData = [];
+
+        function addCluster(numPts, meanX, meanY, spread, type) {
+            for(let i=0; i<numPts; i++) {
+                // random uniform around mean
+                let x = meanX + (Math.random() - 0.5) * spread;
+                let y = meanY + (Math.random() - 0.5) * spread;
+                ptsData.push({x: x, y: y, type: type});
+            }
+        }
+
+        // X scale 0-100, Y scale 0-100
+        addCluster(30, 30, 30, 25, 'color-factor-1'); // Normal (blue)
+        addCluster(10, 60, 60, 20, 'color-factor-2'); // Dec (yellow)
+        addCluster(10, 85, 85, 15, 'color-factor-3'); // Jan (red)
+
+        function initScatter() {
+            ptsData.forEach((d, i) => {
+                let pt = document.createElement('div');
+                pt.className = 'scatter-pt color-normal';
+                pt.id = 'pt-' + i;
+                
+                // Map to percentages
+                pt.style.left = d.x + "%";
+                pt.style.top = (100 - d.y) + "%"; // flip Y
+                
+                scatterArea.appendChild(pt);
+            });
+        }
+
+        initScatter();
+
+        btnReveal.addEventListener('click', () => {
+            // Reveal colors
+            ptsData.forEach((d, i) => {
+                let pt = document.getElementById('pt-' + i);
+                pt.classList.remove('color-normal');
+                pt.classList.add(d.type);
+            });
+            
+            // Show truth text and legend
+            hiddenTruth.style.display = 'block';
+            legendArea.style.display = 'flex';
+            
+            // Hide button
+            btnReveal.style.display = 'none';
+        });
+        
+    </script>
+
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>

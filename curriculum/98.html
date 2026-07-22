@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>表計算ソフトによる統計分析 | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .concept-box {
+            background-color: var(--color-paper);
+            border: 2px solid var(--color-brass);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .vs-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .vs-item {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+        .interactive-tool {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        .tool-header {
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: var(--color-ink);
+            text-align: center;
+        }
+        .data-table {
+            width: 100%;
+            max-width: 500px;
+            border-collapse: collapse;
+            font-family: var(--font-mono);
+            font-size: 14px;
+            margin-bottom: 20px;
+            background-color: #fff;
+        }
+        .data-table th, .data-table td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+        .data-table th {
+            background-color: #f1f1f1;
+            font-weight: bold;
+        }
+        .input-val {
+            width: 70px;
+            padding: 4px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-align: center;
+            font-family: var(--font-mono);
+        }
+        .sim-board {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            width: 100%;
+            padding: 30px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            gap: 20px;
+        }
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            width: 100%;
+            max-width: 500px;
+        }
+        .stat-box {
+            background: #fdf2f0;
+            border: 2px solid #e74c3c;
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+        }
+        .stat-title {
+            font-size: 11px;
+            color: #666;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .stat-val {
+            font-size: 18px;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            color: #333;
+        }
+        .formula-box {
+            font-family: var(--font-mono);
+            font-size: 13px;
+            background: #f8f9fa;
+            border: 1px solid #ccc;
+            padding: 8px;
+            border-radius: 4px;
+            margin-top: 5px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第7章 学習支援とツール活用 &gt; 単元98
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 07 / Unit 98</span>
+                <h2 class="lesson-title">表計算ソフトによる統計分析</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>データを「分析」するための統計指標</h4>
+                    <p>単なる集計（合計や件数）から一歩進み、データ全体の「特徴」や「関係性」を炙り出すのが<strong>統計分析</strong>です。<br>
+                    第5章で学んだ「平均値」「標準偏差（ばらつき）」「相関係数（関連度）」といった数学的指標は、表計算ソフトの関数を使うことで、何万件ものデータに対して瞬時に計算することができます。</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>主要な統計関数と役割</h4>
+                    <p>実務で頻出する3大統計指標と、対応する関数は以下の通りです。</p>
+                    
+                    <div class="vs-grid">
+                        <div class="vs-item" style="border-top: 4px solid #3498db;">
+                            <h5 style="margin-top:0; color:#3498db; font-size:14px;">1. 代表値を表す</h5>
+                            <p style="font-size:12px; font-weight:bold; font-family:var(--font-mono); margin-bottom:5px;">=AVERAGE(範囲)</p>
+                            <p style="font-size:12px; line-height:1.4; color:#555; margin-bottom:0;">データの中心を示す「平均値」。他に中央値を表す MEDIAN も重要です。</p>
+                        </div>
+                        <div class="vs-item" style="border-top: 4px solid #e74c3c;">
+                            <h5 style="margin-top:0; color:#e74c3c; font-size:14px;">2. ばらつきを表す</h5>
+                            <p style="font-size:12px; font-weight:bold; font-family:var(--font-mono); margin-bottom:5px;">=STDEV.P(範囲)</p>
+                            <p style="font-size:12px; line-height:1.4; color:#555; margin-bottom:0;">データの散らばり具合（標準偏差）。リスクや品質の安定度を示します。</p>
+                        </div>
+                        <div class="vs-item" style="border-top: 4px solid #2ecc71;">
+                            <h5 style="margin-top:0; color:#2ecc71; font-size:14px;">3. 関連性を表す</h5>
+                            <p style="font-size:12px; font-weight:bold; font-family:var(--font-mono); margin-bottom:5px;">=CORREL(範囲1, 範囲2)</p>
+                            <p style="font-size:12px; line-height:1.4; color:#555; margin-bottom:0;">2つのデータの相関関係（-1〜+1）。売上と広告費の連動度などを測ります。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 Interactive Tool -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>【体験】リアルタイム統計データアナライザー</h4>
+                    <p>以下のデータテーブル（広告費と新規獲得数）の数値を変更してみてください。<br>
+                    データの入力に合わせて、下に表示されている「平均値」「標準偏差」「相関係数」がリアルタイムに再計算されます。数値を極端に変えたときに、統計結果がどのように変化するかを手元で体験しましょう。</p>
+                    
+                    <div class="interactive-tool">
+                        <div class="tool-header">
+                            プロモーション効果測定データ
+                        </div>
+                        
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>週</th>
+                                    <th>X：広告費（万円）</th>
+                                    <th>Y：新規獲得数（人）</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>第1週</td>
+                                    <td><td><input type="number" id="x1" class="input-val" value="10"></td></td>
+                                    <td><td><input type="number" id="y1" class="input-val" value="50"></td></td>
+                                </tr>
+                                <tr>
+                                    <td>第2週</td>
+                                    <td><td><input type="number" id="x2" class="input-val" value="15"></td></td>
+                                    <td><td><input type="number" id="y2" class="input-val" value="70"></td></td>
+                                </tr>
+                                <tr>
+                                    <td>第3週</td>
+                                    <td><td><input type="number" id="x3" class="input-val" value="8"></td></td>
+                                    <td><td><input type="number" id="y3" class="input-val" value="40"></td></td>
+                                </tr>
+                                <tr>
+                                    <td>第4週</td>
+                                    <td><td><input type="number" id="x4" class="input-val" value="20"></td></td>
+                                    <td><td><input type="number" id="y4" class="input-val" value="95"></td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="sim-board">
+                            <div class="stat-grid">
+                                <div class="stat-box" style="border-color: #3498db;">
+                                    <div class="stat-title">広告費の平均 (X)</div>
+                                    <div class="stat-val" id="avgX">13.25</div>
+                                    <div class="formula-box">=AVERAGE(X)</div>
+                                </div>
+                                <div class="stat-box" style="border-color: #e74c3c;">
+                                    <div class="stat-title">獲得数の標準偏差 (Y)</div>
+                                    <div class="stat-val" id="stdevY">20.73</div>
+                                    <div class="formula-box">=STDEV.P(Y)</div>
+                                </div>
+                                <div class="stat-box" style="border-color: #2ecc71;">
+                                    <div class="stat-title">XとYの相関係数</div>
+                                    <div class="stat-val" id="correl">0.99</div>
+                                    <div class="formula-box">=CORREL(X, Y)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】「CORREL」関数がもたらしたデータ解析の破壊力</h4>
+                    <p>手計算では狂気的な時間のかかる統計処理を、一瞬で終わらせる関数の強力さについてです。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">何百項目ものデータから関連性を見つけ出す</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            相関係数を求めるには、各データの平均からのズレ（偏差）を求め、それらを掛け合わせて「共分散」を出し、さらにそれぞれの「標準偏差」で割り算するという複雑な手順が必要です。データ数が数十個あるだけでも、手計算なら1時間以上かかるでしょう。
+                        </p>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            しかしスプレッドシートに `=CORREL(列A, 列B)` と打ち込めば、10万行のデータであっても一瞬で計算が完了します。データサイエンティストは、ビッグデータを扱う際、まず全変数同士の相関係数を網羅的に計算して「相関マトリックス（表）」を作り、どの数値とどの数値が連動しているかの当たりをつけます。関数による高速処理のおかげで、私たちは「計算の苦労」から解放され、「結果の解釈と打ち手の立案」に脳のエネルギーを集中させることができるのです。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 4 Summary -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>まとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 15px; font-size: 14px; line-height: 1.7;">
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li><strong>統計分析</strong>：データ全体の傾向（代表値）、ばらつき、他のデータとの相関関係を数学的に導き出す作業。</li>
+                            <li><strong>AVERAGE</strong>：データの平均値を求める。</li>
+                            <li><strong>STDEV.P</strong>：標準偏差を求め、データのばらつき（リスク）を定量化する。</li>
+                            <li><strong>CORREL</strong>：相関係数を求め、2つのデータの連動度を -1.0 から +1.0 の範囲で算出する。</li>
+                            <li>関数を活用することで、手計算では不可能な膨大なデータ量から、重要な関連性を一瞬で発見できる。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lesson-footer-nav" style="margin-top: 40px;">
+                    <a href="97.html" class="btn-secondary">&larr; 前の単元へ</a>
+                    <a href="index.html" class="btn-secondary">目次に戻る</a>
+                    <a href="99.html" class="btn btn-primary">次の単元へ &rarr;</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const x1 = document.getElementById('x1');
+        const x2 = document.getElementById('x2');
+        const x3 = document.getElementById('x3');
+        const x4 = document.getElementById('x4');
+        
+        const y1 = document.getElementById('y1');
+        const y2 = document.getElementById('y2');
+        const y3 = document.getElementById('y3');
+        const y4 = document.getElementById('y4');
+        
+        const avgX = document.getElementById('avgX');
+        const stdevY = document.getElementById('stdevY');
+        const correl = document.getElementById('correl');
+
+        const inputs = [x1, x2, x3, x4, y1, y2, y3, y4];
+        inputs.forEach(input => {
+            input.addEventListener('input', updateStats);
+        });
+
+        // Helper calculations
+        function getAverage(arr) {
+            return arr.reduce((acc, v) => acc + v, 0) / arr.length;
+        }
+
+        function getStdevP(arr, avg) {
+            let variance = arr.reduce((acc, v) => acc + Math.pow(v - avg, 2), 0) / arr.length;
+            return Math.sqrt(variance);
+        }
+
+        function getCorrel(xArr, yArr, avgX, avgY, sdX, sdY) {
+            if (sdX === 0 || sdY === 0) return 0;
+            let covariance = 0;
+            for(let i=0; i<xArr.length; i++) {
+                covariance += (xArr[i] - avgX) * (yArr[i] - avgY);
+            }
+            covariance /= xArr.length;
+            return covariance / (sdX * sdY);
+        }
+
+        function updateStats() {
+            let xVals = [
+                parseFloat(x1.value) || 0,
+                parseFloat(x2.value) || 0,
+                parseFloat(x3.value) || 0,
+                parseFloat(x4.value) || 0
+            ];
+            
+            let yVals = [
+                parseFloat(y1.value) || 0,
+                parseFloat(y2.value) || 0,
+                parseFloat(y3.value) || 0,
+                parseFloat(y4.value) || 0
+            ];
+
+            let ax = getAverage(xVals);
+            let ay = getAverage(yVals);
+            
+            let sx = getStdevP(xVals, ax);
+            let sy = getStdevP(yVals, ay);
+            
+            let r = getCorrel(xVals, yVals, ax, ay, sx, sy);
+            
+            avgX.textContent = ax.toFixed(2);
+            stdevY.textContent = sy.toFixed(2);
+            correl.textContent = r.toFixed(2);
+        }
+
+        updateStats();
+        
+    </script>
+</body>
+</html>

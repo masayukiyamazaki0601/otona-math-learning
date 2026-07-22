@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>二次方程式の解法（因数分解の利用） | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .interactive-puzzle {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .puzzle-eq {
+            font-size: 24px;
+            font-family: var(--font-mono);
+            margin-bottom: 20px;
+            color: var(--color-ink);
+        }
+        .puzzle-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .number-picker {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: var(--color-paper);
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+        }
+        .number-picker input[type="number"] {
+            font-size: 20px;
+            width: 60px;
+            text-align: center;
+            margin: 10px 0;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .puzzle-feedback {
+            padding: 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 18px;
+            transition: all 0.3s;
+            border: 2px dashed var(--color-paper-line);
+        }
+        .feedback-success {
+            background-color: rgba(46, 196, 182, 0.1);
+            border-color: #2ec4b6;
+            color: #26a69a;
+        }
+        .btn-next-puzzle {
+            margin-top: 15px;
+            padding: 8px 16px;
+            background: var(--color-brass);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第4章 高校数学への接続 &gt; 単元51
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 04 / Unit 51</span>
+                <h2 class="lesson-title">二次方程式の解法（因数分解の利用）</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>ばらばらの式を「掛け算の形」にまとめる</h4>
+                    <p>二次方程式 $x^2 + Bx + C = 0$ を解くための強力な武器が<strong>「因数分解」</strong>です。<br>
+                    展開（かっこを外すこと）の逆の操作であり、「和」の形になっている式を「積（掛け算）」の形に戻すことを指します。</p>
+                    <p>なぜ掛け算の形にするのでしょうか？ それは、<strong>「掛けてゼロになるなら、どちらかがゼロである」</strong>という極めてシンプルで強力な法則（ $A \times B = 0 \implies A=0 \text{ または } B=0$ ）が使えるからです。</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>【体験】因数分解パズルツール</h4>
+                    <p>因数分解の基本は、「足して $B$ 、掛けて $C$ 」になる2つの数字（ $p$ と $q$ ）を見つけ出すゲームです。<br>
+                    以下のツールを操作して、与えられた二次方程式を因数分解してみましょう。</p>
+                    
+                    <div class="interactive-puzzle" id="puzzleContainer">
+                        <div class="puzzle-eq" id="eqDisplay">$x^2 + 5x + 6 = 0$</div>
+                        <p style="font-size: 14px; margin-bottom: 15px;">足して <span id="valB" style="font-weight:bold; color:var(--color-brass);">5</span> 、掛けて <span id="valC" style="font-weight:bold; color:var(--color-brass);">6</span> になる２つの数字を探してください。</p>
+                        
+                        <div class="puzzle-controls">
+                            <div class="number-picker">
+                                <label>数字 $p$</label>
+                                <input type="number" id="inputP" value="0" step="1">
+                            </div>
+                            <div style="font-size: 24px;">と</div>
+                            <div class="number-picker">
+                                <label>数字 $q$</label>
+                                <input type="number" id="inputQ" value="0" step="1">
+                            </div>
+                        </div>
+
+                        <div id="feedbackBox" class="puzzle-feedback">
+                            $p + q =$ <span id="sumDisplay">0</span> <br>
+                            $p \times q =$ <span id="prodDisplay">0</span>
+                        </div>
+                        <button id="nextBtn" class="btn-next-puzzle">次の問題へ</button>
+                    </div>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】実社会で活躍する因数分解：現代の暗号通信（RSA暗号）</h4>
+                    <p>「因数分解なんて、学生時代のテスト以外で何の役に立つのか？」と感じるかもしれません。<br>
+                    しかし実は、今あなたがこのサイトを見ている通信や、ネットショッピングのクレジットカード決済、メッセージのやり取りなど、<strong>現代のインターネットのセキュリティの根幹は「因数分解」によって守られています。</strong></p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">「掛けるのは簡単、戻すのは難しい」という性質</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            現在広く使われている「RSA暗号」は、<strong>「素数の掛け算（展開）はコンピュータにとって一瞬だが、その結果を元の素数に分解（素因数分解）するのは、スーパーコンピュータを使っても何万年もかかる」</strong>という非対称な性質を利用しています。
+                        </p>
+                        <div class="math-formula" style="background-color: var(--color-paper); padding: 15px; font-size: 14px; text-align: left; margin-bottom: 12px; font-family: var(--font-mono);">
+                            ・展開： $3 \times 5 = 15$ （一瞬で計算可能）<br>
+                            ・因数分解： $15 = 3 \times 5$ （人間でも解けるが、桁数が増えると爆発的に難化する）
+                        </div>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            これが数百桁の数字になると、最先端のAIやスパコンでも実質的に解くことが不可能です。<br>
+                            私たちが学んでいる因数分解は、こうした高度な現代数学・情報科学の入り口に繋がる、美しくも実用的な概念なのです。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="lesson-footer-nav" style="margin-top: 40px;">
+                    <a href="index.html" class="btn-secondary">目次に戻る</a>
+                    <a href="52.html" class="btn btn-primary">次の単元へ &rarr;</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 因数分解パズルロジック
+        const problems = [
+            { b: 5, c: 6, p1: 2, p2: 3 },
+            { b: -1, c: -12, p1: -4, p2: 3 },
+            { b: -8, c: 15, p1: -3, p2: -5 }
+        ];
+        let currentProblem = 0;
+
+        const eqDisplay = document.getElementById('eqDisplay');
+        const valB = document.getElementById('valB');
+        const valC = document.getElementById('valC');
+        const inputP = document.getElementById('inputP');
+        const inputQ = document.getElementById('inputQ');
+        const feedbackBox = document.getElementById('feedbackBox');
+        const sumDisplay = document.getElementById('sumDisplay');
+        const prodDisplay = document.getElementById('prodDisplay');
+        const nextBtn = document.getElementById('nextBtn');
+
+        function loadProblem(index) {
+            const prob = problems[index];
+            const signB = prob.b >= 0 ? '+' : '-';
+            const signC = prob.c >= 0 ? '+' : '-';
+            const absB = Math.abs(prob.b);
+            const absC = Math.abs(prob.c);
+            
+            let bStr = absB === 1 ? '' : absB;
+            
+            eqDisplay.innerHTML = `$x^2 ${signB} ${bStr}x ${signC} ${absC} = 0$`;
+            valB.textContent = prob.b;
+            valC.textContent = prob.c;
+            
+            inputP.value = 0;
+            inputQ.value = 0;
+            updateFeedback();
+            
+            // KaTeX re-render
+            if(window.renderMathInElement) {
+                renderMathInElement(eqDisplay, {delimiters: [{left: '$', right: '$', display: false}]});
+            }
+        }
+
+        function updateFeedback() {
+            const p = parseInt(inputP.value) || 0;
+            const q = parseInt(inputQ.value) || 0;
+            const prob = problems[currentProblem];
+            
+            const sum = p + q;
+            const prod = p * q;
+            
+            sumDisplay.textContent = sum;
+            prodDisplay.textContent = prod;
+            
+            feedbackBox.className = 'puzzle-feedback';
+            nextBtn.style.display = 'none';
+
+            if (sum === prob.b && prod === prob.c) {
+                feedbackBox.classList.add('feedback-success');
+                const signP = p >= 0 ? '+' : '-';
+                const signQ = q >= 0 ? '+' : '-';
+                feedbackBox.innerHTML = `正解！<br>$(x ${signP} ${Math.abs(p)})(x ${signQ} ${Math.abs(q)}) = 0$ <br>よって解は $x = ${-p}, ${-q}$ です。`;
+                
+                if (currentProblem < problems.length - 1) {
+                    nextBtn.style.display = 'inline-block';
+                } else {
+                    nextBtn.style.display = 'inline-block';
+                    nextBtn.textContent = '全問クリア！';
+                    nextBtn.disabled = true;
+                }
+                
+                if(window.renderMathInElement) {
+                    renderMathInElement(feedbackBox, {delimiters: [{left: '$', right: '$', display: false}]});
+                }
+            } else {
+                feedbackBox.innerHTML = `$p + q =$ <span id="sumDisplay">${sum}</span> <br> $p \\times q =$ <span id="prodDisplay">${prod}</span>`;
+                // re-bind since innerHTML replaced them
+            }
+        }
+
+        inputP.addEventListener('input', updateFeedback);
+        inputQ.addEventListener('input', updateFeedback);
+        
+        nextBtn.addEventListener('click', () => {
+            if (currentProblem < problems.length - 1) {
+                currentProblem++;
+                loadProblem(currentProblem);
+            }
+        });
+
+        // initial load
+        loadProblem(0);
+    </script>
+
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>

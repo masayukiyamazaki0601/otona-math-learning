@@ -18,13 +18,16 @@
 <body>
     <header class="header">
         <div class="header-inner container">
-            <h1 class="logo"><a href="index.html" style="color: inherit;">Otona Math</a></h1>
+            <h1 class="logo"><a href="index.html" style="color: inherit;">Otona Math & Stats</a></h1>
             <nav class="nav">
                 <ul>
-                    <li><a href="curriculum/index.html">カリキュラム</a></li>
-                    <li><a href="columns/index.html">コラム</a></li>
-                    <li><a href="reviews/index.html">参考書・ツール</a></li>
-                    <li><a href="schools/index.html">スクール比較</a></li>
+                    <li><a href="curriculum/index.html">数学</a></li>
+                    <li><a href="statistics/index.html">統計学</a></li>
+                    <li><a href="python/index.html">Python</a></li>
+                    <li><a href="sql/index.html">SQL</a></li>
+                    <li><a href="datascience/index.html">データサイエンス</a></li>
+                    <li><a href="ml/index.html">機械学習</a></li>
+                    <li><a href="mba/index.html">MBA</a></li>
                 </ul>
             </nav>
             <div class="header-cta">
@@ -37,10 +40,10 @@
         <section class="hero grid-bg">
             <div class="container hero-container">
                 <div class="hero-content">
-                    <h2 class="hero-title">もう一度、<br>数学と向き合う。</h2>
-                    <p class="hero-lead">社会人に必要な「論理的思考力」と「データ分析力」の土台を、<br>ノートに書き込むように、一つずつ確実に積み上げる全100単元。</p>
+                    <h2 class="hero-title">もう一度、<br>数理の力と向き合う。</h2>
+                    <p class="hero-lead">社会人のリスキリングに必須の「数学（全300単元）」と「統計学（全100単元）」を、<br>直感的なインタラクティブ・シミュレーターを用いて一つずつ確実に積み上げる。</p>
                     <div class="hero-actions">
-                        <a href="#curriculum" class="btn btn-primary">学習を始める</a>
+                        <a href="#courses" class="btn btn-primary">コースを選ぶ</a>
                         <a href="#about" class="btn-secondary">サイトのコンセプトを見る</a>
                     </div>
                 </div>
@@ -72,22 +75,38 @@
 
         <section class="stats-strip">
             <div class="container">
-                <div class="stats-grid">
+                <div class="stats-grid" style="grid-template-columns: repeat(8, 1fr); gap: 10px;">
                     <div class="stat-item">
-                        <span class="stat-label">総単元数</span>
+                        <span class="stat-label">総コンテンツ数</span>
+                        <span class="stat-value">750<span class="stat-unit"> units</span></span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">数学</span>
+                        <span class="stat-value">300<span class="stat-unit"> units</span></span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">統計学</span>
                         <span class="stat-value">100<span class="stat-unit"> units</span></span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-label">章数</span>
-                        <span class="stat-value">07<span class="stat-unit"> chapters</span></span>
+                        <span class="stat-label">Python</span>
+                        <span class="stat-value">50<span class="stat-unit"> units</span></span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-label">想定所要時間</span>
-                        <span class="stat-value">15<span class="stat-unit"> hrs</span></span>
+                        <span class="stat-label">SQL</span>
+                        <span class="stat-value">50<span class="stat-unit"> units</span></span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-label">前提知識</span>
-                        <span class="stat-value">None</span>
+                        <span class="stat-label">データサイエンス</span>
+                        <span class="stat-value">50<span class="stat-unit"> units</span></span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">機械学習</span>
+                        <span class="stat-value">100<span class="stat-unit"> units</span></span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">MBA</span>
+                        <span class="stat-value">100<span class="stat-unit"> units</span></span>
                     </div>
                 </div>
             </div>
@@ -110,54 +129,137 @@
                     </div>
                     <div class="sample-right">
                         <h2 class="section-title">公式の暗記を捨て、<br>「なぜ」を理解する。</h2>
-                        <p>本カリキュラムでは、数学を「計算のテクニック」としてではなく、「論理の積み重ね」として捉え直します。</p>
+                        <p>本カリキュラムでは、数理を「計算のテクニック」としてではなく、「論理の積み重ね」として捉え直します。</p>
                         <p>図解と具体例を通じて、曖昧だった概念の輪郭をはっきりさせ、実務におけるデータ解釈や論理構築の強力な武器へと昇華させます。</p>
-                        <a href="#about" class="btn-secondary">学習メソッドについて詳しく</a>
+                        <a href="#courses" class="btn btn-primary">コースを選んで学習を始める</a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="curriculum" class="chapter-list-section">
+        <section id="courses" class="chapter-list-section">
             <div class="container">
-                <h2 class="section-title text-center">カリキュラム構成</h2>
+                <h2 class="section-title text-center" style="margin-bottom: 50px;">学習コースを選ぶ</h2>
                 
-                <div class="chapter-list">
-                    <a href="curriculum/index.html#ch01" class="chapter-row">
-                        <div class="chapter-number">01</div>
-                        <div class="chapter-info">
-                            <h3 class="chapter-title">導入と学習準備</h3>
-                            <p class="chapter-desc">大人が数学を学ぶ意義と、挫折を防ぐ効率的な学習メソッド。</p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-top: 40px;">
+                    <!-- Math Course Card -->
+                    <div class="card" style="padding: 35px; display: flex; flex-direction: column; justify-content: space-between; border: 2px solid var(--color-paper-line); background: var(--color-paper);">
+                        <div>
+                            <span style="font-family: var(--font-mono); color: var(--color-brass); font-weight: bold; font-size: 13px; text-transform: uppercase; letter-spacing: 2px;">Mathematics Course</span>
+                            <h3 style="font-size: 24px; margin: 12px 0; font-family: var(--font-serif); color: var(--color-ink);">大人のやり直し数学</h3>
+                            <p style="color: #666; font-size: 13px; line-height: 1.7; margin-bottom: 25px;">
+                                小学校算数の基礎的な数や割合の概念から、高校微積分、線形代数、さらに機械学習や金融工学、量子力学で使われる高度な数理までを、300単元の超ボリュームで体系的にカバー。
+                            </p>
+                            <div style="margin-bottom: 25px; font-family: var(--font-mono); font-size: 12px; color: #555; line-height: 1.7;">
+                                • 全 27 章 / 300 単元<br>
+                                • 微分積分・線形代数の本質理解<br>
+                                • 機械学習・最適化・物理の数理へ接続
+                            </div>
                         </div>
-                        <div class="chapter-units">5 units</div>
-                    </a>
+                        <a href="curriculum/index.html" class="btn btn-primary" style="text-align: center; display: block; width: 100%;">数学コースの学習を始める</a>
+                    </div>
                     
-                    <a href="curriculum/index.html#ch02" class="chapter-row">
-                        <div class="chapter-number">02</div>
-                        <div class="chapter-info">
-                            <h3 class="chapter-title">小学校算数の再構築</h3>
-                            <p class="chapter-desc">分数、割合、四則演算の本質的理解とビジネスへの応用。</p>
+                    <!-- Stats Course Card -->
+                    <div class="card" style="padding: 35px; display: flex; flex-direction: column; justify-content: space-between; border: 2px solid var(--color-paper-line); background: var(--color-paper);">
+                        <div>
+                            <span style="font-family: var(--font-mono); color: var(--color-brass); font-weight: bold; font-size: 13px; text-transform: uppercase; letter-spacing: 2px;">Statistics Course</span>
+                            <h3 style="font-size: 24px; margin: 12px 0; font-family: var(--font-serif); color: var(--color-ink);">大人のデータサイエンス統計学</h3>
+                            <p style="color: #666; font-size: 13px; line-height: 1.7; margin-bottom: 25px;">
+                                データの要約値やヒストグラムの記述統計から、確率モデル、標本抽出、仮説検定、さらにベイズ統計、時系列分析、因果推論といったビジネスとデータサイエンス実務のコアとなる統計理論を100単元で凝縮。
+                            </p>
+                            <div style="margin-bottom: 25px; font-family: var(--font-mono); font-size: 12px; color: #555; line-height: 1.7;">
+                                • 全 8 章 / 100 単元<br>
+                                • 平均・分散から推測統計・検定理論まで<br>
+                                • ベイズ・時系列・因果推論の実務応用
+                            </div>
                         </div>
-                        <div class="chapter-units">15 units</div>
-                    </a>
-                    
-                    <a href="curriculum/index.html#ch03" class="chapter-row">
-                        <div class="chapter-number">03</div>
-                        <div class="chapter-info">
-                            <h3 class="chapter-title">中学校数学の基礎固め</h3>
-                            <p class="chapter-desc">正負の数、文字式、方程式、図形の基本的な性質。</p>
-                        </div>
-                        <div class="chapter-units">25 units</div>
-                    </a>
+                        <a href="statistics/index.html" class="btn btn-primary" style="text-align: center; display: block; width: 100%;">統計学コースの学習を始める</a>
+                    </div>
 
-                    <a href="curriculum/index.html#ch04" class="chapter-row">
-                        <div class="chapter-number">04</div>
-                        <div class="chapter-info">
-                            <h3 class="chapter-title">高校数学への接続</h3>
-                            <p class="chapter-desc">関数、指数・対数、三角比、確率・統計の入り口。</p>
+                    <!-- Python Course Card -->
+                    <div class="card" style="padding: 35px; display: flex; flex-direction: column; justify-content: space-between; border: 2px solid var(--color-paper-line); background: var(--color-paper);">
+                        <div>
+                            <span style="font-family: var(--font-mono); color: var(--color-brass); font-weight: bold; font-size: 13px; text-transform: uppercase; letter-spacing: 2px;">Python Programming</span>
+                            <h3 style="font-size: 24px; margin: 12px 0; font-family: var(--font-serif); color: var(--color-ink);">Pythonプログラミング入門</h3>
+                            <p style="color: #666; font-size: 13px; line-height: 1.7; margin-bottom: 25px;">
+                                環境構築やPython文法の基本から、実務のデータ操作で不可欠なNumPy・Pandasによるデータフレーム操作、Matplotlibによるデータのグラフ可視化、外部Webデータの抽出までを50単元で習得。
+                            </p>
+                            <div style="margin-bottom: 25px; font-family: var(--font-mono); font-size: 12px; color: #555; line-height: 1.7;">
+                                • 全 4 章 / 50 単元<br>
+                                • 変数・制御構文・関数などのプログラミング基本<br>
+                                • Pandas/NumPyによるデータ操作と実務効率化
+                            </div>
                         </div>
-                        <div class="chapter-units">25 units</div>
-                    </a>
+                        <a href="python/index.html" class="btn btn-primary" style="text-align: center; display: block; width: 100%;">Pythonコースの学習を始める</a>
+                    </div>
+
+                    <!-- ML/DL Course Card -->
+                    <div class="card" style="padding: 35px; display: flex; flex-direction: column; justify-content: space-between; border: 2px solid var(--color-paper-line); background: var(--color-paper);">
+                        <div>
+                            <span style="font-family: var(--font-mono); color: var(--color-brass); font-weight: bold; font-size: 13px; text-transform: uppercase; letter-spacing: 2px;">Machine Learning & AI</span>
+                            <h3 style="font-size: 24px; margin: 12px 0; font-family: var(--font-serif); color: var(--color-ink);">機械学習・AI実装実践</h3>
+                            <p style="color: #666; font-size: 13px; line-height: 1.7; margin-bottom: 25px;">
+                                データの前処理から、scikit-learnを用いた回帰・分類モデル構築、PyTorchを用いたディープラーニング、CNN/Transformerモデルの構造理解、LLMのチューニング（LoRA等）やRAG、AIアプリ構築まで網羅。
+                            </p>
+                            <div style="margin-bottom: 25px; font-family: var(--font-mono); font-size: 12px; color: #555; line-height: 1.7;">
+                                • 全 5 章 / 100 単元<br>
+                                • 教師あり・なし学習モデル構築と精度検証<br>
+                                • 生成AI（LLM/RAG/LoRA）実装とAPI・Web展開（MLOps）
+                            </div>
+                        </div>
+                        <a href="ml/index.html" class="btn btn-primary" style="text-align: center; display: block; width: 100%;">機械学習コースの学習を始める</a>
+                    </div>
+
+                    <!-- SQL Course Card -->
+                    <div class="card" style="padding: 35px; display: flex; flex-direction: column; justify-content: space-between; border: 2px solid var(--color-paper-line); background: var(--color-paper);">
+                        <div>
+                            <span style="font-family: var(--font-mono); color: var(--color-brass); font-weight: bold; font-size: 13px; text-transform: uppercase; letter-spacing: 2px;">SQL & Databases</span>
+                            <h3 style="font-size: 24px; margin: 12px 0; font-family: var(--font-serif); color: var(--color-ink);">SQL＆データベース・データ基盤</h3>
+                            <p style="color: #666; font-size: 13px; line-height: 1.7; margin-bottom: 25px;">
+                                SELECT、JOIN、集計関数などの基本操作から、実務で頻出するWindow関数や日付関数、テーブル設計・正規化、BigQuery/Snowflake等のモダンDWHとdbtによるデータ開発までを50単元で習得。
+                            </p>
+                            <div style="margin-bottom: 25px; font-family: var(--font-mono); font-size: 12px; color: #555; line-height: 1.7;">
+                                • 全 4 章 / 50 単元<br>
+                                • RDBの仕組みとデータ抽出・データ集計クエリの実践<br>
+                                • データベースモデリング（正規化）とクラウドデータ基盤設計
+                            </div>
+                        </div>
+                        <a href="sql/index.html" class="btn btn-primary" style="text-align: center; display: block; width: 100%;">SQLコースの学習を始める</a>
+                    </div>
+
+                    <!-- Data Science Course Card -->
+                    <div class="card" style="padding: 35px; display: flex; flex-direction: column; justify-content: space-between; border: 2px solid var(--color-paper-line); background: var(--color-paper);">
+                        <div>
+                            <span style="font-family: var(--font-mono); color: var(--color-brass); font-weight: bold; font-size: 13px; text-transform: uppercase; letter-spacing: 2px;">Data Science Practice</span>
+                            <h3 style="font-size: 24px; margin: 12px 0; font-family: var(--font-serif); color: var(--color-ink);">探索的データ分析＆DS実践</h3>
+                            <p style="color: #666; font-size: 13px; line-height: 1.7; margin-bottom: 25px;">
+                                分析設計や探索的データ分析（EDA）、KPIツリー構築、Tableau/Looker StudioによるBI可視化、実務でのA/Bテスト効果測定（サンプルサイズ・Z/t検定）からストーリーテリングまでを50単元で習得。
+                            </p>
+                            <div style="margin-bottom: 25px; font-family: var(--font-mono); font-size: 12px; color: #555; line-height: 1.7;">
+                                • 全 4 章 / 50 単元<br>
+                                • イシューからの分析設計と探索的データ分析（EDA）による視覚的データ解釈<br>
+                                • BIダッシュボード設計とA/Bテスト・差分の差分法による効果検証
+                            </div>
+                        </div>
+                        <a href="datascience/index.html" class="btn btn-primary" style="text-align: center; display: block; width: 100%;">データサイエンスコースの学習を始める</a>
+                    </div>
+
+                    <!-- MBA Course Card -->
+                    <div class="card" style="padding: 35px; display: flex; flex-direction: column; justify-content: space-between; border: 2px solid var(--color-paper-line); background: var(--color-paper);">
+                        <div>
+                            <span style="font-family: var(--font-mono); color: var(--color-brass); font-weight: bold; font-size: 13px; text-transform: uppercase; letter-spacing: 2px;">MBA & Business Decision</span>
+                            <h3 style="font-size: 24px; margin: 12px 0; font-family: var(--font-serif); color: var(--color-ink);">MBA＆経営意思決定</h3>
+                            <p style="color: #666; font-size: 13px; line-height: 1.7; margin-bottom: 25px;">
+                                論理思考、経営戦略、マーケティング、財務・管理会計、コーポレートファイナンスに加え、組織人事、オペレーション、交渉術、新規事業起業、経営法務の全10分野を完全網羅。
+                            </p>
+                            <div style="margin-bottom: 25px; font-family: var(--font-mono); font-size: 12px; color: #555; line-height: 1.7;">
+                                • 全 10 章 / 100 単元<br>
+                                • グロービス等の主要MBA書籍に準拠した本格カリキュラム<br>
+                                • 数理・統計・AIを実際の企業価値評価や経営判断へ接続
+                            </div>
+                        </div>
+                        <a href="mba/index.html" class="btn btn-primary" style="text-align: center; display: block; width: 100%;">MBAコースの学習を始める</a>
+                    </div>
                 </div>
             </div>
         </section>
@@ -166,8 +268,8 @@
     <footer class="footer">
         <div class="container footer-inner">
             <div class="footer-left">
-                <div class="footer-logo">Otona Math</div>
-                <p>大人のためのやり直し数学プラットフォーム</p>
+                <div class="footer-logo">Otona Math & Stats</div>
+                <p>大人のためのやり直し数理プラットフォーム</p>
             </div>
             <div class="footer-right">
                 <ul class="footer-nav">

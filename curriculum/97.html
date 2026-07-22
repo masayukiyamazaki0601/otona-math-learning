@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>表計算ソフトによるグラフ作成と可視化 | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .concept-box {
+            background-color: var(--color-paper);
+            border: 2px solid var(--color-brass);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .vs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .vs-item {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        .interactive-tool {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        .tool-header {
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: var(--color-ink);
+            text-align: center;
+        }
+        .data-table {
+            width: 100%;
+            max-width: 500px;
+            border-collapse: collapse;
+            font-family: var(--font-mono);
+            font-size: 14px;
+            margin-bottom: 20px;
+            background-color: #fff;
+        }
+        .data-table th, .data-table td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+        .data-table th {
+            background-color: #f1f1f1;
+            font-weight: bold;
+        }
+        .input-val {
+            width: 80px;
+            padding: 4px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-align: center;
+            font-family: var(--font-mono);
+        }
+        .control-panel {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .control-group {
+            background: var(--color-paper);
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 200px;
+        }
+        .slider {
+            width: 100%;
+            accent-color: var(--color-brass);
+            margin-top: 10px;
+        }
+        .btn-chart {
+            background-color: #f8f9fa;
+            color: #333;
+            border: 2px solid #ccc;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        .btn-chart.active {
+            background-color: var(--color-brass);
+            border-color: var(--color-brass);
+            color: #fff;
+        }
+        .sim-board {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            width: 100%;
+            padding: 30px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            gap: 20px;
+        }
+        .chart-container {
+            width: 100%;
+            max-width: 500px;
+            aspect-ratio: 4 / 3;
+            background: #fafafa;
+            border-left: 2px solid #333;
+            border-bottom: 2px solid #333;
+            position: relative;
+            overflow: hidden;
+        }
+        .axis-label-x {
+            position: absolute;
+            bottom: 5px;
+            right: 10px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #666;
+        }
+        .axis-label-y {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第7章 学習支援とツール活用 &gt; 単元97
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 07 / Unit 97</span>
+                <h2 class="lesson-title">表計算ソフトによるグラフ作成と可視化</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>なぜデータを「グラフ」にするのか？</h4>
+                    <p>どれほど大量のデータ（数字の羅列）を集めても、それらを眺めるだけでは実務の意思決定には使えません。人間の脳は、数字よりも<strong>形や色の変化を捉える方が圧倒的に得意</strong>だからです。</p>
+                    <p>データをグラフ化（可視化）する最大の目的は、データの中に隠れている<strong>「トレンド（傾向）」「パターン（規則性）」「異常値（他と違うデータ）」を一瞬で見抜く</strong>ことにあります。</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>グラフの「目的別」使い分け</h4>
+                    <p>グラフには様々な種類があり、データの性質や見せたい目的に応じて正しく使い分ける必要があります。</p>
+                    
+                    <div class="vs-grid">
+                        <div class="vs-item" style="border-top: 4px solid #3498db;">
+                            <h5 style="margin-top:0; color:#3498db;">比較と推移（棒グラフ・折れ線）</h5>
+                            <p style="font-size:13px; line-height:1.5;">
+                                • <strong>棒グラフ</strong>：離散データの「大きさ」を比較する。カテゴリ別の売上など。<br>
+                                • <strong>折れ線グラフ</strong>：時間の経過に伴う「変化（傾き）」を視覚化する。月別の売上推移など。
+                            </p>
+                        </div>
+                        <div class="vs-item" style="border-top: 4px solid #e74c3c;">
+                            <h5 style="margin-top:0; color:#e74c3c;">関係と割合（散布図・円グラフ）</h5>
+                            <p style="font-size:13px; line-height:1.5;">
+                                • <strong>散布図</strong>：2つの変数間の「相関関係（分布）」を可視化する。広告費と売上の関係など。<br>
+                                • <strong>円グラフ</strong>：全体に対する「構成比（割合）」を示す。シェアの比較など。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>「嘘をつくグラフ」の罠に騙されない</h4>
+                    <p>グラフは人を説得する強力な武器ですが、悪意ある（または無知な）作成者によって<strong>数値を誇張した「嘘のグラフ」</strong>が作られることが頻繁にあります。</p>
+                    <p>その代表例が、<strong>「Y軸の始点を0以外にする」</strong>というテクニックです。たとえば、売上が「100万円から101万円（わずか1%の伸び）」にしか変化していないのに、Y軸の範囲を99万円〜102万円に設定することで、まるで売上が「数倍に急成長した」かのように見せかけることができます。<br>
+                    ビジネスデータを読み解く際は、グラフの線の形だけでなく、必ず<strong>軸のメモリ（スケール）</strong>を確認する習慣をつけてください。</p>
+                </div>
+
+                <!-- Step 4 Interactive Tool -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>【体験】データ可視化と「視覚トリック」検証ツール</h4>
+                    <p>以下のデータテーブルの売上値を書き換えるか、スライダーでグラフ表示の「Y軸の最小値（始点）」を変更してみてください。<br>
+                    「Y軸の最小値を0にする（正しい表示）」と「Y軸の最小値を90にする（誇張表示）」で、同じ売上データであるにもかかわらず、折れ線の「傾き（変化の勢い）」の印象がどれほど劇的に変化するかを体験できます。</p>
+                    
+                    <div class="interactive-tool">
+                        <div class="tool-header">
+                            月別売上データ（万円）
+                        </div>
+                        
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>4月</th>
+                                    <th>5月</th>
+                                    <th>6月</th>
+                                    <th>7月</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="number" id="valApr" class="input-val" value="100"></td>
+                                    <td><input type="number" id="valMay" class="input-val" value="102"></td>
+                                    <td><input type="number" id="valJun" class="input-val" value="105"></td>
+                                    <td><input type="number" id="valJul" class="input-val" value="109"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="control-panel">
+                            <div class="calc-mode-select" style="display:flex; gap:10px;">
+                                <button class="btn-chart active" id="btnLine">折れ線グラフ</button>
+                                <button class="btn-chart" id="btnBar">棒グラフ</button>
+                            </div>
+                            
+                            <div class="control-group">
+                                <label style="font-weight:bold;">Y軸の最小値 (始点): <span id="lblMinY" style="color:var(--color-brass); font-family:var(--font-mono); font-size:18px;">0</span></label>
+                                <input type="range" id="slMinY" class="slider" min="0" max="95" step="5" value="0">
+                            </div>
+                        </div>
+
+                        <div class="sim-board">
+                            <div class="chart-container">
+                                <div class="axis-label-x">月</div>
+                                <div class="axis-label-y">売上</div>
+                                <svg id="chartSvg" width="100%" height="100%" viewBox="0 0 500 375" preserveAspectRatio="none">
+                                    <!-- Axes grid and data visualization will be drawn here -->
+                                </svg>
+                            </div>
+                            
+                            <div id="statusText" style="font-size:14px; font-weight:bold; color:#27ae60; text-align:center;">
+                                Y軸が「0」から始まっているため、実態に即した正しい比較ができています。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】インフォグラフィックスと倫理観</h4>
+                    <p>グラフは客観的なデータを伝えるものであると同時に、見せ方ひとつで印象を操作できる「デザイン」の側面を持っています。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">「見やすさ」と「正確さ」のトレードオフ</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            ビジネスプレゼンにおいて、「今期の成長を強調したいからY軸を狭めよう」という誘惑に駆られることがあります。一時的には会議を通しやすくなるかもしれませんが、中長期的なデータリテラシーのある経営陣やクライアントからは「数字を誤魔化そうとしている」と見抜かれ、深刻な信頼失墜を招きます。
+                        </p>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            特に円グラフを立体（3D）に傾けて表示すると、手前のパイが遠くのパイよりも不当に大きく見えるという幾何学的な目の錯覚が発生します。プロフェッショナルな報告資料ほど、3D効果や不要な装飾を排除し、2Dかつ軸を正しく設定したフラットなデザインを用いるのが鉄則です。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 5 Summary -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>まとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 15px; font-size: 14px; line-height: 1.7;">
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li>データの可視化は、数値データの中に潜むトレンドや異常値を一瞬で見抜くために不可欠。</li>
+                            <li><strong>棒グラフ</strong>はカテゴリ比較、<strong>折れ線</strong>は時系列の推移、<strong>散布図</strong>は相関関係の把握に最適。</li>
+                            <li><strong>Y軸の始点を0以外に設定</strong>すると、わずかな変化を大きな急変動であるかのように見せる視覚的な誇張（トリック）が生じる。</li>
+                            <li>ビジネス上のコミュニケーションにおいて、誇張のないスケールと論理的な配色で、誠実かつ正確なグラフを作ることが基本ルールである。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lesson-footer-nav" style="margin-top: 40px;">
+                    <a href="96.html" class="btn-secondary">&larr; 前の単元へ</a>
+                    <a href="index.html" class="btn-secondary">目次に戻る</a>
+                    <a href="98.html" class="btn btn-primary">次の単元へ &rarr;</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const valApr = document.getElementById('valApr');
+        const valMay = document.getElementById('valMay');
+        const valJun = document.getElementById('valJun');
+        const valJul = document.getElementById('valJul');
+        
+        const slMinY = document.getElementById('slMinY');
+        const lblMinY = document.getElementById('lblMinY');
+        const chartSvg = document.getElementById('chartSvg');
+        const statusText = document.getElementById('statusText');
+        
+        const btnLine = document.getElementById('btnLine');
+        const btnBar = document.getElementById('btnBar');
+
+        let chartType = 'line'; // 'line' or 'bar'
+
+        btnLine.addEventListener('click', () => {
+            chartType = 'line';
+            btnLine.classList.add('active');
+            btnBar.classList.remove('active');
+            updateSim();
+        });
+
+        btnBar.addEventListener('click', () => {
+            chartType = 'bar';
+            btnBar.classList.add('active');
+            btnLine.classList.remove('active');
+            updateSim();
+        });
+
+        [valApr, valMay, valJun, valJul, slMinY].forEach(el => {
+            el.addEventListener('input', updateSim);
+        });
+
+        const SVG_W = 500;
+        const SVG_H = 375;
+        const PADDING_BOTTOM = 40;
+        const PADDING_TOP = 40;
+        const PADDING_LEFT = 50;
+        const PADDING_RIGHT = 30;
+
+        function updateSim() {
+            let val4 = parseFloat(valApr.value) || 0;
+            let val5 = parseFloat(valMay.value) || 0;
+            let val6 = parseFloat(valJun.value) || 0;
+            let val7 = parseFloat(valJul.value) || 0;
+            
+            let vals = [val4, val5, val6, val7];
+            let maxVal = Math.max(...vals) * 1.1; // Add 10% headroom
+            let minVal = parseFloat(slMinY.value);
+            
+            lblMinY.textContent = minVal;
+            
+            // Validate: minVal shouldn't exceed the minimum data point
+            let actualMinData = Math.min(...vals);
+            if (minVal >= actualMinData) {
+                minVal = Math.max(0, Math.floor(actualMinData - 2));
+                slMinY.value = minVal;
+                lblMinY.textContent = minVal;
+            }
+
+            // Update warning status
+            if (minVal > 0) {
+                statusText.textContent = `Y軸が「${minVal}」から始まっているため、データの「変化率（差）」が誇張され、急成長しているように見えます。`;
+                statusText.style.color = "#e74c3c";
+            } else {
+                statusText.textContent = "Y軸が「0」から始まっているため、実態に即した正しい比較ができています。";
+                statusText.style.color = "#27ae60";
+            }
+
+            let svgHtml = '';
+            
+            // Draw Grid Lines (Y-axis grid)
+            let gridSteps = 4;
+            let stepVal = (maxVal - minVal) / gridSteps;
+            for(let i=0; i<=gridSteps; i++) {
+                let currVal = minVal + stepVal * i;
+                let normY = (currVal - minVal) / (maxVal - minVal);
+                let yPos = SVG_H - PADDING_BOTTOM - normY * (SVG_H - PADDING_BOTTOM - PADDING_TOP);
+                
+                // Horizontal line
+                svgHtml += `<line x1="${PADDING_LEFT}" y1="${yPos}" x2="${SVG_W - PADDING_RIGHT}" y2="${yPos}" stroke="#eee" stroke-width="1" />`;
+                // Y label
+                svgHtml += `<text x="${PADDING_LEFT - 10}" y="${yPos + 4}" font-size="12" font-family="var(--font-mono)" text-anchor="end">${Math.round(currVal)}</text>`;
+            }
+
+            // Draw X Labels
+            let months = ["4月", "5月", "6月", "7月"];
+            let xPositions = [];
+            months.forEach((m, idx) => {
+                let xPos = PADDING_LEFT + idx * ((SVG_W - PADDING_LEFT - PADDING_RIGHT) / 3);
+                xPositions.push(xPos);
+                
+                // Vertical line guide
+                svgHtml += `<line x1="${xPos}" y1="${PADDING_TOP}" x2="${xPos}" y2="${SVG_H - PADDING_BOTTOM}" stroke="#f9f9f9" stroke-width="1" />`;
+                // X label
+                svgHtml += `<text x="${xPos}" y="${SVG_H - PADDING_BOTTOM + 20}" font-size="12" font-weight="bold" text-anchor="middle">${m}</text>`;
+            });
+
+            // Draw Baseline Axes
+            svgHtml += `<line x1="${PADDING_LEFT}" y1="${SVG_H - PADDING_BOTTOM}" x2="${SVG_W - PADDING_RIGHT}" y2="${SVG_H - PADDING_BOTTOM}" stroke="#333" stroke-width="2" />`; // X axis
+            svgHtml += `<line x1="${PADDING_LEFT}" y1="${PADDING_TOP}" x2="${PADDING_LEFT}" y2="${SVG_H - PADDING_BOTTOM}" stroke="#333" stroke-width="2" />`; // Y axis
+
+            // Calculate Data coordinates in SVG space
+            let pts = [];
+            vals.forEach((v, idx) => {
+                let normY = (v - minVal) / (maxVal - minVal);
+                // Clamp
+                if (normY < 0) normY = 0;
+                let x = xPositions[idx];
+                let y = SVG_H - PADDING_BOTTOM - normY * (SVG_H - PADDING_BOTTOM - PADDING_TOP);
+                pts.push({x: x, y: y});
+            });
+
+            // Draw Data
+            if (chartType === 'line') {
+                // Draw Line Chart
+                let linePath = "";
+                pts.forEach((p, idx) => {
+                    linePath += `${idx === 0 ? 'M' : 'L'} ${p.x} ${p.y} `;
+                });
+                svgHtml += `<path d="${linePath}" fill="none" stroke="var(--color-brass)" stroke-width="4" />`;
+                
+                // Draw Dots
+                pts.forEach(p => {
+                    svgHtml += `<circle cx="${p.x}" cy="${p.y}" r="6" fill="var(--color-brass)" stroke="#fff" stroke-width="2" />`;
+                });
+            } else {
+                // Draw Bar Chart
+                let barWidth = 35;
+                pts.forEach(p => {
+                    let h = (SVG_H - PADDING_BOTTOM) - p.y;
+                    svgHtml += `<rect x="${p.x - barWidth/2}" y="${p.y}" width="${barWidth}" height="${h}" fill="rgba(197, 160, 89, 0.7)" stroke="var(--color-brass)" stroke-width="2" />`;
+                });
+            }
+
+            chartSvg.innerHTML = svgHtml;
+        }
+
+        updateSim();
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>金融計算基礎（単利と複利） | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .concept-box {
+            background-color: var(--color-paper);
+            border: 2px solid var(--color-brass);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .vs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .vs-item {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        .math-display {
+            font-size: 20px;
+            font-family: var(--font-mono);
+            color: var(--color-ink);
+            margin: 10px 0;
+            overflow-x: auto;
+            text-align: center;
+        }
+        .interactive-tool {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .tool-header {
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: var(--color-ink);
+            text-align: center;
+        }
+        .control-panel {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .control-group {
+            background: var(--color-paper);
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 200px;
+        }
+        .slider {
+            width: 100%;
+            accent-color: var(--color-brass);
+            margin-top: 10px;
+        }
+        .sim-board {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            width: 100%;
+            padding: 30px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            gap: 20px;
+        }
+        .chart-container {
+            width: 100%;
+            max-width: 600px;
+            height: 300px;
+            background: #fafafa;
+            border: 1px solid #ccc;
+            position: relative;
+        }
+        .stat-results {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            max-width: 600px;
+            margin-top: 10px;
+        }
+        .stat-box {
+            text-align: center;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 15px;
+            flex: 1;
+            margin: 0 10px;
+        }
+        .stat-title {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .stat-val {
+            font-size: 24px;
+            font-family: var(--font-mono);
+            font-weight: bold;
+        }
+        .color-simple { color: #3498db; }
+        .color-compound { color: #e74c3c; }
+        .diff-val {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2ecc71;
+            margin-top: 15px;
+            padding: 10px;
+            background: #ebf9f1;
+            border: 1px solid #2ecc71;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">カリキュラム</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                    <li><a href="../reviews/index.html">参考書・ツール</a></li>
+                    <li><a href="../schools/index.html">スクール比較</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 第6章 論理と集合 &gt; 単元84
+        </div>
+
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 06 / Unit 84</span>
+                <h2 class="lesson-title">金融計算基礎（単利と複利）</h2>
+            </header>
+
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>アインシュタインが「人類最大の発明」と呼んだもの</h4>
+                    <p>ビジネスや資産運用において絶対に欠かせないのが「利息（金利）」の計算です。<br>
+                    利息の計算方法には<strong>「単利（たんり）」</strong>と<strong>「複利（ふくり）」</strong>の2種類があります。</p>
+                    <p>天才物理学者アインシュタインは、「複利は人類最大の発明である。知っている人は複利で稼ぎ、知らない人は利息を払う」という名言を残したと言われています。なぜ複利がそれほどまでに特別視されるのでしょうか。</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>単利と複利の決定的な違い</h4>
+                    <p>100万円を年利5%で預けた場合の違いを見てみましょう。</p>
+                    
+                    <div class="vs-grid">
+                        <div class="vs-item" style="border-top: 4px solid #3498db;">
+                            <h5 style="margin-top:0; color:#3498db;">単利（Simple Interest）</h5>
+                            <p style="font-size:13px; line-height:1.5;">最初の「元本（100万円）」に対してのみ利息がつく計算方法。<br>毎年必ず「5万円」ずつしか増えない。直線的な成長。</p>
+                            <div class="math-display" style="font-size:14px;">1年後: 105万<br>2年後: 110万<br>3年後: 115万...</div>
+                        </div>
+                        <div class="vs-item" style="border-top: 4px solid #e74c3c;">
+                            <h5 style="margin-top:0; color:#e74c3c;">複利（Compound Interest）</h5>
+                            <p style="font-size:13px; line-height:1.5;">「元本＋前年までについた利息」の合計に対して利息がつく計算方法。<br>利息が利息を生むため、雪だるま式（指数関数的）に増える。</p>
+                            <div class="math-display" style="font-size:14px;">1年後: 105万<br>2年後: 110.25万<br>3年後: 115.76万...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 Interactive Tool -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>【体験】単利 vs 複利 シミュレーター</h4>
+                    <p>最初はわずかな差（2年目で2500円の差）しかありませんが、時間が経てば経つほど複利のグラフは劇的に跳ね上がります。<br>
+                    スライダーで「年利」と「運用期間」を動かし、長期投資における複利の圧倒的なパワーを視覚的に確認しましょう。</p>
+                    
+                    <div class="interactive-tool">
+                        <div class="tool-header">
+                            元本100万円の運用シミュレーション
+                        </div>
+                        
+                        <div class="control-panel">
+                            <div class="control-group">
+                                <label style="font-weight:bold;">年利: <span id="lblRate" style="color:var(--color-brass); font-family:var(--font-mono); font-size:18px;">5</span> %</label>
+                                <input type="range" id="slRate" class="slider" min="1" max="15" step="1" value="5">
+                            </div>
+                            <div class="control-group">
+                                <label style="font-weight:bold;">運用期間: <span id="lblYears" style="color:var(--color-brass); font-family:var(--font-mono); font-size:18px;">30</span> 年</label>
+                                <input type="range" id="slYears" class="slider" min="5" max="50" step="1" value="30">
+                            </div>
+                        </div>
+
+                        <div class="sim-board">
+                            <div class="chart-container">
+                                <svg width="100%" height="100%" viewBox="0 0 600 300" preserveAspectRatio="none">
+                                    <!-- Grid & Labels -->
+                                    <line x1="0" y1="280" x2="600" y2="280" stroke="#ccc" stroke-dasharray="4,4" />
+                                    <text x="5" y="275" font-size="12" fill="#999">元本 100万円</text>
+                                    
+                                    <!-- Lines generated by JS -->
+                                    <polyline id="lineSimple" fill="none" stroke="#3498db" stroke-width="3" />
+                                    <polyline id="lineCompound" fill="none" stroke="#e74c3c" stroke-width="3" />
+                                </svg>
+                            </div>
+                            
+                            <div class="stat-results">
+                                <div class="stat-box" style="border-top: 4px solid #3498db;">
+                                    <div class="stat-title">単利での最終金額</div>
+                                    <div class="stat-val color-simple" id="valSimple">0 万円</div>
+                                </div>
+                                <div class="stat-box" style="border-top: 4px solid #e74c3c;">
+                                    <div class="stat-title">複利での最終金額</div>
+                                    <div class="stat-val color-compound" id="valCompound">0 万円</div>
+                                </div>
+                            </div>
+                            <div class="diff-val" id="valDiff">複利の方が 〇〇万円 お得！</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column -->
+                <div class="lesson-step alert">
+                    <span class="lesson-step-meta">番外編 (Column)</span>
+                    <h4>【番外編】金融業界の常識「72の法則」</h4>
+                    <p>複利の計算（累乗）は複雑ですが、投資の世界には便利な暗算テクニックがあります。</p>
+                    
+                    <div class="lesson-callout" style="border-color: var(--color-brass); background-color: var(--color-surface);">
+                        <span class="lesson-callout-title" style="color: var(--color-brass);">「72 ÷ 金利(%) ＝ 元本が2倍になる年数」</span>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 12px;">
+                            これは<strong>「72の法則」</strong>と呼ばれる有名な公式です。<br>
+                            例えば、年利が「3%」の金融商品があったとします。この公式に当てはめると「$72 \div 3 = 24$」。つまり、複利で運用すれば約24年後に元本が2倍になる、ということが電卓なしで瞬時にわかります。
+                        </p>
+                        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 0;">
+                            逆に、「10年で元本を2倍にしたい」のであれば、「$72 \div 10 = 7.2$」となり、年利7.2%の投資先を探す必要があることがわかります。金融商品の営業を受けた際は、この72の法則を頭の中で計算するだけで、その商品の良し悪しを冷静に判断する武器になります。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 5 Summary -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>まとめ</h4>
+                    <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 15px; font-size: 14px; line-height: 1.7;">
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li><strong>単利</strong>：最初の元本にのみ利息がつく。直線的な増加。</li>
+                            <li><strong>複利</strong>：元本＋利息の合計に対して利息がつく。指数関数的な増加（雪だるま式）。</li>
+                            <li>長期間運用すればするほど、単利と複利の差は劇的に開いていく。</li>
+                            <li><strong>72の法則</strong>：「72 ÷ 金利 ＝ 資産が2倍になる年数」という、複利の便利な概算テクニック。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lesson-footer-nav" style="margin-top: 40px;">
+                    <a href="83.html" class="btn-secondary">&larr; 前の単元へ</a>
+                    <a href="index.html" class="btn-secondary">目次に戻る</a>
+                    <a href="85.html" class="btn btn-primary">次の単元へ &rarr;</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const slRate = document.getElementById('slRate');
+        const slYears = document.getElementById('slYears');
+        const lblRate = document.getElementById('lblRate');
+        const lblYears = document.getElementById('lblYears');
+        
+        const lineSimple = document.getElementById('lineSimple');
+        const lineCompound = document.getElementById('lineCompound');
+        
+        const valSimple = document.getElementById('valSimple');
+        const valCompound = document.getElementById('valCompound');
+        const valDiff = document.getElementById('valDiff');
+
+        function updateSim() {
+            let r = parseInt(slRate.value) / 100; // e.g. 0.05
+            let years = parseInt(slYears.value);
+            
+            lblRate.textContent = slRate.value;
+            lblYears.textContent = years;
+            
+            let principal = 100; // 100万円
+            
+            let dataSimple = [principal];
+            let dataCompound = [principal];
+            
+            for(let i=1; i<=years; i++) {
+                // Simple: principal + (principal * rate * years)
+                let sVal = principal * (1 + r * i);
+                dataSimple.push(sVal);
+                
+                // Compound: principal * (1 + rate)^years
+                let cVal = principal * Math.pow(1 + r, i);
+                dataCompound.push(cVal);
+            }
+            
+            let finalSimple = dataSimple[years];
+            let finalCompound = dataCompound[years];
+            
+            // Draw SVG
+            // Max Y should be a bit above finalCompound to fit
+            let maxY = finalCompound * 1.1; 
+            if(maxY < 200) maxY = 200; // minimum scale
+            
+            function getPts(hist) {
+                let pts = "";
+                for(let i=0; i<=years; i++) {
+                    let x = (i / years) * 600;
+                    // Y: 0 is at 280px (bottom), maxY is at 20px (top)
+                    let y = 280 - ((hist[i] - 0) / (maxY - 0)) * 260;
+                    pts += `${x},${y} `;
+                }
+                return pts;
+            }
+            
+            lineSimple.setAttribute("points", getPts(dataSimple));
+            lineCompound.setAttribute("points", getPts(dataCompound));
+            
+            // Update texts
+            // Round to 1 decimal place (万円)
+            let fsStr = finalSimple.toFixed(1);
+            let fcStr = finalCompound.toFixed(1);
+            let diffStr = (finalCompound - finalSimple).toFixed(1);
+            
+            valSimple.textContent = parseFloat(fsStr).toLocaleString() + " 万円";
+            valCompound.textContent = parseFloat(fcStr).toLocaleString() + " 万円";
+            valDiff.innerHTML = `複利の方が <strong>${parseFloat(diffStr).toLocaleString()} 万円</strong> お得！`;
+        }
+
+        slRate.addEventListener('input', updateSim);
+        slYears.addEventListener('input', updateSim);
+        updateSim();
+        
+    </script>
+</body>
+</html>
