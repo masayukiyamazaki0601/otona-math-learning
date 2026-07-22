@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>運営者情報・著者プロフィール | Otona Math & Stats</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css?v=3">
+    <style>
+        .profile-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .profile-card {
+            background-color: var(--color-paper);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 8px;
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--color-brass) 0%, #d4af37 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+            font-family: 'Shippori Mincho', serif;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .profile-title-block {
+            flex: 1;
+            min-width: 200px;
+        }
+        .profile-name {
+            font-size: 24px;
+            color: var(--color-brass);
+            margin: 0 0 8px 0;
+            font-family: 'Shippori Mincho', serif;
+        }
+        .profile-title {
+            font-size: 14px;
+            color: var(--color-ink-soft);
+            font-family: var(--font-mono);
+        }
+        .profile-section-title {
+            font-size: 18px;
+            color: var(--color-brass);
+            margin: 30px 0 15px 0;
+            border-left: 4px solid var(--color-brass);
+            padding-left: 15px;
+            font-family: 'Shippori Mincho', serif;
+        }
+        .profile-content {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--color-ink);
+            text-align: justify;
+        }
+        .profile-list {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+        .profile-list li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="index.html" style="color: inherit;">Otona Math & Stats</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">数学と統計学</a></li>
+                    <li><a href="books.html">書籍紹介</a></li>
+                    <li><a href="columns/index.html">コラム</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="profile-container">
+        <div class="lesson-breadcrumbs" style="margin-bottom: 30px;">
+            <a href="index.html">ホーム</a> &gt; 運営者情報
+        </div>
+
+        <section class="profile-card">
+            <div class="profile-header">
+                <div class="profile-avatar">YM</div>
+                <div class="profile-title-block">
+                    <h2 class="profile-name">山崎 雅之 (YM)</h2>
+                    <div class="profile-title">フリーランス 機械学習エンジニア / データサイエンティスト</div>
+                </div>
+            </div>
+
+            <div class="profile-content">
+                <h3 class="profile-section-title">略歴</h3>
+                <p>
+                    大学理工学部にて数理統計学および最適化理論を専攻。
+                    卒業後、国内大手IT企業にてレコメンドエンジンのアルゴリズム開発、ディープラーニングを用いた画像認識モデリング、および需要予測システムの構築・実装に従事しました。
+                    その後独立し、現在はフリーランスとして複数企業のデータ活用プロジェクトに参画しております。
+                </p>
+                <p>
+                    実務で数理モデルを実装・運用する中で、多くのエンジニアや実務家が「数式への苦手意識」からライブラリをブラックボックスとして使わざるを得ない現状を目の当たりにしてきました。
+                    「公式の丸暗記を排し、その背後にある数理の仕組みを直感的に納得できる学び直しの場を作りたい」との思いから、本プラットフォーム「Otona Math & Stats」を立ち上げ、教材の作成および技術コラムの執筆を精力的に行っています。
+                </p>
+
+                <h3 class="profile-section-title">主な専門領域</h3>
+                <ul class="profile-list">
+                    <li><strong>機械学習モデル開発</strong>：決定木、ランダムフォレスト、勾配ブースティング（LightGBM/XGBoost）を用いた予測モデリング</li>
+                    <li><strong>統計モデリング</strong>：ベイズ統計を用いたデータ予測、仮説検定・A/Bテストの効果検証設計</li>
+                    <li><strong>データサイエンス実務</strong>：KPI設計、BIツール（Tableau/Looker Studio）を用いた可視化ダッシュボードの構築</li>
+                    <li><strong>システム実装</strong>：Pythonによる機械学習パイプラインの構築、GCP/AWS上へのデータ処理基盤の展開</li>
+                </ul>
+
+                <h3 class="profile-section-title">メッセージ</h3>
+                <p>
+                    データサイエンスや機械学習のライブラリは日々進化し、今や誰でも簡単に高度なアルゴリズムを呼び出すことができます。
+                    しかし、モデルの精度を高め、重大な予測バグを回避し、何より分析結果を周囲に納得のいく論理で説明するためには、その根底にある数学・統計学の理解が不可欠です。
+                </p>
+                <p>
+                    本サイトを通じて、数式の裏にある本質的な「なぜ」を解き明かす知的興奮を一人でも多くの方と共有できれば幸いです。
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math & Stats</div>
+                <p>大人のためのやり直し数理プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <ul class="footer-nav">
+                    <li><a href="profile.html">運営者情報</a></li>
+                    <li><a href="#">利用規約</a></li>
+                    <li><a href="#">プライバシーポリシー</a></li>
+                    <li><a href="#">お問い合わせ</a></li>
+                </ul>
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
