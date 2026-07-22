@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ハインリッヒの法則：大失敗の裏に潜む確率の数理 | Otona Math コラム</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .column-content {
+            background-color: var(--color-surface);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            margin-bottom: 40px;
+        }
+        .column-content p {
+            line-height: 2.1;
+            margin-bottom: 28px;
+        }
+        .section-header {
+            color: var(--color-brass);
+            margin-top: 40px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 10px;
+            font-size: 22px;
+        }
+        
+        /* Interactive Simulator Styles */
+        .interactive-simulator {
+            background-color: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        .simulator-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 15px;
+        }
+        .simulator-header h3 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            color: var(--color-ink);
+        }
+        .simulator-header p {
+            font-size: 14px;
+            color: var(--color-ink-soft);
+        }
+        
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 0.95fr 1.05fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        @media (max-width: 900px) {
+            .sim-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Control Panel */
+        .control-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .sim-state-card {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .sim-control-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--color-ink);
+            margin-bottom: 10px;
+        }
+        
+        /* Slider Group */
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 15px;
+        }
+        .slider-label-container {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--color-ink);
+        }
+        .sim-slider {
+            width: 100%;
+            height: 6px;
+            background: var(--color-paper);
+            border-radius: 3px;
+            outline: none;
+            accent-color: var(--color-brass);
+        }
+
+        /* SVG Visualization Container */
+        .pyramid-viz-box {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .pyramid-viz-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--color-ink-soft);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .pyramid-svg-container {
+            width: 100%;
+            height: 240px;
+            position: relative;
+        }
+        .pyramid-svg-container svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        /* Results Board */
+        .results-board {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            background: var(--color-paper);
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        @media (max-width: 600px) {
+            .results-board {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+        .res-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .res-label {
+            font-size: 11px;
+            color: var(--color-ink-soft);
+            margin-bottom: 4px;
+        }
+        .res-val {
+            font-size: 20px;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            color: var(--color-ink);
+        }
+        .res-val.status-warn { color: var(--color-red); }
+        .res-val.status-ok { color: #10b981; }
+
+        /* Status Board */
+        .status-board {
+            background: rgba(169, 120, 47, 0.05);
+            border: 1px solid rgba(169, 120, 47, 0.2);
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        .status-board.active-warning {
+            background: rgba(180, 67, 47, 0.06);
+            border-color: rgba(180, 67, 47, 0.3);
+        }
+        @media (max-width: 600px) {
+            .status-board {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+        .status-left {
+            display: flex;
+            flex-direction: column;
+        }
+        .status-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .status-board.active-warning .status-title {
+            color: var(--color-red);
+        }
+        .status-desc {
+            font-size: 12px;
+            color: var(--color-ink-soft);
+        }
+        .status-right {
+            display: flex;
+            align-items: center;
+        }
+        .status-stat-value {
+            font-family: var(--font-body);
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .status-board.active-warning .status-stat-value {
+            color: var(--color-red);
+        }
+
+        /* SVG Element Styling */
+        .pyramid-facet {
+            stroke: #ced4da;
+            stroke-width: 1px;
+            fill: none;
+        }
+        .pyramid-facet.level-3 { fill: #f8f9fa; }
+        .pyramid-facet.level-2 { fill: #f1f3f5; }
+        .pyramid-facet.level-1 { fill: #e9ecef; }
+        
+        .dot-incident {
+            transition: all 0.5s;
+        }
+        .dot-incident.inc-near {
+            fill: #f59e0b;
+        }
+        .dot-incident.inc-minor {
+            fill: #e53e3e;
+            r: 3px;
+        }
+        .dot-incident.inc-major {
+            fill: #742a2a;
+            r: 5px;
+        }
+
+        .viz-label {
+            font-family: var(--font-body);
+            font-size: 10px;
+            fill: var(--color-ink-soft);
+            text-anchor: middle;
+        }
+        .pyramid-text {
+            font-family: var(--font-body);
+            font-size: 10px;
+            fill: var(--color-ink);
+            font-weight: bold;
+            text-anchor: middle;
+        }
+
+        /* Common Button Style */
+        .sim-btn {
+            background: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            color: var(--color-ink);
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: var(--radius-btn);
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+        }
+        .sim-btn:hover {
+            border-color: var(--color-ink);
+            background-color: #f7f7f7;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="../index.html">数学と統計学</a></li>
+                    <li><a href="index.html">コラム</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">コラム</a> &gt; ハインリッヒの法則
+        </div>
+
+        <article class="column-content">
+            <h2 style="font-size: 28px; margin-bottom: 30px; line-height: 1.4;">ハインリッヒの法則（1:29:300の法則）：<br>「1つの大失敗」の裏に隠された危機管理の数理モデル</h2>
+            
+            <p>
+                企業の不祥事や工場の重大な労働災害がなぜ起こるのか。
+                その背後に潜む確率論的な構造を統計学的に解き明かしたのが、「ハインリッヒの法則」です。
+            </p>
+            <p>
+                1930年代にアメリカの保険会社で働いていたハーバート・ウィリアム・ハインリッヒは、5,000件以上の労働災害データを詳細に分析しました。
+                その結果、事故の発生比率には「ある一定の統計的な偏り」が存在することを発見しました。
+                現在では、リスク管理や品質保証の絶対的な基本原理とされている本法則の仕組みについて、シミュレーションを用いて解説します。
+            </p>
+
+            <h3 class="section-header">第1章：水面下の氷山「1：29：300」の構成比</h3>
+            <p>
+                ハインリッヒが導き出した数値は、「1：29：300」の比率です。
+                これは、同一の作業環境において発生するトラブルが、以下の構成比を示すことを表しています。
+            </p>
+            <ul style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
+                <li><strong>「1」の重大事故</strong>：生命の危険に直結する事故や、会社組織の存続を脅かす致命的な障害。</li>
+                <li><strong>「29」の軽微な事故</strong>：修復可能であり、実質的な被害が局所的な範囲で留まる小さな失敗。</li>
+                <li><strong>「300」のヒヤリ・ハット</strong>：事故には至らなかったものの、直感的に「危険である」と認識されたアクシデントの未遂状態。</li>
+            </ul>
+            <p>
+                重大な事故は、ある日突然、偶発的に発生するものではありません。
+                水面下に隠された「300回の未遂」と、その上に積み上がった「29回の小さな失敗」という因果関係の鎖（ドミノ）の終着点として、必然的に「1回の致命的な大失敗」が発生します。
+            </p>
+
+            <h3 class="section-header">【体験】レストラン労働災害・ハインリッヒ確率シミュレーター</h3>
+            <p>
+                レストランの床の水たまりを放置した危険な経営状態を検証します。
+                危険度（水たまりの放置割合）をスライダーで設定し、「店舗の営業を進める（10日分）」を押すと、日々ヒヤリ・ハット（黄色点）がプロットされます。
+                統計確率に従って、黄色が積み上がった先に軽微な事故（橙点）や重大な事故（赤点・倒産）が発生するリスクを観察してください。
+            </p>
+
+            <!-- シミュレーター容器 -->
+            <div class="interactive-simulator">
+                <div class="simulator-header">
+                    <h3>危険度の放置とトラブルの確率収束</h3>
+                    <p>水たまりの放置割合（危険度）を設定し、営業日数を経過させてピラミッド上にイベントが積み重なる様子を確認します。</p>
+                </div>
+                
+                <div class="sim-grid">
+                    <!-- 左：設定とコントロール -->
+                    <div class="control-panel">
+                        <div class="sim-state-card">
+                            <div class="sim-control-title">⚙️ 床の水濡れ放置割合（危険度）</div>
+                            <div class="slider-group">
+                                <div class="slider-label-container">
+                                    <span>⚠️ 危険度レベル</span>
+                                    <span><span id="val-risk-level">100</span> %</span>
+                                </div>
+                                <input type="range" id="slide-risk-level" class="sim-slider" min="0" max="100" step="10" value="100" oninput="onParamChange()">
+                            </div>
+                        </div>
+
+                        <div class="sim-state-card" id="card-inputs">
+                            <button id="btn-next-days" class="sim-btn" onclick="runDays(10)">📅 店舗の営業を進める (10日分) ➔</button>
+                        </div>
+
+                        <div style="text-align: center;">
+                            <button class="sim-btn" onclick="resetHeinrichSim()">🔄 シミュレーションを初期化</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 右：SVG可視化 -->
+                    <div class="pyramid-viz-box">
+                        <div class="pyramid-viz-title">
+                            <span>📐 ハインリッヒ・ピラミッド</span>
+                            <span style="font-family:var(--font-mono); font-size:10px; color:var(--color-ink-soft);">累積イベント可視化</span>
+                        </div>
+                        <div class="pyramid-svg-container">
+                            <svg id="svg-pyramid" viewBox="0 0 240 220">
+                                <!-- ピラミッド領域の描画 -->
+                                <!-- 1: 重大事故 (頂点) -->
+                                <polygon points="120,20 100,60 140,60" class="pyramid-facet level-3" />
+                                <!-- 29: 軽微な事故 (中段) -->
+                                <polygon points="100,60 140,60 160,110 80,110" class="pyramid-facet level-2" />
+                                <!-- 300: ヒヤリハット (下段) -->
+                                <polygon points="80,110 160,110 190,180 50,180" class="pyramid-facet level-1" />
+
+                                <!-- テキストラベル -->
+                                <text x="120" y="50" class="pyramid-text">重大 (1)</text>
+                                <text x="120" y="90" class="pyramid-text">軽微 (29)</text>
+                                <text x="120" y="150" class="pyramid-text">ヒヤリ・ハット (300)</text>
+
+                                <!-- プロット点描画グループ -->
+                                <g id="group-incident-dots"></g>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 結果ボード -->
+                <div class="results-board">
+                    <div class="res-box">
+                        <div class="res-label">累計営業日数</div>
+                        <div class="res-val"><span id="val-days-count">0</span> 日</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">ヒヤリ・ハット数</div>
+                        <div class="res-val" style="color:#f59e0b;"><span id="val-near-miss">0</span> 件</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">軽微な事故数</div>
+                        <div class="res-val" style="color:#e53e3e;"><span id="val-minor-acc">0</span> 件</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">重大事故数</div>
+                        <div class="res-val" style="color:#742a2a;"><span id="val-major-acc">0</span> 件</div>
+                    </div>
+                </div>
+                
+                <!-- 判定ボード -->
+                <div id="sim-status-board" class="status-board">
+                    <div class="status-left">
+                        <div class="status-title">🚥 危機管理レベル診断</div>
+                        <div id="sim-status-desc" class="status-desc">初期化が完了しました。危険度を設定して営業を開始してください。</div>
+                    </div>
+                    <div class="status-right">
+                        <div id="sim-status-val" class="target-stat-value">営業前</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-header">第2章：脳のバイアス「被害ゼロ＝安全」という誤認</h3>
+            <p>
+                経営管理者や現場作業者が、倒産を招くような重大な事象を防げない背景には、人間の認知バイアスが関係しています。
+            </p>
+            <p>
+                濡れた床で足を滑らせたものの、転倒せず料理も破損しなかった（実質的な被害がゼロであった）場合、多くの人は「特に何も起きなかったため安全である」と都合よく解釈します。
+                この未遂体験の繰り返しにより、「注意深く歩けば安全である」という、本来是正すべき異常状態が「正常（日常）」へと認識の上で置き換わります。
+            </p>
+            <p>
+                重大な事故を起こす組織は、突発的な不運によるものではありません。
+                水面下で発生していた300回におよぶ警告シグナルをすべて無視し続けた結果、確率の収束によって最終的に1件の重大事故を引き当てています。
+            </p>
+
+            <h3 class="section-header">第3章：ピラミッドの底辺を潰す危機管理アプローチ</h3>
+            <p>
+                ハインリッヒの法則が示す教訓は、「頂点に位置する1つの重大事故だけを個別に防ぎに行くアプローチは効果が薄い」ということです。
+            </p>
+            <p>
+                事故が発生した後に謝罪や補償を行うことは、事後的な対処に過ぎません。
+                全体の事故発生確率を数学的に引き下げる唯一の対策は、ピラミッドの土台を構成する「300のヒヤリ・ハット（未遂）」を初期の段階で根絶することです。
+            </p>
+            <p>
+                優れた企業組織においては、作業者が「滑りかけた」「手順を間違えそうになった」という未遂の事実を報告した際、決して叱責を行いません。
+                むしろ、未遂のデータを集積し、床を乾燥させる、あるいは滑り止めの床材へ変更するなど、根本原因の解消に資源を投下します。
+                底辺の300件の要因を排除すれば、その上に重なる29件の軽微な事故、そして1件の重大事故は数学的・確率的に発生しなくなります。
+            </p>
+
+            <h3 class="section-header">まとめ</h3>
+            <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 20px; font-size: 15px; line-height: 1.8;">
+                ハインリッヒの法則は、「偶発的な大事故は存在しない」という統計的な真理を提示しています。
+                「これまで事故が起きていないから今後も安全である」という楽観的な誤認を排除し、日常の小さな異常（ヒヤリ・ハット）の段階でシステムや物理的環境を修正することが、組織を致命的な破滅から守る最も確実な防波堤です。
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- シミュレーター制御スクリプト -->
+    <script>
+        // 状態変数
+        let days = 0;
+        let nearMiss = 0;
+        let minorAcc = 0;
+        let majorAcc = 0;
+        let riskLevel = 100; // 0%〜100%
+
+        const slideRisk = document.getElementById('slide-risk-level');
+        const lblRisk = document.getElementById('val-risk-level');
+        
+        const lblDays = document.getElementById('val-days-count');
+        const lblNear = document.getElementById('val-near-miss');
+        const lblMinor = document.getElementById('val-minor-acc');
+        const lblMajor = document.getElementById('val-major-acc');
+
+        const btnNextDays = document.getElementById('btn-next-days');
+        const statusBoard = document.getElementById('sim-status-board');
+        const statusDesc = document.getElementById('sim-status-desc');
+        const statusVal = document.getElementById('sim-status-val');
+
+        const gIncidentDots = document.getElementById('group-incident-dots');
+
+        function resetHeinrichSim() {
+            days = 0;
+            nearMiss = 0;
+            minorAcc = 0;
+            majorAcc = 0;
+
+            slideRisk.disabled = false;
+            btnNextDays.disabled = false;
+            btnNextDays.style.opacity = 1;
+
+            lblDays.textContent = days;
+            lblNear.textContent = nearMiss;
+            lblMinor.textContent = minorAcc;
+            lblMajor.textContent = majorAcc;
+
+            gIncidentDots.innerHTML = '';
+
+            statusBoard.className = 'status-board';
+            statusVal.textContent = '営業前';
+            statusDesc.textContent = '危険度を設定して「店舗の営業を進める」ボタンを押してください。';
+        }
+
+        function onParamChange() {
+            riskLevel = parseInt(slideRisk.value);
+            lblRisk.textContent = riskLevel;
+            resetHeinrichSim();
+        }
+
+        // 営業を進める (10日単位)
+        function runDays(step) {
+            if (majorAcc >= 1) return; // 倒産後は実行不可
+
+            days += step;
+            lblDays.textContent = days;
+
+            // 危険度に基づく発生確率の計算
+            // 危険度100%の場合、1日あたりヒヤリハットが 平均 3〜5回発生
+            // 危険度 50%の場合、1日あたりヒヤリハットが 平均 1.5〜2.5回発生
+            // 危険度 0%の場合、発生しない
+            const dailyNearMissMean = (riskLevel / 100) * 4;
+
+            for (let d = 0; d < step; d++) {
+                // ポアソン分布風のランダム回数決定
+                const todayNearCount = Math.round(dailyNearMissMean + (Math.random() - 0.5) * 2);
+                const actualNear = Math.max(0, todayNearCount);
+                
+                for (let n = 0; n < actualNear; n++) {
+                    nearMiss++;
+                    
+                    // 比率 300 : 29 : 1 の確率判定
+                    // ヒヤリハット300件に達するたびに、軽微な事故が29件相当、重大事故が1件相当発生する
+                    // つまり、ヒヤリハット1件あたり、軽微事故への移行確率は 29 / 300 ≒ 9.6%
+                    // 重大事故への移行確率は 1 / 330 ≒ 0.3%
+                    const roll = Math.random();
+                    if (roll < 0.003) {
+                        majorAcc = 1;
+                        break;
+                    } else if (roll < 0.096) {
+                        minorAcc++;
+                    }
+                }
+                if (majorAcc >= 1) break;
+            }
+
+            lblNear.textContent = nearMiss;
+            lblMinor.textContent = minorAcc;
+            lblMajor.textContent = majorAcc;
+
+            // プロット描画
+            drawIncidentDots();
+
+            // 診断評価
+            if (majorAcc >= 1) {
+                btnNextDays.disabled = true;
+                btnNextDays.style.opacity = 0.5;
+                slideRisk.disabled = true;
+
+                statusBoard.className = 'status-board active-warning';
+                statusVal.textContent = '重大事故発生による店舗閉鎖（倒産）';
+                statusDesc.textContent = `ヒヤリ・ハット【${nearMiss}件】が積み重なった結果、確率の収束により重大な転倒事故が発生しました。数千万円の損害賠償と信用の喪失により倒産となりました。`;
+            } else {
+                if (riskLevel === 0) {
+                    statusBoard.className = 'status-board';
+                    statusVal.textContent = '極めて安全な環境設計';
+                    statusDesc.textContent = '危険度が0%のため、ヒヤリ・ハット自体の発生確率がゼロに抑えられており、将来にわたって重大事故のリスクはありません。';
+                } else if (nearMiss > 150) {
+                    statusBoard.className = 'status-board active-warning';
+                    statusVal.textContent = '危機的状況（大事故寸前）';
+                    statusDesc.textContent = `ヒヤリ・ハットが【${nearMiss}件】、軽微な事故が【${minorAcc}件】発生しています。重大事故（倒産）の発生確率が極めて高くなっています。`;
+                } else {
+                    statusBoard.className = 'status-board';
+                    statusVal.textContent = '危険の累積中';
+                    statusDesc.textContent = `現在までは重大事故は発生していませんが、水面下でヒヤリ・ハットが蓄積されています。`;
+                }
+            }
+        }
+
+        // ピラミッド上へのプロット点の描画
+        function drawIncidentDots() {
+            gIncidentDots.innerHTML = '';
+
+            // ヒヤリ・ハット (下段台形内にプロット)
+            // 領域: 80,110 160,110 190,180 50,180
+            // 描画数を最大150個に制限（表示上の都合）
+            const dispNear = Math.min(nearMiss, 150);
+            for (let i = 0; i < dispNear; i++) {
+                const { x, y } = getPyramidRandomCoord(115, 175, 55, 185);
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', x);
+                circle.setAttribute('cy', y);
+                circle.setAttribute('r', 1.5);
+                circle.setAttribute('class', 'dot-incident inc-near');
+                gIncidentDots.appendChild(circle);
+            }
+
+            // 軽微な事故 (中段台形内にプロット)
+            // 領域: 100,60 140,60 160,110 80,110
+            const dispMinor = Math.min(minorAcc, 30);
+            for (let i = 0; i < dispMinor; i++) {
+                const { x, y } = getPyramidRandomCoord(65, 105, 85, 155);
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', x);
+                circle.setAttribute('cy', y);
+                circle.setAttribute('r', 2.5);
+                circle.setAttribute('class', 'dot-incident inc-minor');
+                gIncidentDots.appendChild(circle);
+            }
+
+            // 重大事故 (上段三角形内にプロット)
+            // 領域: 120,20 100,60 140,60
+            if (majorAcc >= 1) {
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', 120);
+                circle.setAttribute('cy', 40);
+                circle.setAttribute('r', 5);
+                circle.setAttribute('class', 'dot-incident inc-major');
+                gIncidentDots.appendChild(circle);
+            }
+        }
+
+        // 範囲内での簡易的な位置決定
+        function getPyramidRandomCoord(minY, maxY, minXOffset, maxXOffset) {
+            const y = minY + Math.random() * (maxY - minY);
+            // Y座標が高くなる（上に行く）ほど、Xの幅が狭まる
+            const t = (y - 20) / 160; // 0 (頂点) 〜 1 (底辺)
+            const halfW = 20 + t * 70; // 頂点で幅40, 底辺で幅140
+            const x = 120 - halfW + Math.random() * (halfW * 2);
+            return { x, y };
+        }
+
+        // 初期ロード
+        resetHeinrichSim();
+    </script>
+</body>
+</html>

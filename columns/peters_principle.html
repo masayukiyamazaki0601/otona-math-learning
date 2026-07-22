@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ピーターの法則：有能な社員が無能な上司に変わる人事の数理 | Otona Math コラム</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .column-content {
+            background-color: var(--color-surface);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            margin-bottom: 40px;
+        }
+        .column-content p {
+            line-height: 2.1;
+            margin-bottom: 28px;
+        }
+        .section-header {
+            color: var(--color-brass);
+            margin-top: 40px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 10px;
+            font-size: 22px;
+        }
+        
+        /* Interactive Simulator Styles */
+        .interactive-simulator {
+            background-color: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        .simulator-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 15px;
+        }
+        .simulator-header h3 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            color: var(--color-ink);
+        }
+        .simulator-header p {
+            font-size: 14px;
+            color: var(--color-ink-soft);
+        }
+        
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 0.95fr 1.05fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        @media (max-width: 900px) {
+            .sim-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Control Panel */
+        .control-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .sim-state-card {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .sim-control-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--color-ink);
+            margin-bottom: 10px;
+        }
+        
+        /* Toggle Option Groups */
+        .option-button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .opt-btn {
+            padding: 10px;
+            font-size: 12px;
+            font-weight: bold;
+            border: 1px solid var(--color-paper-line);
+            background: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            line-height: 1.4;
+        }
+        .opt-btn:hover, .opt-btn.active {
+            background-color: var(--color-ink);
+            color: var(--color-paper);
+            border-color: var(--color-ink);
+        }
+
+        /* SVG Visualization Container */
+        .org-viz-box {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .org-viz-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--color-ink-soft);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .org-svg-container {
+            width: 100%;
+            height: 240px;
+            position: relative;
+        }
+        .org-svg-container svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        /* Results Board */
+        .results-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            background: var(--color-paper);
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        @media (max-width: 600px) {
+            .results-board {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+        .res-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .res-label {
+            font-size: 13px;
+            color: var(--color-ink-soft);
+            margin-bottom: 4px;
+        }
+        .res-val {
+            font-size: 24px;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            color: var(--color-ink);
+        }
+        .res-val.status-warn { color: var(--color-red); }
+        .res-val.status-ok { color: #10b981; }
+
+        /* Status Board */
+        .status-board {
+            background: rgba(169, 120, 47, 0.05);
+            border: 1px solid rgba(169, 120, 47, 0.2);
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        .status-board.active-warning {
+            background: rgba(180, 67, 47, 0.06);
+            border-color: rgba(180, 67, 47, 0.3);
+        }
+        @media (max-width: 600px) {
+            .status-board {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+        .status-left {
+            display: flex;
+            flex-direction: column;
+        }
+        .status-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .status-board.active-warning .status-title {
+            color: var(--color-red);
+        }
+        .status-desc {
+            font-size: 12px;
+            color: var(--color-ink-soft);
+        }
+        .status-right {
+            display: flex;
+            align-items: center;
+        }
+        .status-stat-value {
+            font-family: var(--font-body);
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .status-board.active-warning .status-stat-value {
+            color: var(--color-red);
+        }
+
+        /* SVG Element Styling */
+        .org-link {
+            stroke: #ced4da;
+            stroke-width: 1px;
+        }
+        .org-node {
+            transition: fill 0.5s;
+            stroke: #fff;
+            stroke-width: 1.5px;
+        }
+        .org-node.node-green { fill: #10b981; }
+        .org-node.node-yellow { fill: #f59e0b; }
+        .org-node.node-red { fill: #ef4444; }
+        .org-node.node-unassigned { fill: #dee2e6; }
+        
+        .viz-label {
+            font-family: var(--font-body);
+            font-size: 10px;
+            fill: var(--color-ink-soft);
+            text-anchor: middle;
+        }
+        .node-text {
+            font-family: var(--font-body);
+            font-size: 8px;
+            fill: #fff;
+            font-weight: bold;
+            pointer-events: none;
+            text-anchor: middle;
+        }
+
+        /* Common Button Style */
+        .sim-btn {
+            background: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            color: var(--color-ink);
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: var(--radius-btn);
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+        }
+        .sim-btn:hover {
+            border-color: var(--color-ink);
+            background-color: #f7f7f7;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="../index.html">数学と統計学</a></li>
+                    <li><a href="index.html">コラム</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">コラム</a> &gt; ピーターの法則
+        </div>
+
+        <article class="column-content">
+            <h2 style="font-size: 28px; margin-bottom: 30px; line-height: 1.4;">ピーターの法則：<br>優秀な社員が必ず「無能な上司」へと変わる組織の人事メカニズム</h2>
+            
+            <p>
+                社会における組織階層（ヒエラルキー）において、なぜ「実務能力のない上司」が数多く存在してしまうのか。
+                その謎を論理的に解き明かしたのが、南カリフォルニア大学の教育学者ローレンス・J・ピーターが1969年に提唱した「ピーターの法則」です。
+            </p>
+            <p>
+                能力主義に基づいて「現在の業務で実績を残した優秀な人物を昇進させる」という、一見すると合理的で正しい人事評価制度が、結果として組織全体を機能不全に陥らせるというパラドックスを証明しています。
+                営業部門でのトップ営業プレイヤーが、課長（マネージャー）へと昇進した後に無能化する具体的なプロセスをモデル化し、その人事力学を解説します。
+            </p>
+
+            <h3 class="section-header">第1章：ピーターの法則の絶対原則</h3>
+            <p>
+                本理論は、以下の仮説を基本原則として提唱しています。
+            </p>
+            <blockquote style="border-left: 4px solid var(--color-brass); padding-left: 15px; margin: 20px 0; font-style: italic; color: var(--color-ink-soft); line-height: 1.8;">
+                「階層型組織において、すべての構成員は自らの『無能さ』が露呈する地位に達するまで昇進を続け、その地位に定着する」
+            </blockquote>
+            <p>
+                この結果、組織の成熟に伴い、あらゆる管理職や上位ポストが、その業務を適切に遂行する能力を持たない「不適格な人材」によって埋め尽くされていくという、組織論的な崩壊論が導き出されます。
+            </p>
+
+            <h3 class="section-header">【体験】ピーターの法則・組織人事シミュレーター</h3>
+            <p>
+                ピラミッド型組織（マネージャー層：1名、リーダー層：3名、現場プレイヤー層：6名）の昇進と生産性の変化を確認します。
+                「現職査定ルール（標準の人事）」と「適性評価・降格許容（現代戦略）」の切り替えを行い、「1年経過させる」を押して、有能（緑）な現場プレイヤーが昇進後にマネジメント不全（赤）へと変色していく組織崩壊と、その対策効果を体感してください。
+            </p>
+
+            <!-- シミュレーター容器 -->
+            <div class="interactive-simulator">
+                <div class="simulator-header">
+                    <h3>組織階層における昇進と適性の推移</h3>
+                    <p>人事の評価選考ルールを選択し、年月の経過に伴う各役職のパフォーマンス変化を監視します。</p>
+                </div>
+                
+                <div class="sim-grid">
+                    <!-- 左：設定とコントロール -->
+                    <div class="control-panel">
+                        <div class="sim-state-card">
+                            <div class="sim-control-title">📅 組織の経営年度</div>
+                            <div style="font-size: 13px; line-height: 1.6; color: var(--color-ink);">
+                                <ul>
+                                    <li>経過期間：<strong><span id="val-years">0</span> 年目</strong> / 5年</li>
+                                    <li>組織全体の総生産性：<strong><span id="val-total-prod">78</span> %</strong></li>
+                                    <li>役職の不適格者（赤）の割合：<strong><span id="val-incompetent">0</span> %</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="sim-state-card">
+                            <div class="sim-control-title">⚖️ 人事昇進・配置ルール</div>
+                            <div class="option-button-group">
+                                <button id="btn-rule-peter" class="opt-btn active" onclick="setRule('peter')">現職査定<br>(ピーターの法則)</button>
+                                <button id="btn-rule-modern" class="opt-btn" onclick="setRule('modern')">適性考慮・降格許容<br>(現代組織戦略)</button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <button id="btn-run-year" class="sim-btn" onclick="runYearTransition()">📅 1年経過させる ➔</button>
+                        </div>
+                        
+                        <div style="text-align: center;">
+                            <button class="sim-btn" onclick="resetOrgSim()">🔄 組織を初期化する</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 右：SVG可視化 -->
+                    <div class="org-viz-box">
+                        <div class="org-viz-title">
+                            <span>🏢 ピラミッド型組織構造</span>
+                            <span style="font-family:var(--font-mono); font-size:10px; color:var(--color-ink-soft);">緑: 有能 / 黄: 普通 / 赤: 無能</span>
+                        </div>
+                        <div class="org-svg-container">
+                            <svg id="svg-org" viewBox="0 0 240 200">
+                                <!-- 階層のリンク線 -->
+                                <!-- マネージャーからリーダーへ -->
+                                <line x1="120" y1="40" x2="60" y2="100" class="org-link" />
+                                <line x1="120" y1="40" x2="120" y2="100" class="org-link" />
+                                <line x1="120" y1="40" x2="180" y2="100" class="org-link" />
+                                
+                                <!-- リーダーからプレイヤーへ -->
+                                <line x1="60" y1="100" x2="30" y2="160" class="org-link" />
+                                <line x1="60" y1="100" x2="66" y2="160" class="org-link" />
+                                
+                                <line x1="120" y1="100" x2="102" y2="160" class="org-link" />
+                                <line x1="120" y1="100" x2="138" y2="160" class="org-link" />
+
+                                <line x1="180" y1="100" x2="174" y2="160" class="org-link" />
+                                <line x1="180" y1="100" x2="210" y2="160" class="org-link" />
+
+                                <!-- 役職ラベル -->
+                                <text x="225" y="44" class="viz-label" style="text-anchor:end;">MGR</text>
+                                <text x="225" y="104" class="viz-label" style="text-anchor:end;">LDR</text>
+                                <text x="225" y="164" class="viz-label" style="text-anchor:end;">PLY</text>
+
+                                <!-- ノードグループ（動的配置） -->
+                                <g id="group-org-nodes"></g>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 結果ボード -->
+                <div class="results-board">
+                    <div class="res-box">
+                        <div class="res-label">現在の経営方式</div>
+                        <div class="res-val" style="font-size:15px;" id="val-method-label">現職査定（ピーターの法則）</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">現場全体の総売上指数</div>
+                        <div class="res-val" style="color:#10b981;"><span id="val-sales-index">78</span> %</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">管理職の合計実務値</div>
+                        <div class="res-val" style="color:var(--color-brass);"><span id="val-mgmt-index">75</span> %</div>
+                    </div>
+                </div>
+                
+                <!-- 判定ボード -->
+                <div id="sim-status-board" class="status-board">
+                    <div class="status-left">
+                        <div class="status-title">🚥 組織マネジメント診断</div>
+                        <div id="sim-status-desc" class="status-desc">初期化が完了しました。年度を進めて組織の変化を確認してください。</div>
+                    </div>
+                    <div class="status-right">
+                        <div id="sim-status-val" class="target-stat-value">初期状態</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-header">第2章：求められる能力の断絶が引き起こす機能不全</h3>
+            <p>
+                この悲劇的な現象は、本人の能力低下や怠慢ではなく、人事評価システムの根本的な欠陥によって誘発されます。
+                一般に、企業内の各役職において「求められる能力」は一律ではなく、階層が変わるタイミングで要件が完全に変化します。
+            </p>
+            <ul style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
+                <li><strong>プレイヤー（現場担当者）</strong>：個人として動き、自己の担当数値（営業力、開発力）を最大化する能力が求められます。</li>
+                <li><strong>マネージャー（管理職）</strong>：他者を稼働させ、チーム全体の数値設計や利害調整、モチベーション管理を行う能力が求められます。</li>
+            </ul>
+            <p>
+                「一流のプロ野球選手が、必ずしも名監督になるとは限らない」という格言と同様です。
+                しかし、多くの企業ではプレイヤーとしての優秀さを理由に、マネジメント適性の検証を行わずに昇進させます。
+                その結果、優秀なプレイヤーが1人消失し、代わりに無能なマネージャーが1人誕生するプロセスが繰り返されます。
+            </p>
+
+            <h3 class="section-header">第3章：組織が「無能」によって固定化される要因</h3>
+            <p>
+                管理職へ昇進し、その適性の低さが露呈した人物は、その役職で低パフォーマンスを示し続けることになります。
+                有能さを示すことができないため、それより上層の役職（部長や取締役など）へさらに昇進することはありません。
+            </p>
+            <p>
+                一方で、多くの近代組織制度においては、一度決定した昇進を無効にして降格や減給を適用する判断は心理的・法的に高い障壁を伴います。
+                その結果、不適格者はその「無能さが露呈したポスト」に定年まで定着することになります。
+            </p>
+            <p>
+                このプロセスがすべての部門および全ての階層で発生することで、上層の重要ポストは「それ以上上に進めなくなった不適格な人材」によって固定され、結果的に組織全体に滞留する構造が形成されます。
+            </p>
+
+            <h3 class="section-header">第4章：ピーターの法則を打破する人事アーキテクチャ</h3>
+            <p>
+                この機能不全から脱却するため、現代の先進的な企業では以下のような新しい評価管理システムが採用されています。
+            </p>
+            <p>
+                <strong>1. 専門職（スペシャリスト）複線型制度の導入</strong>：<br>
+                「昇進＝管理職になること」という唯一の経路設計を見直します。
+                現場の実務能力が際立って高い人物に対しては、部下を持たずに実務に専念させながら、管理職と同等以上の給料や権限を付与する専門キャリアコースを用意します。
+                これにより、優秀な人材のマネジメントミスによる損失を未然に防ぎます。
+            </p>
+            <p>
+                <strong>2. ポスト評価の分離と降格の常態化</strong>：<br>
+                「過去の成果」と「新ポストへの適正」を切り離して検証します。
+                新任管理職への登用時には、事前にシミュレーション試験や適性評価を行い、実務能力とは異なる管理資質を厳格に判定します。
+                また、配置後に成果が出ない場合は、本人の実務の価値を尊重した上で、躊躇なくプレイヤー職へと速やかに再配置（降格）できる柔軟な組織運用を構築します。
+            </p>
+
+            <h3 class="section-header">まとめ</h3>
+            <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 20px; font-size: 15px; line-height: 1.8;">
+                ピーターの法則は、一見論理的に見える「成果に対する昇進」という報酬設計が、組織の重要ポストを最も適さない人材で満たすパラドックスを示しています。
+                組織の生産性を維持するためには、プレイヤーとしての優秀さを安易にマネジメントスキルと混同せず、それぞれの適性に応じた待遇を提供できる人事の多元的な構造設計が必須となります。
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- シミュレーター制御スクリプト -->
+    <script>
+        // 社員データ (10名)
+        // P: プレイヤー戦闘力, M: マネージャー適性
+        let employees = [
+            { id: 0, name: "Aさん", P: 95, M: 20, pos: 9, active: true }, // 最強の営業（現場）
+            { id: 1, name: "Bさん", P: 82, M: 35, pos: 8, active: true },
+            { id: 2, name: "Cさん", P: 40, M: 88, pos: 7, active: true }, // マネージャー超適性
+            { id: 3, name: "Dさん", P: 76, M: 70, pos: 6, active: true }, // 両方いける
+            { id: 4, name: "Eさん", P: 60, M: 60, pos: 5, active: true },
+            { id: 5, name: "Fさん", P: 88, M: 45, pos: 4, active: true }, // 優秀な営業
+            { id: 6, name: "Gさん", P: 45, M: 72, pos: 3, active: true }, // 管理適性
+            { id: 7, name: "Hさん", P: 50, M: 52, pos: 2, active: true },
+            { id: 8, name: "Iさん", P: 80, M: 30, pos: 1, active: true }, // 優秀プレイヤー
+            { id: 9, name: "Jさん", P: 72, M: 78, pos: 0, active: true }  // 初期マネージャー
+        ];
+
+        // 役職位置 (pos) の座標マッピング
+        // 0: マネージャー (上層1名)
+        // 1, 2, 3: リーダー (中層3名)
+        // 4, 5, 6, 7, 8, 9: プレイヤー (下層6名)
+        const posCoords = {
+            0: { x: 120, y: 40, label: "Mgr" },
+            1: { x: 60, y: 100, label: "LdrA" },
+            2: { x: 120, y: 100, label: "LdrB" },
+            3: { x: 180, y: 100, label: "LdrC" },
+            4: { x: 30, y: 160, label: "PlyA" },
+            5: { x: 66, y: 160, label: "PlyB" },
+            6: { x: 102, y: 160, label: "PlyC" },
+            7: { x: 138, y: 160, label: "PlyD" },
+            8: { x: 174, y: 160, label: "PlyE" },
+            9: { x: 210, y: 160, label: "PlyF" }
+        };
+
+        let years = 0;
+        let policyRule = 'peter'; // 'peter' or 'modern'
+
+        const lblYears = document.getElementById('val-years');
+        const lblTotalProd = document.getElementById('val-total-prod');
+        const lblIncompetent = document.getElementById('val-incompetent');
+        const lblMethod = document.getElementById('val-method-label');
+
+        const lblSalesIdx = document.getElementById('val-sales-index');
+        const lblMgmtIdx = document.getElementById('val-mgmt-index');
+
+        const btnRunYear = document.getElementById('btn-run-year');
+        const statusBoard = document.getElementById('sim-status-board');
+        const statusDesc = document.getElementById('sim-status-desc');
+        const statusVal = document.getElementById('sim-status-val');
+
+        const gNodes = document.getElementById('group-org-nodes');
+
+        function setRule(rule) {
+            policyRule = rule;
+            document.getElementById('btn-rule-peter').classList.remove('active');
+            document.getElementById('btn-rule-modern').classList.remove('active');
+            
+            if (rule === 'peter') {
+                document.getElementById('btn-rule-peter').classList.add('active');
+                lblMethod.textContent = '現職査定（ピーターの法則）';
+            } else {
+                document.getElementById('btn-rule-modern').classList.add('active');
+                lblMethod.textContent = '適性考慮・降格許容';
+            }
+            resetOrgSim();
+        }
+
+        function resetOrgSim() {
+            years = 0;
+            // 社員の配置を初期状態に戻す
+            employees = [
+                { id: 0, name: "Aさん", P: 95, M: 20, pos: 9, active: true },
+                { id: 1, name: "Bさん", P: 82, M: 35, pos: 8, active: true },
+                { id: 2, name: "Cさん", P: 40, M: 88, pos: 7, active: true },
+                { id: 3, name: "Dさん", P: 76, M: 70, pos: 6, active: true },
+                { id: 4, name: "Eさん", P: 60, M: 60, pos: 5, active: true },
+                { id: 5, name: "Fさん", P: 88, M: 45, pos: 4, active: true },
+                { id: 6, name: "Gさん", P: 45, M: 72, pos: 3, active: true },
+                { id: 7, name: "Hさん", P: 50, M: 52, pos: 2, active: true },
+                { id: 8, name: "Iさん", P: 80, M: 30, pos: 1, active: true },
+                { id: 9, name: "Jさん", P: 72, M: 78, pos: 0, active: true }
+            ];
+
+            btnRunYear.disabled = false;
+            btnRunYear.style.opacity = 1;
+
+            updateUI();
+        }
+
+        // 状態評価と有能度判定
+        function getPerformanceClass(emp) {
+            const currentPos = emp.pos;
+            if (currentPos === 0 || currentPos <= 3) {
+                // マネージャーまたはリーダー: マネージャー力 M を基準
+                if (emp.M >= 70) return 'node-green';
+                if (emp.M >= 50) return 'node-yellow';
+                return 'node-red';
+            } else {
+                // プレイヤー: 現場力 P を基準
+                if (emp.P >= 70) return 'node-green';
+                if (emp.P >= 50) return 'node-yellow';
+                return 'node-red';
+            }
+        }
+
+        function updateUI() {
+            lblYears.textContent = years;
+
+            // 総生産性と不適格率の計算
+            let totalProductivitySum = 0;
+            let incompetentCount = 0;
+            let mgmtProductivitySum = 0;
+            let plyProductivitySum = 0;
+
+            employees.forEach(emp => {
+                const perfClass = getPerformanceClass(emp);
+                if (perfClass === 'node-red') incompetentCount++;
+
+                if (emp.pos === 0 || emp.pos <= 3) {
+                    mgmtProductivitySum += emp.M;
+                    totalProductivitySum += emp.M;
+                } else {
+                    plyProductivitySum += emp.P;
+                    totalProductivitySum += emp.P;
+                }
+            });
+
+            const totalProd = Math.round(totalProductivitySum / 10);
+            const incompRatio = Math.round((incompetentCount / 10) * 100);
+            const salesIdx = Math.round(plyProductivitySum / 6);
+            const mgmtIdx = Math.round(mgmtProductivitySum / 4);
+
+            lblTotalProd.textContent = totalProd;
+            lblIncompetent.textContent = incompRatio;
+            lblSalesIdx.textContent = salesIdx;
+            lblMgmtIdx.textContent = mgmtIdx;
+
+            // ノード再描画
+            gNodes.innerHTML = '';
+            employees.forEach(emp => {
+                const coords = posCoords[emp.pos];
+                const perfClass = getPerformanceClass(emp);
+
+                const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', coords.x);
+                circle.setAttribute('cy', coords.y);
+                circle.setAttribute('r', 10);
+                circle.setAttribute('class', `org-node ${perfClass}`);
+                group.appendChild(circle);
+
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', coords.x);
+                text.setAttribute('y', coords.y + 3);
+                text.setAttribute('class', 'node-text');
+                text.textContent = emp.name.substring(0, 1);
+                group.appendChild(text);
+
+                // 簡易情報テキスト
+                const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+                title.textContent = `${emp.name}\n現場パフォーマンス: ${emp.P}\nマネジメント適性: ${emp.M}`;
+                group.appendChild(title);
+
+                gNodes.appendChild(group);
+            });
+
+            // 診断ボード
+            if (years === 0) {
+                statusBoard.className = 'status-board';
+                statusVal.textContent = '初期段階';
+                statusDesc.textContent = '人事シミュレーションの初期状態です。経過年数ボタンを押し、配置の変化を観察します。';
+            } else if (policyRule === 'peter') {
+                if (incompRatio >= 40) {
+                    statusBoard.className = 'status-board active-warning';
+                    statusVal.textContent = 'ピーターの法則による崩壊';
+                    statusDesc.textContent = `優秀な現場プレイヤーが次々と無能な役職へ昇進し、上層ポストの【${incompRatio}%】が赤（無能）に染まり、全体の生産性が低下しています。`;
+                } else {
+                    statusBoard.className = 'status-board';
+                    statusVal.textContent = '有能プレイヤーの吸い上げ';
+                    statusDesc.textContent = `現場で有能なメンバーが順次管理職へと引き上げられ、一時的な組織変動が生じています。`;
+                }
+            } else {
+                statusBoard.className = 'status-board';
+                statusVal.textContent = '両利きの適材適所';
+                statusDesc.textContent = `管理適性のない人員の降格と適性選考の併用により、上層に緑（有能上司）が集まり、組織生産性は【${totalProd}%】を維持しています。`;
+            }
+        }
+
+        // 年度推移と人事異動の実行
+        function runYearTransition() {
+            if (years >= 5) return;
+
+            years++;
+
+            if (policyRule === 'peter') {
+                // 1. 現職査定昇進ルール (ピーターの法則)
+                // 各期において、上層の役職でパフォーマンスが悪い（赤または黄）人を対象に、
+                // その真下の役職で「現職において優秀（緑）」なプレイヤーを吸い上げる。
+                // 降格は絶対に発生しない。
+                
+                // マネージャー(pos=0)のパフォーマンスを評価
+                let mgrEmp = employees.find(e => e.pos === 0);
+                const mgrPerf = getPerformanceClass(mgrEmp);
+                
+                if (mgrPerf !== 'node-green') {
+                    // リーダー(pos=1,2,3)から最も「有能（緑）」な人物を見つける
+                    let candidate = null;
+                    let bestP = -1;
+                    employees.forEach(e => {
+                        if (e.pos >= 1 && e.pos <= 3) {
+                            const ldrPerf = getPerformanceClass(e);
+                            if (ldrPerf === 'node-green' && e.P > bestP) {
+                                bestP = e.P;
+                                candidate = e;
+                            }
+                        }
+                    });
+
+                    if (candidate) {
+                        // 昇進決定: candidateがpos 0へ、元のmgrEmpは元リーダー枠へ戻すが、これは「降格ではない押し出し人事」
+                        const oldPos = candidate.pos;
+                        candidate.pos = 0;
+                        mgrEmp.pos = oldPos;
+                    }
+                }
+
+                // 同様にリーダー層(pos 1,2,3)の中で、パフォーマンスが「赤」のものがあれば、
+                // 下層のプレイヤー(pos 4〜9)で最も現場パフォーマンスPの高い有能な人を昇進させる
+                for (let l = 1; l <= 3; l++) {
+                    let ldrEmp = employees.find(e => e.pos === l);
+                    if (getPerformanceClass(ldrEmp) !== 'node-green') {
+                        let candidate = null;
+                        let bestP = -1;
+                        employees.forEach(e => {
+                            if (e.pos >= 4 && e.pos <= 9) {
+                                const plyPerf = getPerformanceClass(e);
+                                if (plyPerf === 'node-green' && e.P > bestP) {
+                                    bestP = e.P;
+                                    candidate = e;
+                                }
+                            }
+                        });
+
+                        if (candidate) {
+                            const oldPos = candidate.pos;
+                            candidate.pos = l;
+                            ldrEmp.pos = oldPos;
+                        }
+                    }
+                }
+
+            } else {
+                // 2. 適性考慮・降格許容ルール (現代戦略)
+                // 管理職に配置されている人で、マネージャー適性Mが不十分（赤）な者は、
+                // 現場ポジション（pos 4〜9）へ戻し、代わりに「管理適性Mが70以上」の者を配属する。
+
+                // まず管理職全員をスクリーニング
+                for (let p = 0; p <= 3; p++) {
+                    let emp = employees.find(e => e.pos === p);
+                    if (emp && emp.M < 60) {
+                        // マネジメント適性不足のため降格（現場復帰）
+                        // 現場のプレイヤーで、管理適性Mが最も高い(かつ現場パフォーマンスも維持できている)メンバーと入れ替える
+                        let bestCandidate = null;
+                        let maxM = -1;
+                        employees.forEach(e => {
+                            if (e.pos >= 4 && e.pos <= 9) {
+                                if (e.M > maxM) {
+                                    maxM = e.M;
+                                    bestCandidate = e;
+                                }
+                            }
+                        });
+
+                        if (bestCandidate && bestCandidate.M > emp.M) {
+                            const oldPos = bestCandidate.pos;
+                            bestCandidate.pos = p;
+                            emp.pos = oldPos;
+                        }
+                    }
+                }
+
+                // さらに、現場メンバーの中で管理適性が非常に高い人がいれば、優先的に登用する
+                let bestPly = null;
+                let bestM = -1;
+                employees.forEach(e => {
+                    if (e.pos >= 4 && e.pos <= 9) {
+                        if (e.M > bestM) {
+                            bestM = e.M;
+                            bestPly = e;
+                        }
+                    }
+                });
+
+                if (bestPly && bestPly.M >= 70) {
+                    // 現在のリーダー・マネージャーで、管理適性が最も低い人と配置をチェンジ
+                    let worstMgr = null;
+                    let minM = 999;
+                    employees.forEach(e => {
+                        if (e.pos >= 0 && e.pos <= 3) {
+                            if (e.M < minM) {
+                                minM = e.M;
+                                worstMgr = e;
+                            }
+                        }
+                    });
+
+                    if (worstMgr && bestPly.M > worstMgr.M) {
+                        const oldPos = bestPly.pos;
+                        bestPly.pos = worstMgr.pos;
+                        worstMgr.pos = oldPos;
+                    }
+                }
+            }
+
+            updateUI();
+
+            if (years >= 5) {
+                btnRunYear.disabled = true;
+                btnRunYear.style.opacity = 0.5;
+            }
+        }
+
+        // 初期ロード
+        resetOrgSim();
+    </script>
+</body>
+</html>
