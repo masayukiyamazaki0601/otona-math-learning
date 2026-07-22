@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>直感を裏切る「誕生日のパラドックス」 | Otona Math コラム</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .column-content {
+            background-color: var(--color-surface);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            margin-bottom: 40px;
+        }
+        .column-content p {
+            line-height: 2.1;
+            margin-bottom: 28px;
+        }
+        .section-header {
+            color: var(--color-brass);
+            margin-top: 40px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 10px;
+            font-size: 22px;
+        }
+        
+        /* Interactive Simulator Styles */
+        .interactive-simulator {
+            background-color: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        .simulator-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 15px;
+        }
+        .simulator-header h3 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            color: var(--color-ink);
+        }
+        .simulator-header p {
+            font-size: 14px;
+            color: var(--color-ink-soft);
+        }
+        
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        @media (max-width: 900px) {
+            .sim-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Sliders Panel */
+        .sliders-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .slider-group {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .slider-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--color-ink);
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .slider-label span.value-disp {
+            font-family: var(--font-mono);
+            color: var(--color-brass);
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .slider-group input[type="range"] {
+            width: 100%;
+            accent-color: var(--color-brass);
+            cursor: pointer;
+        }
+        .slider-desc {
+            font-size: 11px;
+            color: var(--color-ink-soft);
+            margin-top: 5px;
+            line-height: 1.4;
+        }
+        
+        /* Simulation Visualizer Panel */
+        .visualizer-box {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .visualizer-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            color: var(--color-ink-soft);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .visual-container {
+            width: 100%;
+            height: 240px;
+            position: relative;
+            background-color: var(--color-paper);
+            border-radius: 6px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .visual-container svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Graph Visualizer Panel */
+        .graph-box {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            margin-top: 20px;
+        }
+        .graph-svg-container {
+            width: 100%;
+            height: 160px;
+        }
+        .graph-svg-container svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+        
+        /* Results Board */
+        .results-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            background: var(--color-paper);
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        @media (max-width: 600px) {
+            .results-board {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+        .res-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .res-label {
+            font-size: 13px;
+            color: var(--color-ink-soft);
+            margin-bottom: 4px;
+        }
+        .res-val {
+            font-size: 24px;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            color: var(--color-ink);
+        }
+        .res-val.risk-warn { color: var(--color-red); }
+        .res-val.risk-safe { color: #10b981; }
+        
+        /* Target Board */
+        .target-board {
+            background: rgba(169, 120, 47, 0.05);
+            border: 1px solid rgba(169, 120, 47, 0.2);
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        @media (max-width: 600px) {
+            .target-board {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+        .target-left {
+            display: flex;
+            flex-direction: column;
+        }
+        .target-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .target-desc {
+            font-size: 12px;
+            color: var(--color-ink-soft);
+        }
+        .target-right {
+            display: flex;
+            align-items: center;
+        }
+        .target-stat-value {
+            font-family: var(--font-body);
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+
+        /* Formulas & Explanations */
+        .formula-box {
+            font-family: var(--font-mono);
+            background-color: var(--color-paper);
+            border: 1px solid var(--color-paper-line);
+            padding: 20px;
+            border-radius: 6px;
+            margin: 25px 0;
+            overflow-x: auto;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        .formula-line {
+            display: block;
+            margin-bottom: 8px;
+        }
+        .formula-line:last-child {
+            margin-bottom: 0;
+        }
+        .formula-inline {
+            font-family: var(--font-mono);
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 15px;
+        }
+
+        /* Common Button Style */
+        .sim-btn {
+            background: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            color: var(--color-ink);
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: var(--radius-btn);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .sim-btn:hover {
+            border-color: var(--color-ink);
+            background-color: #f7f7f7;
+        }
+        
+        .avatar-dot {
+            transition: all 0.3s ease;
+        }
+        .link-line {
+            stroke: var(--color-red);
+            stroke-width: 2;
+            stroke-dasharray: 4, 4;
+            animation: dash 1s linear infinite;
+        }
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -20;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="../index.html">数学と統計学</a></li>
+                    <li><a href="index.html">コラム</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">コラム</a> &gt; 直感を裏切る「誕生日のパラドックス」
+        </div>
+
+        <article class="column-content">
+            <h2 style="font-size: 28px; margin-bottom: 30px; line-height: 1.4;">直感を裏切る確率の罠：<br>「誕生日のパラドックス」とビジネスにおけるリスク評価</h2>
+            
+            <p>
+                私たちの「直感」は、確率の計算において、しばしば大きな間違いを引き起こします。
+                その最も有名な例が、**「誕生日のパラドックス」**と呼ばれる数学の現象です。
+            </p>
+            <p>
+                「ある部屋に何人集まれば、その中に同じ誕生日のペア（2人）が1組以上いる確率が50%を超えるでしょうか？」
+            </p>
+            <p>
+                1年は365日もありますから、「150人か180人くらい必要では？」と直感的に思うかもしれません。
+                しかし、数学的な正解はわずか**「23人」**です。
+                さらに、50人集まればその確率は97%に達します。
+                この直感と数理のズレは、サイバーセキュリティやデータ分析など、現代ビジネスのリスク評価に極めて重要な教訓を与えています。
+            </p>
+
+            <h3 class="section-header">【体験】確率収束＆誕生日シャッフルシミュレーター</h3>
+            <p>
+                人数を変更しながら、確率がどのように変化するかを体験してみましょう。
+                「誕生日をシャッフル」ボタンを押すと、その人数分の誕生日をランダムに再配置し、誰と誰の誕生日が重なったかを視覚化します。
+            </p>
+
+            <!-- シミュレーター容器 -->
+            <div class="interactive-simulator">
+                <div class="simulator-header">
+                    <h3>誕生日のパラドックス体験シミュレーター</h3>
+                    <p>人数を変更して確率の急上昇を確認し、誕生日シャッフルでペアが重なる瞬間を可視化しましょう。</p>
+                </div>
+                
+                <div class="sim-grid">
+                    <!-- 左：操作パネル -->
+                    <div class="sliders-panel">
+                        <div class="slider-group">
+                            <div class="slider-label">
+                                <span>👥 集団の人数 (n)</span>
+                                <span class="value-disp"><span id="lbl-n-count">23</span> 人</span>
+                            </div>
+                            <input type="range" id="param-n-count" min="2" max="80" step="1" value="23">
+                            <div class="slider-desc">部屋にいる人の数です。</div>
+                        </div>
+                        
+                        <div style="text-align: center;">
+                            <button class="sim-btn" onclick="shuffleBirthdays()">🔄 誕生日をシャッフル</button>
+                            <button class="sim-btn" onclick="setN(23)">基準値 (23人)</button>
+                        </div>
+                        
+                        <!-- 確率推移グラフ -->
+                        <div class="graph-box">
+                            <div class="timeline-title" style="font-size:12px; margin-bottom:8px;">
+                                <span>📈 確率上昇曲線 (n=2〜80)</span>
+                                <span id="lbl-graph-val" style="color:var(--color-brass); font-weight:bold;">n=23 (50.73%)</span>
+                            </div>
+                            <div class="graph-svg-container">
+                                <svg id="svg-graph">
+                                    <!-- グリッド背景 -->
+                                    <line x1="0%" y1="50%" x2="100%" y2="50%" stroke="#f0f0f0" stroke-width="1" />
+                                    <line x1="0%" y1="3%" x2="100%" y2="3%" stroke="#f0f0f0" stroke-width="1" />
+                                    <!-- 確率曲線 -->
+                                    <path id="path-probability" d="" fill="none" stroke="var(--color-ink-soft)" stroke-width="2" />
+                                    <!-- 50% 基準線 -->
+                                    <line x1="0%" y1="50%" x2="100%" y2="50%" stroke="var(--color-paper-line)" stroke-width="1.5" stroke-dasharray="3,3" />
+                                    <!-- 現在点の縦インジケータ -->
+                                    <line id="line-n-indicator" x1="0" y1="0" x2="0" y2="100%" stroke="var(--color-brass)" stroke-width="1" />
+                                    <circle id="dot-probability" cx="0" cy="0" r="5" fill="var(--color-brass)" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 右：アバター円環マップ -->
+                    <div class="visualizer-box">
+                        <div class="visualizer-title">
+                            <span>🔮 誕生日一致マップ (アサイン状況)</span>
+                            <span id="lbl-match-status" style="font-weight:bold; color:var(--color-red);">ペア検出！</span>
+                        </div>
+                        <div class="visual-container">
+                            <svg id="svg-avatars">
+                                <!-- JSでドットと結ぶ線を配置 -->
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 結果ボード -->
+                <div class="results-board">
+                    <div class="res-box">
+                        <div class="res-label">同じ誕生日のペアがいる確率</div>
+                        <div class="res-val"><span id="val-prob-same">50.73</span> %</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">ペアの総数 (組合せ数)</div>
+                        <div class="res-val"><span id="val-combinations">253</span> 通り</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">今回のシャッフル結果</div>
+                        <div id="val-sim-result-wrapper" class="res-val" style="font-size:16px;">
+                            <span id="val-sim-result">一致あり (1組)</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 情報ボード -->
+                <div class="target-board">
+                    <div class="target-left">
+                        <div class="target-title">💡 なぜ23人で50%を超えるのか？</div>
+                        <div class="target-desc">23人の集団では、ペアを作る組み合わせの数が ${}_{23} \mathrm{C}_2 = 253$ 通りになり、1年の日数（365）に対して十分なマッチング確率を持つためです。</div>
+                    </div>
+                    <div class="target-right">
+                        <div class="target-stat-value">
+                            n(n-1)/2 = <span id="lbl-calc-comb">253</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-header">直感が外れる数学的メカニズム</h3>
+            <p>
+                この現象を数学的に証明するには、**「余事象（よじしょう）」**という考え方を使います。
+                「少なくとも2人が同じ誕生日である確率」を計算するのは大変なため、逆に**「全員が別々の誕生日である確率」**を計算し、それを全体（1）から引くアプローチをとります。
+            </p>
+            <p>
+                $n$人の集団において、全員の誕生日が被らない確率は以下の式で求められます。
+            </p>
+            
+            <div class="formula-box">
+                P(A') = (365/365) × (364/365) × (363/365) × ... × ((365 - n + 1)/365)
+            </div>
+
+            <p>
+                この「全員が異なる確率」$P(A')$ を計算し、求める確率 $P(A) = 1 - P(A')$ を算出します。
+            </p>
+            <p>
+                私たちの直感が間違ってしまう最大の理由は、この問題を**「自分と同じ誕生日の人がいる確率」と無意識にすり替えてしまうから**です。
+            </p>
+            <p>
+                「私」と同じ誕生日の人を23人の中から探す場合、その確率は極めて低いです。
+                しかし、この問題は「誰でもいいから同じ誕生日の2人組がいる確率」です。
+                23人いる場合、その中のペアの作り方は $23 \times 22 \div 2 = 253$ 通りもあります。
+                **253回も「誕生日が同じか？」をチェックしている**ことになるため、50%を超えるのは数学的に当然の結果なのです。
+            </p>
+
+            <h3 class="section-header">ビジネスへの応用：「バースデー攻撃」という脅威</h3>
+            <p>
+                この誕生日のパラドックスは、情報セキュリティの世界において非常に重要な概念です。
+                暗号解読手法の一つである**「バースデー攻撃（Birthday Attack）」**の基礎理論になっているからです。
+            </p>
+            <p>
+                データの改ざんを防ぐ「ハッシュ関数」において、異なるデータから偶然同じ値が出力されることを「衝突（コリジョン）」と呼びます。
+                ハッカーが特定のデータを改ざんしようとするとき、特定のハッシュ値を狙い撃ちするのは不可能です。
+                しかし、**「ハッシュ値が被る任意のデータペアを何でもいいから探す」**という戦略（バースデー攻撃）をとった場合、誕生日のパラドックスと同じ理屈で、想定よりもはるかに少ない試行回数で改ざんデータを作成できてしまうリスクが生じます。
+            </p>
+            <p>
+                このため、暗号鍵やハッシュ値のビット数は、直感で安全だと思えるレベルよりも**はるかに長く大きく設計**しなければなりません。
+            </p>
+
+            <h3 class="section-header">まとめ</h3>
+            <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 20px; font-size: 15px; line-height: 1.8;">
+                誕生日のパラドックスは、「人間の直感は、組み合わせの数の爆発的な増加（指数関数的な変化）を捉えるのが苦手である」という事実を教えてくれます。
+                ビジネスにおけるリスク評価やシステム設計を行う際は、直感や思い込みに頼るのではなく、**冷徹なデータと数理モデルに基づいて評価・決定すること**が大切です。
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- シミュレーター制御スクリプト -->
+    <script>
+        const paramN = document.getElementById('param-n-count');
+        const lblN = document.getElementById('lbl-n-count');
+        const valProbSame = document.getElementById('val-prob-same');
+        const valCombinations = document.getElementById('val-combinations');
+        const valSimResult = document.getElementById('val-sim-result');
+        const valSimResultWrapper = document.getElementById('val-sim-result-wrapper');
+        const lblCalcComb = document.getElementById('lbl-calc-comb');
+        
+        const pathProbability = document.getElementById('path-probability');
+        const dotProbability = document.getElementById('dot-probability');
+        const lineNIndicator = document.getElementById('line-n-indicator');
+        const lblGraphVal = document.getElementById('lbl-graph-val');
+        
+        const svgAvatars = document.getElementById('svg-avatars');
+        const lblMatchStatus = document.getElementById('lbl-match-status');
+
+        let currentBirthdays = []; // 現在の誕生日リスト (1〜365の値)
+
+        // 確率計算関数
+        function getProbability(n) {
+            if (n <= 1) return 0;
+            if (n > 365) return 1.0;
+            let pDiff = 1.0;
+            for (let i = 0; i < n; i++) {
+                pDiff *= (365 - i) / 365;
+            }
+            return 1.0 - pDiff;
+        }
+
+        // SVGグラフ全体の描画（初回のみ）
+        function drawGraphBackground() {
+            const width = 300; // 仮想座標
+            const height = 150;
+            
+            let dPath = '';
+            for (let n = 2; n <= 80; n++) {
+                const prob = getProbability(n);
+                // 座標変換: x: 2〜80 -> 0〜300, y: 0〜1.0 -> 150〜0
+                const x = ((n - 2) / (80 - 2)) * width;
+                const y = height - (prob * height);
+
+                if (n === 2) {
+                    dPath = `M ${x} ${y}`;
+                } else {
+                    dPath += ` L ${x} ${y}`;
+                }
+            }
+            pathProbability.setAttribute('d', dPath);
+        }
+
+        // グラフインジケーターの更新
+        function updateGraphIndicator(n) {
+            const width = 300;
+            const height = 150;
+            const prob = getProbability(n);
+
+            const x = ((n - 2) / (80 - 2)) * width;
+            const y = height - (prob * height);
+
+            dotProbability.setAttribute('cx', x);
+            dotProbability.setAttribute('cy', y);
+
+            lineNIndicator.setAttribute('x1', x);
+            lineNIndicator.setAttribute('x2', x);
+            lineNIndicator.setAttribute('y1', 0);
+            lineNIndicator.setAttribute('y2', height);
+
+            lblGraphVal.textContent = `n=${n} (${(prob * 100).toFixed(2)}%)`;
+        }
+
+        // アバター表示と誕生日シャッフルの可視化
+        function updateAvatarVisualizer(n) {
+            svgAvatars.innerHTML = ''; // クリア
+
+            const width = 240;
+            const height = 240;
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const radius = 90; // 円環の半径
+
+            // 各メンバーの座標と誕生日配置
+            const members = [];
+            for (let i = 0; i < n; i++) {
+                const angle = (i / n) * 2.0 * Math.PI - Math.PI / 2;
+                const x = centerX + radius * Math.cos(angle);
+                const y = centerY + radius * Math.sin(angle);
+                
+                // 誕生日の日付文字列を生成
+                const bVal = currentBirthdays[i];
+                const dateStr = formatDateFromDay(bVal);
+
+                members.push({ id: i, x, y, birthdayVal: bVal, dateStr });
+            }
+
+            // 重複のチェック
+            const birthdayMap = {};
+            members.forEach(m => {
+                if (!birthdayMap[m.birthdayVal]) {
+                    birthdayMap[m.birthdayVal] = [];
+                }
+                birthdayMap[m.birthdayVal].push(m);
+            });
+
+            // 重複ラインの描画
+            let matchCount = 0;
+            Object.keys(birthdayMap).forEach(key => {
+                const matches = birthdayMap[key];
+                if (matches.length > 1) {
+                    matchCount += (matches.length - 1);
+                    // 全ての組み合わせについて線を引く
+                    for (let a = 0; a < matches.length; a++) {
+                        for (let b = a + 1; b < matches.length; b++) {
+                            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                            line.setAttribute('x1', matches[a].x);
+                            line.setAttribute('y1', matches[a].y);
+                            line.setAttribute('x2', matches[b].x);
+                            line.setAttribute('y2', matches[b].y);
+                            line.setAttribute('class', 'link-line');
+                            svgAvatars.appendChild(line);
+                        }
+                    }
+                }
+            });
+
+            // アバター（丸点）と誕生日ラベルの描画
+            members.forEach(m => {
+                const isMatched = birthdayMap[m.birthdayVal].length > 1;
+                
+                // ドット
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', m.x);
+                circle.setAttribute('cy', m.y);
+                circle.setAttribute('r', isMatched ? '7' : '5');
+                circle.setAttribute('fill', isMatched ? 'var(--color-red)' : 'var(--color-ink-soft)');
+                circle.setAttribute('class', 'avatar-dot');
+                svgAvatars.appendChild(circle);
+
+                // テキスト（日付、人数が少ない場合のみ表示し、重なりを防ぐ）
+                if (n <= 30 || isMatched) {
+                    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    // 少し外側に配置
+                    const angle = (m.id / n) * 2.0 * Math.PI - Math.PI / 2;
+                    const textX = centerX + (radius + 18) * Math.cos(angle);
+                    const textY = centerY + (radius + 18) * Math.sin(angle) + 4;
+
+                    text.setAttribute('x', textX);
+                    text.setAttribute('y', textY);
+                    text.setAttribute('text-anchor', 'middle');
+                    text.setAttribute('font-size', '9px');
+                    text.setAttribute('font-family', 'var(--font-mono)');
+                    text.setAttribute('fill', isMatched ? 'var(--color-red)' : 'var(--color-ink-soft)');
+                    text.setAttribute('font-weight', isMatched ? 'bold' : 'normal');
+                    text.textContent = m.dateStr;
+                    svgAvatars.appendChild(text);
+                }
+            });
+
+            // 状態表示テキストの更新
+            if (matchCount > 0) {
+                lblMatchStatus.textContent = `検出: ${matchCount}ペア一致！`;
+                lblMatchStatus.style.color = 'var(--color-red)';
+                valSimResult.textContent = `一致あり (${matchCount}組)`;
+                valSimResultWrapper.className = 'res-val risk-warn';
+            } else {
+                lblMatchStatus.textContent = '一致なし';
+                lblMatchStatus.style.color = 'var(--color-ink-soft)';
+                valSimResult.textContent = '一致なし';
+                valSimResultWrapper.className = 'res-val risk-safe';
+            }
+        }
+
+        // 1〜365の整数から MM/DD フォーマットへ変換
+        function formatDateFromDay(day) {
+            const months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            let currentMonth = 0;
+            let currentDay = day;
+
+            for (let i = 0; i < 12; i++) {
+                if (currentDay <= months[i]) {
+                    currentMonth = i + 1;
+                    break;
+                }
+                currentDay -= months[i];
+            }
+            return `${currentMonth}/${currentDay}`;
+        }
+
+        // 新しい誕生日リストを生成
+        function generateRandomBirthdays(n) {
+            currentBirthdays = [];
+            for (let i = 0; i < n; i++) {
+                currentBirthdays.push(Math.floor(Math.random() * 365) + 1);
+            }
+        }
+
+        // 誕生日シャッフルボタンのアクション
+        function shuffleBirthdays() {
+            const n = parseInt(paramN.value);
+            generateRandomBirthdays(n);
+            updateAvatarVisualizer(n);
+        }
+
+        // 人数直接指定
+        function setN(n) {
+            paramN.value = n;
+            updateSimulation();
+        }
+
+        function updateSimulation() {
+            const n = parseInt(paramN.value);
+            lblN.textContent = n;
+
+            // 確率と組合せ数を更新
+            const prob = getProbability(n);
+            valProbSame.textContent = (prob * 100).toFixed(2);
+            
+            const comb = (n * (n - 1)) / 2;
+            valCombinations.textContent = comb.toLocaleString();
+            lblCalcComb.textContent = comb.toLocaleString();
+
+            updateGraphIndicator(n);
+            
+            // 誕生日配列が足りない・多すぎる場合は調整の上で再生成
+            if (currentBirthdays.length !== n) {
+                generateRandomBirthdays(n);
+            }
+            updateAvatarVisualizer(n);
+        }
+
+        // イベントリスナー設定
+        paramN.addEventListener('input', () => {
+            // 人数が変更されるたびに配列長さを合わせ、描画更新
+            const n = parseInt(paramN.value);
+            if (currentBirthdays.length > n) {
+                currentBirthdays = currentBirthdays.slice(0, n);
+            } else {
+                while (currentBirthdays.length < n) {
+                    currentBirthdays.push(Math.floor(Math.random() * 365) + 1);
+                }
+            }
+            updateSimulation();
+        });
+
+        // 初回起動処理
+        drawGraphBackground();
+        generateRandomBirthdays(23);
+        updateSimulation();
+    </script>
+</body>
+</html>

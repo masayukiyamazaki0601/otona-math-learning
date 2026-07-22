@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>パレートの法則（80:20の法則）：「不平等な偏り」を利益に変える数理 | Otona Math コラム</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .column-content {
+            background-color: var(--color-surface);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            margin-bottom: 40px;
+        }
+        .column-content p {
+            line-height: 2.1;
+            margin-bottom: 28px;
+        }
+        .section-header {
+            color: var(--color-brass);
+            margin-top: 40px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 10px;
+            font-size: 22px;
+        }
+        
+        /* Interactive Simulator Styles */
+        .interactive-simulator {
+            background-color: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        .simulator-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 15px;
+        }
+        .simulator-header h3 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            color: var(--color-ink);
+        }
+        .simulator-header p {
+            font-size: 14px;
+            color: var(--color-ink-soft);
+        }
+        
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        @media (max-width: 900px) {
+            .sim-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Control Panel */
+        .control-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .sim-state-card {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .sim-control-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--color-ink);
+            margin-bottom: 10px;
+        }
+        
+        /* Slider Group */
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 15px;
+        }
+        .slider-label-container {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--color-ink);
+        }
+        .sim-slider {
+            width: 100%;
+            height: 6px;
+            background: var(--color-paper);
+            border-radius: 3px;
+            outline: none;
+            accent-color: var(--color-brass);
+        }
+
+        /* Preset Buttons */
+        .preset-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .preset-btn {
+            padding: 8px;
+            font-size: 11px;
+            font-weight: bold;
+            border: 1px solid var(--color-paper-line);
+            background: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .preset-btn:hover, .preset-btn.active {
+            background-color: var(--color-ink);
+            color: var(--color-paper);
+            border-color: var(--color-ink);
+        }
+
+        /* SVG Visualization Container */
+        .restaurant-viz-box {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .restaurant-viz-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--color-ink-soft);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .restaurant-svg-container {
+            width: 100%;
+            height: 240px;
+            position: relative;
+        }
+        .restaurant-svg-container svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        /* Results Board */
+        .results-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            background: var(--color-paper);
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        @media (max-width: 600px) {
+            .results-board {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+        .res-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .res-label {
+            font-size: 13px;
+            color: var(--color-ink-soft);
+            margin-bottom: 4px;
+        }
+        .res-val {
+            font-size: 24px;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            color: var(--color-ink);
+        }
+        .res-val.status-warn { color: var(--color-red); }
+        .res-val.status-ok { color: #10b981; }
+
+        /* Status Board */
+        .status-board {
+            background: rgba(169, 120, 47, 0.05);
+            border: 1px solid rgba(169, 120, 47, 0.2);
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        .status-board.active-warning {
+            background: rgba(180, 67, 47, 0.06);
+            border-color: rgba(180, 67, 47, 0.3);
+        }
+        @media (max-width: 600px) {
+            .status-board {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+        .status-left {
+            display: flex;
+            flex-direction: column;
+        }
+        .status-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .status-board.active-warning .status-title {
+            color: var(--color-red);
+        }
+        .status-desc {
+            font-size: 12px;
+            color: var(--color-ink-soft);
+        }
+        .status-right {
+            display: flex;
+            align-items: center;
+        }
+        .status-stat-value {
+            font-family: var(--font-body);
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .status-board.active-warning .status-stat-value {
+            color: var(--color-red);
+        }
+
+        /* SVG Element Styling */
+        .vip-zone {
+            fill: none;
+            stroke: var(--color-brass);
+            stroke-width: 1.5;
+            rx: 6;
+            transition: fill 0.3s;
+        }
+        .vip-zone.active-investment {
+            fill: rgba(169, 120, 47, 0.04);
+        }
+        .gen-zone {
+            fill: none;
+            stroke: var(--color-paper-line);
+            stroke-width: 1.5;
+            rx: 6;
+            transition: fill 0.3s;
+        }
+        .gen-zone.active-investment {
+            fill: rgba(62, 80, 99, 0.02);
+        }
+        .avatar-group {
+            font-size: 20px;
+            text-anchor: middle;
+        }
+        .viz-label {
+            font-family: var(--font-body);
+            font-size: 10px;
+            fill: var(--color-ink-soft);
+            text-anchor: middle;
+        }
+        
+        /* Common Button Style */
+        .sim-btn {
+            background: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            color: var(--color-ink);
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: var(--radius-btn);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .sim-btn:hover {
+            border-color: var(--color-ink);
+            background-color: #f7f7f7;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="../index.html">数学と統計学</a></li>
+                    <li><a href="index.html">コラム</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">コラム</a> &gt; パレートの法則
+        </div>
+
+        <article class="column-content">
+            <h2 style="font-size: 28px; margin-bottom: 30px; line-height: 1.4;">パレートの法則（80:20の法則）：<br>「不平等な偏り」を利益に変える数理モデル</h2>
+            
+            <p>
+                経済活動や自然界において、「原因の2割が、結果の8割を生み出している」という経験則を数理的にモデル化したものが「パレートの法則」です。
+                19世紀末にイタリアの経済学者ヴィルフレド・パレートが、ヨーロッパの富の分布を統計的に分析した際に発見しました。
+            </p>
+            <p>
+                ビジネスの世界では、「すべての要素が均等に結果を生み出すわけではない」という前提を突きつける理論として、経営戦略やマーケティングの重要な指針となっています。
+                本コラムでは、中学生レベルにも分かりやすい具体例を用いて、この法則のメカニズムを解説します。
+            </p>
+
+            <h3 class="section-header">第1章：世の中は「均等」にはできていない</h3>
+            <p>
+                私たちは直感的に、「努力した時間」と「得られる成果」や、「商品の数」と「売上」は、正比例して均等に伸びていくと考えがちです。
+                しかし、パレートが統計データを分析した結果、社会の多くの事象において、極端な「偏り（不平等）」が存在することが数学的に示されました。
+            </p>
+            <p>
+                ビジネスにおいて、この「80:20の法則」は以下のような形で現れます。
+            </p>
+            <ul style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
+                <li><strong>売上の法則</strong>：会社の全売上の「80%」は、全顧客のうちのわずか「20%」の優良顧客（常連客）が生み出しています。</li>
+                <li><strong>商品の法則</strong>：店舗にある全商品のうち、上位「20%」の人気商品だけで、全売上の「80%」を占めています。</li>
+                <li><strong>労働の法則</strong>：チーム全体の成果の「80%」は、優秀な「20%」のメンバーの働きによって生み出されています。</li>
+            </ul>
+            <p>
+                この「偏り」の実態を受け入れることが、限られた資源で最大の利益を上げるための重要な第一歩となります。
+            </p>
+
+            <h3 class="section-header">【体験】レストランの顧客リソース配分シミュレーター</h3>
+            <p>
+                レストランの顧客100人（常連客20人、一般客80人）に対するサービス予算や挨拶時間の配分比率（スライダー）を設定し、店舗全体の総売上を最大化するシミュレーターです。
+                プリセットボタンを用いて、全員に均等に配る「平等な配分」と、上位2割に集中させる「パレート配分」の違いによる総売上の差を体感してください。
+            </p>
+
+            <!-- シミュレーター容器 -->
+            <div class="interactive-simulator">
+                <div class="simulator-header">
+                    <h3>常連客 vs 一般客 リソース配分シミュレーター</h3>
+                    <p>スライダーを動かして、常連客（20人）と一般客（80人）へのサービス投資比率（合計100%）を割り振ります。</p>
+                </div>
+                
+                <div class="sim-grid">
+                    <!-- 左：設定とコントロール -->
+                    <div class="control-panel">
+                        <div class="sim-state-card">
+                            <div class="sim-control-title">📋 投資配分プリセット</div>
+                            <div class="preset-buttons">
+                                <button id="preset-one" class="preset-btn active" onclick="applyPreset('one')">① 均等サービス<br>(人数ベース配分)</button>
+                                <button id="preset-two" class="preset-btn" onclick="applyPreset('two')">② パレート配分<br>(80:20の最適化)</button>
+                                <button id="preset-three" class="preset-btn" onclick="applyPreset('three')">③ 常連特化型<br>(一般客の縮小)</button>
+                            </div>
+                        </div>
+
+                        <div class="sim-state-card">
+                            <div class="sim-control-title">⚙️ 投資比率（合計100%）</div>
+                            
+                            <div class="slider-group">
+                                <div class="slider-label-container">
+                                    <span>👑 常連客へのサービス投資比率</span>
+                                    <span><span id="val-vip-ratio">20</span> %</span>
+                                </div>
+                                <input type="range" id="slide-vip-ratio" class="sim-slider" min="0" max="100" step="10" value="20" oninput="onParamChange()">
+                                <div class="slider-label-container" style="font-size:10px; color:var(--color-ink-soft); margin-top:2px;">
+                                    <span>(一般客への投資比率: <span id="val-gen-ratio">80</span> %)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 右：SVG可視化 -->
+                    <div class="restaurant-viz-box">
+                        <div class="restaurant-viz-title">
+                            <span>🗺️ 店舗内のお客様グループ</span>
+                            <span style="font-family:var(--font-mono); font-size:11px;">総顧客: 100人</span>
+                        </div>
+                        <div class="restaurant-svg-container">
+                            <svg id="svg-restaurant">
+                                <!-- 常連客エリア（20人相当の配置枠） -->
+                                <rect x="5%" y="15%" width="40%" height="70%" class="vip-zone" id="zone-vip" />
+                                <text x="25%" y="27%" class="viz-label" font-weight="bold">👑 常連客 (20人 / 売上基盤80%)</text>
+                                
+                                <text x="25%" y="55%" class="avatar-group">👑👑👑</text>
+                                <text x="25%" y="70%" class="avatar-group">👑👑</text>
+                                <text x="25%" y="80%" class="viz-label" id="lbl-vip-invest">投資: 20%</text>
+
+                                <!-- 一般客エリア（80人相当の配置枠） -->
+                                <rect x="55%" y="15%" width="40%" height="70%" class="gen-zone" id="zone-gen" />
+                                <text x="75%" y="27%" class="viz-label" font-weight="bold">👥 一般客 (80人 / 売上基盤20%)</text>
+                                
+                                <text x="75%" y="55%" class="avatar-group">👥👥👥</text>
+                                <text x="75%" y="70%" class="avatar-group">👥👥</text>
+                                <text x="75%" y="80%" class="viz-label" id="lbl-gen-invest">投資: 80%</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 結果ボード -->
+                <div class="results-board">
+                    <div class="res-box">
+                        <div class="res-label">常連客からの売上</div>
+                        <div class="res-val"><span id="val-vip-sales">80</span> 万円</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">一般客からの売上</div>
+                        <div class="res-val"><span id="val-gen-sales">20</span> 万円</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">店舗全体の総売上</div>
+                        <div class="res-val" style="color:var(--color-brass);"><span id="val-total-sales">100.0</span> 万円</div>
+                    </div>
+                </div>
+                
+                <!-- 判定ボード -->
+                <div id="sim-status-board" class="status-board">
+                    <div class="status-left">
+                        <div class="status-title">🚥 投資効率の診断</div>
+                        <div id="sim-status-desc" class="status-desc">シミュレーターのパラメータを動かして、最適な投資バランスを見つけてください。</div>
+                    </div>
+                    <div class="status-right">
+                        <div id="sim-status-val" class="target-stat-value">分析中</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-header">第2章：すべてのお客様を均等に扱ってはいけない数理</h3>
+            <p>
+                パレートの法則を知らない店長と、知っている店長では、結果に以下のような差が生まれます。
+            </p>
+            <p>
+                <strong>「平等」を重んじる店長（投資割合：常連20%、一般80%）</strong>：<br>
+                「100人のお客様は全員平等に大切である」と考え、予算や挨拶時間を人数比率（20:80）に沿って均等に分配します。
+                その結果、限られたサービス資源が100人に薄まってしまい、常連客の満足度も一般客の満足度も中途半端になり、全体の売上（100万円）は伸び悩みます。
+            </p>
+            <p>
+                <strong>パレートの法則を適用する店長（投資割合：常連80%、一般20%）</strong>：<br>
+                売上の80%を支える20人の常連客に対し、80%の予算とサービス時間を集中投下します。
+                特別扱いされた常連客の満足度と来店頻度が劇的に高まることで、全体の売上が最も高率よく向上し、最大売上（約147万円）を達成できます。
+            </p>
+            <p>
+                道徳的な平等は大切ですが、限られた資源を最適化するビジネスの数理においては、薄い分配は「資源の分散（非効率）」につながります。
+                最も効果の高い「20%の急所」を見極め、そこに一点集中するアプローチが欠かせません。
+            </p>
+
+            <h3 class="section-header">第3章：「捨てる」ための数学的根拠</h3>
+            <p>
+                パレートの法則は、「何に注力すべきか」だけでなく、「何をやめる（切り捨てる）べきか」を論理的に決断する際にも有効な根拠になります。
+            </p>
+            <p>
+                例えば、会社の売上のうち下位20%に該当する業務や商品は、往々にして「全体の80%の労力」を消費している原因となっています。
+                クレーム対応の多い商品や、利益率が極端に低い業務などがこれに該当します。
+            </p>
+            <p>
+                「売上が少しでも減少するのが不安である」という理由でこれら維持し続けると、優秀な社員の時間が奪われ、全体の生産性が低下します。
+                下位の業務を切り捨てて一時的に売上が微減したとしても、そこで生まれた時間と労力を上位20%の優良業務に再投資する方が、結果として全体の利益が拡大するという結論が導き出されます。
+            </p>
+
+            <h3 class="section-header">第4章：働き方改革とタイムマネジメントへの応用</h3>
+            <p>
+                この法則は、個人の勉強法やタスク整理にもそのまま当てはまります。
+                「仕事の成果の80%は、費やした時間の最初の20%で生み出される」という法則があります。
+                企画書の骨組みや重要なアイデア（80%の成果）は、集中した最初の短い時間（20%の時間）で完成します。
+                その後、フォントやレイアウトの微調整といった「残りの20%の成果」を完璧にするために、莫大な（80%の）時間を浪費してしまいがちです。
+            </p>
+            <p>
+                現代のビジネスパーソンに必要なのは、100点満点を目指して時間を無限に消費することではなく、「最も重要な20%」を見極めて素早く80点の成果を出し、次のタスクへ移る時間配分です。
+            </p>
+
+            <h3 class="section-header">まとめ</h3>
+            <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 20px; font-size: 15px; line-height: 1.8;">
+                パレートの法則は、「世界は均等ではなく、物事の重要度には必ず偏りがある」という冷徹な事実を示しています。
+                しかし、この偏りを味方につけることで、「すべての課題に全力で取り組む必要はない」「重要な2割の急所を押さえれば、残りの8割をコントロールできる」という実用的な経営戦略を描くことが可能になります。
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- シミュレーター制御スクリプト -->
+    <script>
+        // 状態変数
+        let vipRatio = 20; // 常連客への投資比率
+
+        // ベースの売上（常連客20人＝80万、一般客80人＝20万）
+        const baseVipSales = 80;
+        const baseGenSales = 20;
+
+        const slideVipRatio = document.getElementById('slide-vip-ratio');
+        const lblVipRatio = document.getElementById('val-vip-ratio');
+        const lblGenRatio = document.getElementById('val-gen-ratio');
+        
+        const lblVipSales = document.getElementById('val-vip-sales');
+        const lblGenSales = document.getElementById('val-gen-sales');
+        const lblTotalSales = document.getElementById('val-total-sales');
+        
+        const statusBoard = document.getElementById('sim-status-board');
+        const statusDesc = document.getElementById('sim-status-desc');
+        const statusVal = document.getElementById('sim-status-val');
+
+        // SVG要素
+        const zoneVip = document.getElementById('zone-vip');
+        const zoneGen = document.getElementById('zone-gen');
+        const lblVipInvest = document.getElementById('lbl-vip-invest');
+        const lblGenInvest = document.getElementById('lbl-gen-invest');
+
+        // プリセット適用
+        function applyPreset(presetType) {
+            document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`preset-${presetType}`).classList.add('active');
+
+            if (presetType === 'one') {
+                vipRatio = 20; // 均等サービス（常連: 20%, 一般: 80%）
+            } else if (presetType === 'two') {
+                vipRatio = 80; // パレート配分（常連: 80%, 一般: 20%）
+            } else if (presetType === 'three') {
+                vipRatio = 100; // 常連客特化（常連: 100%, 一般: 0%）
+            }
+            
+            updateSlidersFromParams();
+            calculateResults();
+        }
+
+        function updateSlidersFromParams() {
+            slideVipRatio.value = vipRatio;
+            lblVipRatio.textContent = vipRatio;
+            lblGenRatio.textContent = 100 - vipRatio;
+        }
+
+        // スライダー変更時
+        function onParamChange() {
+            document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+            vipRatio = parseInt(slideVipRatio.value);
+            
+            lblVipRatio.textContent = vipRatio;
+            lblGenRatio.textContent = 100 - vipRatio;
+            
+            calculateResults();
+        }
+
+        // 計算と診断
+        function calculateResults() {
+            const genRatio = 100 - vipRatio;
+
+            // 売上増加モデル（投資比率に応じた売上上昇）
+            // 資源を集中した方が伸びが大きくなるモデルを設定
+            // 期待値: 
+            // 常連: ベース80万 * (1 + 0.6 * (vipRatio / 100)^0.5)
+            // 一般: ベース20万 * (1 + 0.3 * (genRatio / 100)^0.5)
+            const vipSales = baseVipSales * (1 + 0.6 * Math.sqrt(vipRatio / 100));
+            const genSales = baseGenSales * (1 + 0.3 * Math.sqrt(genRatio / 100));
+            const totalSales = vipSales + genSales;
+
+            // ボード表示
+            lblVipSales.textContent = Math.round(vipSales);
+            lblGenSales.textContent = Math.round(genSales);
+            lblTotalSales.textContent = totalSales.toFixed(1);
+
+            // SVG表示更新
+            lblVipInvest.textContent = `投資: ${vipRatio}%`;
+            lblGenInvest.textContent = `投資: ${genRatio}%`;
+
+            // 投資の大きさに応じてエリア背景をハイライト
+            if (vipRatio >= 50) {
+                zoneVip.classList.add('active-investment');
+            } else {
+                zoneVip.classList.remove('active-investment');
+            }
+
+            if (genRatio >= 50) {
+                zoneGen.classList.add('active-investment');
+            } else {
+                zoneGen.classList.remove('active-investment');
+            }
+
+            // 診断
+            if (vipRatio === 20) {
+                statusBoard.className = 'status-board';
+                statusVal.textContent = '均等配分（非効率）';
+                statusDesc.textContent = 'お客様の人数に合わせて均等にリソースを分配した結果、常連客の売上ポテンシャルが眠ったままになっています。';
+            } else if (vipRatio >= 70 && vipRatio <= 90) {
+                statusBoard.className = 'status-board';
+                statusVal.textContent = 'パレート最適（売上最大）';
+                statusDesc.textContent = '売上の8割を支える常連客（2割）に集中的にリソースを投資したことで、最も効率よく店舗全体の売上を最大化できています。';
+            } else if (vipRatio === 100) {
+                statusBoard.className = 'status-board active-warning';
+                statusVal.textContent = '過度な一般客切り捨て';
+                statusDesc.textContent = '一般客への投資を完全にゼロにしたため、一般客（80%）からの売上が最低になり、総売上はパレート最適を下回っています。';
+            } else if (vipRatio < 20) {
+                statusBoard.className = 'status-board active-warning';
+                statusVal.textContent = '逆選択（リソース浪費）';
+                statusDesc.textContent = '売上に貢献しない顧客群に大半の予算と時間を割いてしまい、店舗経営が危機的な状態に陥っています。';
+            } else {
+                statusBoard.className = 'status-board';
+                statusVal.textContent = '発展途上の投資配分';
+                statusDesc.textContent = '常連客への投資配分が上昇し、均等配分のときよりも売上価値が拡大しています。さらなる集中を検討できます。';
+            }
+        }
+
+        // 初期ロード
+        applyPreset('one');
+    </script>
+</body>
+</html>

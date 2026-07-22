@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>レモンの市場：情報の非対称性が引き起こす市場の崩壊 | Otona Math コラム</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .column-content {
+            background-color: var(--color-surface);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            margin-bottom: 40px;
+        }
+        .column-content p {
+            line-height: 2.1;
+            margin-bottom: 28px;
+        }
+        .section-header {
+            color: var(--color-brass);
+            margin-top: 40px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 10px;
+            font-size: 22px;
+        }
+        
+        /* Interactive Simulator Styles */
+        .interactive-simulator {
+            background-color: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        .simulator-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 15px;
+        }
+        .simulator-header h3 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            color: var(--color-ink);
+        }
+        .simulator-header p {
+            font-size: 14px;
+            color: var(--color-ink-soft);
+        }
+        
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        @media (max-width: 900px) {
+            .sim-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Control Panel */
+        .control-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .sim-state-card {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .sim-control-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--color-ink);
+            margin-bottom: 10px;
+        }
+        
+        /* Slider Group */
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 15px;
+        }
+        .slider-label-container {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--color-ink);
+        }
+        .sim-slider {
+            width: 100%;
+            height: 6px;
+            background: var(--color-paper);
+            border-radius: 3px;
+            outline: none;
+            accent-color: var(--color-brass);
+        }
+
+        /* Preset Buttons */
+        .preset-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .preset-btn {
+            padding: 8px;
+            font-size: 11px;
+            font-weight: bold;
+            border: 1px solid var(--color-paper-line);
+            background: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .preset-btn:hover, .preset-btn.active {
+            background-color: var(--color-ink);
+            color: var(--color-paper);
+            border-color: var(--color-ink);
+        }
+
+        /* SVG Visualization Container */
+        .market-viz-box {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .market-viz-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--color-ink-soft);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .market-svg-container {
+            width: 100%;
+            height: 240px;
+            position: relative;
+        }
+        .market-svg-container svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        /* Results Board */
+        .results-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            background: var(--color-paper);
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        @media (max-width: 600px) {
+            .results-board {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+        .res-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .res-label {
+            font-size: 13px;
+            color: var(--color-ink-soft);
+            margin-bottom: 4px;
+        }
+        .res-val {
+            font-size: 24px;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            color: var(--color-ink);
+        }
+        .res-val.status-warn { color: var(--color-red); }
+        .res-val.status-ok { color: #10b981; }
+
+        /* Status Board */
+        .status-board {
+            background: rgba(169, 120, 47, 0.05);
+            border: 1px solid rgba(169, 120, 47, 0.2);
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        .status-board.active-warning {
+            background: rgba(180, 67, 47, 0.06);
+            border-color: rgba(180, 67, 47, 0.3);
+        }
+        @media (max-width: 600px) {
+            .status-board {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+        .status-left {
+            display: flex;
+            flex-direction: column;
+        }
+        .status-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .status-board.active-warning .status-title {
+            color: var(--color-red);
+        }
+        .status-desc {
+            font-size: 12px;
+            color: var(--color-ink-soft);
+        }
+        .status-right {
+            display: flex;
+            align-items: center;
+        }
+        .status-stat-value {
+            font-family: var(--font-body);
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .status-board.active-warning .status-stat-value {
+            color: var(--color-red);
+        }
+
+        /* SVG Element Styling */
+        .market-zone {
+            fill: none;
+            stroke: var(--color-paper-line);
+            stroke-width: 1.5;
+            stroke-dasharray: 4,4;
+        }
+        .car-node {
+            transition: transform 0.8s ease-in-out, opacity 0.8s;
+            cursor: pointer;
+        }
+        .car-node.withdrawn {
+            opacity: 0.25;
+        }
+        .car-bg {
+            fill: #fff;
+            stroke: #ddd;
+            stroke-width: 1.5;
+            rx: 6;
+        }
+        .car-bg.peach {
+            stroke: var(--color-brass);
+            fill: rgba(169, 120, 47, 0.02);
+        }
+        .car-bg.lemon {
+            stroke: var(--color-ink-soft);
+        }
+        .car-bg.sold {
+            fill: rgba(16, 185, 129, 0.1);
+            stroke: #10b981;
+        }
+        .car-label {
+            font-family: var(--font-body);
+            font-size: 11px;
+            fill: var(--color-ink);
+            text-anchor: middle;
+        }
+        
+        /* Common Button Style */
+        .sim-btn {
+            background: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            color: var(--color-ink);
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: var(--radius-btn);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .sim-btn:hover {
+            border-color: var(--color-ink);
+            background-color: #f7f7f7;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="../index.html">数学と統計学</a></li>
+                    <li><a href="index.html">コラム</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">コラム</a> &gt; レモンの市場（情報の非対称性）
+        </div>
+
+        <article class="column-content">
+            <h2 style="font-size: 28px; margin-bottom: 30px; line-height: 1.4;">レモンの市場：<br>情報の非対称性が引き起こす市場の崩壊</h2>
+            
+            <p>
+                売り手と買い手の間に「持っている情報の格差（情報の非対称性）」が存在するとき、健全な市場取引が妨げられ、質の悪い商品ばかりが流通する現象が発生します。
+                このメカニズムを論理的に解明したのが、経済学者ジョージ・アカロフ教授が1970年に発表した論文「レモンの市場（The Market for 'Lemons'）」です。
+            </p>
+            <p>
+                本コラムでは、アメリカの中古車業界を例に、情報の偏りがどのようにもたらす「市場の崩壊」と、それを防ぐビジネス戦略について、シミュレーションを交えて分かりやすく解説します。
+            </p>
+
+            <h3 class="section-header">第1章：ピーチ（優良品）とレモン（粗悪品）</h3>
+            <p>
+                アメリカの中古車業界の隠語では、故障しやすく状態の悪い中古車を「レモン（皮が厚くて中身が酸っぱい様子から）」、状態の良い中古車を「ピーチ」と呼びます。
+                この市場において、以下の条件があると仮定します。
+            </p>
+            <ul style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
+                <li><strong>売り手</strong>：その車がピーチかレモンか、真の状態を正確に把握しています。</li>
+                <li><strong>買い手</strong>：外見からは状態を判別できず、購入して乗るまで品質が分かりません。</li>
+            </ul>
+            <p>
+                このように、取引の一方のみが真実を知っている格差のある状態を「情報の非対称性」と呼びます。
+            </p>
+
+            <h3 class="section-header">【体験】レモンの市場シミュレーター</h3>
+            <p>
+                情報の非対称性が中古車市場に与える影響を観測するシミュレーターです。
+                市場に並ぶ10台の車（ピーチ🍑とレモン🍋）に対し、買い手の鑑定能力や売り手が提示する品質保証の有無によって、取引の成立状況や市場の崩壊（逆選択）がどのように起こるかをシミュレーションします。
+            </p>
+
+            <!-- シミュレーター容器 -->
+            <div class="interactive-simulator">
+                <div class="simulator-header">
+                    <h3>中古車取引・逆選択シミュレーター</h3>
+                    <p>パラメータを設定し、「市場の取引を開始」ボタンを押して、成立する中古車の状態を確認します。</p>
+                </div>
+                
+                <div class="sim-grid">
+                    <!-- 左：設定とコントロール -->
+                    <div class="control-panel">
+                        <div class="sim-state-card">
+                            <div class="sim-control-title">📋 シナリオプリセット</div>
+                            <div class="preset-buttons">
+                                <button id="preset-non" class="preset-btn active" onclick="applyPreset('non')">① 情報格差のみ<br>(市場の崩壊)</button>
+                                <button id="preset-sig" class="preset-btn" onclick="applyPreset('sig')">② 保証の導入<br>(シグナリング)</button>
+                                <button id="preset-scr" class="preset-btn" onclick="applyPreset('scr')">③ 鑑定能力向上<br>(スクリーニング)</button>
+                            </div>
+                        </div>
+
+                        <div class="sim-state-card">
+                            <div class="sim-control-title">⚙️ パラメータ手動調整</div>
+                            
+                            <div class="slider-group">
+                                <div class="slider-label-container">
+                                    <span>🍑 優良車（ピーチ）の初期割合</span>
+                                    <span><span id="val-peach-ratio">50</span> %</span>
+                                </div>
+                                <input type="range" id="slide-peach-ratio" class="sim-slider" min="10" max="90" step="10" value="50" oninput="onParamChange()">
+                            </div>
+
+                            <div class="slider-group">
+                                <div class="slider-label-container">
+                                    <span>🛡️ 品質保証期間（シグナリング）</span>
+                                    <span><span id="val-warranty">0</span> ヶ月</span>
+                                </div>
+                                <input type="range" id="slide-warranty" class="sim-slider" min="0" max="24" step="6" value="0" oninput="onParamChange()">
+                            </div>
+
+                            <div class="slider-group">
+                                <div class="slider-label-container">
+                                    <span>🔍 買い手の鑑定精度（スクリーニング）</span>
+                                    <span><span id="val-screening">0</span> %</span>
+                                </div>
+                                <input type="range" id="slide-screening" class="sim-slider" min="0" max="100" step="20" value="0" oninput="onParamChange()">
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: center; display: flex; gap: 10px; justify-content: center;">
+                            <button id="btn-trade" class="sim-btn" style="flex:1; font-weight:bold; border-color:var(--color-brass);" onclick="runTrade()">▶ 市場の取引を開始</button>
+                            <button class="sim-btn" onclick="resetSim()">🔄 リセット</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 右：SVG可視化 -->
+                    <div class="market-viz-box">
+                        <div class="market-viz-title">
+                            <span>🚗 市場の中古車（10台）</span>
+                            <span id="lbl-step-status" style="font-family:var(--font-mono); font-size:11px;">状態: 開店前</span>
+                        </div>
+                        <div class="market-svg-container">
+                            <svg id="svg-market">
+                                <!-- 市場エリア枠線 -->
+                                <rect x="5%" y="5%" width="90%" height="80%" class="market-zone" rx="8" />
+                                <text x="10%" y="15%" font-size="10" fill="var(--color-ink-soft)">展示場 (市場内)</text>
+                                
+                                <!-- 中古車ノード -->
+                                <g id="group-cars"></g>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 結果ボード -->
+                <div class="results-board">
+                    <div class="res-box">
+                        <div class="res-label">買い手の平均オファー価格</div>
+                        <div class="res-val"><span id="val-buyer-price">0</span> 万円</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">取引成立した中古車数</div>
+                        <div class="res-val"><span id="val-deal-count">0</span> / 10台</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">市場に残る優良車の割合</div>
+                        <div class="res-val"><span id="val-peach-left">0</span> %</div>
+                    </div>
+                </div>
+                
+                <!-- 判定ボード -->
+                <div id="sim-status-board" class="status-board">
+                    <div class="status-left">
+                        <div class="status-title">🚥 市場の健全性診断</div>
+                        <div id="sim-status-desc" class="status-desc">パラメータを設定し、「市場の取引を開始」を押してください。</div>
+                    </div>
+                    <div class="status-right">
+                        <div id="sim-status-val" class="target-stat-value">待機中</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-header">第2章：市場の崩壊メカニズム（逆選択）</h3>
+            <p>
+                シミュレーターの「①情報格差のみ」を実行すると、以下のように市場が崩壊するプロセスが進行します。
+            </p>
+            <p>
+                買い手は、自分が購入しようとする車が「レモン（粗悪品）」であるリスクを過度に警戒します。
+                そのため、買い手はピーチ（優良品）の本来の価値である200万円を支払うことを拒み、レモンを掴まされても損をしない「平均価格（例：150万円）」しか支払おうとしなくなります。
+            </p>
+            <p>
+                これにより、市場では以下の悪循環が発生します。
+            </p>
+            <ol style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
+                <li>買い手が「平均値である安い価格（150万円）」しか提示しなくなります。</li>
+                <li>良い状態の「ピーチ（希望額180万円）」を持つ売り手は、安値での取引を拒み、市場から撤退します（売るのをやめます）。</li>
+                <li>展示場には、安値で売っても利益が出る「レモン（希望額90万円）」ばかりが取り残されます。</li>
+                <li>不良品ばかりになったのを見た買い手はさらに不信感を募らせ、さらに低いオファー価格しか出さなくなります。</li>
+            </ol>
+            <p>
+                このように、良質な商品が不当に排除され、悪質な商品だけが市場に充満する現象を、経済学では**「逆選択（アドバース・セレクション）」**と呼びます。
+            </p>
+
+            <h3 class="section-header">第3章：ビジネスにおける解決策の数理</h3>
+            <p>
+                情報の非対称性による市場の崩壊を防ぐために、ビジネスの現場では以下の2つの対策が取られます。
+            </p>
+            <p>
+                <strong>1. シグナリング（売り手からの品質証明）</strong>：<br>
+                売り手自身が、買い手に対して「この商品は優良である」と伝えるための証拠を提示する戦略です。
+                例えば、「24ヶ月の無料長期保証」や「全額返金保証」を付けることで、買い手に対して安心感を与えます。
+                もし粗悪なレモンに長期保証を付けると、のちに多額の修理費が発生して売り手自身が赤字になります。
+                そのため、保証という形でリスクを背負うこと自体が、「この車は絶対に壊れない優良品（ピーチ）である」という強固な証拠（シグナル）になります。
+            </p>
+            <p>
+                <strong>2. スクリーニング（買い手からの情報選別）</strong>：<br>
+                買い手側が仕組みを用意して、相手の本当の情報を引き出す戦略です。
+                中古車の査定士を同行させることや、購入前に外部の専門機関で「第三者査定シート」を発行させることがこれに該当します。
+                買い手の鑑定精度が高まれば、ピーチに対しては適正な高値を提示し、レモンに対しては安値を提示できるため、逆選択を回避できます。
+            </p>
+
+            <h3 class="section-header">まとめ</h3>
+            <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 20px; font-size: 15px; line-height: 1.8;">
+                「優れた商品を作れば自然と売れる」という考え方は、買い手に見分ける能力がない「情報の非対称性」が存在する環境では通用しません。
+                自社の商品が「ピーチ（優良品）」であることを、保証や第三者の証明（シグナリング）を用いていかに買い手に確信させるか。
+                この情報格差を埋める戦略的アプローチこそが、現代のプラットフォームビジネスやサービス業において重要な経営課題です。
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- シミュレーター制御スクリプト -->
+    <script>
+        // 状態変数
+        let peachRatio = 50;
+        let warranty = 0;
+        let screening = 0;
+        
+        let cars = []; // {id, type: 'peach'|'lemon', status: 'available'|'withdrawn'|'sold', x, y}
+        
+        const slidePeachRatio = document.getElementById('slide-peach-ratio');
+        const slideWarranty = document.getElementById('slide-warranty');
+        const slideScreening = document.getElementById('slide-screening');
+        
+        const lblPeachRatio = document.getElementById('val-peach-ratio');
+        const lblWarranty = document.getElementById('val-warranty');
+        const lblScreening = document.getElementById('val-screening');
+        
+        const lblBuyerPrice = document.getElementById('val-buyer-price');
+        const lblDealCount = document.getElementById('val-deal-count');
+        const lblPeachLeft = document.getElementById('val-peach-left');
+        
+        const statusBoard = document.getElementById('sim-status-board');
+        const statusDesc = document.getElementById('sim-status-desc');
+        const statusVal = document.getElementById('sim-status-val');
+        const lblStepStatus = document.getElementById('lbl-step-status');
+        
+        const svgContainer = document.getElementById('svg-market');
+        const gCars = document.getElementById('group-cars');
+
+        // プリセット適用
+        function applyPreset(presetType) {
+            document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`preset-${presetType}`).classList.add('active');
+
+            if (presetType === 'non') {
+                peachRatio = 50;
+                warranty = 0;
+                screening = 0;
+            } else if (presetType === 'sig') {
+                peachRatio = 50;
+                warranty = 18; // 保証あり
+                screening = 0;
+            } else if (presetType === 'scr') {
+                peachRatio = 50;
+                warranty = 0;
+                screening = 80; // 鑑定精度高い
+            }
+            
+            updateSlidersFromParams();
+            resetSim();
+        }
+
+        function updateSlidersFromParams() {
+            slidePeachRatio.value = peachRatio;
+            slideWarranty.value = warranty;
+            slideScreening.value = screening;
+            
+            lblPeachRatio.textContent = peachRatio;
+            lblWarranty.textContent = warranty;
+            lblScreening.textContent = screening;
+        }
+
+        // スライダー変更時
+        function onParamChange() {
+            document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+            peachRatio = parseInt(slidePeachRatio.value);
+            warranty = parseInt(slideWarranty.value);
+            screening = parseInt(slideScreening.value);
+            
+            lblPeachRatio.textContent = peachRatio;
+            lblWarranty.textContent = warranty;
+            lblScreening.textContent = screening;
+            
+            resetSim();
+        }
+
+        // リセット
+        function resetSim() {
+            cars = [];
+            
+            // 中古車10台の生成
+            const peachCount = peachRatio / 10;
+            
+            // X, Y グリッドで10台配置 (2行5列)
+            for (let i = 0; i < 10; i++) {
+                const type = (i < peachCount) ? 'peach' : 'lemon';
+                const col = i % 5;
+                const row = Math.floor(i / 5);
+                
+                cars.push({
+                    id: i + 1,
+                    type: type,
+                    status: 'available',
+                    x: 40 + (col * 50),
+                    y: 70 + (row * 65)
+                });
+            }
+
+            // 出力クリア
+            lblBuyerPrice.textContent = '0';
+            lblDealCount.textContent = '0 / 10台';
+            lblPeachLeft.textContent = `${peachRatio}`;
+            
+            lblStepStatus.textContent = '状態: 開店前';
+            statusBoard.className = 'status-board';
+            statusVal.textContent = '待機中';
+            statusDesc.textContent = 'パラメータを設定し、「市場の取引を開始」を押してください。';
+
+            drawCars();
+        }
+
+        // 車ノードの描画
+        function drawCars() {
+            gCars.innerHTML = '';
+            
+            cars.forEach(car => {
+                const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                g.setAttribute('class', `car-node ${car.status === 'withdrawn' ? 'withdrawn' : ''}`);
+                g.setAttribute('transform', `translate(${car.x}, ${car.y})`);
+                
+                // カードの背景
+                const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                rect.setAttribute('x', -20);
+                rect.setAttribute('y', -25);
+                rect.setAttribute('width', 40);
+                rect.setAttribute('height', 50);
+                rect.setAttribute('class', `car-bg ${car.type} ${car.status === 'sold' ? 'sold' : ''}`);
+                g.appendChild(rect);
+
+                // アイコンテキスト
+                const textIcon = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                textIcon.setAttribute('x', 0);
+                textIcon.setAttribute('y', 2);
+                textIcon.setAttribute('class', 'car-label');
+                textIcon.setAttribute('font-size', '16');
+                textIcon.textContent = car.type === 'peach' ? '🍑' : '🍋';
+                g.appendChild(textIcon);
+
+                // ステータステキスト
+                const textStatus = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                textStatus.setAttribute('x', 0);
+                textStatus.setAttribute('y', 18);
+                textStatus.setAttribute('class', 'car-label');
+                textStatus.setAttribute('font-size', '8');
+                textStatus.setAttribute('font-weight', 'bold');
+                
+                if (car.status === 'available') {
+                    textStatus.textContent = '出品中';
+                    textStatus.setAttribute('fill', 'var(--color-ink-soft)');
+                } else if (car.status === 'sold') {
+                    textStatus.textContent = '売約済';
+                    textStatus.setAttribute('fill', '#10b981');
+                } else if (car.status === 'withdrawn') {
+                    textStatus.textContent = '出品断念';
+                    textStatus.setAttribute('fill', 'var(--color-red)');
+                }
+                g.appendChild(textStatus);
+
+                gCars.appendChild(g);
+            });
+        }
+
+        // 取引シミュレーションの実行
+        function runTrade() {
+            // 基本的な期待値設定
+            // ピーチの真の価値: 200万、売り手の最低希望価格: 180万
+            // レモンの真の価値: 100万、売り手の最低希望価格: 90万
+            
+            // 1. 買い手の最大オファー価格の決定
+            let buyerOffer = 0;
+            
+            // 鑑定能力(screening)が高い、または保証(warranty)がある場合、情報の非対称性が縮小する
+            // 1) 完璧なスクリーニング(100%): ピーチには180万、レモンには90万を支払える
+            // 2) 保証がある場合: 保証期間に応じて、ピーチがレモンに見える不信の割合が減少する
+            const transparency = Math.max(screening / 100, warranty / 24);
+            
+            if (transparency >= 0.75) {
+                // 情報が透明であるため、ピーチには適正なオファー（180万円）を出せる
+                buyerOffer = 180;
+            } else {
+                // 不透明なため、買い手は期待値オファー（桃とレモンの混合期待値）しか出さない
+                // 市場にある「available」な車のうち、ピーチの割合からオファー期待値を決定
+                const activePeachRatio = peachRatio / 100;
+                buyerOffer = (180 * activePeachRatio) + (90 * (1 - activePeachRatio));
+            }
+
+            lblBuyerPrice.textContent = Math.round(buyerOffer);
+
+            // 2. 売り手の取引判定
+            // 売り手は、買い手の提示価格が自分の希望額（ピーチ180万、レモン90万）以上なら売り、未満なら出品を取りやめる（撤退）
+            let dealCount = 0;
+            let currentPeaches = 0;
+            let currentLemons = 0;
+
+            cars.forEach(car => {
+                if (car.type === 'peach') {
+                    if (buyerOffer >= 180) {
+                        car.status = 'sold';
+                        dealCount++;
+                        currentPeaches++;
+                    } else {
+                        car.status = 'withdrawn'; // 希望額に届かないため撤退
+                    }
+                } else { // lemon
+                    if (buyerOffer >= 90) {
+                        car.status = 'sold';
+                        dealCount++;
+                        currentLemons++;
+                    } else {
+                        car.status = 'withdrawn';
+                    }
+                }
+            });
+
+            // 描画更新
+            drawCars();
+
+            // 結果ボード更新
+            lblDealCount.textContent = `${dealCount} / 10台`;
+            
+            const totalRemaining = currentPeaches + currentLemons;
+            const finalPeachRatio = totalRemaining > 0 ? (currentPeaches / totalRemaining) * 100 : 0;
+            lblPeachLeft.textContent = Math.round(finalPeachRatio);
+
+            // 判定診断の更新
+            lblStepStatus.textContent = '状態: 取引終了';
+            
+            if (dealCount === 0) {
+                statusBoard.className = 'status-board active-warning';
+                statusVal.textContent = '市場の完全崩壊';
+                statusDesc.textContent = '買い手の提示価格が低すぎたため、すべての売り手が撤退し、取引成立数はゼロとなりました。';
+            } else if (currentPeaches === 0 && currentLemons > 0) {
+                statusBoard.className = 'status-board active-warning';
+                statusVal.textContent = '逆選択（崩壊）';
+                statusDesc.textContent = '優良なピーチ車が安値で駆逐され、市場には状態の悪いレモン（粗悪品）だけが売れ残りました。典型的な逆選択の状態です。';
+            } else if (currentPeaches > 0 && currentLemons > 0 && finalPeachRatio >= 40) {
+                statusBoard.className = 'status-board';
+                statusVal.textContent = '健全な市場';
+                statusDesc.textContent = '保証（シグナリング）や鑑定（スクリーニング）が機能し、優良なピーチ車も適正価格で取引が成立しました。';
+            } else {
+                statusBoard.className = 'status-board';
+                statusVal.textContent = '取引一部縮小';
+                statusDesc.textContent = '一部の取引は成立していますが、情報の不透明さにより、優良な商品の割合が減少しています。';
+            }
+        }
+
+        // 初期ロード
+        applyPreset('non');
+    </script>
+</body>
+</html>

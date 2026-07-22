@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>効率化が渋滞を招く「ブラエスのパラドックス」 | Otona Math コラム</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .column-content {
+            background-color: var(--color-surface);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            margin-bottom: 40px;
+        }
+        .column-content p {
+            line-height: 2.1;
+            margin-bottom: 28px;
+        }
+        .section-header {
+            color: var(--color-brass);
+            margin-top: 40px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 10px;
+            font-size: 22px;
+        }
+        
+        /* Interactive Simulator Styles */
+        .interactive-simulator {
+            background-color: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        .simulator-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 15px;
+        }
+        .simulator-header h3 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            color: var(--color-ink);
+        }
+        .simulator-header p {
+            font-size: 14px;
+            color: var(--color-ink-soft);
+        }
+        
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        @media (max-width: 900px) {
+            .sim-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Control Panel */
+        .control-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .sim-state-card {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .sim-control-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--color-ink);
+            margin-bottom: 10px;
+        }
+        
+        /* Toggle Switch Button Group */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .toggle-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--color-ink);
+        }
+        .toggle-switch {
+            display: flex;
+            background: var(--color-paper);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 4px;
+            padding: 2px;
+        }
+        .toggle-btn {
+            background: transparent;
+            border: none;
+            padding: 6px 16px;
+            font-size: 13px;
+            cursor: pointer;
+            border-radius: 2px;
+            color: var(--color-ink-soft);
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .toggle-btn.active {
+            background-color: var(--color-ink);
+            color: var(--color-paper);
+        }
+
+        /* SVG Network Map */
+        .network-box {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .network-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--color-ink-soft);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .network-svg-container {
+            width: 100%;
+            height: 220px;
+            position: relative;
+        }
+        .network-svg-container svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+        
+        /* Node and Edge Styling */
+        .node-circle {
+            fill: var(--color-ink);
+            stroke: #fff;
+            stroke-width: 2;
+        }
+        .node-text {
+            font-family: var(--font-body);
+            font-size: 11px;
+            font-weight: bold;
+            fill: #fff;
+            text-anchor: middle;
+        }
+        .edge-line {
+            stroke: var(--color-paper-line);
+            stroke-width: 3;
+            fill: none;
+            transition: stroke 0.3s, stroke-width 0.3s;
+        }
+        .edge-line.active-route {
+            stroke: var(--color-brass);
+            stroke-width: 5;
+        }
+        .edge-line.bypass {
+            stroke-dasharray: 4,4;
+        }
+        .edge-line.bypass.open {
+            stroke: var(--color-red);
+            stroke-dasharray: none;
+        }
+        .edge-label {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            fill: var(--color-ink-soft);
+            background: #fff;
+        }
+        .edge-flow-lbl {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            fill: var(--color-brass);
+            font-weight: bold;
+        }
+        
+        /* Results Board */
+        .results-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            background: var(--color-paper);
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        @media (max-width: 600px) {
+            .results-board {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+        .res-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .res-label {
+            font-size: 13px;
+            color: var(--color-ink-soft);
+            margin-bottom: 4px;
+        }
+        .res-val {
+            font-size: 24px;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            color: var(--color-ink);
+        }
+        .res-val.status-warn { color: var(--color-red); }
+        .res-val.status-ok { color: #10b981; }
+        
+        /* Target Board */
+        .target-board {
+            background: rgba(169, 120, 47, 0.05);
+            border: 1px solid rgba(169, 120, 47, 0.2);
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        .target-board.active-paradox {
+            background: rgba(180, 67, 47, 0.06);
+            border-color: rgba(180, 67, 47, 0.3);
+        }
+        @media (max-width: 600px) {
+            .target-board {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+        .target-left {
+            display: flex;
+            flex-direction: column;
+        }
+        .target-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .target-board.active-paradox .target-title {
+            color: var(--color-red);
+        }
+        .target-desc {
+            font-size: 12px;
+            color: var(--color-ink-soft);
+        }
+        .target-right {
+            display: flex;
+            align-items: center;
+        }
+        .target-stat-value {
+            font-family: var(--font-body);
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .target-board.active-paradox .target-stat-value {
+            color: var(--color-red);
+        }
+
+        /* Moving dots animation on SVG */
+        .car-dot {
+            fill: var(--color-brass);
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="../index.html">数学と統計学</a></li>
+                    <li><a href="index.html">コラム</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">コラム</a> &gt; 効率化が渋滞を招く「ブラエスのパラドックス」
+        </div>
+
+        <article class="column-content">
+            <h2 style="font-size: 28px; margin-bottom: 30px; line-height: 1.4;">効率化が渋滞を悪化させる：<br>直感に反する「ブラエスのパラドックス」</h2>
+            
+            <p>
+                都市の渋滞を解消するために、どのような対策が有効でしょうか。
+                普通なら、「新しくバイパス道路を作って、交通ルートの選択肢を増やすこと」が正しいように思えますよね。
+            </p>
+            <p>
+                しかし、ネットワーク理論やゲーム理論の世界には、この常識を完全に裏切る**「ブラエスのパラドックス（Braess's Paradox）」**と呼ばれる現象が存在します。
+            </p>
+            <p>
+                これは、**「よかれと思って新しい道路を追加した結果、かえって全員の移動時間が増えて（悪化して）しまう」**という嘘のような数学的パラドックスです。
+            </p>
+
+            <h3 class="section-header">【体験】交通シミュレーターと自律ルーティング</h3>
+            <p>
+                以下のシミュレーターで、地点Aから地点Bを結ぶ夢の「高速バイパス道路（0分）」を**開通**させてみましょう。
+                「シミュレーション開始」を押すと、車（合計4000台）がそれぞれ「自分にとって最も早いルート」を自律的に選択し始めます。
+                個人の最適なルート選びが、いかに全体を渋滞に陥れるかを確認してください。
+            </p>
+
+            <!-- シミュレーター容器 -->
+            <div class="interactive-simulator">
+                <div class="simulator-header">
+                    <h3>ブラエスの渋滞パラドックスシミュレーター</h3>
+                    <p>バイパス道路の有無を切り替え、「シミュレーション開始」を押して車の流れと所要時間の変化を観測します。</p>
+                </div>
+                
+                <div class="sim-grid">
+                    <!-- 左：操作パネル -->
+                    <div class="control-panel">
+                        <div class="toggle-container">
+                            <span class="toggle-label">🛣️ バイパス道路 (A → B) の開通状態</span>
+                            <div class="toggle-switch">
+                                <button id="btn-bypass-close" class="toggle-btn active" onclick="setBypass(false)">閉鎖</button>
+                                <button id="btn-bypass-open" class="toggle-btn" onclick="setBypass(true)">開通</button>
+                            </div>
+                        </div>
+                        
+                        <div class="sim-state-card">
+                            <div class="sim-control-title">🔄 運転手のルート選択アクション</div>
+                            <p style="font-size:12px; line-height:1.5; margin-bottom:15px; color:var(--color-ink-soft)">
+                                各運転手は、少しでも移動時間が短いルートに乗り換えます。「走らせる」を押すと、ナッシュ均衡（全員がルート変更を止める安定状態）に向かって段階的に収束します。
+                            </p>
+                            <div style="text-align: center; display: flex; gap: 10px; justify-content: center;">
+                                <button id="btn-sim-run" class="sim-btn" onclick="startSim()">▶ 走らせる</button>
+                                <button id="btn-sim-reset" class="sim-btn" onclick="resetSim()">🔄 リセット</button>
+                            </div>
+                        </div>
+                        
+                        <div class="sim-state-card">
+                            <div class="sim-control-title">🚗 現在の各ルートの内訳 (合計4000台)</div>
+                            <table style="width:100%; font-size:12px; border-collapse: collapse; text-align:left;">
+                                <tr style="border-bottom:1px solid #eee;">
+                                    <td style="padding:6px 0;">① 上ルート (Start→A→Goal):</td>
+                                    <td style="text-align:right; font-family:var(--font-mono); font-weight:bold;"><span id="lbl-route1-cars">2000</span> 台</td>
+                                </tr>
+                                <tr style="border-bottom:1px solid #eee;">
+                                    <td style="padding:6px 0;">② 下ルート (Start->B->Goal):</td>
+                                    <td style="text-align:right; font-family:var(--font-mono); font-weight:bold;"><span id="lbl-route2-cars">2000</span> 台</td>
+                                </tr>
+                                <tr style="border-bottom:1px solid #eee;">
+                                    <td style="padding:6px 0;">③ バイパスルート (Start→A→B→Goal):</td>
+                                    <td style="text-align:right; font-family:var(--font-mono); font-weight:bold; color:var(--color-red);"><span id="lbl-route3-cars">0</span> 台</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- 右：SVG交通ネットワーク図 -->
+                    <div class="network-box">
+                        <div class="network-title">
+                            <span>🗺️ 交通ネットワークおよび所要時間</span>
+                            <span id="lbl-sim-step" style="font-family:var(--font-mono); font-size:11px;">状態: 待機中</span>
+                        </div>
+                        <div class="network-svg-container">
+                            <svg id="svg-network">
+                                <!-- 道路 (エッジ) の描画 -->
+                                <line id="edge-sa" class="edge-line active-route" x1="15%" y1="50%" x2="50%" y2="15%" />
+                                <line id="edge-ag" class="edge-line active-route" x1="50%" y1="15%" x2="85%" y2="50%" />
+                                <line id="edge-sb" class="edge-line active-route" x1="15%" y1="50%" x2="50%" y2="85%" />
+                                <line id="edge-bg" class="edge-line active-route" x1="50%" y1="85%" x2="85%" y2="50%" />
+                                <line id="edge-bypass" class="edge-line bypass" x1="50%" y1="15%" x2="50%" y2="85%" />
+                                
+                                <!-- 道路の計算数式ラベル -->
+                                <text x="25%" y="28%" class="edge-label">x/100 分</text>
+                                <text x="73%" y="28%" class="edge-label">45 分</text>
+                                <text x="25%" y="78%" class="edge-label">45 分</text>
+                                <text x="73%" y="78%" class="edge-label">y/100 分</text>
+                                <text id="lbl-bypass-math" x="53%" y="52%" class="edge-label" fill="var(--color-red)">閉鎖中</text>
+                                
+                                <!-- 現在の各道路の通過時間表示 -->
+                                <text id="lbl-time-sa" class="edge-flow-lbl" x="25%" y="38%">20分</text>
+                                <text id="lbl-time-ag" class="edge-flow-lbl" x="73%" y="38%">45分</text>
+                                <text id="lbl-time-sb" class="edge-flow-lbl" x="25%" y="68%">45分</text>
+                                <text id="lbl-time-bg" class="edge-flow-lbl" x="73%" y="68%">20分</text>
+
+                                <!-- 交差点 (ノード) の描画 -->
+                                <circle class="node-circle" cx="15%" cy="50%" r="16" />
+                                <text x="15%" y="54%" class="node-text">Start</text>
+                                
+                                <circle class="node-circle" cx="50%" cy="15%" r="14" />
+                                <text x="50%" y="19%" class="node-text">A</text>
+                                
+                                <circle class="node-circle" cx="50%" cy="85%" r="14" />
+                                <text x="50%" y="89%" class="node-text">B</text>
+                                
+                                <circle class="node-circle" cx="85%" cy="50%" r="16" />
+                                <text x="85%" y="54%" class="node-text">Goal</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 結果ボード -->
+                <div class="results-board">
+                    <div class="res-box">
+                        <div class="res-label">バイパスなしの最短時間</div>
+                        <div class="res-val">65.0 分</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">現在の全員の移動時間</div>
+                        <div id="val-current-time-wrapper" class="res-val"><span id="val-current-time">65.0</span> 分</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">バイパスによる効果</div>
+                        <div id="val-effect-wrapper" class="res-val" style="font-size:16px; color:#10b981;">
+                            <span id="val-effect">均衡（増減なし）</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 判定ボード -->
+                <div id="paradox-board" class="target-board">
+                    <div class="target-left">
+                        <div class="target-title">🚥 渋滞状態の診断</div>
+                        <div id="paradox-desc" class="target-desc">バイパスが開通していません。均等な分散状態です。</div>
+                    </div>
+                    <div class="target-right">
+                        <div id="paradox-status" class="target-stat-value">正常状態</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-header">渋滞悪化の数学的メカニズム</h3>
+            <p>
+                バイパス開通前、4000台の車はルート1（Start→A→Goal）とルート2（Start→B→Goal）に2000台ずつ綺麗に分散していました。
+                このときの所要時間は、どちらを通っても以下のようになります。
+            </p>
+            <div class="formula-box">
+                T = (2000 / 100) + 45 = 65分
+            </div>
+            
+            <p>
+                ここに、地点AからBへ「0分」で移動できる夢のバイパス道路が開通しました。
+            </p>
+            <p>
+                すると、個々の運転手は「Start→A（最大40分）を経由し、バイパス（0分）を通って、B→Goal（最大40分）を通る」という新しいルートに気づきます。
+                このルートは、どれだけ混雑しても**最大80分**であり、かつ「最初の一人」になれば**「20分 + 0分 + 20分 = 40分」**で到着できる圧倒的ショートカットです。
+            </p>
+            <p>
+                当然、すべての運転手がこの新しい最短ルートになだれ込みます。
+                その結果、全員が殺到したバイパスルートの所要時間はこうなります。
+            </p>
+            <div class="formula-box">
+                T = (4000 / 100) + 0 + (4000 / 100) = 80分
+            </div>
+            <p>
+                よかれと思って作ったバイパスのせいで、**移動時間が65分から80分へと15分も伸びてしまう**のです。
+            </p>
+
+            <h3 class="section-header">ナッシュ均衡と「合成の誤謬」</h3>
+            <p>
+                なぜ「元のルート（65分）に戻ろう」としないのでしょうか。
+                ここにゲーム理論の**「ナッシュ均衡」**が働いています。
+            </p>
+            <p>
+                全員がバイパスルート（80分）を使っている状態のとき、1人の運転手が「自分だけ抜け出して元のルートに戻ろう」と判断し、StartからBへ向かったとします。
+                このとき、彼の所要時間は「45分（S→B）+ 40分（B→Gは依然混雑しているため） = **85分**」になり、損をしてしまいます。
+            </p>
+            <p>
+                つまり、**「他の全員がバイパスを使う限り、自分一人だけルートを変えると余計遅くなる」**という袋小路に陥っているのです。
+                個人の最適な選択（合理性）が、全体としては最悪の結果を招いてしまう。
+                これが経済学やゲーム理論で言う**「合成の誤謬（ごびゅう）」**の典型例です。
+            </p>
+
+            <h3 class="section-header">ビジネスシステムにおける「ブラエス効果」</h3>
+            <p>
+                ブラエスのパラドックスは、道路網だけの話ではありません。
+                現代のビジネスや組織設計にも全く同じ問題が発生します。
+            </p>
+            
+            <ul style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
+                <li><strong>通信ネットワーク</strong>: 新たな超高速サーバー回線を追加した結果、ルーティングプログラムがその回線にデータを集中させてしまい、かえって全体にパケット遅延が発生するケース。</li>
+                <li><strong>組織のチャットツール</strong>: 部門間のスムーズな連絡のためにチャットツールを導入した結果、全員が「今すぐ確認できる最速ルート」として関係各所にダイレクトメッセージを送りまくり、情報のボトルネックと割り込み仕事が増加、結果として組織全体の生産スピードが下がるケース。</li>
+            </ul>
+
+            <h3 class="section-header">まとめ</h3>
+            <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 20px; font-size: 15px; line-height: 1.8;">
+                「選択肢を増やせば、リソースを追加すれば、システムは改善する」という素朴な前提は、複雑なネットワーク内では裏切られます。
+                全体の最適化を果たすためには、目先の部分効率を追うだけでなく、時に**「あえて選択肢を制限する（バイパスを閉鎖する）」**という逆説的な設計が、数学的かつ合理的な唯一の解決策になるのです。
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- シミュレーター制御スクリプト -->
+    <script>
+        // 状態変数
+        let isBypassOpen = false;
+        let carsRoute1 = 2000; // S -> A -> G
+        let carsRoute2 = 2000; // S -> B -> G
+        let carsRoute3 = 0;    // S -> A -> B -> G (バイパスルート)
+        let simInterval = null;
+        let stepCount = 0;
+
+        // DOM要素
+        const btnBypassClose = document.getElementById('btn-bypass-close');
+        const btnBypassOpen = document.getElementById('btn-bypass-open');
+        const btnSimRun = document.getElementById('btn-sim-run');
+        const lblStep = document.getElementById('lbl-sim-step');
+        
+        const lblR1 = document.getElementById('lbl-route1-cars');
+        const lblR2 = document.getElementById('lbl-route2-cars');
+        const lblR3 = document.getElementById('lbl-route3-cars');
+        
+        const lblTimeSa = document.getElementById('lbl-time-sa');
+        const lblTimeAg = document.getElementById('lbl-time-ag');
+        const lblTimeSb = document.getElementById('lbl-time-sb');
+        const lblTimeBg = document.getElementById('lbl-time-bg');
+        const lblBypassMath = document.getElementById('lbl-bypass-math');
+
+        const valCurrentTime = document.getElementById('val-current-time');
+        const valEffect = document.getElementById('val-effect');
+        const valEffectWrapper = document.getElementById('val-effect-wrapper');
+        const paradoxBoard = document.getElementById('paradox-board');
+        const paradoxDesc = document.getElementById('paradox-desc');
+        const paradoxStatus = document.getElementById('paradox-status');
+        
+        const edgeBypass = document.getElementById('edge-bypass');
+        const edgeSa = document.getElementById('edge-sa');
+        const edgeAg = document.getElementById('edge-ag');
+        const edgeSb = document.getElementById('edge-sb');
+        const edgeBg = document.getElementById('edge-bg');
+
+        // バイパス切り替え
+        function setBypass(isOpen) {
+            isBypassOpen = isOpen;
+            btnBypassClose.className = isOpen ? 'toggle-btn' : 'toggle-btn active';
+            btnBypassOpen.className = isOpen ? 'toggle-btn active' : 'toggle-btn';
+            
+            if (isOpen) {
+                edgeBypass.classList.add('open');
+                lblBypassMath.textContent = '0分';
+                lblBypassMath.setAttribute('fill', 'var(--color-red)');
+            } else {
+                edgeBypass.classList.remove('open');
+                lblBypassMath.textContent = '閉鎖中';
+                lblBypassMath.setAttribute('fill', 'var(--color-ink-soft)');
+                // 閉鎖された場合は車を分散リセット
+                resetSim();
+            }
+            updateSimulation();
+        }
+
+        // リセット
+        function resetSim() {
+            stopSim();
+            carsRoute1 = 2000;
+            carsRoute2 = 2000;
+            carsRoute3 = 0;
+            stepCount = 0;
+            lblStep.textContent = '状態: 待機中';
+            updateSimulation();
+        }
+
+        // シミュレーション開始・停止
+        function startSim() {
+            if (simInterval) {
+                stopSim();
+            } else {
+                btnSimRun.textContent = '⏸ 一時停止';
+                lblStep.textContent = '状態: 計算中...';
+                simInterval = setInterval(simulationStep, 250);
+            }
+        }
+
+        function stopSim() {
+            if (simInterval) {
+                clearInterval(simInterval);
+                simInterval = null;
+            }
+            btnSimRun.textContent = '▶ 走らせる';
+        }
+
+        // ルーティングのステップ実行（ゲーム理論的ダイナミクス）
+        function simulationStep() {
+            stepCount++;
+            lblStep.textContent = `状態: ステップ ${stepCount}`;
+
+            // 各道路の交通量計算
+            const flowSA = carsRoute1 + carsRoute3;
+            const flowBG = carsRoute2 + carsRoute3;
+            const flowAG = carsRoute1;
+            const flowSB = carsRoute2;
+
+            // 各ルートの所要時間
+            const t1 = (flowSA / 100) + 45;       // S -> A -> G
+            const t2 = 45 + (flowBG / 100);       // S -> B -> G
+            const t3 = isBypassOpen ? (flowSA / 100) + 0 + (flowBG / 100) : 999; // S -> A -> B -> G (バイパス無効時は巨大なコスト)
+
+            // 最短ルートと最長ルートを見つける
+            const times = [
+                { route: 1, t: t1 },
+                { route: 2, t: t2 },
+                { route: 3, t: t3 }
+            ];
+            times.sort((a, b) => a.t - b.t);
+
+            const bestRoute = times[0].route;
+            const worstRoute = times[2].route;
+
+            // 時間の差がある場合、最悪ルートから最適ルートへ車を乗り換える (1ステップあたり最大100台)
+            const diff = times[2].t - times[0].t;
+            if (diff > 0.1) {
+                const shiftCars = 100;
+                
+                // 最悪ルートから引く
+                let successShift = false;
+                if (worstRoute === 1 && carsRoute1 >= shiftCars) {
+                    carsRoute1 -= shiftCars;
+                    successShift = true;
+                } else if (worstRoute === 2 && carsRoute2 >= shiftCars) {
+                    carsRoute2 -= shiftCars;
+                    successShift = true;
+                } else if (worstRoute === 3 && carsRoute3 >= shiftCars) {
+                    carsRoute3 -= shiftCars;
+                    successShift = true;
+                }
+
+                // 最良ルートへ足す
+                if (successShift) {
+                    if (bestRoute === 1) carsRoute1 += shiftCars;
+                    if (bestRoute === 2) carsRoute2 += shiftCars;
+                    if (bestRoute === 3) carsRoute3 += shiftCars;
+                } else {
+                    // シフトできなかった（すでに最悪ルートの台数が空だった場合など）は終了
+                    stopSim();
+                    lblStep.textContent = `状態: 均衡に到達`;
+                }
+            } else {
+                // ほぼ均衡に達した
+                stopSim();
+                lblStep.textContent = `状態: 均衡に到達 (ナッシュ均衡)`;
+            }
+
+            updateSimulation();
+        }
+
+        // 数値と表示の更新
+        function updateSimulation() {
+            // 各セグメントの台数ラベル
+            lblR1.textContent = carsRoute1;
+            lblR2.textContent = carsRoute2;
+            lblR3.textContent = carsRoute3;
+
+            // 交通量
+            const flowSA = carsRoute1 + carsRoute3;
+            const flowBG = carsRoute2 + carsRoute3;
+            const flowAG = carsRoute1;
+            const flowSB = carsRoute2;
+
+            // 道路の通過時間
+            const tSA = flowSA / 100;
+            const tBG = flowBG / 100;
+            const tAG = 45;
+            const tSB = 45;
+
+            lblTimeSa.textContent = `${tSA.toFixed(1)}分 (車:${flowSA})`;
+            lblTimeBg.textContent = `${tBG.toFixed(1)}分 (車:${flowBG})`;
+            lblTimeAg.textContent = `${tAG}分 (車:${flowAG})`;
+            lblTimeSb.textContent = `${tSB}分 (車:${flowSB})`;
+
+            // 太さのアクティブハイライト
+            highlightEdge(edgeSa, flowSA > 0);
+            highlightEdge(edgeBg, flowBG > 0);
+            highlightEdge(edgeAg, flowAG > 0);
+            highlightEdge(edgeSb, flowSB > 0);
+            highlightEdge(edgeBypass, isBypassOpen && carsRoute3 > 0);
+
+            // 平均所要時間（加重平均）
+            // 全体の総所要時間
+            const totalCost = (carsRoute1 * (tSA + tAG)) + (carsRoute2 * (tSB + tBG)) + (carsRoute3 * (tSA + 0 + tBG));
+            const avgTime = totalCost / 4000;
+
+            valCurrentTime.textContent = avgTime.toFixed(1);
+
+            // 結果と判定
+            if (isBypassOpen) {
+                const diffTime = avgTime - 65.0;
+                if (diffTime > 0.5) {
+                    valEffect.textContent = `遅延: +${diffTime.toFixed(1)}分`;
+                    valEffectWrapper.className = 'res-val status-warn';
+                    
+                    paradoxBoard.className = 'target-board active-paradox';
+                    paradoxStatus.textContent = 'パラドックス発生中';
+                    paradoxDesc.textContent = '新しく開通したバイパス道路に車が殺到した結果、開通前（65分）より全員の所要時間が長くなっています！';
+                } else {
+                    valEffect.textContent = `差分なし`;
+                    valEffectWrapper.className = 'res-val';
+                    valEffectWrapper.style.color = 'var(--color-ink-soft)';
+                    
+                    paradoxBoard.className = 'target-board';
+                    paradoxStatus.textContent = 'パラドックスなし';
+                    paradoxDesc.textContent = 'バイパスが開通しましたが、ルート選択が最適化されており、まだ大きな渋滞は起きていません。走らせてみましょう。';
+                }
+            } else {
+                valEffect.textContent = `閉鎖中（基準）`;
+                valEffectWrapper.className = 'res-val';
+                valEffectWrapper.style.color = 'var(--color-ink-soft)';
+                
+                paradoxBoard.className = 'target-board';
+                paradoxStatus.textContent = '正常状態';
+                paradoxDesc.textContent = 'バイパスが閉鎖されています。車は2つのルートに2000台ずつ分散し、もっとも効率的（65分）に流れています。';
+            }
+        }
+
+        function highlightEdge(element, isActive) {
+            if (isActive) {
+                element.classList.add('active-route');
+            } else {
+                element.classList.remove('active-route');
+            }
+        }
+
+        // 初期設定
+        updateSimulation();
+    </script>
+</body>
+</html>

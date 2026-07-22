@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プロスペクト理論：人間の「不合理な心理」を解き明かす行動経済学 | Otona Math コラム</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .column-content {
+            background-color: var(--color-surface);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            margin-bottom: 40px;
+        }
+        .column-content p {
+            line-height: 2.1;
+            margin-bottom: 28px;
+        }
+        .section-header {
+            color: var(--color-brass);
+            margin-top: 40px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 10px;
+            font-size: 22px;
+        }
+        
+        /* Interactive Simulator Styles */
+        .interactive-simulator {
+            background-color: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        .simulator-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 15px;
+        }
+        .simulator-header h3 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            color: var(--color-ink);
+        }
+        .simulator-header p {
+            font-size: 14px;
+            color: var(--color-ink-soft);
+        }
+        
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        @media (max-width: 900px) {
+            .sim-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Interactive Panel Card */
+        .game-control-card {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .choice-btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 5px;
+        }
+        .choice-btn {
+            padding: 12px;
+            font-size: 13px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid var(--color-paper-line);
+            background: #fff;
+            text-align: left;
+            line-height: 1.4;
+            color: var(--color-ink);
+        }
+        .choice-btn:hover {
+            border-color: var(--color-brass);
+            background-color: rgba(169, 120, 47, 0.02);
+        }
+        .choice-btn.active {
+            background-color: rgba(169, 120, 47, 0.08);
+            border-color: var(--color-brass);
+            color: var(--color-brass);
+        }
+        
+        /* Graph Visualizer */
+        .graph-viz-box {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .graph-viz-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--color-ink-soft);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .graph-svg-container {
+            width: 100%;
+            height: 250px;
+            position: relative;
+        }
+        .graph-svg-container svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+        
+        /* Slider Panel */
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 10px;
+        }
+        .slider-label-container {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--color-ink);
+        }
+        .sim-slider {
+            width: 100%;
+            height: 6px;
+            background: var(--color-paper);
+            border-radius: 3px;
+            outline: none;
+            accent-color: var(--color-brass);
+        }
+
+        /* SVG Graph Lines styling */
+        .axis-line {
+            stroke: var(--color-paper-line);
+            stroke-width: 1.5;
+        }
+        .value-curve {
+            stroke: var(--color-brass);
+            stroke-width: 3;
+            fill: none;
+        }
+        .weight-curve {
+            stroke: var(--color-ink);
+            stroke-width: 3;
+            fill: none;
+            stroke-dasharray: 4,4;
+        }
+        .diagonal-ref {
+            stroke: #ddd;
+            stroke-width: 1;
+            fill: none;
+        }
+        .plot-dot {
+            fill: var(--color-red);
+            stroke: #fff;
+            stroke-width: 2;
+        }
+        
+        /* Tab Navigation */
+        .tab-nav {
+            display: flex;
+            border-bottom: 1px solid var(--color-paper-line);
+            margin-bottom: 15px;
+        }
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--color-ink-soft);
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        .tab-btn.active {
+            color: var(--color-brass);
+            border-bottom-color: var(--color-brass);
+        }
+
+        /* Results Board */
+        .results-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            background: var(--color-paper);
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        @media (max-width: 600px) {
+            .results-board {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+        .res-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .res-label {
+            font-size: 13px;
+            color: var(--color-ink-soft);
+            margin-bottom: 4px;
+        }
+        .res-val {
+            font-size: 24px;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            color: var(--color-ink);
+        }
+        
+        /* Target Board */
+        .target-board {
+            background: rgba(169, 120, 47, 0.05);
+            border: 1px solid rgba(169, 120, 47, 0.2);
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        @media (max-width: 600px) {
+            .target-board {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+        .target-left {
+            display: flex;
+            flex-direction: column;
+        }
+        .target-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .target-desc {
+            font-size: 12px;
+            color: var(--color-ink-soft);
+        }
+        .target-right {
+            display: flex;
+            align-items: center;
+        }
+        .target-stat-value {
+            font-family: var(--font-body);
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="../index.html">数学と統計学</a></li>
+                    <li><a href="index.html">コラム</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">コラム</a> &gt; プロスペクト理論
+        </div>
+
+        <article class="column-content">
+            <h2 style="font-size: 28px; margin-bottom: 30px; line-height: 1.4;">プロスペクト理論：<br>人間の「不合理な心理」を解き明かす行動経済学</h2>
+            
+            <p>
+                従来の経済学や数学では、「人間は常に論理的であり、自分に最も得となる選択肢を計算して選ぶ」という前提で考えられていました。
+                しかし実際の人間は、感情に左右されたり、表現の仕方に影響されたりして、しばしば理屈に合わない不合理な選択を行います。
+            </p>
+            <p>
+                この「人間ならではの不合理な心理」を身近な例から解き明かしたのが、行動経済学の代表的なモデルである「プロスペクト理論」です。
+                本コラムでは、提唱者であるダニエル・カーネマン教授が明らかにした人間の意思決定の法則について、シミュレーションを交えて解説します。
+            </p>
+
+            <h3 class="section-header">第1章：「得」の喜びより「損」の痛みを強く感じる（損失回避）</h3>
+            <p>
+                プロスペクト理論の根幹となるのが、**「人間は、利益を得た喜びよりも、損失を出した悲しみの方を約2倍から2.5倍強く感じる」**という性質です。
+                この心理特性を「損失回避（そんしつかいひ）」と呼びます。
+            </p>
+            <p>
+                例えば、以下の2つの状況における心の動きを考えてみてください。
+            </p>
+            <ul style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
+                <li>道で偶然「5,000円」を拾ったときの喜び</li>
+                <li>自分の財布から「5,000円」を落としてなくしたときの悲しみ</li>
+            </ul>
+            <p>
+                金額は同じ5,000円ですが、拾ったときの「喜び」よりも、なくしたときの「ショック」の方が、圧倒的に心に深く残るはずです。
+                人間は本能的に、「何かを得ること」よりも「今持っているものを失うこと」を極端に嫌う性質を持っています。
+            </p>
+
+            <h3 class="section-header">【体験】プロスペクト理論シミュレーター</h3>
+            <p>
+                利益や損失に直面したとき、人間の意思決定がどのように変化するかを体験するツールです。
+                「意思決定テスト」タブでゲームに回答して自身の傾向を確認し、「心理曲線グラフ」タブで人間が頭の中で感じる心理的な価値や確率の歪み曲線を確認してください。
+            </p>
+
+            <!-- シミュレーター容器 -->
+            <div class="interactive-simulator">
+                <div class="tab-nav">
+                    <button id="tab-btn-game" class="tab-btn active" onclick="switchTab('game')">🎮 意思決定テスト</button>
+                    <button id="tab-btn-graph" class="tab-btn" onclick="switchTab('graph')">📈 心理曲線グラフ</button>
+                </div>
+                
+                <div class="sim-grid">
+                    <!-- タブ1：意思決定テスト -->
+                    <div id="tab-content-game" class="game-control-card" style="display: flex;">
+                        <div id="game-stage-1" style="display: block;">
+                            <div style="font-size: 13px; font-weight: bold; margin-bottom: 12px; color: var(--color-ink);">
+                                問1. 【利益の場面】どちらか一方を選択してください。
+                            </div>
+                            <div class="choice-btn-group">
+                                <button class="choice-btn" onclick="selectChoice(1, 1)">
+                                    <strong>選択肢A：確実に「1万円」をもらう</strong><br>
+                                    <span style="font-size: 11px; color: var(--color-ink-soft);">（手堅く確実に手に入れます）</span>
+                                </button>
+                                <button class="choice-btn" onclick="selectChoice(1, 2)">
+                                    <strong>選択肢B：コインを投げ、表なら「2万円」、裏なら「0円」</strong><br>
+                                    <span style="font-size: 11px; color: var(--color-ink-soft);">（50%の勝負に出ます）</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="game-stage-2" style="display: none;">
+                            <div style="font-size: 13px; font-weight: bold; margin-bottom: 12px; color: var(--color-ink);">
+                                問2. 【損失の場面】あなたは現在「2万円」の借金があります。どちらか一方を選択してください。
+                            </div>
+                            <div class="choice-btn-group">
+                                <button class="choice-btn" onclick="selectChoice(2, 1)">
+                                    <strong>選択肢A：確実に「1万円」が免除される（確実に1万円の借金が残る）</strong><br>
+                                    <span style="font-size: 11px; color: var(--color-ink-soft);">（確実に1万円失うことを受け入れます）</span>
+                                </button>
+                                <button class="choice-btn" onclick="selectChoice(2, 2)">
+                                    <strong>選択肢B：コインを投げ、表なら借金が「0円」に、裏なら「2万円のまま」</strong><br>
+                                    <span style="font-size: 11px; color: var(--color-ink-soft);">（借金ゼロを目指して勝負に出ます）</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="game-stage-3" style="display: none;">
+                            <div style="font-size: 13px; font-weight: bold; margin-bottom: 12px; color: var(--color-ink);">
+                                問3. 【表現の場面（フレーミング）】重い病気の手術説明を受けます。どちらの説明により安心感を覚えますか。
+                            </div>
+                            <div class="choice-btn-group">
+                                <button class="choice-btn" onclick="selectChoice(3, 1)">
+                                    <strong>説明A：「この手術の成功率は90%です」</strong><br>
+                                    <span style="font-size: 11px; color: var(--color-ink-soft);">（生存の確率を提示されます）</span>
+                                </button>
+                                <button class="choice-btn" onclick="selectChoice(3, 2)">
+                                    <strong>説明B：「この手術は10%の確率で失敗し、亡くなります」</strong><br>
+                                    <span style="font-size: 11px; color: var(--color-ink-soft);">（死亡のリスクを提示されます）</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div id="game-result-panel" style="display: none; text-align: center;">
+                            <h4 style="font-size: 16px; color: var(--color-brass); margin-bottom: 10px;">診断完了</h4>
+                            <p style="font-size: 13px; line-height: 1.6; margin-bottom: 15px;" id="lbl-result-text">
+                                テスト結果の分析を行います。
+                            </p>
+                            <button class="sim-btn" onclick="resetTest()">🔄 もう一度テストを受ける</button>
+                        </div>
+                    </div>
+
+                    <!-- タブ2：心理曲線グラフ -->
+                    <div id="tab-content-graph" class="game-control-card" style="display: none;">
+                        <div class="select-group">
+                            <label for="graph-type">📊 表示するグラフの種類</label>
+                            <select id="graph-type" onchange="drawGraph()">
+                                <option value="value">価値関数（得と損の感じ方の違い）</option>
+                                <option value="weight">確率加重関数（確率に対する錯覚）</option>
+                            </select>
+                        </div>
+                        
+                        <div class="slider-group" id="container-val-slider">
+                            <div class="slider-label-container">
+                                <span>💵 客観的な金額（得失額）</span>
+                                <span><span id="lbl-amount">10,000</span> 円</span>
+                            </div>
+                            <input type="range" id="slide-amount" class="sim-slider" min="-20000" max="20000" step="1000" value="10000" oninput="drawGraph()">
+                        </div>
+
+                        <div class="slider-group" id="container-prob-slider" style="display: none;">
+                            <div class="slider-label-container">
+                                <span>🎲 客観的な確率</span>
+                                <span><span id="lbl-prob">50</span> %</span>
+                            </div>
+                            <input type="range" id="slide-prob" class="sim-slider" min="0" max="100" step="1" value="50" oninput="drawGraph()">
+                        </div>
+                    </div>
+
+                    <!-- 右：グラフ描画ボード -->
+                    <div class="graph-viz-box">
+                        <div class="graph-viz-title">
+                            <span id="lbl-graph-title">価値関数グラフ</span>
+                            <span id="lbl-graph-y" style="font-family:var(--font-mono); font-size:11px;">心理的価値: 100</span>
+                        </div>
+                        <div class="graph-svg-container">
+                            <svg id="svg-graph">
+                                <!-- グリッド・軸（後ほど動的・静的両方で描画） -->
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 結果ボード -->
+                <div class="results-board">
+                    <div class="res-box">
+                        <div class="res-label" id="res-lbl-1">客観的な数値</div>
+                        <div class="res-val"><span id="res-val-1">10,000</span></div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label" id="res-lbl-2">脳内での心理数値</div>
+                        <div class="res-val"><span id="res-val-2">10,000</span></div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label" id="res-lbl-3">心理的バイアス倍率</div>
+                        <div class="res-val"><span id="res-val-3">1.0</span> 倍</div>
+                    </div>
+                </div>
+                
+                <!-- 判定ボード -->
+                <div id="sim-status-board" class="target-board">
+                    <div class="target-left">
+                        <div class="target-title">🚥 心理の法則診断</div>
+                        <div id="sim-status-desc" class="target-desc">シミュレーターのパラメータを動かして、人間の頭の中で起こる数値の歪みを確認してください。</div>
+                    </div>
+                    <div class="target-right">
+                        <div id="sim-status-val" class="target-stat-value">分析中</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-header">第2章：利益を前にすると、人間は「確実性」を好む</h3>
+            <p>
+                シミュレーターの問1は、以下のどちらを選ぶかという期待値の問いです。
+            </p>
+            <ul style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
+                <li>選択肢A：確実に「1万円」がもらえる。</li>
+                <li>選択肢B：50%の確率で「2万円」もらえるが、50%の確率で「0円」となる。</li>
+            </ul>
+            <p>
+                数学における期待値は、どちらを選択しても「1万円」で同一です。
+                しかし、実際にこの質問を行うと、大半の人が「選択肢A（確実に1万円もらえる）」を選択します。
+            </p>
+            <p>
+                これは、人間が「2万円もらえるかもしれない」という期待よりも、「せっかく手に入るはずの1万円が0円になってしまう」という損失リスクを過剰に恐れるためです。
+                利益が目の前にある状況では、リスクを避けて安全な道を選ぶ心理（確実性効果）が働きます。
+            </p>
+
+            <h3 class="section-header">第3章：損失を前にすると、人間は「ギャンブル」に出る</h3>
+            <p>
+                一方で、状況が「損をしている場面」に変わると、人間の行動は逆転します（問2）。
+            </p>
+            <ul style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
+                <li>選択肢A：確実に借金が「1万円」に減額される（確実に1万円の損失）。</li>
+                <li>選択肢B：50%の確率で借金が「0円」になるが、50%の確率で「2万円のまま」となる。</li>
+            </ul>
+            <p>
+                こちらも期待値は同じマイナス1万円ですが、多くの人は「選択肢B（借金が0円になるギャンブル）」を選択します。
+                確実に1万円損をすることを受け入れるよりは、全額免除の可能性にかけてリスクを取りたがる性質（損失愛好的）が働くためです。
+            </p>
+            <p>
+                投資やギャンブルで損失を出した人が、損失を取り戻そうとしてさらに無謀な勝負を重ね、傷口を広げてしまう現象は、この心理傾向によって説明されます。
+            </p>
+
+            <h3 class="section-header">第4.5章：表現ひとつで選択が変わる「フレーミング」と「保有効果」</h3>
+            <p>
+                プロスペクト理論の重要な要素として、情報の提示方法によって意思決定が変化する**「フレーミング効果」**があります。
+                例えば、「生存率90%の手術」と「死亡率10%の手術」は、事実として全く同じ割合を示していますが、死亡率という言葉を強調されるだけで、恐怖心から手術を拒否する人が増えます。
+            </p>
+            <p>
+                また、自分が一度所有したものに対して、他人が評価する以上の価値を感じて手放せなくなる心理を**「保有効果」**と呼びます。
+                サブスクリプションサービスの「最初の1ヶ月無料キャンペーン」は、この保有効果を利用した強力なマーケティング手法です。
+                一度サービスを体験して「自分のもの」として慣れ親しんでしまうと、解約によってその便利さを失うことに対する心理的な痛みが大きくなるため、そのまま有料会員を維持しやすくなります。
+            </p>
+
+            <h3 class="section-header">第6.7章：確率に対する人間の錯覚と実社会への応用</h3>
+            <p>
+                人間は、客観的な確率を正しく認識できません。
+                宝くじが当たるような「極めて低い確率（ほぼ0%）」を実際より高く見積もり、手術の成功率のように「極めて高い確率（ほぼ100%）」を実際より低く見積もって不安を抱く傾向があります。
+            </p>
+            <p>
+                これらの不合理な心理は、ビジネスの現場で以下のように活用されています。
+            </p>
+            <ul style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
+                <li><strong>有効期限付きポイント</strong>：「500ポイントを進呈します」と伝えるよりも、「明日で500ポイントが消滅します」と警告する方が、顧客は損失を防ぐために高い確率で来店します。</li>
+                <li><strong>返金保証キャンペーン</strong>：「気に入らなければ全額返金」と提示することで、購入に伴う損失の恐怖を取り除きます。購入後は保有効果が働くため、実際に返品されることはほとんどありません。</li>
+            </ul>
+
+            <h3 class="section-header">まとめ</h3>
+            <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 20px; font-size: 15px; line-height: 1.8;">
+                市場を動かしているのは、完璧な計算機ではなく、感情を持った不合理な人間です。
+                人々がどのような言葉に安心を覚え、何に対して損失の恐怖を抱くのか。
+                人間の「不合理な心理」の法則性を理解することは、現代のビジネス戦略における重要な前提条件となっています。
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- シミュレーター制御スクリプト -->
+    <script>
+        // タブ切り替え
+        let activeTab = 'game';
+        
+        // テスト用回答データ
+        let gameAnswers = { 1: 0, 2: 0, 3: 0 };
+        
+        // グラフ状態
+        let currentAmount = 10000;
+        let currentProb = 50;
+
+        const tabBtnGame = document.getElementById('tab-btn-game');
+        const tabBtnGraph = document.getElementById('tab-btn-graph');
+        const tabContentGame = document.getElementById('tab-content-game');
+        const tabContentGraph = document.getElementById('tab-content-graph');
+        
+        const graphTypeSelect = document.getElementById('graph-type');
+        const containerValSlider = document.getElementById('container-val-slider');
+        const containerProbSlider = document.getElementById('container-prob-slider');
+        
+        const slideAmount = document.getElementById('slide-amount');
+        const slideProb = document.getElementById('slide-prob');
+        const lblAmount = document.getElementById('lbl-amount');
+        const lblProb = document.getElementById('lbl-prob');
+
+        const lblGraphTitle = document.getElementById('lbl-graph-title');
+        const lblGraphY = document.getElementById('lbl-graph-y');
+        const svgGraph = document.getElementById('svg-graph');
+
+        const resLbl1 = document.getElementById('res-lbl-1');
+        const resLbl2 = document.getElementById('res-lbl-2');
+        const resLbl3 = document.getElementById('res-lbl-3');
+        const resVal1 = document.getElementById('res-val-1');
+        const resVal2 = document.getElementById('res-val-2');
+        const resVal3 = document.getElementById('res-val-3');
+        
+        const statusBoard = document.getElementById('sim-status-board');
+        const statusDesc = document.getElementById('sim-status-desc');
+        const statusVal = document.getElementById('sim-status-val');
+
+        function switchTab(tabName) {
+            activeTab = tabName;
+            if (tabName === 'game') {
+                tabBtnGame.classList.add('active');
+                tabBtnGraph.classList.remove('active');
+                tabContentGame.style.display = 'flex';
+                tabContentGraph.style.display = 'none';
+                lblGraphTitle.textContent = '意思決定パターン分析';
+                updateGameDashboard();
+            } else {
+                tabBtnGraph.classList.add('active');
+                tabBtnGame.classList.remove('active');
+                tabContentGraph.style.display = 'flex';
+                tabContentGame.style.display = 'none';
+                drawGraph();
+            }
+        }
+
+        // ゲームテスト処理
+        function selectChoice(questionId, choiceId) {
+            gameAnswers[questionId] = choiceId;
+            
+            document.querySelectorAll(`#game-stage-${questionId} .choice-btn`).forEach((btn, idx) => {
+                if (idx === choiceId - 1) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            // 次の設問へ
+            setTimeout(() => {
+                if (questionId === 1) {
+                    document.getElementById('game-stage-1').style.display = 'none';
+                    document.getElementById('game-stage-2').style.display = 'block';
+                } else if (questionId === 2) {
+                    document.getElementById('game-stage-2').style.display = 'none';
+                    document.getElementById('game-stage-3').style.display = 'block';
+                } else if (questionId === 3) {
+                    document.getElementById('game-stage-3').style.display = 'none';
+                    document.getElementById('game-result-panel').style.display = 'block';
+                    evaluateTest();
+                }
+            }, 400);
+        }
+
+        function resetTest() {
+            gameAnswers = { 1: 0, 2: 0, 3: 0 };
+            document.querySelectorAll('.choice-btn').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById('game-stage-1').style.display = 'block';
+            document.getElementById('game-stage-2').style.display = 'none';
+            document.getElementById('game-stage-3').style.display = 'none';
+            document.getElementById('game-result-panel').style.display = 'none';
+            
+            resetGameDashboard();
+        }
+
+        function resetGameDashboard() {
+            resLbl1.textContent = '進行中の設問';
+            resVal1.textContent = '問 1 / 3';
+            resLbl2.textContent = '解答ステータス';
+            resVal2.textContent = '回答待ち';
+            resLbl3.textContent = 'バイパス度';
+            resVal3.textContent = '---';
+            
+            statusBoard.className = 'target-board';
+            statusVal.textContent = '診断中';
+            statusDesc.textContent = '設問に回答し、自身の意思決定の傾向を確認してください。';
+            
+            svgGraph.innerHTML = ''; // グラフクリア
+        }
+
+        function updateGameDashboard() {
+            if (gameAnswers[3] === 0) {
+                resetGameDashboard();
+            } else {
+                evaluateTest();
+            }
+        }
+
+        // テストの判定
+        function evaluateTest() {
+            const a1 = gameAnswers[1];
+            const a2 = gameAnswers[2];
+            const a3 = gameAnswers[3];
+            
+            let isProspectType = false;
+            let resultText = '';
+            let statusTitle = '';
+            let statusDetail = '';
+            
+            // プロスペクト理論の典型的な回答：問1=1（確実）, 問2=2（ギャンブル）, 問3=1（成功率90%）
+            if (a1 === 1 && a2 === 2) {
+                isProspectType = true;
+                resultText = 'あなたは典型的な「プロスペクト理論（損失回避型）」の心理傾向を持っています。得をする場面では手堅く動き、損をする場面ではリスクを背負ってギャンブルに走る傾向があります。';
+                statusTitle = '損失回避型（プロスペクト）';
+                statusDetail = '得を失うのを過度に嫌い、逆に損失の場面では一発逆転を狙いやすいため、投資での塩漬けや無謀な勝負に注意が必要です。';
+            } else if (a1 === 2 && a2 === 1) {
+                resultText = 'あなたは期待値に基づきつつ、損失を確実に受け入れようとする珍しい意思決定パターンです。';
+                statusTitle = 'リスク志向・論理型';
+                statusDetail = '客観的な価値を見極め、感情に流されずに決断を下せる傾向を持っています。';
+            } else if (a1 === 1 && a2 === 1) {
+                resultText = 'あなたは利益・損失ともに安全第一の選択を行う、極めて堅実なリスク回避型です。';
+                statusTitle = '絶対安全志向';
+                statusDetail = 'どのような局面でも大きな波風を立てず、手堅い解決策を第一優先に選択します。';
+            } else {
+                resultText = 'あなたは利益・損失ともにギャンブル的な賭けを選択する、リスク愛好型です。';
+                statusTitle = 'リスクヘッジ軽視型';
+                statusDetail = '確実な結果よりも期待される最大値に惹かれ、勝負に出る性質を持っています。';
+            }
+
+            // フレーミング効果の解説追加
+            if (a3 === 1) {
+                resultText += ' また、問3で「成功率90%」を選んだあなたは、言葉のポジティブな印象に安心感を抱く「フレーミング効果」の影響を受けています。';
+            } else {
+                resultText += ' また、問3で「失敗率10%」の記述を避けられなかったあなたは、否定的な言葉の印象に強く揺さぶられる傾向があります。';
+            }
+
+            document.getElementById('lbl-result-text').textContent = resultText;
+            
+            resLbl1.textContent = 'あなたのタイプ';
+            resVal1.textContent = '心理型';
+            resLbl2.textContent = 'バイアス感度';
+            resVal2.textContent = isProspectType ? '強め' : '普通';
+            resLbl3.textContent = '損失回避倍率';
+            resVal3.textContent = isProspectType ? '約 2.25' : '1.0';
+
+            statusBoard.className = isProspectType ? 'target-board active-warning' : 'target-board';
+            statusVal.textContent = statusTitle;
+            statusDesc.textContent = statusDetail;
+
+            // 特製判定SVGの描画
+            drawResultChart(a1, a2);
+        }
+
+        // テスト結果可視化SVG
+        function drawResultChart(a1, a2) {
+            svgGraph.innerHTML = '';
+            
+            // 四分象のマトリクスを描画
+            const width = 200;
+            const height = 200;
+            
+            const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            g.setAttribute('transform', 'translate(30, 20)');
+
+            // 軸
+            const xAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            xAxis.setAttribute('x1', 0);
+            xAxis.setAttribute('y1', 100);
+            xAxis.setAttribute('x2', 200);
+            xAxis.setAttribute('y2', 100);
+            xAxis.setAttribute('class', 'axis-line');
+            g.appendChild(xAxis);
+
+            const yAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            yAxis.setAttribute('x1', 100);
+            yAxis.setAttribute('y1', 0);
+            yAxis.setAttribute('x2', 100);
+            yAxis.setAttribute('y2', 200);
+            yAxis.setAttribute('class', 'axis-line');
+            g.appendChild(yAxis);
+
+            // 象限ラベル
+            const labels = [
+                { x: 30, y: 50, text: '堅実型' },
+                { x: 130, y: 50, text: '期待値型' },
+                { x: 30, y: 150, text: '損失回避' },
+                { x: 130, y: 150, text: '勝負師' }
+            ];
+            labels.forEach(l => {
+                const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                txt.setAttribute('x', l.x);
+                txt.setAttribute('y', l.y);
+                txt.setAttribute('font-size', '10');
+                txt.setAttribute('fill', '#999');
+                txt.textContent = l.text;
+                g.appendChild(txt);
+            });
+
+            // あなたの位置をプロット
+            let px = 100;
+            let py = 100;
+            if (a1 === 1) px = 50;  // 確実
+            if (a1 === 2) px = 150; // ギャンブル
+            if (a2 === 1) py = 50;  // 確実損
+            if (a2 === 2) py = 150; // ギャンブル損
+
+            const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            dot.setAttribute('cx', px);
+            dot.setAttribute('cy', py);
+            dot.setAttribute('r', 8);
+            dot.setAttribute('class', 'plot-dot');
+            g.appendChild(dot);
+
+            const dotLbl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            dotLbl.setAttribute('x', px + 12);
+            dotLbl.setAttribute('y', py + 4);
+            dotLbl.setAttribute('font-size', '10');
+            dotLbl.setAttribute('font-weight', 'bold');
+            dotLbl.setAttribute('fill', 'var(--color-red)');
+            dotLbl.textContent = 'あなた';
+            g.appendChild(dotLbl);
+
+            svgGraph.appendChild(g);
+        }
+
+        // 心理曲線グラフ描画
+        function drawGraph() {
+            if (activeTab !== 'graph') return;
+            
+            const gType = graphTypeSelect.value;
+            svgGraph.innerHTML = '';
+            
+            if (gType === 'value') {
+                containerValSlider.style.display = 'block';
+                containerProbSlider.style.display = 'none';
+                lblGraphTitle.textContent = '価値関数 v(x) ＝ x^0.88（得と損の感じ方）';
+                
+                currentAmount = parseInt(slideAmount.value);
+                lblAmount.textContent = currentAmount.toLocaleString();
+                
+                drawValueFunction();
+            } else {
+                containerValSlider.style.display = 'none';
+                containerProbSlider.style.display = 'block';
+                lblGraphTitle.textContent = '確率加重関数 w(p)（確率に対する錯覚）';
+                
+                currentProb = parseInt(slideProb.value);
+                lblProb.textContent = currentProb;
+                
+                drawProbabilityWeight();
+            }
+        }
+
+        // 価値関数グラフのプロット
+        function drawValueFunction() {
+            const width = 220;
+            const height = 200;
+            const cx = width / 2; // 原点X
+            const cy = height / 2; // 原点Y
+            
+            // X範囲: -20,000 〜 20,000 -> 描画X: 10 〜 210 (スケール: 1px = 200円)
+            // Y範囲: -20,000の価値 〜 20,000の価値
+            // 価値 v(x) = x^0.88 (x >= 0)
+            // v(x) = -2.25 * (-x)^0.88 (x < 0)
+            const scaleX = 100 / 20000;
+            // 心理的価値の最大値 v(20000) = 20000^0.88 = 5985
+            // 損失側の最大値 v(-20000) = -2.25 * 20000^0.88 = -13467
+            // Yの表示範囲を合わせるためのスケール
+            const scaleY = 90 / 13467;
+
+            const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            g.setAttribute('transform', 'translate(20, 10)');
+
+            // 軸
+            const xAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            xAxis.setAttribute('x1', 0);
+            xAxis.setAttribute('y1', cy);
+            xAxis.setAttribute('x2', width);
+            xAxis.setAttribute('y2', cy);
+            xAxis.setAttribute('class', 'axis-line');
+            g.appendChild(xAxis);
+
+            const yAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            yAxis.setAttribute('x1', cx);
+            yAxis.setAttribute('y1', 0);
+            yAxis.setAttribute('x2', cx);
+            yAxis.setAttribute('y2', height);
+            yAxis.setAttribute('class', 'axis-line');
+            g.appendChild(yAxis);
+
+            // グラフパス生成
+            let pathD = '';
+            for (let i = -20000; i <= 20000; i += 500) {
+                const screenX = cx + (i * scaleX);
+                let val = 0;
+                if (i >= 0) {
+                    val = Math.pow(i, 0.88);
+                } else {
+                    val = -2.25 * Math.pow(-i, 0.88);
+                }
+                const screenY = cy - (val * scaleY);
+                
+                if (i === -20000) {
+                    pathD += `M ${screenX} ${screenY}`;
+                } else {
+                    pathD += ` L ${screenX} ${screenY}`;
+                }
+            }
+
+            const curve = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            curve.setAttribute('d', pathD);
+            curve.setAttribute('class', 'value-curve');
+            g.appendChild(curve);
+
+            // 現在地をプロット
+            const px = cx + (currentAmount * scaleX);
+            let pVal = 0;
+            if (currentAmount >= 0) {
+                pVal = Math.pow(currentAmount, 0.88);
+            } else {
+                pVal = -2.25 * Math.pow(-currentAmount, 0.88);
+            }
+            const py = cy - (pVal * scaleY);
+
+            const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            dot.setAttribute('cx', px);
+            dot.setAttribute('cy', py);
+            dot.setAttribute('r', 5);
+            dot.setAttribute('class', 'plot-dot');
+            g.appendChild(dot);
+
+            svgGraph.appendChild(g);
+
+            // ボード情報の更新
+            resLbl1.textContent = '客観的な金額';
+            resVal1.textContent = `${currentAmount.toLocaleString()} 円`;
+            
+            resLbl2.textContent = '脳内での心理的価値';
+            resVal2.textContent = Math.round(pVal).toLocaleString();
+            
+            // 心理的価値比率
+            let ratio = 1.0;
+            if (currentAmount !== 0) {
+                // 10,000円を基準（1.0倍）としたときの価値比率
+                const refVal = Math.pow(10000, 0.88);
+                ratio = Math.abs(pVal) / refVal;
+            }
+            resLbl3.textContent = '基準(1万円)対比価値';
+            resVal3.textContent = `${ratio.toFixed(2)} 倍`;
+
+            // 診断ボード
+            statusVal.textContent = currentAmount >= 0 ? '利益の低減効果' : '損失の強烈な痛み';
+            statusDesc.textContent = currentAmount >= 0 ? 
+                '利益が増えるにつれて嬉しさの伸びは鈍くなっていきます（カーブが平らになる）。' : 
+                '損失の痛みは、同額の利益の喜びに対して「約2.25倍」急激に大きく感じられます。';
+        }
+
+        // 確率加重関数グラフのプロット
+        function drawProbabilityWeight() {
+            const width = 200;
+            const height = 200;
+            
+            // 確率加重関数 w(p) = p^0.61 / (p^0.61 + (1-p)^0.61)^(1/0.61)
+            const gamma = 0.61;
+            function w(p) {
+                if (p <= 0) return 0;
+                if (p >= 1) return 1;
+                const num = Math.pow(p, gamma);
+                const den = Math.pow(num + Math.pow(1 - p, gamma), 1 / gamma);
+                return num / den;
+            }
+
+            const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            g.setAttribute('transform', 'translate(25, 10)');
+
+            // 軸
+            const xAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            xAxis.setAttribute('x1', 0);
+            xAxis.setAttribute('y1', height);
+            xAxis.setAttribute('x2', width);
+            xAxis.setAttribute('y2', height);
+            xAxis.setAttribute('class', 'axis-line');
+            g.appendChild(xAxis);
+
+            const yAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            yAxis.setAttribute('x1', 0);
+            yAxis.setAttribute('y1', 0);
+            yAxis.setAttribute('x2', 0);
+            yAxis.setAttribute('y2', height);
+            yAxis.setAttribute('class', 'axis-line');
+            g.appendChild(yAxis);
+
+            // 対角参照線 (w(p)=p の完全合理直線)
+            const refLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            refLine.setAttribute('x1', 0);
+            refLine.setAttribute('y1', height);
+            refLine.setAttribute('x2', width);
+            refLine.setAttribute('y2', 0);
+            refLine.setAttribute('class', 'diagonal-ref');
+            g.appendChild(refLine);
+
+            // w(p) 曲線パス
+            let pathD = '';
+            for (let i = 0; i <= 100; i += 2) {
+                const p = i / 100;
+                const screenX = p * width;
+                const screenY = height - (w(p) * height);
+                if (i === 0) {
+                    pathD += `M ${screenX} ${screenY}`;
+                } else {
+                    pathD += ` L ${screenX} ${screenY}`;
+                }
+            }
+
+            const curve = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            curve.setAttribute('d', pathD);
+            curve.setAttribute('class', 'weight-curve');
+            g.appendChild(curve);
+
+            // 現在値プロット
+            const pVal = currentProb / 100;
+            const px = pVal * width;
+            const py = height - (w(pVal) * height);
+
+            const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            dot.setAttribute('cx', px);
+            dot.setAttribute('cy', py);
+            dot.setAttribute('r', 5);
+            dot.setAttribute('class', 'plot-dot');
+            g.appendChild(dot);
+
+            svgGraph.appendChild(g);
+
+            // ボード情報の更新
+            resLbl1.textContent = '客観的な確率';
+            resVal1.textContent = `${currentProb} %`;
+            
+            const wPercent = w(pVal) * 100;
+            resLbl2.textContent = '脳内での主観確率';
+            resVal2.textContent = `${wPercent.toFixed(1)} %`;
+            
+            const pRatio = w(pVal) / (pVal || 0.0001);
+            resLbl3.textContent = '確率の誇張度';
+            resVal3.textContent = `${pRatio.toFixed(2)} 倍`;
+
+            // 診断
+            statusVal.textContent = currentProb < 35 ? '過大評価（期待）' : '過小評価（不安）';
+            statusDesc.textContent = currentProb < 35 ? 
+                '宝くじの当選率など、極めて低い確率は頭の中で「実際よりも高く」過大評価されます。' : 
+                '90%以上の高い確率は、頭の中で「実際より低く」見積もられ、残り数％の失敗リスクを過大に恐れてしまいます。';
+        }
+
+        // 初期ロード
+        switchTab('game');
+    </script>
+</body>
+</html>

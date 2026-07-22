@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全体と部分の逆転「シンプソンのパラドックス」 | Otona Math コラム</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .column-content {
+            background-color: var(--color-surface);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            margin-bottom: 40px;
+        }
+        .column-content p {
+            line-height: 2.1;
+            margin-bottom: 28px;
+        }
+        .section-header {
+            color: var(--color-brass);
+            margin-top: 40px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 10px;
+            font-size: 22px;
+        }
+        
+        /* Interactive Simulator Styles */
+        .interactive-simulator {
+            background-color: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        .simulator-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 15px;
+        }
+        .simulator-header h3 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            color: var(--color-ink);
+        }
+        .simulator-header p {
+            font-size: 14px;
+            color: var(--color-ink-soft);
+        }
+        
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        @media (max-width: 900px) {
+            .sim-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Control Panel */
+        .control-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .param-section-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--color-ink);
+            border-left: 3px solid var(--color-brass);
+            padding-left: 8px;
+            margin-bottom: 10px;
+        }
+        .slider-group {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 12px 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .slider-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--color-ink);
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+        .slider-label span.value-disp {
+            font-family: var(--font-mono);
+            color: var(--color-brass);
+            font-weight: bold;
+        }
+        .slider-group input[type="range"] {
+            width: 100%;
+            accent-color: var(--color-brass);
+            cursor: pointer;
+        }
+
+        /* Tabs and Graph Panel */
+        .graph-panel {
+            display: flex;
+            flex-direction: column;
+        }
+        .tab-menu {
+            display: flex;
+            border-bottom: 1px solid var(--color-paper-line);
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+        .tab-btn {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
+            padding: 8px 16px;
+            font-size: 13px;
+            cursor: pointer;
+            color: var(--color-ink-soft);
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .tab-btn:hover {
+            color: var(--color-ink);
+        }
+        .tab-btn.active {
+            color: var(--color-brass);
+            border-bottom-color: var(--color-brass);
+            font-weight: bold;
+        }
+        
+        .graph-box {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .graph-svg-container {
+            width: 100%;
+            height: 200px;
+        }
+        .graph-svg-container svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+        
+        /* Results Board */
+        .results-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            background: var(--color-paper);
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        @media (max-width: 600px) {
+            .results-board {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+        .res-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .res-label {
+            font-size: 13px;
+            color: var(--color-ink-soft);
+            margin-bottom: 4px;
+        }
+        .res-val {
+            font-size: 20px;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            color: var(--color-ink);
+        }
+        
+        /* Target Board */
+        .target-board {
+            background: rgba(169, 120, 47, 0.05);
+            border: 1px solid rgba(169, 120, 47, 0.2);
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        .target-board.active-paradox {
+            background: rgba(180, 67, 47, 0.06);
+            border-color: rgba(180, 67, 47, 0.3);
+        }
+        @media (max-width: 600px) {
+            .target-board {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+        .target-left {
+            display: flex;
+            flex-direction: column;
+        }
+        .target-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .target-board.active-paradox .target-title {
+            color: var(--color-red);
+        }
+        .target-desc {
+            font-size: 12px;
+            color: var(--color-ink-soft);
+        }
+        .target-right {
+            display: flex;
+            align-items: center;
+        }
+        .target-stat-value {
+            font-family: var(--font-body);
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .target-board.active-paradox .target-stat-value {
+            color: var(--color-red);
+        }
+
+        /* SVG Bar Styling */
+        .bar-a {
+            fill: rgba(169, 120, 47, 0.7); /* 真鍮 */
+            transition: height 0.4s ease, y 0.4s ease;
+        }
+        .bar-b {
+            fill: rgba(62, 80, 99, 0.7); /* インク */
+            transition: height 0.4s ease, y 0.4s ease;
+        }
+        .bar-label {
+            font-size: 9px;
+            font-family: var(--font-mono);
+            fill: var(--color-ink-soft);
+        }
+        .bar-pct-lbl {
+            font-size: 10px;
+            font-family: var(--font-mono);
+            fill: var(--color-ink);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="../index.html">数学と統計学</a></li>
+                    <li><a href="index.html">コラム</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">コラム</a> &gt; 全てと部分の逆転「シンプソンのパラドックス」
+        </div>
+
+        <article class="column-content">
+            <h2 style="font-size: 28px; margin-bottom: 30px; line-height: 1.4;">データを読み誤る陥穽：<br>全体と部分で結論が逆転する「シンプソンのパラドックス」</h2>
+            
+            <p>
+                データを分析して意思決定を行う現代ビジネスにおいて、数字は常に「客観的な事実」を示していると思われがちです。
+                しかし、統計学には私たちの直感をあざ笑うような**「シンプソンのパラドックス」**という罠が潜んでいます。
+            </p>
+            <p>
+                これは、**「データを全体で見たときの傾向が、グループ（属性）に細分化して見たときの傾向と完全に真逆になってしまう」**という不思議な現象です。
+            </p>
+
+            <h3 class="section-header">Webマーケティングの「A/Bテスト」に潜む罠</h3>
+            <p>
+                例えば、新しいマーケティング施策として「キャンペーンA」と「キャンペーンB」のA/Bテストを実施したとします。
+                全体の登録率（コンバージョン率）を集計すると、結果は以下のようになりました。
+            </p>
+            <ul style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
+                <li><strong>キャンペーンA:</strong> 51.7% (登録 62人 / 配信 120人)</li>
+                <li><strong>キャンペーンB:</strong> 46.7% (登録 56人 / 配信 120人)</li>
+            </ul>
+            <p>
+                全体の数字だけを見れば、誰もが「Aの方が効果的だ」と判断するはずです。
+                しかし、このデータを「若年層」と「シニア層」の属性別に分けて再集計すると、驚くべき事実が見えてきます。
+            </p>
+
+            <h3 class="section-header">【体験】A/Bテスト・データ分割シミュレーター</h3>
+            <p>
+                スライダーを使って、キャンペーンAとBの「若年層の人数」と「シニア層の人数」の配分を変更してみましょう。
+                セグメント別では常に「B」の方が高いコンバージョン率を維持しているのにもかかわらず、全体の合計コンバージョン率が「A」に逆転してしまう不思議を体験できます。
+            </p>
+
+            <!-- シミュレーター容器 -->
+            <div class="interactive-simulator">
+                <div class="simulator-header">
+                    <h3>A/Bテスト分割解析シミュレーター</h3>
+                    <p>キャンペーンA・Bの各層の人数バランスを変更し、全体集計と属性別集計のグラフを切り替えてみてください。</p>
+                </div>
+                
+                <div class="sim-grid">
+                    <!-- 左：操作パネル -->
+                    <div class="control-panel">
+                        <div class="param-section-title">🏢 キャンペーンA (若年層CVR: 10% / シニアCVR: 60%)</div>
+                        <div class="slider-group">
+                            <div class="slider-label">
+                                <span>A：若年層の配信人数</span>
+                                <span class="value-disp"><span id="lbl-a-young">20</span>人</span>
+                            </div>
+                            <input type="range" id="param-a-young" min="10" max="150" step="10" value="20">
+                        </div>
+                        <div class="slider-group">
+                            <div class="slider-label">
+                                <span>A：シニア層の配信人数</span>
+                                <span class="value-disp"><span id="lbl-a-senior">100</span>人</span>
+                            </div>
+                            <input type="range" id="param-a-senior" min="10" max="150" step="10" value="100">
+                        </div>
+
+                        <div class="param-section-title" style="margin-top: 15px;">🚀 キャンペーンB (若年層CVR: 40% / シニアCVR: 80%)</div>
+                        <div class="slider-group">
+                            <div class="slider-label">
+                                <span>B：若年層の配信人数</span>
+                                <span class="value-disp"><span id="lbl-b-young">100</span>人</span>
+                            </div>
+                            <input type="range" id="param-b-young" min="10" max="150" step="10" value="100">
+                        </div>
+                        <div class="slider-group">
+                            <div class="slider-label">
+                                <span>B：シニア層の配信人数</span>
+                                <span class="value-disp"><span id="lbl-b-senior">20</span>人</span>
+                            </div>
+                            <input type="range" id="param-b-senior" min="10" max="150" step="10" value="20">
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 10px;">
+                            <button class="sim-btn" onclick="setPreset(20, 100, 100, 20)">逆転プリセット（デフォルト）</button>
+                            <button class="sim-btn" onclick="setPreset(50, 50, 50, 50)">人数均等（逆転なし）</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 右：グラフ表示 -->
+                    <div class="graph-panel">
+                        <div class="tab-menu">
+                            <button id="tab-total" class="tab-btn active" onclick="switchTab('total')">📊 全体集計グラフ</button>
+                            <button id="tab-segmented" class="tab-btn" onclick="switchTab('segmented')">👥 属性別集計グラフ</button>
+                        </div>
+                        
+                        <div class="graph-box">
+                            <div class="graph-svg-container">
+                                <svg id="svg-graph">
+                                    <!-- Y軸グリッド -->
+                                    <line x1="10%" y1="10%" x2="90%" y2="10%" stroke="#f0f0f0" />
+                                    <line x1="10%" y1="50%" x2="90%" y2="50%" stroke="#f0f0f0" />
+                                    <line x1="10%" y1="90%" x2="90%" y2="90%" stroke="var(--color-paper-line)" />
+                                    
+                                    <!-- 棒グラフを描画 (JSでモードに応じて切り替え) -->
+                                    <g id="grp-total-bars">
+                                        <rect id="total-bar-a" class="bar-a" x="25%" y="90%" width="15%" height="0" />
+                                        <rect id="total-bar-b" class="bar-b" x="60%" y="90%" width="15%" height="0" />
+                                        
+                                        <text x="32.5%" y="97%" text-anchor="middle" font-size="10">A全体</text>
+                                        <text x="67.5%" y="97%" text-anchor="middle" font-size="10">B全体</text>
+                                        
+                                        <text id="total-val-a" class="bar-pct-lbl" x="32.5%" y="0" text-anchor="middle">0%</text>
+                                        <text id="total-val-b" class="bar-pct-lbl" x="67.5%" y="0" text-anchor="middle">0%</text>
+                                    </g>
+                                    
+                                    <g id="grp-segmented-bars" style="display:none;">
+                                        <!-- 若年層 -->
+                                        <rect id="seg-bar-a-y" class="bar-a" x="15%" y="90%" width="10%" height="0" />
+                                        <rect id="seg-bar-b-y" class="bar-b" x="27%" y="90%" width="10%" height="0" />
+                                        <text x="21%" y="97%" text-anchor="middle" font-size="9" fill="var(--color-ink)">若年(A)</text>
+                                        <text x="32%" y="97%" text-anchor="middle" font-size="9" fill="var(--color-ink)">若年(B)</text>
+                                        <text id="seg-val-a-y" class="bar-pct-lbl" x="20%" y="0" text-anchor="middle" font-size="9">10%</text>
+                                        <text id="seg-val-b-y" class="bar-pct-lbl" x="32%" y="0" text-anchor="middle" font-size="9">40%</text>
+
+                                        <!-- シニア層 -->
+                                        <rect id="seg-bar-a-s" class="bar-a" x="58%" y="90%" width="10%" height="0" />
+                                        <rect id="seg-bar-b-s" class="bar-b" x="70%" y="90%" width="10%" height="0" />
+                                        <text x="63%" y="97%" text-anchor="middle" font-size="9" fill="var(--color-ink)">シニア(A)</text>
+                                        <text x="75%" y="97%" text-anchor="middle" font-size="9" fill="var(--color-ink)">シニア(B)</text>
+                                        <text id="seg-val-a-s" class="bar-pct-lbl" x="63%" y="0" text-anchor="middle" font-size="9">60%</text>
+                                        <text id="seg-val-b-s" class="bar-pct-lbl" x="75%" y="0" text-anchor="middle" font-size="9">80%</text>
+                                    </g>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 結果ボード -->
+                <div class="results-board">
+                    <div class="res-box">
+                        <div class="res-label">A全体のコンバージョン率</div>
+                        <div class="res-val"><span id="val-a-total">51.7</span> %</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">B全体のコンバージョン率</div>
+                        <div class="res-val"><span id="val-b-total">46.7</span> %</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">全体集計での勝者</div>
+                        <div id="val-winner" class="res-val" style="color:var(--color-brass)">キャンペーンA</div>
+                    </div>
+                </div>
+                
+                <!-- 判定ボード -->
+                <div id="paradox-board" class="target-board">
+                    <div class="target-left">
+                        <div class="target-title">⚠️ シンプソンのパラドックス状態</div>
+                        <div id="paradox-desc" class="target-desc">各属性ではBが優位なのに、全体を合わせるとAが勝利する「結論の逆転」が発生しています。</div>
+                    </div>
+                    <div class="target-right">
+                        <div id="paradox-status" class="target-stat-value">発生中</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-header">なぜ、このような「あべこべ」が起きるのか？</h3>
+            <p>
+                各グループ（部分）で見れば、若年層でもシニア層でも「キャンペーンB」の方が圧倒的な成果を出しています。
+                それなのに、なぜ全体を合計すると「キャンペーンA」が勝ってしまうのでしょうか。
+            </p>
+            <p>
+                その理由は、**「分母の極端な偏り（交絡因子）」**にあります。
+            </p>
+            <p>
+                もう一度、初期パラメータの配信人数（母数）に注目してみましょう。
+            </p>
+            <ul style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
+                <li><strong>キャンペーンA:</strong> 反応しやすい「シニア層」に偏って大量配信（100人）</li>
+                <li><strong>キャンペーンB:</strong> 反応しにくい「若年層」に偏って大量配信（100人）</li>
+            </ul>
+            <p>
+                キャンペーンBは、そもそもコンバージョン率が低くなりやすい若年層に大量にアプローチしてしまったため、**分母の重みによって全体のコンバージョン率が大きく押し下げられてしまった**のです。
+                対するAは、コンバージョンしやすいシニア層のデータが全体の約8割を占めるため、**全体の平均値が不自然に底上げ**されました。
+            </p>
+            <p>
+                つまり、全体での比較は「キャンペーン自体の純粋な効果」ではなく、「配信人数の偏り」を比較していたに過ぎないのです。
+            </p>
+
+            <h3 class="section-header">ビジネスにおける「加重平均」の教訓</h3>
+            <p>
+                ビジネスの報告書でよく目にする「平均値」や「全体合計」は、このように母数の偏りがある場合、実態を全く反映しない偽りのデータになるリスクがあります。
+            </p>
+            <p>
+                例えば、営業チーム全体の売上目標が未達成であったとしても、個々の営業エリア別で見ればすべてのエリアで前年比プラス成長を遂げている、といった現象も、これと同じ理屈（エリアごとの市場規模の偏り）で発生します。
+            </p>
+            <p>
+                シンプソンのパラドックスを回避し、正しい意思決定を行うためには、以下のプロセスが不可欠です。
+            </p>
+            
+            <ul style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
+                <li>単一の「平均値」だけで勝敗を決めつけず、データを細かく分解（セグメンテーション）して見る。</li>
+                <li>偏りの原因となる変数（今回の「ユーザー層」や「エリア」など）が各グループで均等に割り振られているかを確認する。</li>
+                <li>実験を行う際は、あらかじめ母数を揃えた「ランダム化比較試験」を実施する。</li>
+            </ul>
+
+            <h3 class="section-header">まとめ</h3>
+            <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 20px; font-size: 15px; line-height: 1.8;">
+                データ分析は、時として表面的な平均値の裏に真実を隠してしまいます。
+                全体像だけを見てキャンペーンAを採用していれば、本当に効果のあったBを切り捨てるという大失敗につながっていたでしょう。
+                「直感を裏切る罠」を意識し、常にデータの背後にある構造的な偏りを疑うことこそが、データ駆動ビジネスにおける最大の護身術なのです。
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- シミュレーター制御スクリプト -->
+    <script>
+        // DOM要素
+        const paramAYoung = document.getElementById('param-a-young');
+        const paramASenior = document.getElementById('param-a-senior');
+        const paramBYoung = document.getElementById('param-b-young');
+        const paramBSenior = document.getElementById('param-b-senior');
+
+        const lblAYoung = document.getElementById('lbl-a-young');
+        const lblASenior = document.getElementById('lbl-a-senior');
+        const lblBYoung = document.getElementById('lbl-b-young');
+        const lblBSenior = document.getElementById('lbl-b-senior');
+
+        const valATotal = document.getElementById('val-a-total');
+        const valBTotal = document.getElementById('val-b-total');
+        const valWinner = document.getElementById('val-winner');
+
+        const paradoxBoard = document.getElementById('paradox-board');
+        const paradoxDesc = document.getElementById('paradox-desc');
+        const paradoxStatus = document.getElementById('paradox-status');
+
+        const grpTotalBars = document.getElementById('grp-total-bars');
+        const grpSegmentedBars = document.getElementById('grp-segmented-bars');
+
+        // SVG rectとtext
+        const totalBarA = document.getElementById('total-bar-a');
+        const totalBarB = document.getElementById('total-bar-b');
+        const totalValA = document.getElementById('total-val-a');
+        const totalValB = document.getElementById('total-val-b');
+
+        const segBarAY = document.getElementById('seg-bar-a-y');
+        const segBarBY = document.getElementById('seg-bar-b-y');
+        const segBarAS = document.getElementById('seg-bar-a-s');
+        const segBarBS = document.getElementById('seg-bar-b-s');
+
+        const segValAY = document.getElementById('seg-val-a-y');
+        const segValBY = document.getElementById('seg-val-b-y');
+        const segValAS = document.getElementById('seg-val-a-s');
+        const segValBS = document.getElementById('seg-val-b-s');
+
+        // 各グループのコンバージョン率（固定値）
+        const CVR_A_YOUNG = 0.10;  // 10%
+        const CVR_A_SENIOR = 0.60; // 60%
+        const CVR_B_YOUNG = 0.40;  // 40%
+        const CVR_B_SENIOR = 0.80; // 80%
+
+        let activeTab = 'total'; // 'total' or 'segmented'
+
+        function setPreset(ay, as, by, bs) {
+            paramAYoung.value = ay;
+            paramASenior.value = as;
+            paramBYoung.value = by;
+            paramBSenior.value = bs;
+            updateSimulation();
+        }
+
+        function switchTab(mode) {
+            activeTab = mode;
+            document.getElementById('tab-total').className = (mode === 'total') ? 'tab-btn active' : 'tab-btn';
+            document.getElementById('tab-segmented').className = (mode === 'segmented') ? 'tab-btn active' : 'tab-btn';
+            
+            if (mode === 'total') {
+                grpTotalBars.style.display = 'block';
+                grpSegmentedBars.style.display = 'none';
+            } else {
+                grpTotalBars.style.display = 'none';
+                grpSegmentedBars.style.display = 'block';
+            }
+            updateSimulation();
+        }
+
+        function updateSimulation() {
+            // 人数の取得
+            const nAYoung = parseInt(paramAYoung.value);
+            const nASenior = parseInt(paramASenior.value);
+            const nBYoung = parseInt(paramBYoung.value);
+            const nBSenior = parseInt(paramBSenior.value);
+
+            // ラベルの更新
+            lblAYoung.textContent = nAYoung;
+            lblASenior.textContent = nASenior;
+            lblBYoung.textContent = nBYoung;
+            lblBSenior.textContent = nBSenior;
+
+            // コンバージョン数の計算
+            const cvAYoung = nAYoung * CVR_A_YOUNG;
+            const cvASenior = nASenior * CVR_A_SENIOR;
+            const cvBYoung = nBYoung * CVR_B_YOUNG;
+            const cvBSenior = nBSenior * CVR_B_SENIOR;
+
+            // 合計
+            const totalA = nAYoung + nASenior;
+            const totalB = nBYoung + nBSenior;
+
+            const cvTotalA = cvAYoung + cvASenior;
+            const cvTotalB = cvBYoung + cvBSenior;
+
+            const pctA = (cvTotalA / totalA) * 100;
+            const pctB = (cvTotalB / totalB) * 100;
+
+            // 結果ボードの更新
+            valATotal.textContent = pctA.toFixed(1);
+            valBTotal.textContent = pctB.toFixed(1);
+
+            // 勝者の判定
+            if (pctA > pctB) {
+                valWinner.textContent = 'キャンペーンA';
+                valWinner.style.color = 'var(--color-brass)';
+            } else if (pctB > pctA) {
+                valWinner.textContent = 'キャンペーンB';
+                valWinner.style.color = 'rgba(62, 80, 99, 1)';
+            } else {
+                valWinner.textContent = '引き分け';
+                valWinner.style.color = 'var(--color-ink-soft)';
+            }
+
+            // シンプソンのパラドックスの発生判定
+            // 条件：個別ではBがAより常に高い（10% < 40%, 60% < 80% で固定されているため、個別は常にBが勝つ）
+            // なので、全体集計でAのコンバージョン率がBより高くなっていれば、パラドックスが発生していることになる。
+            const isParadox = pctA > pctB;
+
+            if (isParadox) {
+                paradoxBoard.className = 'target-board active-paradox';
+                paradoxStatus.textContent = '発生中';
+                paradoxDesc.textContent = '各セグメントではBが勝っているのに、全体のコンバージョン率はAが勝利する「結論の逆転」が発生しています！';
+            } else {
+                paradoxBoard.className = 'target-board';
+                paradoxStatus.textContent = '発生なし';
+                paradoxDesc.textContent = '全体の集計結果も、個別セグメントと同様に「キャンペーンB」の勝利となっており、整合しています。';
+            }
+
+            // --- SVGグラフの更新 ---
+            const maxVal = 100; // 100%基準
+            const height = 200;
+            const barMaxH = 140; // 棒グラフの最大高さ(px)
+            const groundY = 180; // 0%のY座標位置
+
+            if (activeTab === 'total') {
+                // 全体集計グラフ
+                const hA = (pctA / maxVal) * barMaxH;
+                const hB = (pctB / maxVal) * barMaxH;
+
+                totalBarA.setAttribute('height', hA);
+                totalBarA.setAttribute('y', groundY - hA);
+                totalValA.textContent = `${pctA.toFixed(1)}%`;
+                totalValA.setAttribute('y', groundY - hA - 5);
+
+                totalBarB.setAttribute('height', hB);
+                totalBarB.setAttribute('y', groundY - hB);
+                totalValB.textContent = `${pctB.toFixed(1)}%`;
+                totalValB.setAttribute('y', groundY - hB - 5);
+            } else {
+                // 属性別集計グラフ
+                const hAY = (CVR_A_YOUNG * barMaxH);
+                const hBY = (CVR_B_YOUNG * barMaxH);
+                const hAS = (CVR_A_SENIOR * barMaxH);
+                const hBS = (CVR_B_SENIOR * barMaxH);
+
+                segBarAY.setAttribute('height', hAY);
+                segBarAY.setAttribute('y', groundY - hAY);
+                segValAY.textContent = `${(CVR_A_YOUNG * 100).toFixed(0)}%`;
+                segValAY.setAttribute('y', groundY - hAY - 5);
+
+                segBarBY.setAttribute('height', hBY);
+                segBarBY.setAttribute('y', groundY - hBY);
+                segValBY.textContent = `${(CVR_B_YOUNG * 100).toFixed(0)}%`;
+                segValBY.setAttribute('y', groundY - hBY - 5);
+
+                segBarAS.setAttribute('height', hAS);
+                segBarAS.setAttribute('y', groundY - hAS);
+                segValAS.textContent = `${(CVR_A_SENIOR * 100).toFixed(0)}%`;
+                segValAS.setAttribute('y', groundY - hAS - 5);
+
+                segBarBS.setAttribute('height', hBS);
+                segBarBS.setAttribute('y', groundY - hBS);
+                segValBS.textContent = `${(CVR_B_SENIOR * 100).toFixed(0)}%`;
+                segValBS.setAttribute('y', groundY - hBS - 5);
+            }
+        }
+
+        // イベント設定
+        [paramAYoung, paramASenior, paramBYoung, paramBSenior].forEach(input => {
+            input.addEventListener('input', updateSimulation);
+        });
+
+        // 初期計算実行
+        updateSimulation();
+    </script>
+</body>
+</html>

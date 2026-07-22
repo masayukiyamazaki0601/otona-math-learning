@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>二次関数と最適価格設定 | Otona Math コラム</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .column-content {
+            background-color: var(--color-surface);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            margin-bottom: 40px;
+        }
+        .column-content p {
+            line-height: 2.1;
+            margin-bottom: 28px;
+        }
+        .section-header {
+            color: var(--color-brass);
+            margin-top: 40px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 10px;
+            font-size: 22px;
+        }
+        
+        /* Interactive Simulator Styles */
+        .interactive-simulator {
+            background-color: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        .simulator-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 15px;
+        }
+        .simulator-header h3 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            color: var(--color-ink);
+        }
+        .simulator-header p {
+            font-size: 14px;
+            color: var(--color-ink-soft);
+        }
+        
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        @media (max-width: 900px) {
+            .sim-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Sliders Panel */
+        .sliders-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .slider-group {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .slider-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--color-ink);
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .slider-label span.value-disp {
+            font-family: var(--font-mono);
+            color: var(--color-brass);
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .slider-group input[type="range"] {
+            width: 100%;
+            accent-color: var(--color-brass);
+            cursor: pointer;
+        }
+        .slider-desc {
+            font-size: 11px;
+            color: var(--color-ink-soft);
+            margin-top: 5px;
+            line-height: 1.4;
+        }
+        
+        /* Graphs Panel */
+        .graphs-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .graph-box {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            position: relative;
+        }
+        .graph-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--color-ink-soft);
+            display: flex;
+            justify-content: space-between;
+        }
+        .graph-svg-container {
+            width: 100%;
+            height: 160px;
+            position: relative;
+        }
+        .graph-svg-container svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+        
+        /* Results Board */
+        .results-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            background: var(--color-paper);
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        @media (max-width: 600px) {
+            .results-board {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+        .res-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .res-label {
+            font-size: 13px;
+            color: var(--color-ink-soft);
+            margin-bottom: 4px;
+        }
+        .res-val {
+            font-size: 24px;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            color: var(--color-ink);
+        }
+        .res-val.profit-plus { color: #10b981; }
+        .res-val.profit-minus { color: var(--color-red); }
+        
+        /* Target Board */
+        .target-board {
+            background: rgba(169, 120, 47, 0.05);
+            border: 1px solid rgba(169, 120, 47, 0.2);
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        @media (max-width: 600px) {
+            .target-board {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+        .target-left {
+            display: flex;
+            flex-direction: column;
+        }
+        .target-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .target-desc {
+            font-size: 12px;
+            color: var(--color-ink-soft);
+        }
+        .target-right {
+            display: flex;
+            gap: 20px;
+        }
+        .target-stat {
+            text-align: right;
+        }
+        @media (max-width: 600px) {
+            .target-stat {
+                text-align: center;
+            }
+        }
+        .target-stat-label {
+            font-size: 11px;
+            color: var(--color-ink-soft);
+        }
+        .target-stat-value {
+            font-family: var(--font-mono);
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+
+        /* Formulas & Explanations */
+        .formula-box {
+            font-family: var(--font-mono);
+            background-color: var(--color-paper);
+            border: 1px solid var(--color-paper-line);
+            padding: 20px;
+            border-radius: 6px;
+            margin: 25px 0;
+            overflow-x: auto;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        .formula-line {
+            display: block;
+            margin-bottom: 8px;
+        }
+        .formula-line:last-child {
+            margin-bottom: 0;
+        }
+        .formula-inline {
+            font-family: var(--font-mono);
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 15px;
+        }
+        .text-highlight {
+            border-bottom: 2px dotted var(--color-brass);
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="../index.html">数学と統計学</a></li>
+                    <li><a href="index.html">コラム</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">コラム</a> &gt; 二次関数と最適価格設定
+        </div>
+
+        <article class="column-content">
+            <h2 style="font-size: 28px; margin-bottom: 30px; line-height: 1.4;">高校数学「二次関数」で決める！<br>最も儲かる「商品の価格設定」</h2>
+            
+            <p>ビジネスにおいて、最も頭を悩ませる意思決定の一つが**「値決め（価格設定）」**です。</p>
+            <p>
+                価格を安くすれば、たくさん売れますが1個あたりの利益（マージン）は減ってしまいます。逆に、価格を高くすれば1個あたりの利益は増えますが、今度は売れる個数が減ってしまいます。
+                この**「高くして少なく売るか、安くして多く売るか」**というトレードオフのなかで、利益を最大化する「完璧な価格」はどうやって見つければよいのでしょうか。
+            </p>
+            <p>
+                実は、この難題に対する明確な答えを提示してくれるのが、高校で学ぶ**「二次関数」**と**「微分」**の知識です。
+            </p>
+
+            <h3 class="section-header">【体験】価格設定と利益最大化シミュレーター</h3>
+            <p>
+                まずは、パン屋さんをモデルにしたシミュレーターを動かしてみましょう。
+                原価（変動費）や固定費、そして「価格を上げるとどれくらい客足が遠のくか（価格感度）」を調整し、販売価格のスライダーを動かしてみてください。
+                販売価格の変化にともなって、需要と利益がどのように変化するか、リアルタイムに放物線が描かれます。
+            </p>
+
+            <!-- シミュレーター容器 -->
+            <div class="interactive-simulator">
+                <div class="simulator-header">
+                    <h3>最適な販売価格シミュレーター</h3>
+                    <p>スライダーを動かして、利益が最大になるポイントを探しましょう。</p>
+                </div>
+                
+                <div class="sim-grid">
+                    <!-- 左：スライダー操作パネル -->
+                    <div class="sliders-panel">
+                        <div class="slider-group">
+                            <div class="slider-label">
+                                <span>🏠 固定費 (月額)</span>
+                                <span class="value-disp"><span id="lbl-fixed-cost">50,000</span>円</span>
+                            </div>
+                            <input type="range" id="param-fixed-cost" min="10000" max="150000" step="5000" value="50000">
+                            <div class="slider-desc">家賃や人件費など、売上にかかわらず毎月固定で発生する費用です。</div>
+                        </div>
+                        
+                        <div class="slider-group">
+                            <div class="slider-label">
+                                <span>🌾 原価 (商品1個あたり)</span>
+                                <span class="value-disp"><span id="lbl-unit-cost">300</span>円</span>
+                            </div>
+                            <input type="range" id="param-unit-cost" min="100" max="1000" step="20" value="300">
+                            <div class="slider-desc">原材料費など、商品を作るために1個ごとに発生する費用です。</div>
+                        </div>
+                        
+                        <div class="slider-group">
+                            <div class="slider-label">
+                                <span>📉 価格感度 (需要の減少率)</span>
+                                <span class="value-disp"><span id="lbl-sensitivity">2.0</span>人 / +10円</span>
+                            </div>
+                            <input type="range" id="param-sensitivity" min="0.5" max="5.0" step="0.1" value="2.0">
+                            <div class="slider-desc">価格が「10円」高くなるごとに、買ってくれるお客さんが何人減るかを表します。</div>
+                        </div>
+                        
+                        <div class="slider-group" style="background: rgba(169, 120, 47, 0.03); border-color: rgba(169, 120, 47, 0.2);">
+                            <div class="slider-label">
+                                <span>🏷️ 設定する販売価格</span>
+                                <span class="value-disp" style="color: var(--color-ink);"><span id="lbl-price">500</span>円</span>
+                            </div>
+                            <input type="range" id="param-price" min="300" max="2000" step="10" value="500">
+                            <div class="slider-desc">あなたが設定する商品の販売価格です。スライダーを左右に動かしてください。</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 右：リアルタイムSVGグラフ -->
+                    <div class="graphs-panel">
+                        <!-- グラフ1：需要曲線 -->
+                        <div class="graph-box">
+                            <div class="graph-title">
+                                <span>📈 需要曲線 (価格 vs 販売個数)</span>
+                                <span id="val-demand-eq" style="font-family: var(--font-mono); font-size:11px;">Q = 1200 - 2P</span>
+                            </div>
+                            <div class="graph-svg-container">
+                                <svg id="svg-demand">
+                                    <!-- グリッド -->
+                                    <line x1="0" y1="130" x2="100%" y2="130" stroke="#eee" stroke-dasharray="2" />
+                                    <line x1="0" y1="70" x2="100%" y2="70" stroke="#eee" stroke-dasharray="2" />
+                                    <!-- 軸 -->
+                                    <line x1="10%" y1="0" x2="10%" y2="90%" stroke="var(--color-paper-line)" stroke-width="1.5" />
+                                    <line x1="10%" y1="90%" x2="100%" y2="90%" stroke="var(--color-paper-line)" stroke-width="1.5" />
+                                    <!-- パス -->
+                                    <path id="path-demand" d="" fill="none" stroke="var(--color-ink-soft)" stroke-width="2" />
+                                    <!-- 現在点マーカー -->
+                                    <circle id="dot-demand" cx="0" cy="0" r="6" fill="var(--color-brass)" />
+                                </svg>
+                            </div>
+                        </div>
+                        
+                        <!-- グラフ2：利益曲線 -->
+                        <div class="graph-box">
+                            <div class="graph-title">
+                                <span>📈 利益放物線 (価格 vs 最終利益)</span>
+                                <span id="val-profit-eq" style="font-family: var(--font-mono); font-size:11px;">y = -2P² + ...</span>
+                            </div>
+                            <div class="graph-svg-container">
+                                <svg id="svg-profit">
+                                    <!-- グリッド -->
+                                    <line x1="0" y1="75" x2="100%" y2="75" stroke="#eee" stroke-dasharray="2" />
+                                    <!-- 0基準線 -->
+                                    <line id="zero-line" x1="10%" y1="110" x2="100%" y2="110" stroke="var(--color-red)" stroke-dasharray="3" stroke-width="1" />
+                                    <!-- 軸 -->
+                                    <line x1="10%" y1="0" x2="10%" y2="90%" stroke="var(--color-paper-line)" stroke-width="1.5" />
+                                    <line x1="10%" y1="90%" x2="100%" y2="90%" stroke="var(--color-paper-line)" stroke-width="1.5" />
+                                    <!-- パス -->
+                                    <path id="path-profit" d="" fill="none" stroke="var(--color-ink)" stroke-width="2" />
+                                    <!-- 最適点マーカー -->
+                                    <circle id="dot-optimum" cx="0" cy="0" r="5" fill="none" stroke="var(--color-brass)" stroke-width="2" />
+                                    <!-- 現在点マーカー -->
+                                    <circle id="dot-profit" cx="0" cy="0" r="6" fill="var(--color-brass)" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 数値出力ボード -->
+                <div class="results-board">
+                    <div class="res-box">
+                        <div class="res-label">予想販売個数 (需要量)</div>
+                        <div class="res-val"><span id="val-demand">0</span> 個</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">予想売上高</div>
+                        <div class="res-val"><span id="val-revenue">0</span> 円</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">予想最終利益</div>
+                        <div id="val-profit-wrapper" class="res-val">
+                            <span id="val-profit">0</span> 円
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 最適結果ボード -->
+                <div class="target-board">
+                    <div class="target-left">
+                        <div class="target-title">🎯 数学が導く「最適価格」</div>
+                        <div class="target-desc">利益関数を平方完成、または微分することで求めた理論上の最高効率ポイントです。</div>
+                    </div>
+                    <div class="target-right">
+                        <div class="target-stat">
+                            <div class="target-stat-label">最適販売価格</div>
+                            <div class="target-stat-value"><span id="val-opt-price">0</span> 円</div>
+                        </div>
+                        <div class="target-stat">
+                            <div class="target-stat-label">最大最終利益</div>
+                            <div class="target-stat-value"><span id="val-max-profit">0</span> 円</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-header">ステップ1：関係性を「一次関数」で表す</h3>
+            <p>
+                数学的に問題を解くためには、まず現実の事象を数式に置き換える（モデリングする）必要があります。
+                今回のパン屋さんにおいて、**価格と売れる個数（需要）の関係**を数式にしてみましょう。
+            </p>
+            <p>
+                市場調査によって、**「このパンは、価格を500円に設定したとき、月に200個売れる」**という基準が分かっているとします。
+                さらに、スライダーで設定した「価格感度」を <span class="formula-inline">b</span> とします。例えば価格感度が <span class="formula-inline">2.0</span> の場合、「価格が10円上がるごとに、需要が2個減る（＝1円上がるごとに0.2個減る）」という意味になります。
+            </p>
+            <p>
+                価格を <span class="formula-inline">P</span> 円、そのときの需要量を <span class="formula-inline">Q</span> 個と置くと、この関係は次の右下がりの**一次関数（直線）**で表されます。
+            </p>
+            
+            <div class="formula-box">
+                <span class="formula-line">Q = 200 - (b / 10) * (P - 500)</span>
+                <span class="formula-line">  = 200 - 0.2 * (P - 500)   (価格感度 b=2.0 の場合)</span>
+                <span class="formula-line">  = 1200 - 0.2P</span>
+            </div>
+            
+            <p>
+                この式は、「もしタダ（価格 <span class="formula-inline">P = 0</span>）で配るなら1200個の需要があるが、価格を1円上げるごとに需要が0.2個ずつ直線的に減っていく」という関係を示しています。
+                これが、シミュレーター右上にある**「需要曲線」**の正体です。
+            </p>
+
+            <h3 class="section-header">ステップ2：利益を「二次関数」へ展開する</h3>
+            <p>
+                次に、最終的に最大化したい目標である**「利益（放物線）」**の関数を組み立てます。
+                パン1個あたりの原価（変動費）を <span class="formula-inline">C</span> 円、店舗の家賃などの固定費を <span class="formula-inline">F</span> 円とします。
+            </p>
+            <p>
+                利益 <span class="formula-inline">y</span> は、**「（販売価格 - 原価）× 販売個数 - 固定費」**という簡単な算数で計算できます。
+                ここに、先ほどの需要関数 <span class="formula-inline">Q = 1200 - 0.2P</span> を代入してみましょう（原価 <span class="formula-inline">C = 300</span> 円、固定費 <span class="formula-inline">F = 50,000</span> 円とします）。
+            </p>
+
+            <div class="formula-box">
+                <span class="formula-line">y = (P - C) * Q - F</span>
+                <span class="formula-line">  = (P - 300) * (1200 - 0.2P) - 50,000</span>
+                <span class="formula-line">  = 1200P - 0.2P² - 360,000 + 60P - 50,000</span>
+                <span class="formula-line">  = -0.2P² + 1260P - 410,000</span>
+            </div>
+
+            <p>
+                価格 <span class="formula-inline">P</span> の2次の項の係数が**マイナス（-0.2）**になっていることに注目してください。
+                これは、グラフを描いたときに**「上に凸（山型）の放物線」**になることを意味しています。
+                価格が安すぎても（原価割れや薄利多売の限界）、高すぎても（誰も買ってくれない）、利益はマイナス（赤字）になり、その中間の「どこか」に、山の一番高い場所（極大値）が存在することが、数理的に証明されたのです。
+            </p>
+
+            <h3 class="section-header">ステップ3：最適価格を求める（2つのアプローチ）</h3>
+            <p>
+                放物線の頂点、すなわち利益が最大となる価格 <span class="formula-inline">P</span> を求めるには、数学的に2つの方法があります。
+            </p>
+
+            <h4>アプローチA：平方完成（高校数学の王道）</h4>
+            <p>
+                二次関数を <span class="formula-inline">y = a(P - p)² + q</span> の形に変形し、頂点 <span class="formula-inline">(p, q)</span> をあぶり出します。
+                先ほどの利益関数を変形してみましょう。
+            </p>
+
+            <div class="formula-box">
+                <span class="formula-line">y = -0.2P² + 1260P - 410,000</span>
+                <span class="formula-line">  = -0.2(P² - 6300P) - 410,000</span>
+                <span class="formula-line">  = -0.2( (P - 3150)² - 3150² ) - 410,000</span>
+                <span class="formula-line">  = -0.2(P - 3150)² + 0.2 * 9,922,500 - 410,000</span>
+                <span class="formula-line">  = -0.2(P - 3150)² + 1,984,500 - 410,000</span>
+                <span class="formula-line">  = -0.2(P - 3150)² + 1,574,500</span>
+            </div>
+
+            <p>
+                この数式は、価格 <span class="formula-inline">P = 3150</span> 円のときに二乗の項がゼロとなり、利益が最大値の**1,574,500円**になることを示しています（これは感度等の初期パラメータに基づいた例です）。
+            </p>
+
+            <h4>アプローチB：微分（実務における最強ツール）</h4>
+            <p>
+                平方完成は確実ですが、数式が複雑になると計算が非常に煩雑になります。そこで威力を発揮するのが**「微分」**です。
+                関数の頂点（極大値）では、**「接線の傾きがゼロ（0）」**になるという性質を利用します。利益関数 <span class="formula-inline">y</span> を価格 <span class="formula-inline">P</span> で微分して導関数を求め、それが 0 になる方程式を解きます。
+            </p>
+
+            <div class="formula-box">
+                <span class="formula-line">y' = d/dP (-0.2P² + 1260P - 410,000)</span>
+                <span class="formula-line">   = -0.4P + 1260</span>
+                <span class="formula-line">接線の傾きが0となる条件は、y' = 0 であるため、</span>
+                <span class="formula-line">   -0.4P + 1260 = 0</span>
+                <span class="formula-line">   0.4P = 1260</span>
+                <span class="formula-line">   P = 3150</span>
+            </div>
+
+            <p>
+                平方完成に比べ、驚くほど簡単な計算で「最適価格は 3150 円である」という同じ答えが導き出せました。
+                実務での複雑な価格決定モデルや、競合の要素を入れた高次の関数を扱う際も、この「微分して0になる点を求める」というアプローチが基盤となっています。
+            </p>
+
+            <h3 class="section-header">まとめ：ビジネスを「どんぶり勘定」から「数理設計」へ</h3>
+            <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 20px; font-size: 15px; line-height: 1.8;">
+                値決めを「勘」や「競合と同じ」に頼るのではなく、「価格変更に対する客足の変化（価格感度）」をテスト等で測定し、簡単な一次関数と二次関数にモデリングするだけで、理論上最も儲かる価格がピンポイントで導き出せます。
+                高校の授業で学んだ抽象的な「二次関数のグラフ」や「平方完成」は、現代の企業のマーケティング部門やデータサイエンティストが利益を設計するための、極めて強力な実践ツールなのです。
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- シミュレーション制御スクリプト -->
+    <script>
+        // DOM要素の取得
+        const paramFixedCost = document.getElementById('param-fixed-cost');
+        const paramUnitCost = document.getElementById('param-unit-cost');
+        const paramSensitivity = document.getElementById('param-sensitivity');
+        const paramPrice = document.getElementById('param-price');
+        
+        const lblFixedCost = document.getElementById('lbl-fixed-cost');
+        const lblUnitCost = document.getElementById('lbl-unit-cost');
+        const lblSensitivity = document.getElementById('lbl-sensitivity');
+        const lblPrice = document.getElementById('lbl-price');
+        
+        const valDemand = document.getElementById('val-demand');
+        const valRevenue = document.getElementById('val-revenue');
+        const valProfit = document.getElementById('val-profit');
+        const valProfitWrapper = document.getElementById('val-profit-wrapper');
+        
+        const valOptPrice = document.getElementById('val-opt-price');
+        const valMaxProfit = document.getElementById('val-max-profit');
+        
+        const valDemandEq = document.getElementById('val-demand-eq');
+        const valProfitEq = document.getElementById('val-profit-eq');
+        
+        const pathDemand = document.getElementById('path-demand');
+        const pathProfit = document.getElementById('path-profit');
+        const dotDemand = document.getElementById('dot-demand');
+        const dotProfit = document.getElementById('dot-profit');
+        const dotOptimum = document.getElementById('dot-optimum');
+        const zeroLine = document.getElementById('zero-line');
+
+        // 定数設定 (パン屋の基準モデル)
+        // 500円のときに200個の需要があるとする。
+        const BASE_PRICE = 500;
+        const BASE_DEMAND = 200;
+
+        function calculateAndDraw() {
+            // パラメータ取得
+            const fixedCost = parseInt(paramFixedCost.value);
+            const unitCost = parseInt(paramUnitCost.value);
+            const sensitivity = parseFloat(paramSensitivity.value); // 10円あたりの減少数
+            const currentPrice = parseInt(paramPrice.value);
+            
+            // 販売価格の最小値を原価（unitCost）に同期させる
+            if (currentPrice < unitCost) {
+                paramPrice.value = unitCost;
+                lblPrice.textContent = unitCost;
+                // 再帰呼び出しを防ぐためここで処理を継続
+            }
+            paramPrice.min = unitCost;
+
+            // ラベルの更新
+            lblFixedCost.textContent = fixedCost.toLocaleString();
+            lblUnitCost.textContent = unitCost.toLocaleString();
+            lblSensitivity.textContent = sensitivity.toFixed(1);
+            lblPrice.textContent = parseInt(paramPrice.value).toLocaleString();
+
+            // 価格に対する需要の傾き (1円上昇あたりの需要減少量)
+            // 10円あたり sensitivity人 減る -> 1円あたり sensitivity/10人 減る
+            const slope = sensitivity / 10.0;
+
+            // 需要関数: Q = BASE_DEMAND - slope * (Price - BASE_PRICE)
+            // Q = (BASE_DEMAND + slope * BASE_PRICE) - slope * Price
+            // 定数項 A を計算
+            const constA = BASE_DEMAND + slope * BASE_PRICE;
+
+            // 式表示の更新 (Q = A - bP)
+            valDemandEq.textContent = `Q = ${constA.toFixed(0)} - ${slope.toFixed(3)}P`;
+
+            // 最終利益関数: Profit = (P - unitCost) * Q - fixedCost
+            // Profit = (P - unitCost) * (constA - slope * P) - fixedCost
+            // Profit = -slope*P^2 + (constA + slope*unitCost)*P - constA*unitCost - fixedCost
+            const coefA = -slope;
+            const coefB = constA + slope * unitCost;
+            const coefC = -constA * unitCost - fixedCost;
+
+            valProfitEq.textContent = `y = ${coefA.toFixed(2)}P² + ${coefB.toFixed(1)}P - ${Math.abs(coefC).toFixed(0)}`;
+
+            // 理論上の最適価格（放物線の頂点のX座標）: P_opt = -b / 2a
+            // P_opt = coefB / (2 * slope)
+            let optPrice = coefB / (2 * slope);
+            optPrice = Math.round(optPrice / 10) * 10; // 実務を考慮して10円単位に四捨五入
+            
+            // 最適価格での需要と最大利益
+            const optDemand = Math.max(0, constA - slope * optPrice);
+            const maxProfit = (optPrice - unitCost) * optDemand - fixedCost;
+
+            valOptPrice.textContent = optPrice.toLocaleString();
+            valMaxProfit.textContent = Math.round(maxProfit).toLocaleString();
+
+            // 現在価格での計算
+            const activePrice = parseInt(paramPrice.value);
+            const currentDemand = Math.max(0, constA - slope * activePrice);
+            const currentRevenue = activePrice * currentDemand;
+            const currentProfit = (activePrice - unitCost) * currentDemand - fixedCost;
+
+            valDemand.textContent = Math.round(currentDemand).toLocaleString();
+            valRevenue.textContent = Math.round(currentRevenue).toLocaleString();
+            valProfit.textContent = Math.round(currentProfit).toLocaleString();
+
+            // 赤字・黒字のスタイル
+            if (currentProfit < 0) {
+                valProfitWrapper.className = 'res-val profit-minus';
+            } else {
+                valProfitWrapper.className = 'res-val profit-plus';
+            }
+
+            // --- SVGグラフ描画処理 ---
+            const svgW = 320; // 内部座標系の仮の幅
+            const svgH = 144; // 内部座標系の仮の高さ
+
+            // X軸：価格（原価〜2000円）のレンジ
+            const priceMin = unitCost;
+            const priceMax = 2000;
+            
+            function getX(price) {
+                // 10%〜90%のエリアに射影
+                const pct = (price - priceMin) / (priceMax - priceMin);
+                return 32 + pct * (svgW - 64);
+            }
+
+            // Y軸（需要量）：0〜A (需要の最大値)
+            const demandMax = constA;
+            function getDemandY(demand) {
+                const pct = demand / demandMax;
+                return 130 - pct * 100; // 軸の底(130px)から上に積み上げ
+            }
+
+            // 需要曲線の描画（直線）
+            const xStart = getX(priceMin);
+            const yStart = getDemandY(constA - slope * priceMin);
+            const xEnd = getX(priceMax);
+            const yEnd = getDemandY(Math.max(0, constA - slope * priceMax));
+            pathDemand.setAttribute('d', `M ${xStart} ${yStart} L ${xEnd} ${yEnd}`);
+
+            // 需要曲線の現在点
+            const curDemandX = getX(activePrice);
+            const curDemandY = getDemandY(currentDemand);
+            dotDemand.setAttribute('cx', curDemandX);
+            dotDemand.setAttribute('cy', curDemandY);
+
+            // Y軸（利益）：放物線の最大値に基づいてスケールを動的に調整
+            // 放物線はマイナス域（大赤字）も描くため、中心またはレンジを調整
+            const maxValForScale = Math.max(10000, maxProfit);
+            const minValForScale = -fixedCost; // 最大赤字は価格＝原価のとき（固定費分）
+            
+            function getProfitY(profit) {
+                // minVal〜maxVal を 15px〜130px の範囲に射影
+                const range = maxValForScale - minValForScale;
+                const pct = (profit - minValForScale) / range;
+                return 130 - pct * 110;
+            }
+
+            // 0基準線のY座標
+            const zeroY = getProfitY(0);
+            zeroLine.setAttribute('y1', zeroY);
+            zeroLine.setAttribute('y2', zeroY);
+
+            // 利益曲線の描画（放物線）
+            let dProfitPath = '';
+            const steps = 40;
+            for (let i = 0; i <= steps; i++) {
+                const priceVal = priceMin + (i / steps) * (priceMax - priceMin);
+                const dem = Math.max(0, constA - slope * priceVal);
+                const prof = (priceVal - unitCost) * dem - fixedCost;
+                
+                const px = getX(priceVal);
+                const py = getProfitY(prof);
+                
+                if (i === 0) {
+                    dProfitPath = `M ${px} ${py}`;
+                } else {
+                    dProfitPath += ` L ${px} ${py}`;
+                }
+            }
+            pathProfit.setAttribute('d', dProfitPath);
+
+            // 利益曲線の最適点（頂点）
+            const optX = getX(optPrice);
+            const optY = getProfitY(maxProfit);
+            dotOptimum.setAttribute('cx', optX);
+            dotOptimum.setAttribute('cy', optY);
+
+            // 利益曲線の現在点
+            const curProfitX = getX(activePrice);
+            const curProfitY = getProfitY(currentProfit);
+            dotProfit.setAttribute('cx', curProfitX);
+            dotProfit.setAttribute('cy', curProfitY);
+        }
+
+        // イベントリスナー設定
+        [paramFixedCost, paramUnitCost, paramSensitivity, paramPrice].forEach(input => {
+            input.addEventListener('input', calculateAndDraw);
+        });
+
+        // 初回計算
+        calculateAndDraw();
+    </script>
+</body>
+</html>

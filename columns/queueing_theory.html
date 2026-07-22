@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>待ち行列理論：行列のイライラを解消するビジネスの数理モデル | Otona Math コラム</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .column-content {
+            background-color: var(--color-surface);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            margin-bottom: 40px;
+        }
+        .column-content p {
+            line-height: 2.1;
+            margin-bottom: 28px;
+        }
+        .section-header {
+            color: var(--color-brass);
+            margin-top: 40px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 10px;
+            font-size: 22px;
+        }
+        
+        /* Interactive Simulator Styles */
+        .interactive-simulator {
+            background-color: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        .simulator-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 15px;
+        }
+        .simulator-header h3 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            color: var(--color-ink);
+        }
+        .simulator-header p {
+            font-size: 14px;
+            color: var(--color-ink-soft);
+        }
+        
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        @media (max-width: 900px) {
+            .sim-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Control Panel */
+        .control-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .sim-state-card {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .sim-control-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--color-ink);
+            margin-bottom: 10px;
+        }
+        
+        /* Slider Group */
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 15px;
+        }
+        .slider-label-container {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--color-ink);
+        }
+        .sim-slider {
+            width: 100%;
+            height: 6px;
+            background: var(--color-paper);
+            border-radius: 3px;
+            outline: none;
+            accent-color: var(--color-brass);
+        }
+
+        /* Preset Buttons */
+        .preset-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .preset-btn {
+            padding: 8px;
+            font-size: 11px;
+            font-weight: bold;
+            border: 1px solid var(--color-paper-line);
+            background: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .preset-btn:hover, .preset-btn.active {
+            background-color: var(--color-ink);
+            color: var(--color-paper);
+            border-color: var(--color-ink);
+        }
+
+        /* SVG Visualization Container */
+        .queue-viz-box {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .queue-viz-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--color-ink-soft);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .queue-svg-container {
+            width: 100%;
+            height: 240px;
+            position: relative;
+        }
+        .queue-svg-container svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        /* Results Board */
+        .results-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            background: var(--color-paper);
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        @media (max-width: 600px) {
+            .results-board {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+        .res-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .res-label {
+            font-size: 13px;
+            color: var(--color-ink-soft);
+            margin-bottom: 4px;
+        }
+        .res-val {
+            font-size: 24px;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            color: var(--color-ink);
+        }
+        .res-val.status-warn { color: var(--color-red); }
+        .res-val.status-ok { color: #10b981; }
+
+        /* Status Board */
+        .status-board {
+            background: rgba(169, 120, 47, 0.05);
+            border: 1px solid rgba(169, 120, 47, 0.2);
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        .status-board.active-warning {
+            background: rgba(180, 67, 47, 0.06);
+            border-color: rgba(180, 67, 47, 0.3);
+        }
+        @media (max-width: 600px) {
+            .status-board {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+        .status-left {
+            display: flex;
+            flex-direction: column;
+        }
+        .status-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .status-board.active-warning .status-title {
+            color: var(--color-red);
+        }
+        .status-desc {
+            font-size: 12px;
+            color: var(--color-ink-soft);
+        }
+        .status-right {
+            display: flex;
+            align-items: center;
+        }
+        .status-stat-value {
+            font-family: var(--font-body);
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .status-board.active-warning .status-stat-value {
+            color: var(--color-red);
+        }
+
+        /* SVG Element Styling */
+        .staff-counter {
+            fill: #fff;
+            stroke: var(--color-ink);
+            stroke-width: 2;
+            transition: fill 0.3s;
+        }
+        .staff-counter.busy {
+            fill: rgba(169, 120, 47, 0.1);
+            stroke: var(--color-brass);
+        }
+        .customer-node {
+            fill: var(--color-brass);
+            stroke: #fff;
+            stroke-width: 1.5;
+            transition: transform 0.5s ease-in-out, opacity 0.5s;
+        }
+        .customer-text {
+            font-family: var(--font-body);
+            font-size: 10px;
+            fill: #fff;
+            text-anchor: middle;
+            font-weight: bold;
+        }
+        .counter-label {
+            font-family: var(--font-body);
+            font-size: 11px;
+            fill: var(--color-ink-soft);
+            text-anchor: middle;
+        }
+
+        /* Common Button Style */
+        .sim-btn {
+            background: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            color: var(--color-ink);
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: var(--radius-btn);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .sim-btn:hover {
+            border-color: var(--color-ink);
+            background-color: #f7f7f7;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="../index.html">数学と統計学</a></li>
+                    <li><a href="index.html">コラム</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">コラム</a> &gt; 待ち行列理論
+        </div>
+
+        <article class="column-content">
+            <h2 style="font-size: 28px; margin-bottom: 30px; line-height: 1.4;">待ち行列理論：<br>行列のイライラを解消するビジネスの数理モデル</h2>
+            
+            <p>
+                混雑したスーパーマーケットのレジ、人気アトラクションの長い列、コールセンターの電話待ちなど、私たちは日常のいたるところで行列に遭遇します。
+                行列でお客様を待たせることは顧客満足度の低下につながり、かといって窓口を増やしすぎると人件費がかさみます。
+            </p>
+            <p>
+                この「顧客の待ち時間」と「サービス提供コスト」という相反する課題を、数学の力で解決するための数理モデルを「待ち行列理論」と呼びます。
+                本コラムでは、中学生でも直感的に理解できる平易な具体例を用いて、行列が発生する仕組みと、人員配置を最適化するビジネスの知恵を解説します。
+            </p>
+
+            <h3 class="section-header">第1章：行列ができる根本的な理由</h3>
+            <p>
+                なぜ、サービスを提供する場所で行列が発生するのでしょうか。
+                行列が発生する要因は、以下の2つの指針のバランスにあります。
+            </p>
+            <ul style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
+                <li><strong>到着率（λ：ラムダ）</strong>：単位時間あたりに新しくやってくる顧客の平均人数（例：2分に1人が来店する状態）。</li>
+                <li><strong>サービス率（μ：ミュー）</strong>：スタッフ1人が1つの窓口で対応できる顧客の平均人数（例：1人の対応に3分かかる状態）。</li>
+            </ul>
+            <p>
+                待ち行列理論の基本的な原則として、顧客の到着ペースがスタッフの処理スピードを上回ったとき、必ず行列が発生し、それは時間経過とともに伸び続けます。
+                それでは、実際にどのように行列が成長するのかをシミュレーターで確認します。
+            </p>
+
+            <h3 class="section-header">【体験】待ち行列シミュレーター</h3>
+            <p>
+                文化祭のクレープ屋台を想定したシミュレーターです。
+                「開店（開始）」ボタンを押すと、お客様が到着して並び、スタッフが対応する様子が1秒＝擬似1分のペースでアニメーション再生されます。
+                プリセットボタンを用いて、スタッフの数やお客様の到着規則を切り替え、行列の長さとスタッフの稼働率の変化を観測してください。
+            </p>
+
+            <!-- シミュレーター容器 -->
+            <div class="interactive-simulator">
+                <div class="simulator-header">
+                    <h3>行列発生とスタッフ稼働シミュレーター</h3>
+                    <p>パラメータを調整し、「シミュレーション開始」を押して、行列の推移とスタッフの空き状況を確認します。</p>
+                </div>
+                
+                <div class="sim-grid">
+                    <!-- 左：設定とコントロール -->
+                    <div class="control-panel">
+                        <div class="sim-state-card">
+                            <div class="sim-control-title">📋 シナリオプリセット</div>
+                            <div class="preset-buttons">
+                                <button id="preset-one" class="preset-btn active" onclick="applyPreset('one')">① ワンマン営業<br>(処理不足)</button>
+                                <button id="preset-two" class="preset-btn" onclick="applyPreset('two')">② 2人体制<br>(行列解消・遊休)</button>
+                                <button id="preset-three" class="preset-btn" onclick="applyPreset('three')">③ ランダム到着<br>(ばらつきの影響)</button>
+                            </div>
+                        </div>
+
+                        <div class="sim-state-card">
+                            <div class="sim-control-title">⚙️ パラメータ手動調整</div>
+                            
+                            <div class="slider-group">
+                                <div class="slider-label-container">
+                                    <span>🚗 お客様の到着頻度（到着率 λ）</span>
+                                    <span><span id="val-lambda">2</span> 分に1人</span>
+                                </div>
+                                <input type="range" id="slide-lambda" class="sim-slider" min="1" max="5" value="2" oninput="onParamChange()">
+                            </div>
+
+                            <div class="slider-group">
+                                <div class="slider-label-container">
+                                    <span>🍳 調理にかかる時間（サービス時間）</span>
+                                    <span><span id="val-mu">3</span> 分</span>
+                                </div>
+                                <input type="range" id="slide-mu" class="sim-slider" min="1" max="5" value="3" oninput="onParamChange()">
+                            </div>
+
+                            <div class="slider-group">
+                                <div class="slider-label-container">
+                                    <span>👥 スタッフの人数（窓口数 c）</span>
+                                    <span><span id="val-servers">1</span> 名</span>
+                                </div>
+                                <input type="range" id="slide-servers" class="sim-slider" min="1" max="3" value="1" oninput="onParamChange()">
+                            </div>
+
+                            <div class="slider-group">
+                                <div class="slider-label-container">
+                                    <span>🎲 到着のランダム性</span>
+                                    <span><span id="val-randomness">規則的</span></span>
+                                </div>
+                                <div style="display:flex; gap:10px; margin-top:4px;">
+                                    <button id="btn-rand-off" class="sim-btn" style="flex:1; font-size:11px; padding:4px;" onclick="setRandomness(false)">規則的（均等）</button>
+                                    <button id="btn-rand-on" class="sim-btn" style="flex:1; font-size:11px; padding:4px;" onclick="setRandomness(true)">不規則（ランダム）</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: center; display: flex; gap: 10px; justify-content: center;">
+                            <button id="btn-sim-toggle" class="sim-btn" style="flex:1; font-weight:bold; border-color:var(--color-brass);" onclick="toggleSim()">▶ シミュレーション開始</button>
+                            <button class="sim-btn" onclick="resetSim()">🔄 リセット</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 右：SVG可視化 -->
+                    <div class="queue-viz-box">
+                        <div class="queue-viz-title">
+                            <span>🗺️ 屋台と行列の稼働図</span>
+                            <span id="lbl-sim-time" style="font-family:var(--font-mono); font-size:11px;">経過時間: 0 分</span>
+                        </div>
+                        <div class="queue-svg-container">
+                            <svg id="svg-queue">
+                                <!-- スタッフカウンターの描画枠（後方） -->
+                                <g id="group-counters"></g>
+                                <!-- 行列エリアのベース線 -->
+                                <line x1="10%" y1="75%" x2="90%" y2="75%" stroke="#eee" stroke-width="2" stroke-dasharray="4,4" />
+                                <text x="10%" y="87%" font-size="10" fill="var(--color-ink-soft)">待機列（行列）</text>
+                                
+                                <!-- 動的要素グループ -->
+                                <g id="group-customers"></g>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 結果ボード -->
+                <div class="results-board">
+                    <div class="res-box">
+                        <div class="res-label">現在の行列の長さ</div>
+                        <div class="res-val"><span id="val-queue-len">0</span> 人</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">スタッフ平均稼働率</div>
+                        <div class="res-val"><span id="val-utilization">0.0</span> %</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">これまでの最大行列</div>
+                        <div class="res-val"><span id="val-max-queue">0</span> 人</div>
+                    </div>
+                </div>
+                
+                <!-- 判定ボード -->
+                <div id="sim-status-board" class="status-board">
+                    <div class="status-left">
+                        <div class="status-title">🚥 営業状況の診断</div>
+                        <div id="sim-status-desc" class="status-desc">シミュレーションを開始してください。</div>
+                    </div>
+                    <div class="status-right">
+                        <div id="sim-status-val" class="status-stat-value">待機中</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-header">第2.3章：シミュレーションから見る対照的な状況</h3>
+            <p>
+                上のシミュレーターで「①ワンマン営業」と「②2人体制」を実行すると、以下のように対照的な結果が現れます。
+            </p>
+            <p>
+                <strong>ワンマン営業（スタッフ1名、2分に1人来店、調理3分）の場合</strong>：<br>
+                1人がクレープを焼くスピード（3分）が、顧客がやってくるペース（2分）に追いつきません。
+                時間が経過するにつれて、行列は確実に長くなり、終わりなく伸び続けます。
+                これは、ビジネスにおいては顧客に長い待ち時間を強いるため、クレームにつながる恐れがあります。
+            </p>
+            <p>
+                <strong>2人体制（スタッフ2名、2分に1人来店、調理3分）の場合</strong>：<br>
+                スタッフを増やしたことで、行列は完全に解消されてゼロになります。
+                顧客は来店した瞬間にクレープを焼いてもらえるため、顧客満足度は非常に高くなります。
+            </p>
+
+            <h3 class="section-header">第4章：ビジネスにおける究極のジレンマ</h3>
+            <p>
+                2人体制にすれば行列がなくなりますが、これで問題がすべて解決したわけではありません。
+                ビジネスの運営には「人件費（コスト）」という重要な問題が存在します。
+            </p>
+            <p>
+                2人体制のシミュレーションを細かく観察すると、スタッフが何もせずに待機している時間（遊休時間）が随所で発生していることが分かります。
+                スタッフが遊んでいる時間に対しても人件費を支払う必要があるため、経営者の立場からは「無駄なコストを支払っている」状態となります。
+            </p>
+            <p>
+                顧客の要望と経営者の要望は、以下のように完全に対立します。
+            </p>
+            <ul style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
+                <li><strong>顧客の要望</strong>：待ち時間をゼロにしたい。スタッフを多く配置してほしい。</li>
+                <li><strong>経営者の要望</strong>：人件費を最小限にしたい。スタッフが常に休まず働いている状態を維持したい。</li>
+            </ul>
+            <p>
+                この相反する要求を同時に満たすことは不可能です。
+                「顧客を極端に待たせない範囲で、人件費も限界まで抑えられる、最適なスタッフの人数」という妥協点を見つけ出す必要があります。
+            </p>
+
+            <h3 class="section-header">第5章：実社会における待ち行列理論の応用例</h3>
+            <p>
+                待ち行列理論は、小規模な店舗だけでなく、社会の様々な重要インフラの設計に活用されています。
+            </p>
+            <ul style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
+                <li><strong>スーパーのレジの稼働数</strong>：時間帯ごとのレジ開放数を計算し、レジ待ち時間を一定時間内に抑えつつ、過剰な人員配置を防ぎます。</li>
+                <li><strong>テーマパークの優先搭乗設計</strong>：一般の列と優先の列のバランスを調整し、アトラクションの稼働率を最大化しながら顧客のストレスを軽減します。</li>
+                <li><strong>コールセンターのスタッフ配置</strong>：特定の時間内に電話がつながる確率を維持するために必要なオペレーターの人数を算出し、シフト表を最適化します。</li>
+            </ul>
+
+            <h3 class="section-header">第6.7章：見えない行列と「ランダム性」の制御</h3>
+            <p>
+                行列は、現実の店舗だけでなくインターネットのデータ通信でも発生しています。
+                Webサイトへのアクセス集中時に表示が遅くなる現象は、サーバーの手前でデータが行列を作って待たされている状態です。
+                ITエンジニアは、アクセス集中時でもシステムが停止しないように、本理論を用いてサーバーの処理性能を計算しています。
+            </p>
+            <p>
+                さらに現実の社会では、顧客は規則正しく来店しません。
+                一時的に数人が同時に現れ、その後はしばらく誰も来ないといった「ランダムなばらつき」が必ず発生します。
+            </p>
+            <p>
+                待ち行列理論の最大の強みは、確率や統計の手法を用いることで、この不確実な「ランダム性」を考慮した平均待ち時間を計算できる点にあります。
+                不規則な要素が絡み合う複雑な状況であっても、数学的なアプローチによって法則性を導き出し、合理的な経営判断を下すことが可能になります。
+            </p>
+
+            <h3 class="section-header">まとめ</h3>
+            <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 20px; font-size: 15px; line-height: 1.8;">
+                数学は机上の計算にとどまらず、ビジネスや社会の現場における現実的な課題を解決するための強力なツールです。
+                直感的な経験則に頼るだけでなく、数理モデルを用いることで、無駄のない最適なシステムを設計できるようになります。
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- シミュレーター制御スクリプト -->
+    <script>
+        // 状態変数
+        let simTime = 0;
+        let isRunning = false;
+        let simInterval = null;
+        let maxQueueLength = 0;
+        
+        let lambda = 2; // 到着間隔 (分に1人)
+        let mu = 3;     // 調理時間 (分)
+        let cServers = 1; // スタッフ数
+        let isRandom = false; // ランダム到着フラグ
+
+        let queue = []; // 待機顧客 [{id, arrivedTime}]
+        let servers = []; // スタッフ状態 [{id, busyUntil, busySeconds, totalTime}]
+        let customerIdCounter = 1;
+        
+        // 統計蓄積
+        let totalBusySeconds = 0;
+        let timeSteps = 0;
+
+        // UI要素
+        const slideLambda = document.getElementById('slide-lambda');
+        const slideMu = document.getElementById('slide-mu');
+        const slideServers = document.getElementById('slide-servers');
+        
+        const lblLambda = document.getElementById('val-lambda');
+        const lblMu = document.getElementById('val-mu');
+        const lblServers = document.getElementById('val-servers');
+        const lblRandomness = document.getElementById('val-randomness');
+        
+        const lblSimTime = document.getElementById('lbl-sim-time');
+        const lblQueueLen = document.getElementById('val-queue-len');
+        const lblUtilization = document.getElementById('val-utilization');
+        const lblMaxQueue = document.getElementById('val-max-queue');
+        
+        const statusBoard = document.getElementById('sim-status-board');
+        const statusDesc = document.getElementById('sim-status-desc');
+        const statusVal = document.getElementById('sim-status-val');
+        
+        const btnToggle = document.getElementById('btn-sim-toggle');
+        const btnRandOff = document.getElementById('btn-rand-off');
+        const btnRandOn = document.getElementById('btn-rand-on');
+        
+        const svgContainer = document.getElementById('svg-queue');
+        const gCounters = document.getElementById('group-counters');
+        const gCustomers = document.getElementById('group-customers');
+
+        // プリセット適用
+        function applyPreset(presetType) {
+            stopSim();
+            document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`preset-${presetType}`).classList.add('active');
+
+            if (presetType === 'one') {
+                lambda = 2;
+                mu = 3;
+                cServers = 1;
+                isRandom = false;
+            } else if (presetType === 'two') {
+                lambda = 2;
+                mu = 3;
+                cServers = 2;
+                isRandom = false;
+            } else if (presetType === 'three') {
+                lambda = 2;
+                mu = 3;
+                cServers = 2;
+                isRandom = true;
+            }
+            
+            updateSlidersFromParams();
+            resetSim();
+        }
+
+        function updateSlidersFromParams() {
+            slideLambda.value = lambda;
+            slideMu.value = mu;
+            slideServers.value = cServers;
+            
+            lblLambda.textContent = lambda;
+            lblMu.textContent = mu;
+            lblServers.textContent = cServers;
+            
+            updateRandomButtonState();
+        }
+
+        function updateRandomButtonState() {
+            if (isRandom) {
+                btnRandOn.classList.add('active');
+                btnRandOff.classList.remove('active');
+                btnRandOn.style.borderColor = 'var(--color-brass)';
+                btnRandOff.style.borderColor = 'var(--color-paper-line)';
+                lblRandomness.textContent = '不規則（ランダム）';
+            } else {
+                btnRandOff.classList.add('active');
+                btnRandOn.classList.remove('active');
+                btnRandOff.style.borderColor = 'var(--color-brass)';
+                btnRandOn.style.borderColor = 'var(--color-paper-line)';
+                lblRandomness.textContent = '規則的';
+            }
+        }
+
+        function setRandomness(val) {
+            isRandom = val;
+            updateRandomButtonState();
+            resetSim();
+        }
+
+        // スライダー値変更時
+        function onParamChange() {
+            document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+            lambda = parseInt(slideLambda.value);
+            mu = parseInt(slideMu.value);
+            cServers = parseInt(slideServers.value);
+            
+            lblLambda.textContent = lambda;
+            lblMu.textContent = mu;
+            lblServers.textContent = cServers;
+            
+            resetSim();
+        }
+
+        // リセット
+        function resetSim() {
+            stopSim();
+            simTime = 0;
+            maxQueueLength = 0;
+            queue = [];
+            customerIdCounter = 1;
+            totalBusySeconds = 0;
+            timeSteps = 0;
+            
+            // サーバーの初期化
+            servers = [];
+            for (let i = 0; i < cServers; i++) {
+                servers.push({
+                    id: i + 1,
+                    customer: null, // 現在対応中の顧客
+                    busyUntil: 0
+                });
+            }
+
+            lblSimTime.textContent = '経過時間: 0 分';
+            lblQueueLen.textContent = '0';
+            lblUtilization.textContent = '0.0';
+            lblMaxQueue.textContent = '0';
+            
+            statusBoard.className = 'status-board';
+            statusVal.textContent = '待機中';
+            statusDesc.textContent = 'パラメータを選択し、「シミュレーション開始」を押してください。';
+
+            drawBaseCounters();
+            drawElements();
+        }
+
+        // 開始・一時停止切り替え
+        function toggleSim() {
+            if (isRunning) {
+                stopSim();
+            } else {
+                isRunning = true;
+                btnToggle.textContent = '⏸ 一時停止';
+                simInterval = setInterval(simulationStep, 1000); // 1秒ごとに1ステップ(1分)
+            }
+        }
+
+        function stopSim() {
+            isRunning = false;
+            btnToggle.textContent = '▶ シミュレーション開始';
+            if (simInterval) {
+                clearInterval(simInterval);
+                simInterval = null;
+            }
+        }
+
+        // ベースカウンター(スタッフ席)の描画
+        function drawBaseCounters() {
+            gCounters.innerHTML = '';
+            
+            // サーバーの数に応じて等間隔に配置
+            for (let i = 0; i < cServers; i++) {
+                const x = 50 + (i * 70); // カウンターのX座標
+                const y = 80;            // カウンターのY座標
+                
+                // カウンターボックスの描画
+                const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                rect.setAttribute('x', x - 25);
+                rect.setAttribute('y', y - 25);
+                rect.setAttribute('width', 50);
+                rect.setAttribute('height', 50);
+                rect.setAttribute('rx', 6);
+                rect.setAttribute('class', 'staff-counter');
+                rect.setAttribute('id', `counter-rect-${i}`);
+                gCounters.appendChild(rect);
+
+                // スタッフ番号テキスト
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', x);
+                text.setAttribute('y', y - 35);
+                text.setAttribute('class', 'counter-label');
+                text.textContent = `スタッフ ${i + 1}`;
+                gCounters.appendChild(text);
+            }
+        }
+
+        // ステップ実行 (1秒＝擬似1分)
+        function simulationStep() {
+            simTime++;
+            timeSteps++;
+            lblSimTime.textContent = `経過時間: ${simTime} 分`;
+
+            // 1. サーバーの対応が完了した顧客の退店チェック
+            servers.forEach(srv => {
+                if (srv.customer && simTime >= srv.busyUntil) {
+                    srv.customer = null; // 退店
+                }
+            });
+
+            // 2. 顧客の新規到着判定
+            let shouldArrive = false;
+            if (isRandom) {
+                // ランダム到着 (ポアソンプロセス近似：平均間隔 lambda 分)
+                // 1分ごとに到着する確率は 1 / lambda
+                shouldArrive = Math.random() < (1 / lambda);
+            } else {
+                // 規則的到着：lambda の倍数のタイミングで到着
+                shouldArrive = (simTime % lambda === 0);
+            }
+
+            if (shouldArrive) {
+                queue.push({
+                    id: customerIdCounter++,
+                    arrivedTime: simTime
+                });
+            }
+
+            // 3. 空いているサーバーに行列から顧客を案内する
+            servers.forEach(srv => {
+                if (!srv.customer && queue.length > 0) {
+                    const cust = queue.shift(); // 先頭の顧客を取り出す
+                    srv.customer = cust;
+                    srv.busyUntil = simTime + mu; // 調理完了時刻
+                }
+            });
+
+            // 4. 最大行列の更新
+            if (queue.length > maxQueueLength) {
+                maxQueueLength = queue.length;
+                lblMaxQueue.textContent = maxQueueLength;
+            }
+
+            // 5. 統計の計算 (サーバーの平均稼働率)
+            let busyCount = 0;
+            servers.forEach(srv => {
+                if (srv.customer) {
+                    busyCount++;
+                }
+            });
+            totalBusySeconds += (busyCount / cServers);
+            const utilization = (totalBusySeconds / timeSteps) * 100;
+            
+            lblQueueLen.textContent = queue.length;
+            lblUtilization.textContent = utilization.toFixed(1);
+
+            // 6. UI状態と診断表示の更新
+            updateDiagnostic(utilization);
+
+            // 7. ビジュアル描画の更新
+            drawElements();
+        }
+
+        // 営業状態の診断
+        function updateDiagnostic(utilization) {
+            // 到着ペース lambda 分に1人 = 60 / lambda 人/時間
+            // 処理ペース 1サーバーあたり 60 / mu 人/時間
+            // 総処理能力 cServers * 60 / mu 人/時間
+            // λ > cμ の場合、理論上行列は無限に伸びる
+            const arrivalRate = 1 / lambda;
+            const serviceCapacity = cServers / mu;
+
+            if (arrivalRate > serviceCapacity) {
+                statusBoard.className = 'status-board active-warning';
+                statusVal.textContent = 'パンク状態';
+                statusDesc.textContent = 'お客様が来るペースが調理スピードを上回っており、行列が無限に成長する危険な状態です。';
+            } else if (utilization < 45.0 && queue.length === 0) {
+                statusBoard.className = 'status-board';
+                statusVal.textContent = '人員過剰';
+                statusDesc.textContent = '行列はゼロですが、スタッフが余っており、人件費コストが過剰にかかっています。';
+            } else {
+                statusBoard.className = 'status-board';
+                statusVal.textContent = '適正運用';
+                statusDesc.textContent = '待ち時間を許容範囲に抑えつつ、スタッフの稼働率も高水準に保つ、効率の良い状態です。';
+            }
+        }
+
+        // SVG内の動的要素の描画
+        function drawElements() {
+            gCustomers.innerHTML = '';
+
+            // カウンター rect のクラス更新 (調理中なら active ハイライト)
+            servers.forEach((srv, idx) => {
+                const rect = document.getElementById(`counter-rect-${idx}`);
+                if (rect) {
+                    if (srv.customer) {
+                        rect.setAttribute('class', 'staff-counter busy');
+                    } else {
+                        rect.setAttribute('class', 'staff-counter');
+                    }
+                }
+            });
+
+            // 1. カウンターで対応中のお客様の描画
+            servers.forEach((srv, idx) => {
+                if (srv.customer) {
+                    const x = 50 + (idx * 70);
+                    const y = 80;
+                    
+                    // お客様ノードの描画 (スタッフ席のすぐ下)
+                    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                    
+                    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    circle.setAttribute('cx', x);
+                    circle.setAttribute('cy', y);
+                    circle.setAttribute('r', 12);
+                    circle.setAttribute('class', 'customer-node');
+                    g.appendChild(circle);
+
+                    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    text.setAttribute('x', x);
+                    text.setAttribute('y', y + 3);
+                    text.setAttribute('class', 'customer-text');
+                    text.textContent = srv.customer.id;
+                    g.appendChild(text);
+                    
+                    gCustomers.appendChild(g);
+                }
+            });
+
+            // 2. 行列にお待ちのお客様の描画
+            // 右端 (X: 180付近) から左へ向かって並べる
+            const startQueueX = 80 + ((cServers - 1) * 70) + 40;
+            queue.forEach((cust, idx) => {
+                const x = startQueueX + (idx * 30);
+                const y = 175;
+
+                // 表示エリア外に出る場合は描画しない
+                if (x > 360) return;
+
+                const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', x);
+                circle.setAttribute('cy', y);
+                circle.setAttribute('r', 12);
+                circle.setAttribute('class', 'customer-node');
+                g.appendChild(circle);
+
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', x);
+                text.setAttribute('y', y + 3);
+                text.setAttribute('class', 'customer-text');
+                text.textContent = cust.id;
+                g.appendChild(text);
+
+                gCustomers.appendChild(g);
+            });
+        }
+
+        // 初期設定ロード
+        applyPreset('one');
+    </script>
+</body>
+</html>

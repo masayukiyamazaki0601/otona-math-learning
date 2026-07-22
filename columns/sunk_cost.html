@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>サンクコスト効果：過去の投資に引きずられる意思決定の罠 | Otona Math コラム</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .column-content {
+            background-color: var(--color-surface);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            margin-bottom: 40px;
+        }
+        .column-content p {
+            line-height: 2.1;
+            margin-bottom: 28px;
+        }
+        .section-header {
+            color: var(--color-brass);
+            margin-top: 40px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 10px;
+            font-size: 22px;
+        }
+        
+        /* Interactive Simulator Styles */
+        .interactive-simulator {
+            background-color: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        .simulator-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 15px;
+        }
+        .simulator-header h3 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            color: var(--color-ink);
+        }
+        .simulator-header p {
+            font-size: 14px;
+            color: var(--color-ink-soft);
+        }
+        
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 0.95fr 1.05fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        @media (max-width: 900px) {
+            .sim-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Control Panel */
+        .control-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .sim-state-card {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .sim-control-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--color-ink);
+            margin-bottom: 10px;
+        }
+
+        /* SVG Visualization Container */
+        .project-viz-box {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .project-viz-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--color-ink-soft);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .project-svg-container {
+            width: 100%;
+            height: 240px;
+            position: relative;
+        }
+        .project-svg-container svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        /* Results Board */
+        .results-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            background: var(--color-paper);
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        @media (max-width: 600px) {
+            .results-board {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+        .res-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .res-label {
+            font-size: 13px;
+            color: var(--color-ink-soft);
+            margin-bottom: 4px;
+        }
+        .res-val {
+            font-size: 24px;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            color: var(--color-ink);
+        }
+        .res-val.status-warn { color: var(--color-red); }
+        .res-val.status-ok { color: #10b981; }
+
+        /* Status Board */
+        .status-board {
+            background: rgba(169, 120, 47, 0.05);
+            border: 1px solid rgba(169, 120, 47, 0.2);
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        .status-board.active-warning {
+            background: rgba(180, 67, 47, 0.06);
+            border-color: rgba(180, 67, 47, 0.3);
+        }
+        @media (max-width: 600px) {
+            .status-board {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+        .status-left {
+            display: flex;
+            flex-direction: column;
+        }
+        .status-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .status-board.active-warning .status-title {
+            color: var(--color-red);
+        }
+        .status-desc {
+            font-size: 12px;
+            color: var(--color-ink-soft);
+        }
+        .status-right {
+            display: flex;
+            align-items: center;
+        }
+        .status-stat-value {
+            font-family: var(--font-body);
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .status-board.active-warning .status-stat-value {
+            color: var(--color-red);
+        }
+
+        /* SVG Element Styling */
+        .concorde-part {
+            fill: none;
+            stroke: #ddd;
+            stroke-width: 2;
+            transition: fill 0.8s, stroke 0.8s;
+        }
+        .concorde-part.completed {
+            fill: rgba(169, 120, 47, 0.1);
+            stroke: var(--color-brass);
+        }
+        .concorde-part.abandoned {
+            fill: none;
+            stroke: #f3f3f3;
+        }
+        .viz-label {
+            font-family: var(--font-body);
+            font-size: 10px;
+            fill: var(--color-ink-soft);
+            text-anchor: middle;
+        }
+
+        /* Common Button Style */
+        .sim-btn {
+            background: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            color: var(--color-ink);
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: var(--radius-btn);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .sim-btn:hover {
+            border-color: var(--color-ink);
+            background-color: #f7f7f7;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="../index.html">数学と統計学</a></li>
+                    <li><a href="index.html">コラム</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">コラム</a> &gt; サンクコスト効果
+        </div>
+
+        <article class="column-content">
+            <h2 style="font-size: 28px; margin-bottom: 30px; line-height: 1.4;">サンクコスト効果（コンコルド効果）：<br>「取り戻せない過去」が未来の決断を狂わせる行動経済学</h2>
+            
+            <p>
+                ビジネスの意思決定において、経営者から現場の担当者まで、多くの人が陥ってしまう危険な心理的罠の一つが「サンクコスト（埋没費用）効果」です。
+                未来の行動を決定する際、「過去に支払ってしまったコスト」は一切考慮してはならないというのが、数学や経済学における鉄則です。
+            </p>
+            <p>
+                しかし現実の人間は、「もったいない」という感情に支配され、不合理な決断を下しがちです。
+                本コラムでは、この回収不可能な費用がもたらす意思決定の罠について、シミュレーションを交えて解説します。
+            </p>
+
+            <h3 class="section-header">第1章：サンクコスト（埋没費用）の定義</h3>
+            <p>
+                サンクコスト（Sunk Cost）とは、直訳すると「沈んでしまった費用」を意味します。
+                具体的には、「すでにお金や時間を支払ってしまい、これからどのような選択をしたとしても、絶対に手元に戻ってくることのないコスト」のことです。
+            </p>
+            <p>
+                合理的な意思決定を行うための原則は、「これからの未来において、どれだけ利益が出るか（または損を減らせるか）」のみを計算することです。すでに手元を離れ、回収できない過去のコストは、計算から完全に除外しなければなりません。
+            </p>
+            <p>
+                しかし、人間はこの過去のコストを諦めきれず、結果として傷口をさらに広げる選択をしてしまいます。
+            </p>
+
+            <h3 class="section-header">【体験】コンコルド開発投資シミュレーター</h3>
+            <p>
+                プレイヤーは国家プロジェクト（超音速旅客機開発）の責任者となり、各年度ごとに「開発継続」か「開発中止（損切り）」かを決定します。
+                毎年開発費が発生する一方で、世界の市場環境は変化し、完成時の期待利益は年々減少していきます。
+                過去の投資額（サンクコスト）に惑わされず、追加投資の回収可能性のみに基づいて適切な撤退時期を判断してください。
+            </p>
+
+            <!-- シミュレーター容器 -->
+            <div class="interactive-simulator">
+                <div class="simulator-header">
+                    <h3>超音速旅客機開発プロジェクト管理</h3>
+                    <p>年度ごとに情報がもたらされます。開発費を追加投入して「継続」するか、プロジェクトを「中止」するか選択します。</p>
+                </div>
+                
+                <div class="sim-grid">
+                    <!-- 左：設定とコントロール -->
+                    <div class="control-panel">
+                        <div class="sim-state-card">
+                            <div class="sim-control-title">📅 現在のプロジェクト状況</div>
+                            <div style="font-size: 13px; line-height: 1.6; color: var(--color-ink);">
+                                <ul>
+                                    <li>経過年数：<strong><span id="val-year">1</span> 年目</strong> / 5年</li>
+                                    <li>今年度の必要開発費：<strong>1 億円</strong></li>
+                                    <li>将来の期待利益（見込み）：<strong><span id="val-future-profit">4</span> 億円</strong></li>
+                                </ul>
+                            </div>
+                            <div style="margin-top:12px; font-size:11px; color:var(--color-ink-soft); line-height:1.5;" id="lbl-news-flash">
+                                【ニュース】新開発のプロジェクトがスタートしました。世界中から高い期待が集まっています。
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: center; display: flex; gap: 10px; justify-content: center;">
+                            <button id="btn-continue" class="sim-btn" style="flex:1; font-weight:bold; border-color:var(--color-brass);" onclick="stepProject(true)">💰 開発を継続する（＋1億円投資）</button>
+                            <button id="btn-stop" class="sim-btn" style="flex:1; font-weight:bold; border-color:var(--color-red); color:var(--color-red);" onclick="stepProject(false)">🛑 プロジェクトを中止する（撤退）</button>
+                        </div>
+                        
+                        <div style="text-align: center;">
+                            <button class="sim-btn" onclick="resetSim()">🔄 シミュレーションをリセット</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 右：SVG可視化 -->
+                    <div class="project-viz-box">
+                        <div class="project-viz-title">
+                            <span>✈️ 機体の組み立て進捗</span>
+                            <span id="lbl-project-status" style="font-family:var(--font-mono); font-size:11px;">状態: 開発中</span>
+                        </div>
+                        <div class="project-svg-container">
+                            <svg id="svg-project">
+                                <!-- 機体の組み立て線画（後ほどクラス completed でパーツを組み立てていく） -->
+                                <!-- 胴体 -->
+                                <path id="part-body" d="M 40 100 L 170 100 L 190 110 L 170 120 L 40 120 Z" class="concorde-part" />
+                                <!-- 機首 -->
+                                <path id="part-nose" d="M 190 110 L 220 110 L 190 115 Z" class="concorde-part" />
+                                <!-- 左翼 -->
+                                <path id="part-wing-l" d="M 80 100 L 140 100 L 60 50 Z" class="concorde-part" />
+                                <!-- 右翼 -->
+                                <path id="part-wing-r" d="M 80 120 L 140 120 L 60 170 Z" class="concorde-part" />
+                                <!-- 尾翼 -->
+                                <path id="part-tail" d="M 50 100 L 40 70 L 60 100 Z" class="concorde-part" />
+
+                                <text x="50%" y="90%" class="viz-label" id="lbl-svg-progress">進捗: 0%</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 結果ボード -->
+                <div class="results-board">
+                    <div class="res-box">
+                        <div class="res-label">回収不能な埋没費用（サンクコスト）</div>
+                        <div class="res-val"><span id="val-sunk-cost">0</span> 億円</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">無駄な追加投資を防ぎ守った資金</div>
+                        <div class="res-val" style="color:#10b981;"><span id="val-saved-cost">5</span> 億円</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">最終的なプロジェクト損益</div>
+                        <div class="res-val" id="val-net-profit-wrapper"><span id="val-net-profit">0</span> 億円</div>
+                    </div>
+                </div>
+                
+                <!-- 判定ボード -->
+                <div id="sim-status-board" class="status-board">
+                    <div class="status-left">
+                        <div class="status-title">🚥 意思決定の診断</div>
+                        <div id="sim-status-desc" class="status-desc">「開発を継続する」を押してプロジェクトを進めてください。</div>
+                    </div>
+                    <div class="status-right">
+                        <div id="sim-status-val" class="target-stat-value">分析中</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-header">第2章：日常に潜むサンクコストの罠</h3>
+            <p>
+                シミュレーターの意思決定が示すように、私たちは日常生活でもサンクコストに捉われた行動を選択しています。
+                例えば、2,000円のチケットを購入して入った映画館において、開始15分でその映画がつまらない駄作であると判明した場合を想定します。
+            </p>
+            <p>
+                このとき、選択肢は以下の2つとなります。
+            </p>
+            <ul style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
+                <li><strong>選択肢A</strong>：チケット代がもったいないという理由で、我慢して残りの1時間45分つまらない映画を見続ける。</li>
+                <li><strong>選択肢B</strong>：映画館を出て、残りの1時間45分をカフェなどで有意義に過ごす。</li>
+            </ul>
+            <p>
+                すでに支払ったチケット代の2,000円は、見続けても帰っても絶対に手元に戻りません。これがサンクコストです。
+                したがって、2,000円のことは計算から除外し、「これから先の時間をどう使うか」のみを計算する必要があります。
+            </p>
+            <p>
+                論理的に考えれば、時間を有効に活用できる「選択肢B」が正しい選択肢です。
+                しかし多くの人は、2,000円が無駄になることを惜しんで選択肢Aを選んでしまいます。
+                結果として、お金だけでなく「貴重な2時間」まで追加で失っていることになります。
+            </p>
+
+            <h3 class="section-header">第3.4章：ビジネスにおける巨大な罠と「コンコルドの悲劇」</h3>
+            <p>
+                この心理的傾向は、ビジネスの現場において企業の経営を揺るがす致命的な問題を引き起こします。
+                開発に5億円を投じた新規システムにおいて、競合他社がより優れたシステムを無料で公開し、開発を続けても利益が上がらない状況が確定したと仮定します。
+                完成までにはさらに1億円の追加費用が必要になります。
+            </p>
+            <p>
+                合理的な判断は、過去の5億円をサンクコストとして無視し、「これから1億円を投資して、回収できる見込みがあるか」のみを評価することです。
+                当然、追加の投資は中止すべきですが、多くの経営者は「これまでの投資が無駄になる」ことを恐れて開発を強行し、結果として損失を6億円へ拡大させます。
+            </p>
+            <p>
+                このサンクコスト効果は、歴史的に「コンコルド効果」とも呼ばれます。
+                1960年代、イギリスとフランスが共同開発した超音速旅客機コンコルドは、開発の途中で採算が取れない（赤字になる）ことが確実視されていました。
+                しかし、両国はこれまでに投資した巨額の開発費や国家の威信を理由に製造を強行し、最終的に天文学的な赤字を垂れ流して破綻に追い込まれました。
+                これがビジネスの歴史に残る「コンコルドの悲劇」の真実です。
+            </p>
+
+            <h3 class="section-header">第5.6章：意思決定を正常化する「ゼロベース思考」</h3>
+            <p>
+                人間が損切りを嫌うのは、プロジェクトの中止によって自らの投資失敗が確定し、損失という現実を直視しなければならない精神的苦痛が伴うためです。
+                この罠を排除するために必要な思考法が**「ゼロベース思考」**です。
+            </p>
+            <p>
+                意思決定に迷いが生じた場合、過去のしがらみや投資額を頭の中から一旦消去し、自分自身に次の問いを投げかけます。
+            </p>
+            <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 20px; font-style: italic; font-size: 14px; line-height: 1.8; margin-bottom: 25px;">
+                「もし今日、自分が何の引き継ぎもなく新規の担当者としてこのプロジェクトを任されたとしたら、現在の状況を見て、これから追加で費用や時間を投資するだろうか？」
+            </div>
+            <p>
+                この問いへの答えが「投資しない（NO）」であるならば、過去にどれだけの費用と苦労を積み上げていようとも、即座にプロジェクトから撤退することが唯一の正しい経営判断となります。
+            </p>
+
+            <h3 class="section-header">まとめ</h3>
+            <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 20px; font-size: 15px; line-height: 1.8;">
+                ビジネスにおける「諦めない姿勢」は、将来の利益回収が見込める場合にのみ美徳となります。
+                すでに失われた過去のコストに執着し、感情的な理由から投資を継続することは、損失を広げる原因となります。
+                過去の損失を冷静に受け入れ、未来の損得計算のみに基づいて撤退（損切り）を決断できる組織こそが、激しい競争環境を生き残ることができます。
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- シミュレーター制御スクリプト -->
+    <script>
+        // プロジェクト年ごとの設定
+        // 開発費は毎年1億円
+        // 期待売上は年々低下していく
+        const scenario = {
+            1: { profit: 4, news: '【ニュース】新開発のプロジェクトがスタートしました。世界中から高い期待が集まっています。' },
+            2: { profit: 2, news: '【ニュース】騒音規制の問題が浮上しました。追加の防音設計が必要になり、市場価値の見込みが低下しています。' },
+            3: { profit: 0.5, news: '【ニュース】燃料費の高騰と燃費の悪さが露呈しました。想定運行コストが跳ね上がり、期待売上が激減しています。' },
+            4: { profit: 0, news: '【ニュース】競合他社が安価で静かな次世代機を開発しました。自社機の売上見込みはゼロ（価値なし）になりました。' },
+            5: { profit: 0, news: '【ニュース】最終年です。今から追加投資を行って機体を完成させても利益は生まれません。' }
+        };
+
+        // 状態変数
+        let currentYear = 1;
+        let sunkCost = 0; // 埋没費用
+        let totalInvested = 0; // 累計投資額
+        let isStopped = false; // 中止フラグ
+
+        const lblYear = document.getElementById('val-year');
+        const lblFutureProfit = document.getElementById('val-future-profit');
+        const lblNewsFlash = document.getElementById('lbl-news-flash');
+
+        const btnContinue = document.getElementById('btn-continue');
+        const btnStop = document.getElementById('btn-stop');
+
+        const lblSunkCost = document.getElementById('val-sunk-cost');
+        const lblSavedCost = document.getElementById('val-saved-cost');
+        const lblNetProfit = document.getElementById('val-net-profit');
+        const valNetProfitWrapper = document.getElementById('val-net-profit-wrapper');
+
+        const statusBoard = document.getElementById('sim-status-board');
+        const statusDesc = document.getElementById('sim-status-desc');
+        const statusVal = document.getElementById('sim-status-val');
+        const lblProjectStatus = document.getElementById('lbl-project-status');
+
+        const lblSvgProgress = document.getElementById('lbl-svg-progress');
+
+        // 各パーツのSVG IDリスト
+        const partsOrder = ['part-body', 'part-nose', 'part-wing-l', 'part-wing-r', 'part-tail'];
+
+        function resetSim() {
+            currentYear = 1;
+            sunkCost = 0;
+            totalInvested = 0;
+            isStopped = false;
+
+            btnContinue.disabled = false;
+            btnStop.disabled = false;
+            btnContinue.style.opacity = 1;
+            btnStop.style.opacity = 1;
+
+            lblYear.textContent = currentYear;
+            lblFutureProfit.textContent = scenario[currentYear].profit;
+            lblNewsFlash.textContent = scenario[currentYear].news;
+
+            lblSunkCost.textContent = '0';
+            lblSavedCost.textContent = '5';
+            lblNetProfit.textContent = '0';
+            valNetProfitWrapper.className = 'res-val';
+
+            lblProjectStatus.textContent = '状態: 開発中';
+            statusBoard.className = 'status-board';
+            statusVal.textContent = '分析中';
+            statusDesc.textContent = '「開発を継続する」を押してプロジェクトを進めてください。';
+
+            lblSvgProgress.textContent = '進捗: 0%';
+
+            // SVGパーツ状態リセット
+            partsOrder.forEach(id => {
+                const part = document.getElementById(id);
+                part.setAttribute('class', 'concorde-part');
+            });
+        }
+
+        // プロジェクト進行処理
+        function stepProject(isContinue) {
+            if (isStopped || currentYear > 5) return;
+
+            if (isContinue) {
+                // 開発継続：1億円投資
+                totalInvested += 1;
+                sunkCost = totalInvested;
+
+                // SVGパーツの組み立て進行
+                const currentPartId = partsOrder[currentYear - 1];
+                const part = document.getElementById(currentPartId);
+                if (part) {
+                    part.setAttribute('class', 'concorde-part completed');
+                }
+                lblSvgProgress.textContent = `進捗: ${currentYear * 20}%`;
+
+                // 状態更新
+                lblSunkCost.textContent = sunkCost;
+                lblSavedCost.textContent = 5 - totalInvested;
+
+                // 次年度へ
+                if (currentYear < 5) {
+                    currentYear++;
+                    lblYear.textContent = currentYear;
+                    lblFutureProfit.textContent = scenario[currentYear].profit;
+                    lblNewsFlash.textContent = scenario[currentYear].news;
+                    
+                    statusDesc.textContent = `過去に【${sunkCost}億円】投資しています。今年度の開発を続けますか？`;
+                } else {
+                    // 5年完遂
+                    finishProject(true);
+                }
+            } else {
+                // 開発中止（損切り）
+                isStopped = true;
+                finishProject(false);
+            }
+        }
+
+        // 終了処理
+        function finishProject(completedAll) {
+            btnContinue.disabled = true;
+            btnStop.disabled = true;
+            btnContinue.style.opacity = 0.5;
+            btnStop.style.opacity = 0.5;
+
+            // 最終損益の計算
+            // 損益 ＝ 期待売上（中止時の年度の期待売上、ただし中止した場合は成果物がないため0） - 累計支出
+            // 途中で中止した場合は、期待売上は0。
+            // 5年完遂して完成させた場合は、5年目（0.5億円または0億円）の売上が入る。
+            const finalProfit = completedAll ? scenario[5].profit : 0;
+            const netProfit = finalProfit - totalInvested;
+
+            lblNetProfit.textContent = `${netProfit} 億円`;
+            if (netProfit >= 0) {
+                valNetProfitWrapper.className = 'res-val score-up';
+            } else {
+                valNetProfitWrapper.className = 'res-val status-warn';
+            }
+
+            lblProjectStatus.textContent = completedAll ? '状態: 開発完了' : '状態: 開発中止';
+
+            // 未完成のパーツを処理
+            if (!completedAll) {
+                for (let i = currentYear - 1; i < 5; i++) {
+                    const part = document.getElementById(partsOrder[i]);
+                    if (part) {
+                        part.setAttribute('class', 'concorde-part abandoned');
+                    }
+                }
+            }
+
+            // 最終診断
+            const savedAmount = 5 - totalInvested;
+
+            if (completedAll) {
+                statusBoard.className = 'status-board active-warning';
+                statusVal.textContent = 'コンコルドの罠（大損失）';
+                statusDesc.textContent = `赤字が確定しているにもかかわらず開発を強行した結果、5億円の予算を全て失い、損益は【${netProfit}億円】となりました。`;
+            } else {
+                // 中止したタイミングに応じた診断
+                if (totalInvested === 1) {
+                    statusBoard.className = 'status-board';
+                    statusVal.textContent = '最速の撤退判断（最良）';
+                    statusDesc.textContent = `2年目に即座に撤退を決断したことで、サンクコストを1億円に抑え、残り【4億円】の追加損失を防ぎました。極めて合理的な決断です。`;
+                } else if (totalInvested === 2) {
+                    statusBoard.className = 'status-board';
+                    statusVal.textContent = '合理的な損切り';
+                    statusDesc.textContent = `3年目で中止し、残り【3億円】の追加損失を防ぎました。傷口を広げる前に踏みとどまりました。`;
+                } else if (totalInvested === 3) {
+                    statusBoard.className = 'status-board';
+                    statusVal.textContent = '遅れた決断';
+                    statusDesc.textContent = `4年目で中止し、最後の2億円を死守しました。決断がやや遅れたものの、最後まで継続するよりは被害を抑えられました。`;
+                } else {
+                    statusBoard.className = 'status-board active-warning';
+                    statusVal.textContent = 'ほぼ埋没（失敗）';
+                    statusDesc.textContent = `5年目の直前で中止したため、大半の予算である4億円を失いました。ここまで来たら損切りとしてのメリットはほとんどありません。`;
+                }
+            }
+        }
+
+        // 初期ロード
+        resetSim();
+    </script>
+</body>
+</html>

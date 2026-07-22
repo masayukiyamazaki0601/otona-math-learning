@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>オウムガイと対数螺旋 | Otona Math コラム</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .column-content {
+            background-color: var(--color-surface);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            margin-bottom: 40px;
+        }
+        .column-content p {
+            line-height: 2.1;
+            margin-bottom: 28px;
+        }
+        .section-header {
+            color: var(--color-brass);
+            margin-top: 40px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 10px;
+            font-size: 22px;
+        }
+        
+        /* Interactive Simulator Styles */
+        .interactive-simulator {
+            background-color: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        .simulator-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 15px;
+        }
+        .simulator-header h3 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            color: var(--color-ink);
+        }
+        .simulator-header p {
+            font-size: 14px;
+            color: var(--color-ink-soft);
+        }
+        
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        @media (max-width: 900px) {
+            .sim-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Sliders Panel */
+        .sliders-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .slider-group {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .slider-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--color-ink);
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .slider-label span.value-disp {
+            font-family: var(--font-mono);
+            color: var(--color-brass);
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .slider-group input[type="range"] {
+            width: 100%;
+            accent-color: var(--color-brass);
+            cursor: pointer;
+        }
+        .slider-desc {
+            font-size: 11px;
+            color: var(--color-ink-soft);
+            margin-top: 5px;
+            line-height: 1.4;
+        }
+
+        /* Toggle Button Group */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .toggle-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--color-ink);
+        }
+        .toggle-switch {
+            display: flex;
+            background: var(--color-paper);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 4px;
+            padding: 2px;
+        }
+        .toggle-btn {
+            background: transparent;
+            border: none;
+            padding: 6px 16px;
+            font-size: 13px;
+            cursor: pointer;
+            border-radius: 2px;
+            color: var(--color-ink-soft);
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .toggle-btn.active {
+            background-color: var(--color-ink);
+            color: var(--color-paper);
+        }
+        
+        /* Graphs Panel */
+        .graphs-panel {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .graph-box {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .graph-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--color-ink-soft);
+            display: flex;
+            justify-content: space-between;
+        }
+        .graph-svg-container {
+            width: 100%;
+            height: 240px;
+            position: relative;
+        }
+        .graph-svg-container svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+        
+        /* Results Board */
+        .results-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            background: var(--color-paper);
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        @media (max-width: 600px) {
+            .results-board {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+        .res-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .res-label {
+            font-size: 13px;
+            color: var(--color-ink-soft);
+            margin-bottom: 4px;
+        }
+        .res-val {
+            font-size: 20px;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            color: var(--color-ink);
+        }
+        
+        /* Target Board */
+        .target-board {
+            background: rgba(169, 120, 47, 0.05);
+            border: 1px solid rgba(169, 120, 47, 0.2);
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        @media (max-width: 600px) {
+            .target-board {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+        .target-left {
+            display: flex;
+            flex-direction: column;
+        }
+        .target-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .target-desc {
+            font-size: 12px;
+            color: var(--color-ink-soft);
+        }
+        .target-right {
+            display: flex;
+            align-items: center;
+        }
+        .target-stat-value {
+            font-family: var(--font-body);
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .target-stat-value.status-good { color: #10b981; }
+        .target-stat-value.status-warn { color: var(--color-red); }
+
+        /* Formulas & Explanations */
+        .formula-box {
+            font-family: var(--font-mono);
+            background-color: var(--color-paper);
+            border: 1px solid var(--color-paper-line);
+            padding: 20px;
+            border-radius: 6px;
+            margin: 25px 0;
+            overflow-x: auto;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        .formula-line {
+            display: block;
+            margin-bottom: 8px;
+        }
+        .formula-line:last-child {
+            margin-bottom: 0;
+        }
+        .formula-inline {
+            font-family: var(--font-mono);
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 15px;
+        }
+        
+        /* Quote Box */
+        .quote-box {
+            background-color: var(--color-paper);
+            border-left: 4px solid var(--color-brass);
+            padding: 15px 20px;
+            margin: 25px 0;
+            font-size: 16px;
+            line-height: 1.8;
+            color: var(--color-ink-soft);
+        }
+        
+        .sim-btn {
+            background: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            color: var(--color-ink);
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: var(--radius-btn);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .sim-btn:hover {
+            border-color: var(--color-ink);
+            background-color: #f7f7f7;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="../index.html">数学と統計学</a></li>
+                    <li><a href="index.html">コラム</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">コラム</a> &gt; オウムガイと対数螺旋
+        </div>
+
+        <article class="column-content">
+            <h2 style="font-size: 28px; margin-bottom: 30px; line-height: 1.4;">自然界の美しさを解き明かす：<br>オウムガイと数学の深遠なる関係</h2>
+            
+            <p>
+                海辺で見つかる巻き貝の美しいフォルム。
+                実はあの形には、ただ美しいだけではない**数学 of 神秘**が隠されていることをご存じでしょうか。
+            </p>
+            <p>
+                オウムガイの殻が描く螺旋は、驚くほどきれいに整っていますよね。
+                この幾何学的な造形は、偶然できたものではありません。
+                生物が**生き残り、成長するためにたどり着いた必然の形**なのです。
+            </p>
+
+            <h3 class="section-header">等比数列的に広がる「対数螺旋」の不思議</h3>
+            <p>
+                オウムガイの殻を数学的に分析すると、**「対数螺旋（たいすうらせん）」**という美しい曲線が現れます。別名「等角螺旋」とも呼ばれます。
+            </p>
+            <p>
+                この螺旋の最大の特徴は、**「中心から離れるほど、広がるスピードが急激にアップする」**という点です。
+                蚊取り線香のような一定幅で広がる螺旋とは異なり、半径が等比数列的に大きくなっていきます。
+            </p>
+            
+            <div class="quote-box">
+                <strong>💡 なぜ生物はこの螺旋を選ぶのか？</strong><br>
+                貝類が大きくなるとき、**「自分の体の形や比率を変えずに成長する（相似形を保つ）」**必要があります。
+                この「形を保ったまま拡大する」という条件を満たす唯一の形状が, 対数螺旋なのです。
+                もし別の形で大きくなろうとすると、殻のバランスが崩れ、身を守ることができなくなってしまいます。
+            </div>
+
+            <h3 class="section-header">【体験】対数螺旋の成長シミュレーター</h3>
+            <p>
+                以下のシミュレーターを使って、成長係数（拡大率）や巻き方向を変更しながら、螺旋の広がり方がどのように変化するかを体験してみましょう。
+                オウムガイが選択した「絶妙なバランス」を確かめることができます。
+            </p>
+
+            <!-- シミュレーター容器 -->
+            <div class="interactive-simulator">
+                <div class="simulator-header">
+                    <h3>対数螺旋の成長シミュレーター</h3>
+                    <p>パラメータを調整して、生物の成長プロセスと螺旋の広がり方をシミュレートします。</p>
+                </div>
+                
+                <div class="sim-grid">
+                    <!-- 左：操作パネル -->
+                    <div class="sliders-panel">
+                        <div class="slider-group">
+                            <div class="slider-label">
+                                <span>📈 成長係数 (k)</span>
+                                <span class="value-disp"><span id="lbl-growth-k">1.15</span></span>
+                            </div>
+                            <input type="range" id="param-growth-k" min="1.02" max="1.30" step="0.01" value="1.15">
+                            <div class="slider-desc">螺旋の拡大率です。値が大きいほど、外側に急激に広がる螺旋になります。</div>
+                        </div>
+                        
+                        <div class="slider-group">
+                            <div class="slider-label">
+                                <span>🔄 回転数 (巻き数)</span>
+                                <span class="value-disp"><span id="lbl-turns">3.0</span> 回転</span>
+                            </div>
+                            <input type="range" id="param-turns" min="1.0" max="4.0" step="0.5" value="3.0">
+                            <div class="slider-desc">螺旋を何回転分描画するかを指定します。</div>
+                        </div>
+
+                        <div class="toggle-container">
+                            <span class="toggle-label">🌀 巻き方向 (キラリティ)</span>
+                            <div class="toggle-switch">
+                                <button id="btn-spin-right" class="toggle-btn active" onclick="setSpin(true)">右巻き</button>
+                                <button id="btn-spin-left" class="toggle-btn" onclick="setSpin(false)">左巻き</button>
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 10px;">
+                            <button class="sim-btn" onclick="resetParams()">基準値に戻す</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 右：リアルタイムSVGグラフ -->
+                    <div class="graphs-panel">
+                        <div class="graph-box">
+                            <div class="graph-title">
+                                <span>📈 極座標描画: r = r₀ × k^(θ・α)</span>
+                                <span id="val-formula" style="font-family: var(--font-mono); font-size:11px;">r = 1.0 × 1.15^θ</span>
+                            </div>
+                            <div class="graph-svg-container">
+                                <svg id="svg-spiral">
+                                    <!-- グリッド同心円 -->
+                                    <circle cx="50%" cy="50%" r="20%" stroke="#f0f0f0" fill="none" stroke-width="1" />
+                                    <circle cx="50%" cy="50%" r="40%" stroke="#e8e8e8" fill="none" stroke-width="1" />
+                                    <circle cx="50%" cy="50%" r="60%" stroke="#e0e0e0" fill="none" stroke-width="1" />
+                                    <!-- 十字軸 -->
+                                    <line x1="10%" y1="50%" x2="90%" y2="50%" stroke="var(--color-paper-line)" stroke-width="1" />
+                                    <line x1="50%" y1="10%" x2="50%" y2="90%" stroke="var(--color-paper-line)" stroke-width="1" />
+                                    
+                                    <!-- 螺旋曲線 -->
+                                    <path id="path-spiral" d="" fill="none" stroke="var(--color-brass)" stroke-width="2.5" />
+                                    <!-- 先端点 -->
+                                    <circle id="dot-spiral-end" cx="0" cy="0" r="5" fill="var(--color-ink)" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 結果ボード -->
+                <div class="results-board">
+                    <div class="res-box">
+                        <div class="res-label">1回転目の終端半径</div>
+                        <div class="res-val"><span id="val-r1">0.0</span></div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">2回転目の終端半径</div>
+                        <div class="res-val"><span id="val-r2">0.0</span></div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">3回転目の終端半径</div>
+                        <div class="res-val"><span id="val-r3">0.0</span></div>
+                    </div>
+                </div>
+                
+                <!-- 判定ボード -->
+                <div class="target-board">
+                    <div class="target-left">
+                        <div class="target-title">🐚 形状判定結果</div>
+                        <div class="target-desc">成長係数が生物の生存に適した範囲内にあるかを判定します。</div>
+                    </div>
+                    <div class="target-right">
+                        <div id="val-status" class="target-stat-value status-good">生物学的成長の許容範囲（安定した対数螺旋）</div>
+                    </div>
+                </div>
+            </div>
+
+            <p>
+                シミュレーターの成長係数 <span class="formula-inline">k</span> を「**1.05**」に下げてみてください。
+                螺旋の巻き方が非常に細かくなり、オウムガイとは違う細長い貝のようになりますよね。
+            </p>
+            <p>
+                逆に「**1.30**」に上げると、急激に広がりすぎて、貝殻の役目を果たさなくなってしまいます。
+                自然界のオウムガイは、この成長係数（拡大率）が**1.1〜1.2の絶妙な黄金バランス**に保たれているのです。
+            </p>
+
+            <h3 class="section-header">美しさを支える「黄金比」と「フィボナッチ数列」</h3>
+            <p>
+                この対数螺旋の広がり方を詳しく調べていくと、デザインの基本である**「黄金比（約1.618）」**にたどり着きます。
+            </p>
+            <p>
+                みなさんは**「フィボナッチ数列」**をご存じでしょうか？
+                「1, 1, 2, 3, 5, 8, 13...」と、前の2つの数字を足していくシンプルな数列です。
+                実は、この数字の幅で描かれるらせん模様（フィボナッチらせん）も、オウムガイの対数螺旋とほぼ同じ形になります。
+            </p>
+            <p>
+                自然界が無駄を省き、最も効率的で安定した構造を選んだ結果、**人間が「美しい」と感じるデザインに自動的に行き着いた**のです。
+                自然と数学の不思議なつながりを感じるポイントですね。
+            </p>
+
+            <h3 class="section-header">右巻きと左巻き：遺伝子に刻まれた「非対称」の謎</h3>
+            <p>
+                貝殻には、形のほかにもう一つ大きな謎があります。それは**「巻き方向」**です。
+            </p>
+            <p>
+                私たちが手にする巻き貝のほとんど（9割以上）は、実は**「右巻き」**なのをご存じでしょうか。
+                サザエやカタツムリなど、自然界の貝類の基本スペックは「右巻き」で統一されています。
+            </p>
+            <p>
+                これは、受精卵が最初に分裂するとき、細胞が右に傾いて分裂する遺伝的なプログラムがあるためです。
+                ごくまれに「左巻き」の突然変異種が生まれることもあります。
+                しかし、**「右巻きと左巻きでは、体がすれ違って交尾（子孫を残すこと）ができない」**という大きな問題に直面します。
+            </p>
+            <p>
+                そのため、左巻きの個体は子孫を残しにくく、自然界では右巻きが多数派として保存されてきました。
+                しかし面白いことに、あえて「左巻き」を選んで進化し、生き残っている珍しい貝もいます。
+                これは、「右巻きの貝を食べるのが得意な天敵（ヘビなど）」から逃れるための、独自の生存戦略だと言われています。
+            </p>
+            <p>
+                それでもなお、一部の種においては左巻きが標準的な形態として定着しているケースも存在します。
+                これは、特定の捕食者（例えば、右巻きの殻の隙間に特化した捕食性のヘビなど）から身を守るための適応進化の結果として、あえて逆巻きの形態を選択したためであると考えられています。
+                生物の生存競争と形態の非対称性は、遺伝子レベルの小さなスイッチがマクロな自然淘汰のダイナミクスに直結している好例です。
+            </p>
+
+            <h3 class="section-header">まとめ</h3>
+            <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 20px; font-size: 15px; line-height: 1.8;">
+                オウムガイの美しい螺旋は、**「形を変えずに大きくなる」**という物理的な条件を数学的にクリアした、極めて合理的な生存戦略の結果です。
+                一見、ただの美術品のように見える自然の造形の中には、宇宙の法則とも言える「対数螺旋」や「遺伝子のプログラム」が静かに宿っています。
+                日常の風景を数学というフィルターを通して眺めると、いつもとは違った世界の美しさが見えてくるかもしれませんね。
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- シミュレーション制御スクリプト -->
+    <script>
+        const paramGrowthK = document.getElementById('param-growth-k');
+        const paramTurns = document.getElementById('param-turns');
+        
+        const lblGrowthK = document.getElementById('lbl-growth-k');
+        const lblTurns = document.getElementById('lbl-turns');
+        const valFormula = document.getElementById('val-formula');
+        
+        const valR1 = document.getElementById('val-r1');
+        const valR2 = document.getElementById('val-r2');
+        const valR3 = document.getElementById('val-r3');
+        const valStatus = document.getElementById('val-status');
+        
+        const pathSpiral = document.getElementById('path-spiral');
+        const dotSpiralEnd = document.getElementById('dot-spiral-end');
+
+        let isSpinRight = true; // デフォルト右巻き
+
+        // 定数設定
+        const R0 = 1.0;
+        // 1回転で30.6倍になる成長比率を再現するための係数（k = 1.15 のとき r(2π) = 30.6 にする）
+        // r(θ) = R0 * k^(θ * α)
+        // 1回転 (θ=2π) で r(2π) = k^(2π * α) = 30.6
+        // k=1.15 のとき, 1.15^(2π * α) = 30.6
+        // 2π * α = ln(30.6) / ln(1.15) ≈ 24.473
+        // α ≈ 24.473 / 2π ≈ 3.895
+        const ALPHA = 24.473 / (2.0 * Math.PI);
+
+        function updateSimulation() {
+            const k = parseFloat(paramGrowthK.value);
+            const turns = parseFloat(paramTurns.value);
+            
+            lblGrowthK.textContent = k.toFixed(2);
+            lblTurns.textContent = turns.toFixed(1);
+            
+            valFormula.textContent = `r = 1.0 × ${k.toFixed(2)}^(3.90 × θ)`;
+
+            // 各回転での終端半径を計算
+            // r_n = R0 * k^(n * 2π * α)
+            const r1 = R0 * Math.pow(k, 1.0 * 2.0 * Math.PI * ALPHA);
+            const r2 = R0 * Math.pow(k, 2.0 * 2.0 * Math.PI * ALPHA);
+            const r3 = R0 * Math.pow(k, 3.0 * 2.0 * Math.PI * ALPHA);
+
+            valR1.textContent = r1.toFixed(1);
+            valR2.textContent = r2.toFixed(1);
+            valR3.textContent = r3.toFixed(1);
+
+            // 状態判定の更新
+            if (k >= 1.10 && k <= 1.20) {
+                valStatus.textContent = '生物学的成長の許容範囲（安定した対数螺旋）';
+                valStatus.className = 'target-stat-value status-good';
+            } else if (k < 1.10) {
+                valStatus.textContent = '成長範囲外（巻きが緩すぎる螺旋）';
+                valStatus.className = 'target-stat-value status-warn';
+            } else {
+                valStatus.textContent = '成長範囲外（急激に拡大する螺旋）';
+                valStatus.className = 'target-stat-value status-warn';
+            }
+
+            // --- SVG螺旋描画 ---
+            const svgW = 200; // 仮想座標サイズ
+            const svgH = 200;
+            const centerX = svgW / 2;
+            const centerY = svgH / 2;
+
+            // 螺旋の最大角度（ラジアン）
+            const maxTheta = turns * 2.0 * Math.PI;
+
+            // 最大半径
+            const maxR = R0 * Math.pow(k, maxTheta * ALPHA);
+            
+            // 最大半径が画面にきれいに収まるようにスケール（半径が最大で75px程度になるよう調整）
+            const scale = 75.0 / maxR;
+
+            let dPath = '';
+            const steps = 180; // 滑らかに描画するための分割数
+
+            for (let i = 0; i <= steps; i++) {
+                const theta = (i / steps) * maxTheta;
+                const r = R0 * Math.pow(k, theta * ALPHA) * scale;
+                
+                // 右巻き・左巻きによる角度の反転制御
+                const angle = isSpinRight ? theta : -theta;
+
+                // 極座標 -> デカルト座標
+                const x = centerX + r * Math.cos(angle);
+                const y = centerY + r * Math.sin(angle);
+
+                if (i === 0) {
+                    dPath = `M ${x} ${y}`;
+                } else {
+                    dPath += ` L ${x} ${y}`;
+                }
+
+                // 最後の点の座標を記憶し、エンドドットの座標にする
+                if (i === steps) {
+                    dotSpiralEnd.setAttribute('cx', x);
+                    dotSpiralEnd.setAttribute('cy', y);
+                }
+            }
+
+            pathSpiral.setAttribute('d', dPath);
+        }
+
+        function setSpin(isRight) {
+            isSpinRight = isRight;
+            document.getElementById('btn-spin-right').className = isRight ? 'toggle-btn active' : 'toggle-btn';
+            document.getElementById('btn-spin-left').className = isRight ? 'toggle-btn' : 'toggle-btn active';
+            updateSimulation();
+        }
+
+        function resetParams() {
+            paramGrowthK.value = 1.15;
+            paramTurns.value = 3.0;
+            setSpin(true);
+            updateSimulation();
+        }
+
+        // イベント設定
+        [paramGrowthK, paramTurns].forEach(input => {
+            input.addEventListener('input', updateSimulation);
+        });
+
+        // 初期計算実行
+        updateSimulation();
+    </script>
+</body>
+</html>

@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>メトカーフの法則：つながりが富を独占するIT時代の数理 | Otona Math コラム</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .column-content {
+            background-color: var(--color-surface);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            margin-bottom: 40px;
+        }
+        .column-content p {
+            line-height: 2.1;
+            margin-bottom: 28px;
+        }
+        .section-header {
+            color: var(--color-brass);
+            margin-top: 40px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 10px;
+            font-size: 22px;
+        }
+        
+        /* Interactive Simulator Styles */
+        .interactive-simulator {
+            background-color: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        .simulator-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 15px;
+        }
+        .simulator-header h3 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            color: var(--color-ink);
+        }
+        .simulator-header p {
+            font-size: 14px;
+            color: var(--color-ink-soft);
+        }
+        
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        @media (max-width: 900px) {
+            .sim-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Control Panel */
+        .control-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .sim-state-card {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .sim-control-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--color-ink);
+            margin-bottom: 10px;
+        }
+        
+        /* Slider Group */
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 15px;
+        }
+        .slider-label-container {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--color-ink);
+        }
+        .sim-slider {
+            width: 100%;
+            height: 6px;
+            background: var(--color-paper);
+            border-radius: 3px;
+            outline: none;
+            accent-color: var(--color-brass);
+        }
+
+        /* Preset Buttons */
+        .preset-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .preset-btn {
+            padding: 8px;
+            font-size: 11px;
+            font-weight: bold;
+            border: 1px solid var(--color-paper-line);
+            background: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .preset-btn:hover, .preset-btn.active {
+            background-color: var(--color-ink);
+            color: var(--color-paper);
+            border-color: var(--color-ink);
+        }
+
+        /* SVG Visualization Container */
+        .network-viz-box {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .network-viz-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--color-ink-soft);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .network-svg-container {
+            width: 100%;
+            height: 240px;
+            position: relative;
+        }
+        .network-svg-container svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        /* Results Board */
+        .results-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            background: var(--color-paper);
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        @media (max-width: 600px) {
+            .results-board {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+        .res-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .res-label {
+            font-size: 13px;
+            color: var(--color-ink-soft);
+            margin-bottom: 4px;
+        }
+        .res-val {
+            font-size: 24px;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            color: var(--color-ink);
+        }
+        .res-val.status-warn { color: var(--color-red); }
+        .res-val.status-ok { color: #10b981; }
+
+        /* Status Board */
+        .status-board {
+            background: rgba(169, 120, 47, 0.05);
+            border: 1px solid rgba(169, 120, 47, 0.2);
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        .status-board.active-warning {
+            background: rgba(180, 67, 47, 0.06);
+            border-color: rgba(180, 67, 47, 0.3);
+        }
+        @media (max-width: 600px) {
+            .status-board {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+        .status-left {
+            display: flex;
+            flex-direction: column;
+        }
+        .status-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .status-board.active-warning .status-title {
+            color: var(--color-red);
+        }
+        .status-desc {
+            font-size: 12px;
+            color: var(--color-ink-soft);
+        }
+        .status-right {
+            display: flex;
+            align-items: center;
+        }
+        .status-stat-value {
+            font-family: var(--font-body);
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .status-board.active-warning .status-stat-value {
+            color: var(--color-red);
+        }
+
+        /* SVG Element Styling */
+        .conn-line {
+            stroke: var(--color-brass);
+            stroke-width: 1;
+            opacity: 0.15;
+            transition: all 0.5s;
+        }
+        .conn-line.active-line {
+            stroke-width: 1.5;
+            opacity: 0.4;
+        }
+        .user-node {
+            fill: #fff;
+            stroke: var(--color-ink);
+            stroke-width: 1.5;
+            transition: all 0.5s;
+        }
+        .user-node.active-node {
+            fill: var(--color-brass);
+            stroke: #fff;
+        }
+        .user-text {
+            font-family: var(--font-body);
+            font-size: 8px;
+            fill: var(--color-ink);
+            text-anchor: middle;
+            font-weight: bold;
+        }
+        .user-text.active-text {
+            fill: #fff;
+        }
+
+        /* Common Button Style */
+        .sim-btn {
+            background: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            color: var(--color-ink);
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: var(--radius-btn);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .sim-btn:hover {
+            border-color: var(--color-ink);
+            background-color: #f7f7f7;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="../index.html">数学と統計学</a></li>
+                    <li><a href="index.html">コラム</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">コラム</a> &gt; メトカーフの法則
+        </div>
+
+        <article class="column-content">
+            <h2 style="font-size: 28px; margin-bottom: 30px; line-height: 1.4;">メトカーフの法則（ネットワーク効果）：<br>「つながり」が富を独占するIT時代の数理モデル</h2>
+            
+            <p>
+                従来のビジネスでは、商品の価値は製品単体の性能や品質によって決定されていました。
+                しかし、インターネットが普及した現代において、ビジネスに最大の価値をもたらす要因は「どれだけ多くの人が結びついているか」というネットワークそのものです。
+            </p>
+            <p>
+                この「つながりの価値」がどのように計算され、なぜ一部の巨大ITプラットフォーム企業による市場の独占（勝者総取り）を引き起こすのか。
+                SNSやメッセージアプリを例に、数理モデル「メトカーフの法則」の仕組みを解説します。
+            </p>
+
+            <h3 class="section-header">第1章：1+1が「2」にならないネットワークの価値</h3>
+            <p>
+                メトカーフの法則とは、通信ネットワークの価値に関する経験則です。
+                その要点は、**「ネットワークの価値は、参加するユーザー数の『2乗』に比例して増大する」**という数式で表されます。
+            </p>
+            <p>
+                一般的な製造業であれば、顧客数が10倍に増えれば売上や価値も約10倍になります。
+                これに対し、ネットワーク効果が働くビジネスでは、参加者が10倍になると、そのネットワーク全体の価値は100倍（10の2乗）へと急激に上昇します。
+                これが、特定のプラットフォーム企業が莫大な利益を上げる数学的な基盤です。
+            </p>
+
+            <h3 class="section-header">【体験】SNSネットワーク接続シミュレーター</h3>
+            <p>
+                ネットワークの参加人数（N）を調整し、それに伴って「ネットワーク内の接続ルート数（組み合わせ）」がどのように指数関数的に爆発するかを視覚化するシミュレーターです。
+                ユーザー数（N）を増やすにつれて、すべてのユーザー間に張り巡らされる通信回線（接続線）がクモの巣状に急増する様子を観察してください。
+            </p>
+
+            <!-- シミュレーター容器 -->
+            <div class="interactive-simulator">
+                <div class="simulator-header">
+                    <h3>ユーザー数と通信回線（つながり）の数</h3>
+                    <p>スライダーを動かして、参加人数（N）を変更し、接続されるネットワークルートの数と、そこから生まれる価値・コストの推移を確認します。</p>
+                </div>
+                
+                <div class="sim-grid">
+                    <!-- 左：設定とコントロール -->
+                    <div class="control-panel">
+                        <div class="sim-state-card">
+                            <div class="sim-control-title">📋 普及フェーズプリセット</div>
+                            <div class="preset-buttons">
+                                <button id="preset-one" class="preset-btn active" onclick="applyPreset('one')">① 黎明期<br>(N=3 / 慢性赤字)</button>
+                                <button id="preset-two" class="preset-btn" onclick="applyPreset('two')">② 臨界点<br>(N=10 / 損益分岐)</button>
+                                <button id="preset-three" class="preset-btn" onclick="applyPreset('three')">③ 独占・爆発期<br>(N=20 / 莫大利益)</button>
+                            </div>
+                        </div>
+
+                        <div class="sim-state-card">
+                            <div class="sim-control-title">⚙️ パラメータ手動調整</div>
+                            
+                            <div class="slider-group">
+                                <div class="slider-label-container">
+                                    <span>👤 参加ユーザー数（N）</span>
+                                    <span><span id="val-n-users">3</span> 人</span>
+                                </div>
+                                <input type="range" id="slide-n-users" class="sim-slider" min="1" max="20" step="1" value="3" oninput="onParamChange()">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 右：SVG可視化 -->
+                    <div class="network-viz-box">
+                        <div class="network-viz-title">
+                            <span>🕸️ ネットワーク結線図</span>
+                            <span style="font-family:var(--font-mono); font-size:11px;">最大ノード: 20</span>
+                        </div>
+                        <div class="network-svg-container">
+                            <svg id="svg-network">
+                                <!-- 動的な線とノードを配置するためのグループ -->
+                                <g id="group-lines"></g>
+                                <g id="group-nodes"></g>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 結果ボード -->
+                <div class="results-board">
+                    <div class="res-box">
+                        <div class="res-label">通信ルート（つながり）の数</div>
+                        <div class="res-val"><span id="val-connections">0</span> 本</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">ネットワーク価値（Nの2乗）</div>
+                        <div class="res-val" style="color:var(--color-brass);"><span id="val-net-value">0</span> 万円</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">システム維持コスト（10×N）</div>
+                        <div class="res-val" style="color:var(--color-ink-soft);"><span id="val-net-cost">0</span> 万円</div>
+                    </div>
+                </div>
+                
+                <!-- 判定ボード -->
+                <div id="sim-status-board" class="status-board">
+                    <div class="status-left">
+                        <div class="status-title">🚥 成長フェーズの診断</div>
+                        <div id="sim-status-desc" class="status-desc">シミュレーターのパラメータを動かして、ネットワークの価値が急上昇するポイントを確認してください。</div>
+                    </div>
+                    <div class="status-right">
+                        <div id="sim-status-val" class="target-stat-value">分析中</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-header">第2章：人数が増えると価値が2乗になる理由</h3>
+            <p>
+                なぜ、ネットワークの通信ルート（つながりの数）は人数に対して2乗で増えるのでしょうか。
+                全員が互いに通信できる組み合わせの数は、以下の数学の組合せ公式で求められます。
+            </p>
+            <div style="text-align: center; margin: 25px 0; font-family: var(--font-mono); font-size: 16px;">
+                つながりの数 ＝ N × (N - 1) ／ 2
+            </div>
+            <p>
+                この公式に従い、具体的なユーザー数における「つながりの数」を計算します。
+            </p>
+            <ul style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
+                <li><strong>ユーザーが2人のとき</strong>：通信ルートは「2×1／2 ＝ 1」本のみです。</li>
+                <li><strong>ユーザーが5人のとき</strong>：通信ルートは「5×4／2 ＝ 10」本に増えます。</li>
+                <li><strong>ユーザーが100人のとき</strong>：通信ルートは「100×99／2 ＝ 4,950」本に達します。</li>
+            </ul>
+            <p>
+                人数は5人から100人へと20倍になっただけですが、提供される「つながり」の価値は10から4,950へと約500倍に膨れ上がります。
+                これが、人数が増えるほど指数関数的に価値が暴騰するネットワーク効果の仕組みです。
+            </p>
+
+            <h3 class="section-header">第3章：「勝者総取り」と「クリティカル・マス」の経営戦略</h3>
+            <p>
+                メトカーフの法則が作用する市場では、**「勝者総取り（Winner-Takes-All）」**という強力な独占が引き起こされます。
+            </p>
+            <p>
+                例えば、どれだけデザインが良く高機能な新しいSNSアプリが登場したとしても、友人が誰もそのアプリを使っていなければ、コミュニケーションツールとしての価値はゼロに等しくなります。
+                結局、ユーザーは機能が多少劣っていたとしても、「全員が使っている（つながりの数が多い）既存のアプリ」を使い続けることになります。
+                この結果、先行してネットワークを築いた1番手の企業が、市場のシェアを完全に支配します。
+            </p>
+            <p>
+                ネットワークビジネスを立ち上げる際、価値がコストを上回って爆発的な成長へ転換する分岐点の人数が存在します。
+                この転換点を**「クリティカル・マス（臨界点）」**と呼びます。
+            </p>
+            <p>
+                シミュレーターの挙動が示すように、臨界点（N=10人）を超えるまでは、インフラ維持コストがネットワーク価値を上回り、慢性的な赤字が続きます。
+                しかし、臨界点を突破した瞬間、価値の伸び（Nの2乗）がコスト（線形）を圧倒し、急激に黒字化して市場を支配します。
+                IT企業が創業期に無料提供やキャッシュバックなどのキャンペーンを打ち出し、赤字覚悟で強引にシェア獲得を急ぐのは、この臨界点をいち早く突破するためです。
+            </p>
+
+            <h3 class="section-header">まとめ</h3>
+            <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 20px; font-size: 15px; line-height: 1.8;">
+                「より良い品質の製品を作れば売れる」という前提は、ネットワーク効果が支配するITプラットフォーム市場では通用しません。
+                いかにして早く利用者を囲い込み、強固なつながりを作って誰も抜け出せないネットワークを構築するか。
+                このゲームを制した者だけが利益を独占できるのが、現代のネットワーク型ビジネスの数理的なルールです。
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- シミュレーター制御スクリプト -->
+    <script>
+        // 状態変数
+        let nUsers = 3;
+
+        const slideNUsers = document.getElementById('slide-n-users');
+        const lblNUsers = document.getElementById('val-n-users');
+        
+        const lblConnections = document.getElementById('val-connections');
+        const lblNetValue = document.getElementById('val-net-value');
+        const lblNetCost = document.getElementById('val-net-cost');
+        
+        const statusBoard = document.getElementById('sim-status-board');
+        const statusDesc = document.getElementById('sim-status-desc');
+        const statusVal = document.getElementById('sim-status-val');
+
+        const svgContainer = document.getElementById('svg-network');
+        const gLines = document.getElementById('group-lines');
+        const gNodes = document.getElementById('group-nodes');
+
+        // プリセット適用
+        function applyPreset(presetType) {
+            document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`preset-${presetType}`).classList.add('active');
+
+            if (presetType === 'one') {
+                nUsers = 3;
+            } else if (presetType === 'two') {
+                nUsers = 10;
+            } else if (presetType === 'three') {
+                nUsers = 20;
+            }
+            
+            updateSlidersFromParams();
+            calculateResults();
+        }
+
+        function updateSlidersFromParams() {
+            slideNUsers.value = nUsers;
+            lblNUsers.textContent = nUsers;
+        }
+
+        // スライダー変更時
+        function onParamChange() {
+            document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+            nUsers = parseInt(slideNUsers.value);
+            
+            lblNUsers.textContent = nUsers;
+            
+            calculateResults();
+        }
+
+        // 計算と描画と診断
+        function calculateResults() {
+            // つながりの数 = N * (N - 1) / 2
+            const connections = nUsers * (nUsers - 1) / 2;
+            
+            // 価値 = N^2 (万円)
+            const netValue = nUsers * nUsers;
+            
+            // 維持コスト = 10 * N (万円)
+            const netCost = 10 * nUsers;
+            
+            // ボード表示
+            lblConnections.textContent = connections;
+            lblNetValue.textContent = netValue;
+            lblNetCost.textContent = netCost;
+
+            // SVG描画の更新
+            drawNetwork(nUsers);
+
+            // 診断
+            if (nUsers === 1) {
+                statusBoard.className = 'status-board active-warning';
+                statusVal.textContent = '価値ゼロ（通信不可）';
+                statusDesc.textContent = '参加者が自分1人だけであるため、通信相手がおらずネットワークの価値が全く生まれません。';
+            } else if (netValue < netCost) {
+                statusBoard.className = 'status-board active-warning';
+                statusVal.textContent = '慢性赤字（初期投資期）';
+                statusDesc.textContent = '回線の接続ルート数が少なく価値が低いため、インフラの維持コスト（線形）が上回り、赤字状態です。';
+            } else if (netValue === netCost) {
+                statusBoard.className = 'status-board';
+                statusVal.textContent = '臨界点（クリティカル・マス）';
+                statusDesc.textContent = 'ユーザー数が10人に達し、ネットワーク価値とコストが均衡しました。ここから指数関数的な爆発的黒字へ転換します。';
+            } else {
+                statusBoard.className = 'status-board';
+                statusVal.textContent = '市場の独占（爆発的利益）';
+                statusDesc.textContent = `ユーザー数${nUsers}人。価値がコストを大幅に上回り、差額の約${netValue - netCost}万円が純利益として手に入ります（勝者総取り）。`;
+            }
+        }
+
+        // ネットワーク図の動的描画
+        function drawNetwork(N) {
+            gLines.innerHTML = '';
+            gNodes.innerHTML = '';
+
+            const cx = 110;
+            const cy = 110;
+            const radius = 70;
+            
+            // ノードの座標リスト算出
+            let nodeCoords = [];
+            for (let i = 0; i < 20; i++) {
+                const theta = (2 * Math.PI * i / 20) - (Math.PI / 2);
+                nodeCoords.push({
+                    x: cx + radius * Math.cos(theta),
+                    y: cy + radius * Math.sin(theta),
+                    active: i < N
+                });
+            }
+
+            // 1. 全通信ルート（線）を描画
+            // 20個のノード候補があり、そのうち active なノード同士を線でつなぐ
+            for (let i = 0; i < 20; i++) {
+                for (let j = i + 1; j < 20; j++) {
+                    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    line.setAttribute('x1', nodeCoords[i].x);
+                    line.setAttribute('y1', nodeCoords[i].y);
+                    line.setAttribute('x2', nodeCoords[j].x);
+                    line.setAttribute('y2', nodeCoords[j].y);
+                    
+                    const isActive = nodeCoords[i].active && nodeCoords[j].active;
+                    if (isActive) {
+                        line.setAttribute('class', 'conn-line active-line');
+                    } else {
+                        line.setAttribute('class', 'conn-line');
+                    }
+                    gLines.appendChild(line);
+                }
+            }
+
+            // 2. ユーザー（円ノード）を描画
+            for (let i = 0; i < 20; i++) {
+                const coord = nodeCoords[i];
+                
+                const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', coord.x);
+                circle.setAttribute('cy', coord.y);
+                circle.setAttribute('r', 10);
+                
+                if (coord.active) {
+                    circle.setAttribute('class', 'user-node active-node');
+                } else {
+                    circle.setAttribute('class', 'user-node');
+                }
+                g.appendChild(circle);
+
+                // テキストラベル
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', coord.x);
+                text.setAttribute('y', coord.y + 3);
+                
+                if (coord.active) {
+                    text.setAttribute('class', 'user-text active-text');
+                } else {
+                    text.setAttribute('class', 'user-text');
+                }
+                text.textContent = i + 1;
+                g.appendChild(text);
+
+                gNodes.appendChild(g);
+            }
+        }
+
+        // 初期ロード
+        applyPreset('one');
+    </script>
+</body>
+</html>

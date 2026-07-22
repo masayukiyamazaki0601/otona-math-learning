@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>正規分布とシックスシグマ | Otona Math コラム</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .column-content {
+            background-color: var(--color-surface);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            margin-bottom: 40px;
+        }
+        .column-content p {
+            line-height: 2.1;
+            margin-bottom: 28px;
+        }
+        .section-header {
+            color: var(--color-brass);
+            margin-top: 40px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 10px;
+            font-size: 22px;
+        }
+        
+        /* Interactive Simulator Styles */
+        .interactive-simulator {
+            background-color: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        .simulator-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 15px;
+        }
+        .simulator-header h3 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            color: var(--color-ink);
+        }
+        .simulator-header p {
+            font-size: 14px;
+            color: var(--color-ink-soft);
+        }
+        
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        @media (max-width: 900px) {
+            .sim-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Sliders Panel */
+        .sliders-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .slider-group {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .slider-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--color-ink);
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .slider-label span.value-disp {
+            font-family: var(--font-mono);
+            color: var(--color-brass);
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .slider-group input[type="range"] {
+            width: 100%;
+            accent-color: var(--color-brass);
+            cursor: pointer;
+        }
+        .slider-desc {
+            font-size: 11px;
+            color: var(--color-ink-soft);
+            margin-top: 5px;
+            line-height: 1.4;
+        }
+        
+        /* Graphs Panel */
+        .graphs-panel {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .graph-box {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .graph-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--color-ink-soft);
+            display: flex;
+            justify-content: space-between;
+        }
+        .graph-svg-container {
+            width: 100%;
+            height: 220px;
+            position: relative;
+        }
+        .graph-svg-container svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+        
+        /* Results Board */
+        .results-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            background: var(--color-paper);
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        @media (max-width: 600px) {
+            .results-board {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+        .res-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .res-label {
+            font-size: 13px;
+            color: var(--color-ink-soft);
+            margin-bottom: 4px;
+        }
+        .res-val {
+            font-size: 24px;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            color: var(--color-ink);
+        }
+        .res-val.status-good { color: #10b981; }
+        .res-val.status-warn { color: var(--color-brass); }
+        .res-val.status-bad { color: var(--color-red); }
+        
+        /* Target Board */
+        .target-board {
+            background: rgba(169, 120, 47, 0.05);
+            border: 1px solid rgba(169, 120, 47, 0.2);
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        @media (max-width: 600px) {
+            .target-board {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+        .target-left {
+            display: flex;
+            flex-direction: column;
+        }
+        .target-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .target-desc {
+            font-size: 12px;
+            color: var(--color-ink-soft);
+        }
+        .target-right {
+            display: flex;
+            gap: 20px;
+        }
+        .target-stat {
+            text-align: right;
+        }
+        @media (max-width: 600px) {
+            .target-stat {
+                text-align: center;
+            }
+        }
+        .target-stat-label {
+            font-size: 11px;
+            color: var(--color-ink-soft);
+        }
+        .target-stat-value {
+            font-family: var(--font-mono);
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+
+        /* Formulas & Explanations */
+        .formula-box {
+            font-family: var(--font-mono);
+            background-color: var(--color-paper);
+            border: 1px solid var(--color-paper-line);
+            padding: 20px;
+            border-radius: 6px;
+            margin: 25px 0;
+            overflow-x: auto;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        .formula-line {
+            display: block;
+            margin-bottom: 8px;
+        }
+        .formula-line:last-child {
+            margin-bottom: 0;
+        }
+        .formula-inline {
+            font-family: var(--font-mono);
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 15px;
+        }
+        
+        /* Table */
+        .stat-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 15px;
+        }
+        .stat-table th, .stat-table td {
+            border: 1px solid var(--color-paper-line);
+            padding: 12px;
+            text-align: center;
+        }
+        .stat-table th {
+            background-color: var(--color-paper);
+            color: var(--color-ink);
+            font-weight: bold;
+        }
+        .stat-table tr:nth-child(even) {
+            background-color: rgba(246, 243, 234, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="../index.html">数学と統計学</a></li>
+                    <li><a href="index.html">コラム</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">コラム</a> &gt; 正規分布とシックスシグマ
+        </div>
+
+        <article class="column-content">
+            <h2 style="font-size: 28px; margin-bottom: 30px; line-height: 1.4;">統計学「正規分布」で理解する！<br>業務エラーを極限まで減らす「シックスシグマ」の仕組み</h2>
+            
+            <p>
+                ビジネスの生産性を語るとき、必ず議題にあがるのが**「品質管理」**や**「業務エラーの削減」**です。
+            </p>
+            <p>
+                どれほど素晴らしいアイデアや製品であっても、不良品や手続きのミスが多発しては顧客の信頼を失い、コストも増大してしまいます。
+                多くの大企業が取り入れている品質改善手法に**「シックスシグマ（$6\sigma$）」**がありますが、これは名前の通り、統計学の基本的な概念である**「標準偏差（$\sigma$）」**と**「正規分布」**を基盤に設計されたものです。
+            </p>
+            <p>
+                数学的に「エラーを減らす」とはどういうことなのか、シミュレーターを使って直感的に理解してみましょう。
+            </p>
+
+            <h3 class="section-header">【体験】ばらつき（標準偏差）と品質レベルのシミュレーター</h3>
+            <p>
+                工場の部品製造プロセスを想定します。目標とする部品サイズ（平均値）は **50.0mm** です。
+                ばらつきを表す「標準偏差（$\sigma$）」のスライダーを左右に動かし、同時に「許容されるサイズの上限・下限（規格幅）」を調整してみてください。
+                ばらつきの減少（プロセスの安定）が、いかに劇的に不良率（エラー発生率）を押し下げるかが一目でわかります。
+            </p>
+
+            <!-- シミュレーター容器 -->
+            <div class="interactive-simulator">
+                <div class="simulator-header">
+                    <h3>ばらつき管理シミュレーター</h3>
+                    <p>標準偏差（ばらつき）を小さくして、規格内にデータを収めましょう。</p>
+                </div>
+                
+                <div class="sim-grid">
+                    <!-- 左：操作パネル -->
+                    <div class="sliders-panel">
+                        <div class="slider-group">
+                            <div class="slider-label">
+                                <span>🎯 製品寸法の目標値 (平均値 μ)</span>
+                                <span class="value-disp">50.0 mm</span>
+                            </div>
+                            <!-- 平均値は50に固定 -->
+                            <div class="slider-desc">製造される部品寸法の狙い値（中心値）です。</div>
+                        </div>
+                        
+                        <div class="slider-group">
+                            <div class="slider-label">
+                                <span>📉 標準偏差 σ (ばらつきの大きさ)</span>
+                                <span class="value-disp"><span id="lbl-sigma">1.00</span> mm</span>
+                            </div>
+                            <input type="range" id="param-sigma" min="0.20" max="3.00" step="0.05" value="1.00">
+                            <div class="slider-desc">寸法のばらつき（標準偏差）です。値が小さいほど、製造工程の精度が高いことを示します。</div>
+                        </div>
+                        
+                        <div class="slider-group" style="background: rgba(169, 120, 47, 0.03);">
+                            <div class="slider-label">
+                                <span>📏 許容規格幅 (平均 ± 規格幅)</span>
+                                <span class="value-disp">± <span id="lbl-tolerance">3.0</span> mm</span>
+                            </div>
+                            <input type="range" id="param-tolerance" min="1.0" max="6.0" step="0.1" value="3.0">
+                            <div class="slider-desc">許容される寸法の限界値です。この幅（下限〜上限）から外れた部品は「不良品（エラー）」となります。</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 右：リアルタイムSVG正規分布グラフ -->
+                    <div class="graphs-panel">
+                        <div class="graph-box">
+                            <div class="graph-title">
+                                <span>📈 正規分布と規格外エリア（赤）</span>
+                                <span id="val-z-score" style="font-family: var(--font-mono); font-size:11px;">Z = 3.00</span>
+                            </div>
+                            <div class="graph-svg-container">
+                                <svg id="svg-normal">
+                                    <!-- グリッドと基準線 -->
+                                    <line x1="50%" y1="0" x2="50%" y2="90%" stroke="var(--color-paper-line)" stroke-dasharray="2" />
+                                    <!-- X軸 -->
+                                    <line x1="5%" y1="90%" x2="95%" y2="90%" stroke="var(--color-paper-line)" stroke-width="1.5" />
+                                    
+                                    <!-- 動的塗りつぶし領域（規格内・規格外） -->
+                                    <path id="path-fill-left" fill="rgba(180, 67, 47, 0.15)" stroke="none" />
+                                    <path id="path-fill-center" fill="rgba(169, 120, 47, 0.08)" stroke="none" />
+                                    <path id="path-fill-right" fill="rgba(180, 67, 47, 0.15)" stroke="none" />
+                                    
+                                    <!-- 確率密度関数曲線 -->
+                                    <path id="path-normal-curve" d="" fill="none" stroke="var(--color-ink)" stroke-width="2" />
+                                    
+                                    <!-- 規格上限・下限の垂直線 -->
+                                    <line id="line-lsl" x1="0" y1="0" x2="0" y2="90%" stroke="var(--color-red)" stroke-width="1.5" stroke-dasharray="3" />
+                                    <line id="line-usl" x1="0" y1="0" x2="0" y2="90%" stroke="var(--color-red)" stroke-width="1.5" stroke-dasharray="3" />
+                                    
+                                    <!-- 規格ラベル（テキスト） -->
+                                    <text id="txt-lsl" x="0" y="98%" font-size="9" fill="var(--color-red)" text-anchor="middle">LSL</text>
+                                    <text id="txt-usl" x="0" y="98%" font-size="9" fill="var(--color-red)" text-anchor="middle">USL</text>
+                                    <text x="50%" y="98%" font-size="9" fill="var(--color-ink-soft)" text-anchor="middle">50.0 (μ)</text>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 結果ボード -->
+                <div class="results-board">
+                    <div class="res-box">
+                        <div class="res-label">良品率 (規格内の確率)</div>
+                        <div class="res-val status-good"><span id="val-good-ratio">0.000</span> %</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">不良率 (規格外の確率)</div>
+                        <div class="res-val status-bad"><span id="val-bad-ratio">0.000</span> %</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">欠陥頻度 (ppm)</div>
+                        <div class="res-val"><span id="val-dpmo">0</span> ppm</div>
+                    </div>
+                </div>
+                
+                <!-- シグマ水準ボード -->
+                <div class="target-board">
+                    <div class="target-left">
+                        <div class="target-title">📈 現在のシグマ水準： <span id="val-sigma-level">0.0</span> シグマ</div>
+                        <div class="target-desc">規格幅の中に、標準偏差（ばらつきの単位）がいくつ収まっているかを示します。</div>
+                    </div>
+                    <div class="target-right">
+                        <div class="target-stat">
+                            <div class="target-stat-label">許容限界 (LSL / USL)</div>
+                            <div class="target-stat-value" style="font-size:16px; color: var(--color-ink);"><span id="val-lsl-val">47.0</span> / <span id="val-usl-val">53.0</span> mm</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-header">ステップ1：「標準偏差（$\sigma$）」とは何か？</h3>
+            <p>
+                数学的に品質を語るための第一歩は、ばらつきを数値化することです。そのための指標が**「標準偏差（$SD$ または $\sigma$：シグマ）」**です。
+            </p>
+            <p>
+                データがどれくらい「散らばっているか」を測定するために、平均値から各データの差（偏差）を計算しますが、そのまま足すとプラスとマイナスが相殺してゼロになってしまいます。
+                そのため、一度すべての偏差を**「2乗」**して平均し（分散）、それを元に戻すために**「平方根」**をとったものが標準偏差です。
+            </p>
+            <p>
+                数式で表すと以下のようになります（データ数を $N$、各データを $x_i$、平均値を $\mu$ とします）。
+            </p>
+            
+            <div class="formula-box">
+                <span class="formula-line">σ = √[ { (x₁ - μ)² + (x₂ - μ)² + ... + (x_N - μ)² } / N ]</span>
+            </div>
+            
+            <p>
+                この $\sigma$ の値が小さいほど「ばらつきのない、均質な（再現性の高い）プロセス」であることを示しています。
+            </p>
+
+            <h3 class="section-header">ステップ2：すべての自然なばらつきが従う「正規分布」</h3>
+            <p>
+                工場で製造する部品、伝票処理にかかる時間、テストの点数など、人間や自然が生み出す多くのランダムなばらつきは、中央が盛り上がり左右に対称に裾野が広がる**「正規分布（ガウス分布）」**と呼ばれる美しい鐘型の曲線に従います。
+            </p>
+            <p>
+                この分布の確率密度関数 $f(x)$ は次の式で表されます。
+            </p>
+            
+            <div class="formula-box">
+                <span class="formula-line">f(x) = ( 1 / √(2πσ²) ) * e^[ -(x - μ)² / (2σ²) ]</span>
+            </div>
+            
+            <p>
+                この数式を積分して面積（確率）を計算すると、平均 $\mu$ と標準偏差 $\sigma$ の間に、次の**極めて強力な普遍の法則**があることが分かります。
+            </p>
+
+            <ul style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
+                <li>平均から $\pm 1\sigma$ の範囲に、全体の**約 68.3%** のデータが入る。</li>
+                <li>平均から $\pm 2\sigma$ の範囲に、全体の**約 95.4%** のデータが入る。</li>
+                <li>平均から $\pm 3\sigma$ の範囲に、全体の**約 99.73%** のデータが入る。</li>
+            </ul>
+
+            <p>
+                シミュレーター上で規格幅を $\pm 3.0$（標準偏差 $\sigma = 1.0$）に合わせたとき、良品率が「99.73%」になることを確認してください。
+                これは「$3\sigma$（スリーシグマ）品質」と呼ばれ、千個のうち約3個の不良品が出るレベルを意味します。
+            </p>
+
+            <h3 class="section-header">ステップ3：なぜ「シックスシグマ（$6\sigma$）」が必要なのか？</h3>
+            <p>
+                「99.73%（$3\sigma$）も正しくできていれば十分ではないか」と感じるかもしれません。しかし、大規模なビジネスや現代のサプライチェーンにおいて、このエラー率は致命的になります。
+            </p>
+            <p>
+                例えば、毎日10万個の部品を出荷する工場や、年間で数百万枚の伝票処理を行う銀行において、「0.27%のエラー」は毎日数百件、年間数万件の重大な事故を引き起こすことを意味します。
+            </p>
+            <p>
+                そこで提案されたのが、ばらつきを極限まで抑え込み、**規格上限・下限（USL / LSL）が平均値から数えて $\pm 6\sigma$ の距離になるようにする**「シックスシグマ（$6\sigma$）」品質です。
+            </p>
+            
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>品質水準 (シグマレベル)</th>
+                        <th>規格内に収まる確率 (良品率)</th>
+                        <th>規格外となる確率 (不良率)</th>
+                        <th>100万回あたりのエラー数 (ppm)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>1 σ</strong></td>
+                        <td>68.27 %</td>
+                        <td>31.73 %</td>
+                        <td>317,300 ppm</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2 σ</strong></td>
+                        <td>95.45 %</td>
+                        <td>4.55 %</td>
+                        <td>45,500 ppm</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3 σ</strong></td>
+                        <td>99.73 %</td>
+                        <td>0.27 %</td>
+                        <td>2,700 ppm</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4 σ</strong></td>
+                        <td>99.9937 %</td>
+                        <td>0.0063 %</td>
+                        <td>63 ppm</td>
+                    </tr>
+                    <tr>
+                        <td><strong>5 σ</strong></td>
+                        <td>99.999943 %</td>
+                        <td>0.000057 %</td>
+                        <td>0.57 ppm</td>
+                    </tr>
+                    <tr>
+                        <td><strong>6 σ</strong></td>
+                        <td>99.9999998 %</td>
+                        <td>0.0000002 %</td>
+                        <td>0.002 ppm (※)</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="font-size: 13px; color: var(--color-ink-soft); margin-top: -15px;">
+                ※実務の「シックスシグマ手法」では、装置の劣化や温度変化による「長期的な平均値の1.5シグマのズレ（シフト）」を織り込むため、実質的な欠陥率は **3.4 ppm (DPMO)** として評価されます。
+            </p>
+
+            <p>
+                シミュレーターの「標準偏差 $\sigma$」を **0.50mm** まで絞り込んでみてください。
+                規格幅 $\pm 3.0$mm の中に、ちょうど $6$ 個分の $\sigma$ （$0.5 \times 6 = 3.0$）がすっぽりと収まります。
+                このとき、画面上の不良率は **0.000%** （実際には 10億分の2）になり、エラーは統計的に「ほぼ絶滅」した状態になります。
+            </p>
+
+            <h3 class="section-header">まとめ：ビジネスにおける「ばらつき」の支配</h3>
+            <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 20px; font-size: 15px; line-height: 1.8;">
+                品質改善とは、「平均値を良くすること」以上に、**「データのばらつき（標準偏差）を極限まで小さくし、ベルカーブを細く鋭くすること」**を指します。
+                数学的なアプローチによってプロセスから不確実性を排除し、分布の裾野（エラー領域）を規格線の外から完全に閉め出すこと。
+                これこそが、世界的大企業が何百億ものコスト削減を達成した「シックスシグマ」のシンプルな数学的正体なのです。
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- シミュレーション制御スクリプト -->
+    <script>
+        const paramSigma = document.getElementById('param-sigma');
+        const paramTolerance = document.getElementById('param-tolerance');
+        
+        const lblSigma = document.getElementById('lbl-sigma');
+        const lblTolerance = document.getElementById('lbl-tolerance');
+        const valZScore = document.getElementById('val-z-score');
+        
+        const valGoodRatio = document.getElementById('val-good-ratio');
+        const valBadRatio = document.getElementById('val-bad-ratio');
+        const valDpmo = document.getElementById('val-dpmo');
+        const valSigmaLevel = document.getElementById('val-sigma-level');
+        
+        const valLslVal = document.getElementById('val-lsl-val');
+        const valUslVal = document.getElementById('val-usl-val');
+        
+        const pathNormalCurve = document.getElementById('path-normal-curve');
+        const pathFillLeft = document.getElementById('path-fill-left');
+        const pathFillCenter = document.getElementById('path-fill-center');
+        const pathFillRight = document.getElementById('path-fill-right');
+        
+        const lineLsl = document.getElementById('line-lsl');
+        const lineUsl = document.getElementById('line-usl');
+        const txtLsl = document.getElementById('txt-lsl');
+        const txtUsl = document.getElementById('txt-usl');
+
+        const MEAN = 50.0;
+
+        // --- 統計計算エンジン (誤差関数の高精度近似) ---
+        // Abramowitz and Stegun (公式 7.1.26) による高精度誤差関数近似
+        function erf(x) {
+            const sign = x < 0 ? -1 : 1;
+            const absX = Math.abs(x);
+            
+            const p = 0.3275911;
+            const a1 = 0.254829592;
+            const a2 = -0.284496736;
+            const a3 = 1.421413741;
+            const a4 = -1.453152027;
+            const a5 = 1.061405429;
+            
+            const t = 1.0 / (1.0 + p * absX);
+            const y = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-absX * absX);
+            
+            return sign * y;
+        }
+
+        // 標準正規分布の累積分布関数 (CDF): Φ(z)
+        function normalCDF(z) {
+            return 0.5 * (1.0 + erf(z / Math.sqrt(2.0)));
+        }
+
+        function updateSimulation() {
+            // パラメータ取得
+            const sigma = parseFloat(paramSigma.value);
+            const tolerance = parseFloat(paramTolerance.value);
+            
+            lblSigma.textContent = sigma.toFixed(2);
+            lblTolerance.textContent = tolerance.toFixed(1);
+
+            // 規格値計算
+            const lsl = MEAN - tolerance;
+            const usl = MEAN + tolerance;
+            valLslVal.textContent = lsl.toFixed(1);
+            valUslVal.textContent = usl.toFixed(1);
+
+            // Zスコア（規格限界のシグマ数）
+            // Z = (規格限界 - 平均) / σ
+            const zScore = tolerance / sigma;
+            valZScore.textContent = `Z = ±${zScore.toFixed(2)}σ`;
+
+            // 累積確率計算
+            // 規格内に収まる確率 = Φ(zScore) - Φ(-zScore)
+            const cdfUpper = normalCDF(zScore);
+            const cdfLower = normalCDF(-zScore);
+            const goodRatio = cdfUpper - cdfLower;
+            const badRatio = 1.0 - goodRatio;
+
+            // DPMO (Defects Per Million Opportunities: 100万回あたりの欠陥率)
+            // 実務上の「長期の1.5σシフト」を適用したシグマレベルも同時に計算して表示
+            // 表示上のシグマ水準は、短期的なZ値をそのまま表示するのが直感的なため、Z値を表示
+            valSigmaLevel.textContent = zScore.toFixed(1);
+
+            // 表示比率のフォーマット
+            const goodPercent = goodRatio * 100;
+            const badPercent = badRatio * 100;
+            
+            // 非常に小さい数値をきれいに表示するための制御
+            if (goodPercent > 99.9999) {
+                valGoodRatio.textContent = goodPercent.toFixed(6);
+            } else {
+                valGoodRatio.textContent = goodPercent.toFixed(3);
+            }
+            
+            if (badPercent < 0.0001) {
+                valBadRatio.textContent = badPercent.toExponential(3);
+            } else {
+                valBadRatio.textContent = badPercent.toFixed(3);
+            }
+            
+            const dpmoVal = Math.round(badRatio * 1000000);
+            valDpmo.textContent = dpmoVal.toLocaleString();
+
+            // 良品・不良品表示の警告色制御
+            const goodRatioEl = document.querySelector('.status-good');
+            const badRatioEl = document.querySelector('.status-bad');
+            if (zScore >= 6.0) {
+                goodRatioEl.className = 'res-val status-good';
+                badRatioEl.style.color = 'var(--color-ink-soft)';
+            } else if (zScore >= 3.0) {
+                goodRatioEl.className = 'res-val status-good';
+                badRatioEl.className = 'res-val status-warn';
+                badRatioEl.style.color = '';
+            } else {
+                goodRatioEl.className = 'res-val status-warn';
+                badRatioEl.className = 'res-val status-bad';
+                badRatioEl.style.color = '';
+            }
+
+            // --- SVGグラフィック描画 ---
+            const svgW = 320; // 仮想座標幅
+            const svgH = 200; // 仮想座標高さ
+            
+            // X軸：40.0mm〜60.0mm のレンジを投影
+            const minXVal = 40.0;
+            const maxXVal = 60.0;
+            function getX(val) {
+                const pct = (val - minXVal) / (maxXVal - minXVal);
+                return 16 + pct * (svgW - 32); // 左右に16pxの余白
+            }
+
+            // Y軸：確率密度を投影
+            // 正規分布の最大高さは 1 / (σ * √(2π))
+            // グラフ上の見栄えを保つため、σの値に応じてスケールを調整する
+            // ばらつきが極めて小さいときはピークが高くなりすぎるため、天井(y=15px)でクリップされないよう調整
+            const maxDensity = 1.0 / (sigma * Math.sqrt(2.0 * Math.PI));
+            // スケーリングファクタ（高さの自動最適化）
+            const scaleY = Math.min(180, 160 / maxDensity); 
+
+            function getY(density) {
+                return 180 - density * scaleY; // 底辺をy=180pxとする
+            }
+
+            // 正規分布確率密度関数
+            function pdf(x) {
+                const diff = x - MEAN;
+                return (1.0 / (sigma * Math.sqrt(2.0 * Math.PI))) * Math.exp(-(diff * diff) / (2.0 * sigma * sigma));
+            }
+
+            // 曲線用パスの構築
+            let dCurve = '';
+            const steps = 80;
+            
+            // 規格外（左）・規格内（中央）・規格外（右）の塗りつぶし領域のための座標
+            let pointsLeft = [];
+            let pointsCenter = [];
+            let pointsRight = [];
+
+            for (let i = 0; i <= steps; i++) {
+                const xVal = minXVal + (i / steps) * (maxXVal - minXVal);
+                const density = pdf(xVal);
+                const px = getX(xVal);
+                const py = getY(density);
+
+                // 曲線パス追加
+                if (i === 0) {
+                    dCurve = `M ${px} ${py}`;
+                } else {
+                    dCurve += ` L ${px} ${py}`;
+                }
+
+                // 領域分割
+                if (xVal < lsl) {
+                    pointsLeft.push({x: px, y: py});
+                } else if (xVal >= lsl && xVal <= usl) {
+                    // 境界値を正確に挿入するためのブリッジ処理
+                    if (pointsLeft.length > 0 && pointsCenter.length === 0) {
+                        const lslPx = getX(lsl);
+                        const lslPy = getY(pdf(lsl));
+                        pointsLeft.push({x: lslPx, y: lslPy});
+                        pointsCenter.push({x: lslPx, y: lslPy});
+                    }
+                    pointsCenter.push({x: px, y: py});
+                } else {
+                    if (pointsCenter.length > 0 && pointsRight.length === 0) {
+                        const uslPx = getX(usl);
+                        const uslPy = getY(pdf(usl));
+                        pointsCenter.push({x: uslPx, y: uslPy});
+                        pointsRight.push({x: uslPx, y: uslPy});
+                    }
+                    pointsRight.push({x: px, y: py});
+                }
+            }
+            pathNormalCurve.setAttribute('d', dCurve);
+
+            // 規格限界線のX座標更新と表示
+            const lslPx = getX(lsl);
+            const uslPx = getX(usl);
+            
+            lineLsl.setAttribute('x1', lslPx);
+            lineLsl.setAttribute('x2', lslPx);
+            lineUsl.setAttribute('x1', uslPx);
+            lineUsl.setAttribute('x2', uslPx);
+            
+            txtLsl.setAttribute('x', lslPx);
+            txtUsl.setAttribute('x', uslPx);
+
+            // 塗りつぶしパスの文字列作成関数
+            function makeFillPath(points) {
+                if (points.length === 0) return '';
+                let d = `M ${points[0].x} 180`; // 底辺からスタート
+                points.forEach(p => {
+                    d += ` L ${p.x} ${p.y}`;
+                });
+                d += ` L ${points[points.length - 1].x} 180 Z`; // 底辺に閉じる
+                return d;
+            }
+
+            pathFillLeft.setAttribute('d', makeFillPath(pointsLeft));
+            pathFillCenter.setAttribute('d', makeFillPath(pointsCenter));
+            pathFillRight.setAttribute('d', makeFillPath(pointsRight));
+        }
+
+        // イベント設定
+        [paramSigma, paramTolerance].forEach(input => {
+            input.addEventListener('input', updateSimulation);
+        });
+
+        // 初期計算実行
+        updateSimulation();
+    </script>
+</body>
+</html>

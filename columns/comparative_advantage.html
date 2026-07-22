@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>比較優位の原理：自分が一番得意なこと以外を捨てるべき数理 | Otona Math コラム</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .column-content {
+            background-color: var(--color-surface);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            margin-bottom: 40px;
+        }
+        .column-content p {
+            line-height: 2.1;
+            margin-bottom: 28px;
+        }
+        .section-header {
+            color: var(--color-brass);
+            margin-top: 40px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 10px;
+            font-size: 22px;
+        }
+        
+        /* Interactive Simulator Styles */
+        .interactive-simulator {
+            background-color: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        .simulator-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 15px;
+        }
+        .simulator-header h3 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            color: var(--color-ink);
+        }
+        .simulator-header p {
+            font-size: 14px;
+            color: var(--color-ink-soft);
+        }
+        
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        @media (max-width: 900px) {
+            .sim-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Control Panel */
+        .control-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .sim-state-card {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .sim-control-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--color-ink);
+            margin-bottom: 10px;
+        }
+        
+        /* Slider Group */
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 15px;
+        }
+        .slider-label-container {
+            display: flex;
+            justify-space-between;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--color-ink);
+            justify-content: space-between;
+        }
+        .sim-slider {
+            width: 100%;
+            height: 6px;
+            background: var(--color-paper);
+            border-radius: 3px;
+            outline: none;
+            accent-color: var(--color-brass);
+        }
+
+        /* Preset Buttons */
+        .preset-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .preset-btn {
+            padding: 8px;
+            font-size: 11px;
+            font-weight: bold;
+            border: 1px solid var(--color-paper-line);
+            background: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .preset-btn:hover, .preset-btn.active {
+            background-color: var(--color-ink);
+            color: var(--color-paper);
+            border-color: var(--color-ink);
+        }
+
+        /* SVG Visualization Container */
+        .office-viz-box {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .office-viz-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--color-ink-soft);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .office-svg-container {
+            width: 100%;
+            height: 240px;
+            position: relative;
+        }
+        .office-svg-container svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        /* Results Board */
+        .results-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            background: var(--color-paper);
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        @media (max-width: 600px) {
+            .results-board {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+        .res-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .res-label {
+            font-size: 13px;
+            color: var(--color-ink-soft);
+            margin-bottom: 4px;
+        }
+        .res-val {
+            font-size: 24px;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            color: var(--color-ink);
+        }
+        .res-val.status-warn { color: var(--color-red); }
+        .res-val.status-ok { color: #10b981; }
+
+        /* Status Board */
+        .status-board {
+            background: rgba(169, 120, 47, 0.05);
+            border: 1px solid rgba(169, 120, 47, 0.2);
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        .status-board.active-warning {
+            background: rgba(180, 67, 47, 0.06);
+            border-color: rgba(180, 67, 47, 0.3);
+        }
+        @media (max-width: 600px) {
+            .status-board {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+        .status-left {
+            display: flex;
+            flex-direction: column;
+        }
+        .status-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .status-board.active-warning .status-title {
+            color: var(--color-red);
+        }
+        .status-desc {
+            font-size: 12px;
+            color: var(--color-ink-soft);
+        }
+        .status-right {
+            display: flex;
+            align-items: center;
+        }
+        .status-stat-value {
+            font-family: var(--font-body);
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .status-board.active-warning .status-stat-value {
+            color: var(--color-red);
+        }
+
+        /* SVG Element Styling */
+        .desk-base {
+            fill: var(--color-paper);
+            stroke: var(--color-paper-line);
+            stroke-width: 1.5;
+            rx: 6;
+        }
+        .char-avatar {
+            font-size: 28px;
+            text-anchor: middle;
+        }
+        .task-icon {
+            font-size: 14px;
+            text-anchor: middle;
+        }
+        .viz-label {
+            font-family: var(--font-body);
+            font-size: 10px;
+            fill: var(--color-ink-soft);
+            text-anchor: middle;
+        }
+        .speech-bubble {
+            fill: #fff;
+            stroke: #ddd;
+            stroke-width: 1;
+            rx: 4;
+        }
+        .speech-text {
+            font-family: var(--font-body);
+            font-size: 8px;
+            fill: var(--color-ink);
+            text-anchor: middle;
+        }
+
+        /* Common Button Style */
+        .sim-btn {
+            background: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            color: var(--color-ink);
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: var(--radius-btn);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .sim-btn:hover {
+            border-color: var(--color-ink);
+            background-color: #f7f7f7;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="../index.html">数学と統計学</a></li>
+                    <li><a href="index.html">コラム</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">コラム</a> &gt; 比較優位の原理
+        </div>
+
+        <article class="column-content">
+            <h2 style="font-size: 28px; margin-bottom: 30px; line-height: 1.4;">比較優位の原理：<br>「自分が一番得意なこと」以外を捨てるべき数理</h2>
+            
+            <p>
+                ビジネスにおいて、チームの生産性を最大化するための最も根本的な理論が「比較優位（ひかくゆうい）の原理」です。
+                これは19世紀の経済学者デヴィッド・リカードが提唱した、国際貿易や組織マネジメントの根幹をなす数理モデルです。
+            </p>
+            <p>
+                多くの人は、「優秀な人がすべての仕事を行った方が、チーム全体の成果は上がる」と直感的に考えがちです。
+                しかし数学的には、たとえある人がすべての能力において他者を上回っていたとしても、適切に仕事を分担した方が必ず全体の利益は大きくなることが証明されています。
+            </p>
+            <p>
+                本コラムでは、中学生レベルの数学知識でも理解できる「優秀な社長と新人アルバイトの仕事分担」という具体例を用いて、この原理の仕組みを解説します。
+            </p>
+
+            <h3 class="section-header">第1章：優秀な社長と新人アルバイトの能力差</h3>
+            <p>
+                あるIT企業に「社長」と「アルバイト」の2人がいると仮定します。
+                この会社には、「プログラミング」と「データ入力」という2つの業務があります。
+                2人の1時間あたりの作業スピードは以下のとおりです。
+            </p>
+            <ul style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
+                <li><strong>社長の能力</strong>：1時間でプログラミングを10行進める、またはデータ入力を100件処理します。</li>
+                <li><strong>アルバイトの能力</strong>：1時間でプログラミングを1行進める、またはデータ入力を50件処理します。</li>
+            </ul>
+            <p>
+                プログラミングでもデータ入力でも、社長の方が処理スピードが速い状態です。
+                このように、すべての能力において相手を上回っている状態を、経済学では「絶対優位（ぜったいゆうい）」と呼びます。
+            </p>
+            <p>
+                「アルバイトに任せるのは遅いから、すべての業務を社長が1人で行った方が効率的である」という直感は、数理的には誤りです。
+            </p>
+
+            <h3 class="section-header">【体験】仕事分担シミュレーター</h3>
+            <p>
+                社長とアルバイトの1日の作業時間（各8時間）をスライダーで配分し、会社全体の成果を最大化するシミュレーターです。
+                プログラミング（1行＝1万円換算）とデータ入力（1件＝1000円換算）の総合生産価値が、時間の割り振りに応じてリアルタイムで再計算されます。
+                プリセットボタンを用いて、直感的な割り振りと比較優位に基づく最適な割り振りの違いを体験してください。
+            </p>
+
+            <!-- シミュレーター容器 -->
+            <div class="interactive-simulator">
+                <div class="simulator-header">
+                    <h3>社長とアルバイトの生産価値最大化シミュレーター</h3>
+                    <p>スライダーを動かして、社長とアルバイトの作業時間を割り振り、生産価値の合計を最大にします。</p>
+                </div>
+                
+                <div class="sim-grid">
+                    <!-- 左：設定とコントロール -->
+                    <div class="control-panel">
+                        <div class="sim-state-card">
+                            <div class="sim-control-title">📋 業務分担プリセット</div>
+                            <div class="preset-buttons">
+                                <button id="preset-one" class="preset-btn active" onclick="applyPreset('one')">① 社長が全抱え<br>(非効率)</button>
+                                <button id="preset-two" class="preset-btn" onclick="applyPreset('two')">② 完全均等<br>(直感的な配分)</button>
+                                <button id="preset-three" class="preset-btn" onclick="applyPreset('three')">③ 比較優位<br>(最適な分担)</button>
+                            </div>
+                        </div>
+
+                        <div class="sim-state-card">
+                            <div class="sim-control-title">⚙️ 時間の割り当て（1日8時間）</div>
+                            
+                            <div class="slider-group">
+                                <div class="slider-label-container">
+                                    <span>👨‍💼 社長：プログラミング時間</span>
+                                    <span><span id="val-p-prog">4</span> 時間</span>
+                                </div>
+                                <input type="range" id="slide-p-prog" class="sim-slider" min="0" max="8" value="4" oninput="onParamChange()">
+                                <div class="slider-label-container" style="font-size:10px; color:var(--color-ink-soft); margin-top:2px;">
+                                    <span>(残りデータ入力時間: <span id="val-p-input">4</span> 時間)</span>
+                                </div>
+                            </div>
+
+                            <div class="slider-group">
+                                <div class="slider-label-container">
+                                    <span>🧑‍🔧 アルバイト：プログラミング時間</span>
+                                    <span><span id="val-a-prog">0</span> 時間</span>
+                                </div>
+                                <input type="range" id="slide-a-prog" class="sim-slider" min="0" max="8" value="0" oninput="onParamChange()">
+                                <div class="slider-label-container" style="font-size:10px; color:var(--color-ink-soft); margin-top:2px;">
+                                    <span>(残りデータ入力時間: <span id="val-a-input">8</span> 時間)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 右：SVG可視化 -->
+                    <div class="office-viz-box">
+                        <div class="office-viz-title">
+                            <span>🏢 オフィス作業配置図</span>
+                            <span style="font-family:var(--font-mono); font-size:11px;">労働: 各8時間</span>
+                        </div>
+                        <div class="office-svg-container">
+                            <svg id="svg-office">
+                                <!-- 社長のデスク -->
+                                <rect x="5%" y="40%" width="40%" height="45%" class="desk-base" />
+                                <text x="25%" y="32%" class="viz-label" font-weight="bold">👨‍💼 社長の席</text>
+                                
+                                <!-- アルバイトのデスク -->
+                                <rect x="55%" y="40%" width="40%" height="45%" class="desk-base" />
+                                <text x="75%" y="32%" class="viz-label" font-weight="bold">🧑‍🔧 アルバイトの席</text>
+                                
+                                <!-- 社長アバターと吹き出し -->
+                                <path d="M 25,90 L 35,90 L 30,105 Z" fill="#fff" stroke="#ddd" id="bubble-p-pointer" />
+                                <rect x="5%" y="55%" width="40%" height="25" class="speech-bubble" id="bubble-p-bg" />
+                                <text x="25%" y="70%" class="speech-text" id="speech-p">「プログラミングに専念するよ」</text>
+                                <text x="25%" y="150%" class="char-avatar">👨‍💼</text>
+                                <text x="25%" y="195%" class="viz-label" id="lbl-p-status">プログラム: 4h / 入力: 4h</text>
+                                
+                                <!-- アルバイトアバターと吹き出し -->
+                                <path d="M 75,90 L 85,90 L 80,105 Z" fill="#fff" stroke="#ddd" id="bubble-a-pointer" />
+                                <rect x="55%" y="55%" width="40%" height="25" class="speech-bubble" id="bubble-a-bg" />
+                                <text x="75%" y="70%" class="speech-text" id="speech-a">「データ入力はお任せください！」</text>
+                                <text x="75%" y="150%" class="char-avatar">🧑‍🔧</text>
+                                <text x="75%" y="195%" class="viz-label" id="lbl-a-status">プログラム: 0h / 入力: 8h</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 結果ボード -->
+                <div class="results-board">
+                    <div class="res-box">
+                        <div class="res-label">総プログラミング成果</div>
+                        <div class="res-val"><span id="val-total-prog">0</span> 行</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">総データ入力成果</div>
+                        <div class="res-val"><span id="val-total-input">0</span> 件</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">チーム総生産価値</div>
+                        <div class="res-val" style="color:var(--color-brass);"><span id="val-total-value">0</span> 万円</div>
+                    </div>
+                </div>
+                
+                <!-- 判定ボード -->
+                <div id="sim-status-board" class="status-board">
+                    <div class="status-left">
+                        <div class="status-title">🚥 分担効率の診断</div>
+                        <div id="sim-status-desc" class="status-desc">シミュレーターのパラメータを動かして、最適な仕事の分担パターンを見つけてください。</div>
+                    </div>
+                    <div class="status-right">
+                        <div id="sim-status-val" class="target-stat-value">分析中</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-header">第2章：目に見えないコスト「機会費用」</h3>
+            <p>
+                この問題を解決する鍵は、**「機会費用（きかいひよう）」**という概念にあります。
+                機会費用とは、「ある行動を選択したことにより、諦める必要があった別の行動の利益」を指します。
+            </p>
+            <p>
+                社長とアルバイトが「データ入力を1時間行った場合」の、それぞれの機会費用を計算します。
+            </p>
+            <ul style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
+                <li><strong>社長の機会費用</strong>：データ入力に1時間を使うと、その時間に進められたはずのプログラミング10行分を失います。社長にとってデータ入力は、機会費用（犠牲）が極めて大きい作業です。</li>
+                <li><strong>アルバイトの機会費用</strong>：データ入力に1時間を使った場合、犠牲になるプログラミングは1行分のみです。アルバイトにとってデータ入力は、機会費用（犠牲）が最も小さく抑えられる作業です。</li>
+            </ul>
+            <p>
+                自身の他の選択肢と比較したときに、相対的に機会費用が安く済む（犠牲が少ない）業務を持っている状態を「比較優位」と呼びます。
+                この条件では、データ入力業務において、絶対的な能率が低いアルバイトの方が「比較優位を持っている」という結論が得られます。
+            </p>
+
+            <h3 class="section-header">第3章：分担による生産性の向上</h3>
+            <p>
+                比較優位に基づいて業務を分担すると、チーム全体の成果は以下のように変化します。
+            </p>
+            <p>
+                <strong>社長がすべての業務を行う場合（アルバイトの待機）</strong>：<br>
+                社長がプログラミングに4時間、データ入力に4時間を使うと、成果は「プログラム40行＋データ入力400件」となります。
+            </p>
+            <p>
+                <strong>比較優位に基づいて分担する場合</strong>：<br>
+                社長はプログラミング（8時間）に専念し、アルバイトはデータ入力（8時間）に専念します。
+                その結果、全体の成果は「プログラム80行＋データ入力400件」となり、データ入力を維持したままプログラム行数が2倍に増加します。
+            </p>
+            <p>
+                アルバイトの作業スピード自体は社長に及びませんが、アルバイトがデータ入力を受け持つことで、社長は最も価値を生むプログラミング作業に集中でき、組織全体の利益が最大化されます。
+            </p>
+
+            <h3 class="section-header">第4章：現代ビジネスや組織マネジメントへの応用</h3>
+            <p>
+                比較優位の原理は、個人のタスク管理からグローバル経済の貿易まで、幅広く応用されています。
+            </p>
+            <ul style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
+                <li><strong>アウトソーシング（外部委託）</strong>：企業が自社で行えるコールセンター業務や経理業務を外部委託するのは、自社の優秀なリソースを最も高い価値を生み出すコア業務（新商品開発など）に専念させるためです。</li>
+                <li><strong>組織のチームビルディング</strong>：リーダーが「自分で作業した方が早い」という理由でメンバーの仕事を抱え込むと、チーム全体の成果は低下します。リーダーは自身の比較優位（戦略立案や交渉など）に専念する必要があります。</li>
+                <li><strong>国際貿易の基礎</strong>：絶対的な製造技術が上の先進国であっても、高度なITや金融にリソースを集中させ、製造は発展途上国から輸入して補い合う方が、双方の富を増大できます。</li>
+            </ul>
+
+            <h3 class="section-header">まとめ</h3>
+            <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 20px; font-size: 15px; line-height: 1.8;">
+                何でも器用にこなせる完璧な存在になる必要はありません。
+                大切なのは、他者との絶対的な能力差を競うことではなく、自分の中で最も機会費用を小さく抑えられる「比較優位の強み」を見つけ、そこに限られた資源を集中させる姿勢です。
+                これは、多様なスキルを持つ個人が結びつき、互いの弱みを補い合う組織デザインの数理的な基礎となっています。
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- シミュレーター制御スクリプト -->
+    <script>
+        // 状態変数
+        let pProgTime = 4; // 社長のプログラミング時間
+        let aProgTime = 0; // アルバイトのプログラミング時間
+
+        // スピード係数
+        const speedP = { prog: 10, input: 100 };
+        const speedA = { prog: 1, input: 50 };
+
+        // 換算価値：プログラム1行＝1万円、データ入力1件＝0.1万円（1000円）
+        const valWeight = { prog: 1.0, input: 0.1 };
+
+        const slidePProg = document.getElementById('slide-p-prog');
+        const slideAProg = document.getElementById('slide-a-prog');
+        
+        const lblPProg = document.getElementById('val-p-prog');
+        const lblPInput = document.getElementById('val-p-input');
+        const lblAProg = document.getElementById('val-a-prog');
+        const lblAInput = document.getElementById('val-a-input');
+        
+        const lblTotalProg = document.getElementById('val-total-prog');
+        const lblTotalInput = document.getElementById('val-total-input');
+        const lblTotalValue = document.getElementById('val-total-value');
+        
+        const statusBoard = document.getElementById('sim-status-board');
+        const statusDesc = document.getElementById('sim-status-desc');
+        const statusVal = document.getElementById('sim-status-val');
+
+        // SVGテキスト
+        const speechP = document.getElementById('speech-p');
+        const speechA = document.getElementById('speech-a');
+        const lblPStatus = document.getElementById('lbl-p-status');
+        const lblAStatus = document.getElementById('lbl-a-status');
+
+        // プリセット適用
+        function applyPreset(presetType) {
+            document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`preset-${presetType}`).classList.add('active');
+
+            if (presetType === 'one') {
+                pProgTime = 4;
+                aProgTime = 0;
+                // アルバイトは待機（ここではアルバイトもデータ入力をしない状態を表現するために、データ入力時間は0時間にするか、あるいはデータ入力をしても社長が全部やってる状態を擬似的に表現）
+                // 厳密に下書きの「失敗パターン：社長がプログラミング1時間、データ入力1時間。アルバイト待機」を再現する
+                // 1日の労働時間を8時間に合わせるため、社長が4時間/4時間、アルバイトはプログラミング0時間/データ入力0時間（待機）とします。
+                slidePProg.value = 4;
+                slideAProg.value = 0;
+            } else if (presetType === 'two') {
+                pProgTime = 4;
+                aProgTime = 4;
+                // 完全均等：社長4h/4h、アルバイト4h/4h
+                slidePProg.value = 4;
+                slideAProg.value = 4;
+            } else if (presetType === 'three') {
+                pProgTime = 8;
+                aProgTime = 0;
+                // 比較優位：社長はプログラミング8h、アルバイトはデータ入力8h（プログラミング0h）
+                slidePProg.value = 8;
+                slideAProg.value = 0;
+            }
+            
+            updateSlidersFromParams();
+            calculateResults();
+        }
+
+        function updateSlidersFromParams() {
+            pProgTime = parseInt(slidePProg.value);
+            aProgTime = parseInt(slideAProg.value);
+
+            lblPProg.textContent = pProgTime;
+            lblPInput.textContent = 8 - pProgTime;
+            lblAProg.textContent = aProgTime;
+            lblAInput.textContent = 8 - aProgTime;
+        }
+
+        // スライダー変更時
+        function onParamChange() {
+            document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+            updateSlidersFromParams();
+            calculateResults();
+        }
+
+        // 計算と診断
+        function calculateResults() {
+            const pInputTime = 8 - pProgTime;
+            
+            // プリセットone「社長が全部やる場合」のみ、アルバイトの稼働時間を0にする（待機）
+            const isPresetOneActive = document.getElementById('preset-one').classList.contains('active');
+            const aInputTime = isPresetOneActive ? 0 : (8 - aProgTime);
+            const activeAProgTime = isPresetOneActive ? 0 : aProgTime;
+
+            // 成果計算
+            const totalProg = (pProgTime * speedP.prog) + (activeAProgTime * speedA.prog);
+            const totalInput = (pInputTime * speedP.input) + (aInputTime * speedA.input);
+            
+            // 価値換算
+            const totalValue = (totalProg * valWeight.prog) + (totalInput * valWeight.input);
+
+            // ボード表示
+            lblTotalProg.textContent = totalProg;
+            lblTotalInput.textContent = totalInput;
+            lblTotalValue.textContent = totalValue.toFixed(1);
+
+            // キャラクター表示と吹き出しセリフの更新
+            lblPStatus.textContent = `プログラム: ${pProgTime}h / 入力: ${pInputTime}h`;
+            lblAStatus.textContent = `プログラム: ${activeAProgTime}h / 入力: ${aInputTime}h`;
+
+            if (pProgTime === 8) {
+                speechP.textContent = '「プログラミングに100%集中するよ！」';
+            } else if (pProgTime === 0) {
+                speechP.textContent = '「データ入力ばかりで私の強みが活きない…」';
+            } else {
+                speechP.textContent = '「両方やるのは仕事の切り替えが多くて大変だね」';
+            }
+
+            if (isPresetOneActive) {
+                speechA.textContent = '「私にはやることがありません…」';
+            } else if (aInputTime === 8) {
+                speechA.textContent = '「データ入力は私にお任せください！」';
+            } else if (activeAProgTime === 8) {
+                speechA.textContent = '「苦手なプログラミングばかりで大変です…」';
+            } else {
+                speechA.textContent = '「仕事を割り振ってもらえて嬉しいです！」';
+            }
+
+            // 診断
+            if (isPresetOneActive) {
+                statusBoard.className = 'status-board active-warning';
+                statusVal.textContent = 'ワンマン営業（非効率）';
+                statusDesc.textContent = '社長がすべての仕事を抱え込み、アルバイトの労働資源を捨てています。成果価値は最小です。';
+            } else if (pProgTime === 8 && activeAProgTime === 0) {
+                statusBoard.className = 'status-board';
+                statusVal.textContent = 'パレート最適（最強分担）';
+                statusDesc.textContent = '比較優位の原理に従い、社長が機会費用の最も高いプログラムに専念しています。生産価値は最大（120万円）です。';
+            } else if (pProgTime === 0 && activeAProgTime === 8) {
+                statusBoard.className = 'status-board active-warning';
+                statusVal.textContent = '逆転の非効率分担';
+                statusDesc.textContent = 'お互いの苦手な業務に時間を振っているため、最も非効率な配分となっており、価値が大きく下がっています。';
+            } else {
+                statusBoard.className = 'status-board';
+                statusVal.textContent = '非最適な分担';
+                statusDesc.textContent = '分担自体は行われていますが、機会費用の調整が不完全なため、さらに生産価値を高める余地があります。';
+            }
+        }
+
+        // 初期ロード
+        applyPreset('one');
+    </script>
+</body>
+</html>

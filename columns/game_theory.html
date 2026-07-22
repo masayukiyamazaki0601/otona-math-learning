@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ゲーム理論超入門 | Otona Math コラム</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .column-content {
+            background-color: var(--color-surface);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            margin-bottom: 40px;
+        }
+        .column-content p {
+            line-height: 2.1;
+            margin-bottom: 28px;
+        }
+        .section-header {
+            color: var(--color-brass);
+            margin-top: 40px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 10px;
+            font-size: 22px;
+        }
+        
+        /* Interactive Simulator Styles */
+        .interactive-simulator {
+            background-color: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        .simulator-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 15px;
+        }
+        .simulator-header h3 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            color: var(--color-ink);
+        }
+        .simulator-header p {
+            font-size: 14px;
+            color: var(--color-ink-soft);
+        }
+        
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        @media (max-width: 900px) {
+            .sim-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Interactive Game Card */
+        .game-control-card {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        /* Character display */
+        .char-stage {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: var(--color-paper);
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+        }
+        .char-avatar {
+            font-size: 40px;
+            width: 60px;
+            height: 60px;
+            background: #fff;
+            border: 1.5px solid var(--color-paper-line);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .char-speech {
+            flex-grow: 1;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 10px 12px;
+            font-size: 13px;
+            position: relative;
+            color: var(--color-ink);
+        }
+        .char-speech::before {
+            content: '';
+            position: absolute;
+            right: 100%;
+            top: 50%;
+            margin-top: -6px;
+            border-width: 6px;
+            border-style: solid;
+            border-color: transparent #fff transparent transparent;
+        }
+        .char-speech::after {
+            content: '';
+            position: absolute;
+            right: 100%;
+            top: 50%;
+            margin-top: -7px;
+            border-width: 7px;
+            border-style: solid;
+            border-color: transparent #ddd transparent transparent;
+            z-index: -1;
+        }
+
+        .game-btn-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 5px;
+        }
+        .game-play-btn {
+            flex: 1;
+            padding: 12px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid var(--color-paper-line);
+        }
+        .btn-cooperate {
+            background-color: rgba(169, 120, 47, 0.08);
+            color: var(--color-brass);
+            border-color: var(--color-brass);
+        }
+        .btn-cooperate:hover {
+            background-color: rgba(169, 120, 47, 0.15);
+        }
+        .btn-defect {
+            background-color: rgba(62, 80, 99, 0.08);
+            color: var(--color-ink);
+            border-color: var(--color-ink);
+        }
+        .btn-defect:hover {
+            background-color: rgba(62, 80, 99, 0.15);
+        }
+        
+        .select-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .select-group label {
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--color-ink-soft);
+        }
+        .select-group select {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid var(--color-paper-line);
+            font-family: inherit;
+            font-size: 13px;
+        }
+
+        /* Matrix table with highlighting */
+        .matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        .matrix-table th, .matrix-table td {
+            border: 1px solid var(--color-paper-line);
+            padding: 6px;
+            transition: background-color 0.3s;
+        }
+        .matrix-table th {
+            background-color: var(--color-paper);
+        }
+        
+        /* Active intersection highlighting */
+        .matrix-cell-cc.active-cell { background-color: rgba(16, 185, 129, 0.2); font-weight: bold; }
+        .matrix-cell-cd.active-cell { background-color: rgba(239, 68, 68, 0.15); font-weight: bold; }
+        .matrix-cell-dc.active-cell { background-color: rgba(16, 185, 129, 0.15); font-weight: bold; }
+        .matrix-cell-dd.active-cell { background-color: rgba(239, 68, 68, 0.2); font-weight: bold; }
+        
+        /* Log table */
+        .log-box {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            max-height: 250px;
+            overflow-y: auto;
+        }
+        .log-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            text-align: center;
+        }
+        .log-table th {
+            position: sticky;
+            top: 0;
+            background: #fff;
+            border-bottom: 2px solid var(--color-paper-line);
+            padding-bottom: 6px;
+        }
+        .log-table td {
+            padding: 6px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        /* Results Board */
+        .results-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            background: var(--color-paper);
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        @media (max-width: 600px) {
+            .results-board {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+        .res-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .res-label {
+            font-size: 12px;
+            color: var(--color-ink-soft);
+            margin-bottom: 4px;
+        }
+        .res-val {
+            font-size: 22px;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            color: var(--color-ink);
+        }
+        .res-val.score-up { color: #10b981; }
+        .res-val.score-down { color: var(--color-red); }
+        
+        /* Target Board */
+        .target-board {
+            background: rgba(169, 120, 47, 0.05);
+            border: 1px solid rgba(169, 120, 47, 0.2);
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        @media (max-width: 600px) {
+            .target-board {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+        .target-left {
+            display: flex;
+            flex-direction: column;
+        }
+        .target-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .target-desc {
+            font-size: 12px;
+            color: var(--color-ink-soft);
+        }
+        .target-right {
+            display: flex;
+            align-items: center;
+        }
+        .target-stat-value {
+            font-family: var(--font-body);
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        
+        /* Interactive feedback flash overlay */
+        .simulator-inner {
+            position: relative;
+            transition: background-color 0.3s;
+            border-radius: 6px;
+        }
+        .flash-win { background-color: rgba(16, 185, 129, 0.04); }
+        .flash-lose { background-color: rgba(239, 68, 68, 0.04); }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="../index.html">数学と統計学</a></li>
+                    <li><a href="index.html">コラム</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">コラム</a> &gt; ゲーム理論超入門
+        </div>
+
+        <article class="column-content">
+            <h2 style="font-size: 28px; margin-bottom: 30px; line-height: 1.4;">対立と協調の数理：<br>大人のための『ゲーム理論』超入門</h2>
+            
+            <p>
+                他社との激しい価格競争、取引先との交渉、あるいは組織内の人間関係において、最適な選択肢が分からず意思決定に悩む場面は少なくありません。
+                私たちは日々、他者の動きを予測しながら、自分にとって最善となる行動を選択しています。
+            </p>
+            <p>
+                このように、相手の出方を考慮した上で、自分が最も利益を得られる戦略を数学的に分析する学問を「ゲーム理論」と呼びます。
+                ゲーム理論は単なる机上の空論ではなく、現代のビジネス戦略や国際政治、さらには生物の進化を説明する上でも強力な土台となっています。
+            </p>
+            <p>
+                本コラムでは、複雑な数式を使用せずに、直感的に理解できる平易な表現で、ゲーム理論の本質を紐解いていきます。
+            </p>
+
+            <h3 class="section-header">最も直感的な例：「ハンバーガー店の値下げ競争」</h3>
+            <p>
+                ゲーム理論の中で最も有名なモデルが「囚人のジレンマ」です。
+                これは、個人がそれぞれ合理的に自分にとって有利な選択をした結果、全体としては損をしてしまう状況を示しています。
+            </p>
+            <p>
+                理解を容易にするために、ある街に競合する「A店」と「B店」というハンバーガーショップが存在すると仮定します。
+                普段は両店とも、ハンバーガーを300円で販売しています。
+            </p>
+            <p>
+                ここで、それぞれの店舗は、価格を「300円で据え置く（協力）」か、顧客を奪うために「200円に値下げする（裏切り）」かの選択を行います。
+                お互いの選択肢による利益の増減を示した利得表は以下の通りです。
+            </p>
+
+            <table class="matrix-table">
+                <tr>
+                    <th>A店 ＼ B店</th>
+                    <th>B店が「300円のまま（協力）」</th>
+                    <th>B店が「200円に値下げ（裏切り）」</th>
+                </tr>
+                <tr>
+                    <th>A店が「300円のまま（協力）」</th>
+                    <td id="cell-cc" class="matrix-cell-cc">お互いに大繁盛となり利益は＋2コインずつ増えます。</td>
+                    <td id="cell-cd" class="matrix-cell-cd">A店は顧客を奪われ赤字（ー5枚）となり、B店は顧客を独占し大もうけ（＋5枚）となります。</td>
+                </tr>
+                <tr>
+                    <th>A店が「200円に値下げ（裏切り）」</th>
+                    <td id="cell-dc" class="matrix-cell-dc">A店は顧客を独占し大もうけ（＋5枚）となり、B店は顧客を奪われ赤字（ー5枚）となります。</td>
+                    <td id="cell-dd" class="matrix-cell-dd">お互いに激しい値下げ競争となり、利益はー2コインずつ減ります。</td>
+                </tr>
+            </table>
+
+            <h3 class="section-header">【ゲーム】対戦キャラクターとコイン争奪戦</h3>
+            <p>
+                お互いに10枚の持ちコインからスタートし、5回戦のゲームを行います。
+                対戦相手となるAIキャラクターはそれぞれ異なる性格を持っています。
+                相手の裏切りを警戒しつつ、手元のコインを増やす戦略を体験してください。
+            </p>
+
+            <!-- シミュレーター容器 -->
+            <div id="sim-container" class="interactive-simulator simulator-inner">
+                <div class="simulator-header">
+                    <h3>ハンバーガー値下げバトル（コイン争奪戦）</h3>
+                    <p>AIキャラクターを選び、ボタンを押して5回戦の対局を行いましょう。持ちコインが0になると破産ゲームオーバーです。</p>
+                </div>
+                
+                <div class="sim-grid">
+                    <!-- 左：操作パネルとキャラクター -->
+                    <div class="game-control-card">
+                        <div class="select-group">
+                            <label for="ai-char">🤖 対戦するAIキャラクター</label>
+                            <select id="ai-char" onchange="resetGame()">
+                                <option value="sheep">🐑 ひつじ君（しっぺ返し：最初はいい人、やられたらやり返す）</option>
+                                <option value="fox">🦊 きつね社長（常に裏切り：いつでも値下げして騙そうとする）</option>
+                                <option value="dog">🐶 お人好しのイヌ（常に協力：ずっと300円を維持してくれる）</option>
+                                <option value="cat">🐱 気まぐれネコ（ランダム：気分で価格をコロコロ変える）</option>
+                            </select>
+                        </div>
+                        
+                        <!-- キャラクターの顔とセリフ -->
+                        <div class="char-stage">
+                            <div id="char-face" class="char-avatar">🐑</div>
+                            <div class="char-speech">
+                                <span id="char-msg">「お互いに300円を維持して、一緒にコインを増やしようね！」</span>
+                            </div>
+                        </div>
+                        
+                        <div style="font-size: 12px; font-weight: bold; color: var(--color-ink); margin-top: 5px; text-align: center;">
+                            あなたの行動（現在：第 <span id="lbl-turn">1</span> / 5 回戦）
+                        </div>
+                        
+                        <div class="game-btn-group">
+                            <button id="btn-cooperate" class="game-play-btn btn-cooperate" onclick="playTurn('cooperate')">🤐 300円のままにする (協力)</button>
+                            <button id="btn-defect" class="game-play-btn btn-defect" onclick="playTurn('defect')">🗣️ 200円に値下げする (裏切り)</button>
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 5px;">
+                            <button class="sim-btn" onclick="resetGame()">🔄 ゲームをリセット</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 右：対局ログ -->
+                    <div class="log-box">
+                        <div style="font-size:11px; font-weight:bold; margin-bottom:8px; color:var(--color-ink-soft);">📋 今回のバトルの記録</div>
+                        <table class="log-table">
+                            <thead>
+                                <tr>
+                                    <th>回数</th>
+                                    <th>あなた</th>
+                                    <th>相手</th>
+                                    <th>あなたの収支</th>
+                                    <th>相手の収支</th>
+                                </tr>
+                            </thead>
+                            <tbody id="log-body">
+                                <tr>
+                                    <td colspan="5" style="color:var(--color-ink-light); padding:20px;">キャラクターを選択し、行動を選んでください。</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- 結果ボード -->
+                <div class="results-board">
+                    <div class="res-box">
+                        <div class="res-label">あなたの持ちコイン</div>
+                        <div id="val-player-coins-wrapper" class="res-val"><span id="val-player-coins">10</span> 枚</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">相手の持ちコイン</div>
+                        <div id="val-ai-coins-wrapper" class="res-val"><span id="val-ai-coins">10</span> 枚</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">現在のゲーム状況</div>
+                        <div id="val-game-eval-wrapper" class="res-val" style="font-size:15px; color:var(--color-brass);">
+                            <span id="val-game-eval">準備完了</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 判定ボード -->
+                <div id="status-board" class="target-board">
+                    <div class="target-left">
+                        <div class="target-title">🚥 状況の解説</div>
+                        <div id="status-desc" class="target-desc">最初は協力してコインを増やすのがベストですが、相手が裏切るリスクを考えると悩ましいですね。</div>
+                    </div>
+                    <div class="target-right">
+                        <div id="status-val" class="target-stat-value">初期状態</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-header">なぜお互いに損をする選択をしてしまうのか</h3>
+            <p>
+                このハンバーガー店の状況について、お互いの立場から論理的に考えてみます。
+            </p>
+            <p>
+                * **相手が300円で据え置く場合**: 自分が200円に値下げを行えば、顧客を独占して最大の利益（＋5コイン）を得られます。
+                * **相手が200円に値下げする場合**: 自分が300円のままだと大赤字（ー5コイン）になるため、自分も200円に下げて損失を抑える（ー2コイン）しか選択肢がありません。
+            </p>
+            <p>
+                相手がどちらを選択しても、自分にとっては「値下げする」ことが常に最も有利な選択肢となります。
+                このように、相手のいかなる行動に対しても常に最適な選択肢となる戦略を「支配戦略」と呼びます。
+            </p>
+            <p>
+                双方が同じ論理で合理的に判断した結果、両者は「値下げ・値下げ」を選択し、お互いにコインを減らす（ー2コイン）という結果に至ります。
+                このように、お互いに相手の戦略を前提としたとき、自分だけが選択を変えても利益を増やせない安定した状態を「ナッシュ均衡」と呼びます。
+            </p>
+            <p>
+                最も望ましい選択は、互いに協調して価格を据え置くことですが、相手の裏切りを警戒した結果、双方が損失を被る状態に陥ります。
+                この現象は「囚人のジレンマ」と呼ばれており、合理的な個人の選択が全体の不利益につながる数理的な罠の本質を示しています。
+            </p>
+
+            <h3 class="section-header">長期的関係における協調の誕生：しっぺ返し戦略の強さ</h3>
+            <p>
+                ビジネスや取引が1回限りで終了する場合、相手を裏切って値下げすることが合理的な正解となります。
+                しかし、実際のビジネスや社会生活における取引は、将来にわたって何度も繰り返される関係です。
+            </p>
+            <p>
+                このように何度もゲームが繰り返される環境において、最も高い利益獲得と、良好な関係を築くために有効な戦略が、シミュレーターのひつじ君が採用している「しっぺ返し（Tit-for-Tat）戦略」です。
+                ルールは非常に明快です。
+            </p>
+            <ol style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
+                <li><strong>最初のラウンドでは、相手を信頼して「協力（300円据え置き）」を選択します。</strong></li>
+                <li><strong>もし相手が裏切った場合は、次のラウンドで自分も「裏切り（値下げ）」を選択して対抗します。</strong></li>
+                <li><strong>相手が協力に戻った場合は、自分も次のラウンドで即座に「協力」に戻します。</strong></li>
+            </ol>
+            <p>
+                This strategy works by reciprocating cooperation and defection.
+                この戦略は、基本的には協調姿勢を保ちながらも、相手の裏切りには即座に報復を行い、相手が協調に戻ればすぐに許すという特徴を持っています。
+                このシンプルなルールを提示することで、相手に対しても「裏切り続けるより、協力し続けた方が長期的にお得である」と合理的に理解させ、相互に利益を上げ続ける関係を維持できます。
+            </p>
+
+            <h3 class="section-header">まとめ</h3>
+            <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 20px; font-size: 15px; line-height: 1.8;">
+                ゲーム理論は、単なる冷酷な駆け引きのための道具ではありません。
+                社会の中で無意味な対立や価格競争が発生するメカニズムを論理的に解明し、どうすれば持続可能な協力関係を築けるかを示すフレームワークです。
+                互いの利益を奪い合う関係から脱却し、ルールそのものを設計し直して双方に利益をもたらす関係を生み出す戦略的思考に、本モデルを役立ててください。
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- シミュレーター制御スクリプト -->
+    <script>
+        let currentTurn = 1;
+        const maxTurns = 5;
+        let playerCoins = 10;
+        let aiCoins = 10;
+        let history = []; // {turn, playerChoice, aiChoice, playerDiff, aiDiff}
+
+        // キャラクター設定
+        const characters = {
+            sheep: {
+                name: 'ひつじ君',
+                face: '🐑',
+                startMsg: '「お互いに300円を維持して、一緒にコインを増やそうね！」',
+                ccMsg: '「やったー！お互いハッピーだね！次も協力しよう！」',
+                cdMsg: '「ひどい！信じてたのに…次はやり返すよ！」',
+                dcMsg: '「ごめんね、私もちょっと身を守りたかったんだ…」',
+                ddMsg: '「うう、お互い値下げ競争じゃ損するよ。次は戻そう？」',
+                overMsg: '「お疲れさま！やっぱり協力するのが一番だよね！」'
+            },
+            fox: {
+                name: 'きつね社長',
+                face: '🦊',
+                startMsg: '「へへへ、協力して稼ごうぜ（裏切る気満々）」',
+                ccMsg: '「へえ、協力するのもたまには悪くないな」',
+                cdMsg: '「ひゃっはー！騙される方が悪いんだよ！コインごちそうさま！」',
+                dcMsg: '「チッ、裏切りがバレてたか。やるな」',
+                ddMsg: '「ケッ、お互い裏切りか。これじゃ儲からねえな」',
+                overMsg: '「けっ、まあこんなもんだろ。お前のコイン、もっと欲しかったな」'
+            },
+            dog: {
+                name: 'イヌ君',
+                face: '🐶',
+                startMsg: '「僕は君を信じてる！ずっと300円で売り続けるよ！」',
+                ccMsg: '「わーい！協力って素晴らしいね！」',
+                cdMsg: '「ええっ裏切られたの！？でも、次こそは信じてるよ！」',
+                dcMsg: '「だよね！君がトクしたなら僕は嬉しいよ！」',
+                ddMsg: '「うう、悲しいなぁ。でも僕はまた信じて協力するよ！」',
+                overMsg: '「最後まで一緒に遊んでくれてありがとう！」'
+            },
+            cat: {
+                name: '気まぐれネコ',
+                face: '🐱',
+                startMsg: '「ゴロゴロ…気分で売るよ。よろしくね」',
+                ccMsg: '「ニャー、いい感じ」',
+                cdMsg: '「フンッ、気まぐれに裏切ってみたの」',
+                dcMsg: '「ニャンだとー！裏切りおってー！」',
+                ddMsg: '「シャー！お互い気が合わないねぇ」',
+                overMsg: '「フニャー、楽しかったよ。またね」'
+            }
+        };
+
+        // DOM要素
+        const lblTurn = document.getElementById('lbl-turn');
+        const valPlayerCoins = document.getElementById('val-player-coins');
+        const valAiCoins = document.getElementById('val-ai-coins');
+        const valPlayerCoinsWrapper = document.getElementById('val-player-coins-wrapper');
+        const valAiCoinsWrapper = document.getElementById('val-ai-coins-wrapper');
+        const valGameEval = document.getElementById('val-game-eval');
+        const valGameEvalWrapper = document.getElementById('val-game-eval-wrapper');
+        const logBody = document.getElementById('log-body');
+        const btnCooperate = document.getElementById('btn-cooperate');
+        const btnDefect = document.getElementById('btn-defect');
+        const selectAiChar = document.getElementById('ai-char');
+        const statusVal = document.getElementById('status-val');
+        const statusDesc = document.getElementById('status-desc');
+        const simContainer = document.getElementById('sim-container');
+
+        // キャラクターアバター
+        const charFace = document.getElementById('char-face');
+        const charMsg = document.getElementById('char-msg');
+
+        function resetGame() {
+            currentTurn = 1;
+            playerCoins = 10;
+            aiCoins = 10;
+            history = [];
+            
+            lblTurn.textContent = currentTurn;
+            valPlayerCoins.textContent = playerCoins;
+            valAiCoins.textContent = aiCoins;
+            
+            valPlayerCoinsWrapper.className = 'res-val';
+            valAiCoinsWrapper.className = 'res-val';
+            
+            valGameEval.textContent = '準備完了';
+            valGameEvalWrapper.style.color = 'var(--color-brass)';
+            
+            logBody.innerHTML = '<tr><td colspan="5" style="color:var(--color-ink-light); padding:20px;">キャラクターを選択し、行動を選んでください。</td></tr>';
+            
+            btnCooperate.disabled = false;
+            btnCooperate.style.opacity = 1;
+            btnDefect.disabled = false;
+            btnDefect.style.opacity = 1;
+
+            statusVal.textContent = '初期状態';
+            statusDesc.textContent = '最初は協力してコインを増やすのがベストですが、相手が裏切るリスクを考えると悩ましいですね。';
+            
+            // 利得表のハイライトをすべてクリア
+            clearTableHighlight();
+
+            // キャラクター表示リセット
+            const charType = selectAiChar.value;
+            charFace.textContent = characters[charType].face;
+            charMsg.textContent = characters[charType].startMsg;
+
+            simContainer.classList.remove('flash-win');
+            simContainer.classList.remove('flash-lose');
+        }
+
+        function clearTableHighlight() {
+            ['cell-cc', 'cell-cd', 'cell-dc', 'cell-dd'].forEach(id => {
+                document.getElementById(id).className = document.getElementById(id).className.replace(' active-cell', '');
+            });
+        }
+
+        // AI意思決定
+        function getAiChoice(charType, playerHistory) {
+            const char = characters[charType];
+            if (charType === 'dog') return 'cooperate'; // 常に協力
+            if (charType === 'fox') return 'defect';    // 常に裏切り
+            if (charType === 'cat') return Math.random() < 0.5 ? 'cooperate' : 'defect';
+            
+            // しっぺ返し (ひつじ君)
+            if (charType === 'sheep') {
+                if (playerHistory.length === 0) return 'cooperate';
+                return playerHistory[playerHistory.length - 1];
+            }
+            return 'cooperate';
+        }
+
+        function playTurn(playerChoice) {
+            if (currentTurn > maxTurns) return;
+
+            const charType = selectAiChar.value;
+            const char = characters[charType];
+            
+            const playerHistory = history.map(h => h.playerChoice);
+            const aiChoice = getAiChoice(charType, playerHistory);
+
+            // 利得計算
+            let pDiff = 0;
+            let aDiff = 0;
+            let targetCellId = '';
+
+            if (playerChoice === 'cooperate' && aiChoice === 'cooperate') {
+                pDiff = 2;
+                aDiff = 2;
+                targetCellId = 'cell-cc';
+                charMsg.textContent = char.ccMsg;
+            } else if (playerChoice === 'cooperate' && aiChoice === 'defect') {
+                pDiff = -5;
+                aDiff = 5;
+                targetCellId = 'cell-cd';
+                charMsg.textContent = char.cdMsg;
+            } else if (playerChoice === 'defect' && aiChoice === 'cooperate') {
+                pDiff = 5;
+                aDiff = -5;
+                targetCellId = 'cell-dc';
+                charMsg.textContent = char.dcMsg;
+            } else {
+                pDiff = -2;
+                aDiff = -2;
+                targetCellId = 'cell-dd';
+                charMsg.textContent = char.ddMsg;
+            }
+
+            // 利得表のセルをハイライト
+            clearTableHighlight();
+            const activeCell = document.getElementById(targetCellId);
+            activeCell.className += ' active-cell';
+
+            // コインの増減
+            playerCoins += pDiff;
+            aiCoins += aDiff;
+
+            // フラッシュ演出
+            if (pDiff > 0) {
+                simContainer.classList.add('flash-win');
+                setTimeout(() => simContainer.classList.remove('flash-win'), 300);
+            } else if (pDiff < 0) {
+                simContainer.classList.add('flash-lose');
+                setTimeout(() => simContainer.classList.remove('flash-lose'), 300);
+            }
+
+            // コインと評価
+            valPlayerCoins.textContent = playerCoins;
+            valAiCoins.textContent = aiCoins;
+
+            if (playerCoins <= 0) {
+                // 破産ゲームオーバー
+                playerCoins = 0;
+                valPlayerCoins.textContent = 0;
+                history.push({ turn: currentTurn, playerChoice, aiChoice, playerDiff: pDiff, aiDiff: aDiff });
+                renderLog();
+                gameOver(true); // 破産
+                return;
+            }
+
+            // 履歴追加
+            history.push({
+                turn: currentTurn,
+                playerChoice,
+                aiChoice,
+                playerDiff: pDiff,
+                aiDiff: aDiff
+            });
+
+            renderLog();
+
+            // ターン進行
+            if (currentTurn < maxTurns) {
+                currentTurn++;
+                lblTurn.textContent = currentTurn;
+            } else {
+                gameOver(false); // 5ターン完遂
+            }
+        }
+
+        function renderLog() {
+            if (history.length === 1) {
+                logBody.innerHTML = '';
+            }
+
+            const last = history[history.length - 1];
+            const row = document.createElement('tr');
+            
+            const trans = (choice) => choice === 'cooperate' ? '🤐 300円' : '🗣️ 200円';
+            const fmtDiff = (val) => val >= 0 ? `+${val}枚` : `${val}枚`;
+
+            row.innerHTML = `
+                <td><strong>${last.turn}</strong></td>
+                <td style="color:${last.playerChoice === 'cooperate' ? 'var(--color-brass)' : 'var(--color-ink)'}">${trans(last.playerChoice)}</td>
+                <td style="color:${last.aiChoice === 'cooperate' ? 'var(--color-brass)' : 'var(--color-ink)'}">${trans(last.aiChoice)}</td>
+                <td style="font-family:var(--font-mono); color:${last.playerDiff >= 0 ? '#10b981' : 'var(--color-red)'}">${fmtDiff(last.playerDiff)}</td>
+                <td style="font-family:var(--font-mono); color:${last.aiDiff >= 0 ? '#10b981' : 'var(--color-red)'}">${fmtDiff(last.aiDiff)}</td>
+            `;
+            logBody.appendChild(row);
+        }
+
+        function gameOver(isBankrupt) {
+            btnCooperate.disabled = true;
+            btnCooperate.style.opacity = 0.5;
+            btnDefect.disabled = true;
+            btnDefect.style.opacity = 0.5;
+            lblTurn.textContent = '終了';
+
+            const charType = selectAiChar.value;
+            charMsg.textContent = characters[charType].overMsg;
+
+            if (isBankrupt) {
+                valGameEval.textContent = '破産ゲームオーバー';
+                valGameEvalWrapper.style.color = 'var(--color-red)';
+                valPlayerCoinsWrapper.className = 'res-val score-down';
+                
+                statusVal.textContent = '破産のジレンマ';
+                statusDesc.textContent = '相手を信じすぎたか、泥沼の裏切り競争を続けた結果、資金が底をついて破産してしまいました。戦略の修正が必要です。';
+                return;
+            }
+
+            // 5ターン終了時のコイン数評価
+            if (playerCoins >= 18 && aiCoins >= 18) {
+                valGameEval.textContent = '共存共栄（最良）';
+                valGameEvalWrapper.style.color = '#10b981';
+                valPlayerCoinsWrapper.className = 'res-val score-up';
+                valAiCoinsWrapper.className = 'res-val score-up';
+                
+                statusVal.textContent = '信頼の好循環';
+                statusDesc.textContent = 'お互いに一度も裏切らずに協力を維持できたため、双方とも大富豪になりました。これがパレート最適の形です。';
+            } else if (playerCoins <= 5 && aiCoins <= 5) {
+                valGameEval.textContent = '共倒れ（最悪）';
+                valGameEvalWrapper.style.color = 'var(--color-red)';
+                valPlayerCoinsWrapper.className = 'res-val score-down';
+                valAiCoinsWrapper.className = 'res-val score-down';
+                
+                statusVal.textContent = '値下げ泥沼の崩壊';
+                statusDesc.textContent = 'お互いに疑い合って値下げ（裏切り）を続けた結果、お互いにコインをすり減らしました。典型的なナッシュ均衡の罠です。';
+            } else {
+                if (playerCoins > aiCoins) {
+                    valGameEval.textContent = 'あなたの勝利';
+                    valGameEvalWrapper.style.color = 'var(--color-brass)';
+                    valPlayerCoinsWrapper.className = 'res-val score-up';
+                    valAiCoinsWrapper.className = 'res-val score-down';
+                    
+                    statusVal.textContent = '一方的な搾取';
+                    statusDesc.textContent = 'あなたは裏切りを絡めて相手からコインを奪うことに成功しました。しかし、相手が「しっぺ返し」なら報復を招いていたはずです。';
+                } else if (playerCoins < aiCoins) {
+                    valGameEval.textContent = '敗北';
+                    valGameEvalWrapper.style.color = 'var(--color-red)';
+                    valPlayerCoinsWrapper.className = 'res-val score-down';
+                    valAiCoinsWrapper.className = 'res-val score-up';
+                    
+                    statusVal.textContent = '騙されの損害';
+                    statusDesc.textContent = '相手（特にきつね）にカモにされ、コインを奪い取られてしまいました。お人好しすぎる戦略には警戒が必要です。';
+                } else {
+                    valGameEval.textContent = '引き分け';
+                    valGameEvalWrapper.style.color = 'var(--color-ink-soft)';
+                    
+                    statusVal.textContent = '同等均衡';
+                    statusDesc.textContent = '両者とも全く同じ戦略（または対抗策）をとり、結果として均等にコインが分配されました。';
+                }
+            }
+        }
+
+        // 初期化実行
+        resetGame();
+    </script>
+</body>
+</html>

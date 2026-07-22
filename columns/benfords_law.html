@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>不正会計を見抜く「ベンフォードの法則」 | Otona Math コラム</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .column-content {
+            background-color: var(--color-surface);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            margin-bottom: 40px;
+        }
+        .column-content p {
+            line-height: 2.1;
+            margin-bottom: 28px;
+        }
+        .section-header {
+            color: var(--color-brass);
+            margin-top: 40px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 10px;
+            font-size: 22px;
+        }
+        
+        /* Interactive Simulator Styles */
+        .interactive-simulator {
+            background-color: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        .simulator-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 15px;
+        }
+        .simulator-header h3 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            color: var(--color-ink);
+        }
+        .simulator-header p {
+            font-size: 14px;
+            color: var(--color-ink-soft);
+        }
+        
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        @media (max-width: 900px) {
+            .sim-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Left Panel */
+        .control-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .dataset-btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .dataset-btn {
+            background: #fff;
+            border: 1px solid var(--color-paper-line);
+            padding: 15px;
+            border-radius: 6px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .dataset-btn:hover {
+            border-color: var(--color-brass);
+            background-color: var(--color-paper);
+        }
+        .dataset-btn.active {
+            border-color: var(--color-brass);
+            background-color: rgba(169, 120, 47, 0.08);
+            box-shadow: 0 2px 8px rgba(169, 120, 47, 0.1);
+        }
+        .dataset-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--color-ink);
+            margin-bottom: 4px;
+        }
+        .dataset-desc {
+            font-size: 12px;
+            color: var(--color-ink-soft);
+            line-height: 1.4;
+        }
+
+        /* Graph Panel */
+        .graph-box {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+        }
+        .graph-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--color-ink-soft);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .graph-legend {
+            display: flex;
+            gap: 12px;
+            font-size: 11px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+        .graph-svg-container {
+            width: 100%;
+            height: 240px;
+        }
+        .graph-svg-container svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+        
+        /* Results Board */
+        .results-board {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            background: var(--color-paper);
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        @media (max-width: 600px) {
+            .results-board {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+        .res-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .res-label {
+            font-size: 13px;
+            color: var(--color-ink-soft);
+            margin-bottom: 4px;
+        }
+        .res-val {
+            font-size: 22px;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            color: var(--color-ink);
+        }
+        .res-val.status-ok { color: #10b981; }
+        .res-val.status-warn { color: var(--color-red); }
+        
+        /* Target Board */
+        .target-board {
+            background: rgba(169, 120, 47, 0.05);
+            border: 1px solid rgba(169, 120, 47, 0.2);
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        @media (max-width: 600px) {
+            .target-board {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+        .target-left {
+            display: flex;
+            flex-direction: column;
+        }
+        .target-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .target-desc {
+            font-size: 12px;
+            color: var(--color-ink-soft);
+        }
+        .target-right {
+            display: flex;
+            align-items: center;
+        }
+        .target-stat-value {
+            font-family: var(--font-body);
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+
+        /* Formulas & Explanations */
+        .formula-box {
+            font-family: var(--font-mono);
+            background-color: var(--color-paper);
+            border: 1px solid var(--color-paper-line);
+            padding: 20px;
+            border-radius: 6px;
+            margin: 25px 0;
+            overflow-x: auto;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        .formula-inline {
+            font-family: var(--font-mono);
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 15px;
+        }
+        
+        /* Bar chart styling */
+        .bar-actual {
+            fill: var(--color-ink-soft);
+            transition: height 0.5s ease, y 0.5s ease;
+        }
+        .bar-actual.warn {
+            fill: var(--color-red);
+        }
+        .line-theory {
+            stroke: var(--color-brass);
+            stroke-width: 2.5;
+            fill: none;
+        }
+        .dot-theory {
+            fill: var(--color-brass);
+        }
+        
+        .textarea-data {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            width: 100%;
+            height: 90px;
+            border: 1px solid var(--color-paper-line);
+            background-color: var(--color-paper);
+            color: var(--color-ink-soft);
+            border-radius: 4px;
+            padding: 10px;
+            resize: none;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="../index.html">数学と統計学</a></li>
+                    <li><a href="index.html">コラム</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">コラム</a> &gt; 不正会計を見抜く「ベンフォードの法則」
+        </div>
+
+        <article class="column-content">
+            <h2 style="font-size: 28px; margin-bottom: 30px; line-height: 1.4;">データの不自然な振る舞いを見抜く：<br>不正会計を暴く「ベンフォードの法則」</h2>
+            
+            <p>
+                仕事で財務データや統計データを扱う際、「最も出現しやすい先頭の数字」は何だと思いますか？
+                1から9までの数字がランダムに出るとしたら、確率はどれも均等に約11.1%（9分の1）になるはずですよね。
+                しかし、自然のデータや人間社会の実際のデータでは、この直感は完全に覆されます。
+            </p>
+            <p>
+                データ分析や監査の現場において、捏造や不正を見抜く強力な武器として知られるのが**「ベンフォードの法則（Benford's Law）」**です。
+                この法則によると、自然に生まれた数値群の先頭の数字は、**「1」である確率が約30%に達し**、数字が大きくなるにつれて出現率は対数的に減少し、「9」はわずか4.6%になります。
+            </p>
+
+            <h3 class="section-header">【体験】財務データ不正検知シミュレーター</h3>
+            <p>
+                以下のシミュレーターで、3つのデータセットを切り替えてみましょう。
+                ベンフォードの法則の「理論上の分布（ゴールドの線）」と、「データから集計した実測値（グレー/レッドの棒）」を比較することができます。
+            </p>
+
+            <!-- シミュレーター容器 -->
+            <div class="interactive-simulator">
+                <div class="simulator-header">
+                    <h3>ベンフォードの法則・データ分析監査ツール</h3>
+                    <p>解析対象のデータセットを切り替えて、先頭桁の出現比率が理論値と一致するか確認しましょう。</p>
+                </div>
+                
+                <div class="sim-grid">
+                    <!-- 左：操作パネル -->
+                    <div class="control-panel">
+                        <div class="dataset-btn-group">
+                            <button id="btn-data-a" class="dataset-btn active" onclick="loadDataset('A')">
+                                <div class="dataset-title">🏢 A社：正規の経費データ</div>
+                                <div class="dataset-desc">通常の事業活動で発生した実際の経費です。不正な操作は加えられていません。</div>
+                            </button>
+                            <button id="btn-data-b" class="dataset-btn" onclick="loadDataset('B')">
+                                <div class="dataset-title">⚠️ B社：架空請求が疑われるデータ</div>
+                                <div class="dataset-desc">監査で架空取引が疑われているデータです。人間が不自然に数字を捏造した形跡があります。</div>
+                            </button>
+                            <button id="btn-data-c" class="dataset-btn" onclick="loadDataset('C')">
+                                <div class="dataset-title">🌲 C社：世界の河川の長さデータ</div>
+                                <div class="dataset-desc">地理統計から収集された自然界のデータです。人間の意思が介在しない純粋な自然分布です。</div>
+                            </button>
+                        </div>
+                        
+                        <div>
+                            <div style="font-size: 12px; font-weight: bold; margin-bottom: 5px; color: var(--color-ink-soft)">📂 生データ抽出 (先頭の数十件)</div>
+                            <textarea id="raw-data-area" class="textarea-data" readonly></textarea>
+                        </div>
+                    </div>
+                    
+                    <!-- 右：SVGグラフ -->
+                    <div class="graph-box">
+                        <div class="graph-title">
+                            <span>📊 先頭桁の出現確率分布 (1〜9)</span>
+                            <div class="graph-legend">
+                                <span class="legend-item"><span class="legend-color" style="background: var(--color-brass)"></span>理論値</span>
+                                <span class="legend-item"><span class="legend-color" style="background: var(--color-ink-soft)"></span>実測値</span>
+                            </div>
+                        </div>
+                        <div class="graph-svg-container">
+                            <svg id="svg-benford">
+                                <!-- Y軸グリッド線 -->
+                                <line x1="10%" y1="10%" x2="95%" y2="10%" stroke="#f0f0f0" />
+                                <line x1="10%" y1="40%" x2="95%" y2="40%" stroke="#f0f0f0" />
+                                <line x1="10%" y1="70%" x2="95%" y2="70%" stroke="#f0f0f0" />
+                                <line x1="10%" y1="90%" x2="95%" y2="90%" stroke="var(--color-paper-line)" />
+                                
+                                <!-- 1〜9のX軸ラベルとグリッド -->
+                                <!-- 棒グラフ (JSで高さ制御) -->
+                                <rect id="bar-1" class="bar-actual" x="12%" y="90%" width="6%" height="0" />
+                                <rect id="bar-2" class="bar-actual" x="21%" y="90%" width="6%" height="0" />
+                                <rect id="bar-3" class="bar-actual" x="30%" y="90%" width="6%" height="0" />
+                                <rect id="bar-4" class="bar-actual" x="39%" y="90%" width="6%" height="0" />
+                                <rect id="bar-5" class="bar-actual" x="48%" y="90%" width="6%" height="0" />
+                                <rect id="bar-6" class="bar-actual" x="57%" y="90%" width="6%" height="0" />
+                                <rect id="bar-7" class="bar-actual" x="66%" y="90%" width="6%" height="0" />
+                                <rect id="bar-8" class="bar-actual" x="75%" y="90%" width="6%" height="0" />
+                                <rect id="bar-9" class="bar-actual" x="84%" y="90%" width="6%" height="0" />
+                                
+                                <!-- 理論上の対数折れ線 (JSでパスを上書き) -->
+                                <path id="path-theory" class="line-theory" d="" />
+                                <!-- 理論値のプロット点 -->
+                                <circle id="dot-1" class="dot-theory" r="4" />
+                                <circle id="dot-2" class="dot-theory" r="4" />
+                                <circle id="dot-3" class="dot-theory" r="4" />
+                                <circle id="dot-4" class="dot-theory" r="4" />
+                                <circle id="dot-5" class="dot-theory" r="4" />
+                                <circle id="dot-6" class="dot-theory" r="4" />
+                                <circle id="dot-7" class="dot-theory" r="4" />
+                                <circle id="dot-8" class="dot-theory" r="4" />
+                                <circle id="dot-9" class="dot-theory" r="4" />
+                                
+                                <!-- 軸ラベル -->
+                                <text x="15%" y="97%" text-anchor="middle" font-size="10" font-family="var(--font-mono)">1</text>
+                                <text x="24%" y="97%" text-anchor="middle" font-size="10" font-family="var(--font-mono)">2</text>
+                                <text x="33%" y="97%" text-anchor="middle" font-size="10" font-family="var(--font-mono)">3</text>
+                                <text x="42%" y="97%" text-anchor="middle" font-size="10" font-family="var(--font-mono)">4</text>
+                                <text x="51%" y="97%" text-anchor="middle" font-size="10" font-family="var(--font-mono)">5</text>
+                                <text x="60%" y="97%" text-anchor="middle" font-size="10" font-family="var(--font-mono)">6</text>
+                                <text x="69%" y="97%" text-anchor="middle" font-size="10" font-family="var(--font-mono)">7</text>
+                                <text x="78%" y="97%" text-anchor="middle" font-size="10" font-family="var(--font-mono)">8</text>
+                                <text x="87%" y="97%" text-anchor="middle" font-size="10" font-family="var(--font-mono)">9</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 結果ボード -->
+                <div class="results-board">
+                    <div class="res-box">
+                        <div class="res-label">先頭「1」の出現率</div>
+                        <div class="res-val"><span id="val-pct-1">0.0</span> %</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">先頭「9」の出現率</div>
+                        <div class="res-val"><span id="val-pct-9">0.0</span> %</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">データ監査結果の判定</div>
+                        <div id="val-audit-status" class="res-val status-ok">適合（正常）</div>
+                    </div>
+                </div>
+                
+                <!-- 情報判定ボード -->
+                <div class="target-board">
+                    <div class="target-left">
+                        <div class="target-title">🐚 適合度判定の背景</div>
+                        <div class="target-desc">ベンフォードの法則との乖離度（カイ二乗値）をもとに判定しています。値が小さいほど正常です。</div>
+                    </div>
+                    <div class="target-right">
+                        <div class="target-stat-value">
+                            カイ二乗値 (χ²): <span id="val-chi2">0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-header">直感に反する対数的な確率分布</h3>
+            <p>
+                ベンフォードの法則に従う場合、先頭の数字 $d$（$1$ から $9$）が出現する確率 $P(d)$ は、以下の対数式で表されます。
+            </p>
+
+            <div class="formula-box">
+                P(d) = log₁₀(1 + 1/d)
+            </div>
+
+            <p>
+                この数式から導かれる「各数字が先頭に来る確率」は以下の通りです。
+            </p>
+            <ul style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
+                <li><strong>1:</strong> 30.1%</li>
+                <li><strong>2:</strong> 17.6%</li>
+                <li><strong>3:</strong> 12.5%</li>
+                <li><strong>4:</strong> 9.7%</li>
+                <li><strong>5:</strong> 7.9%</li>
+                <li><strong>6:</strong> 6.7%</li>
+                <li><strong>7:</strong> 5.8%</li>
+                <li><strong>8:</strong> 5.1%</li>
+                <li><strong>9:</strong> 4.6%</li>
+            </ul>
+            <p>
+                なぜ「1」がこれほど多いのでしょうか。
+                概念的に理解するには、**「成長や蓄積のプロセス」**をイメージすると分かりやすいです。
+            </p>
+            <p>
+                例えば、ある口座の預金額が「100万円」だったとします。
+                これが2倍の「200万円（先頭が2）」になるには、**100%の成長**が必要です。
+                しかし、「900万円」から「1000万円（先頭が1）」になるには、**約11%の成長**で済みます。
+                つまり、多くのデータは「1」のゾーンに最も長い時間滞在し、数字が大きくなるほど素早く通過してしまうため、先頭が「1」になるデータが圧倒的に多くなるのです。
+            </p>
+
+            <h3 class="section-header">人間が作ったデータは「均等」になってしまう</h3>
+            <p>
+                シミュレーターで「B社：架空請求が疑われるデータ」を選択してみてください。
+                「1」が不自然に少なく、すべての数字が**平坦（11.1%前後）**に並んでいますよね。
+            </p>
+            <p>
+                不正経費の請求やデータの捏造を行う人間は、「怪しまれないようにバラバラな数字を入力しよう」という心理が働きます。
+                しかし、**「人間の直感的なランダム」は、1から9を均等に使おうとしてしまう**ため、結果としてこの法則から大きく逸脱し、監査ツールで一発で暴かれてしまうのです。
+            </p>
+
+            <h3 class="section-header">現代ビジネスにおける監査への応用</h3>
+            <p>
+                ベンフォードの法則は、単なる数学のパズルではありません。
+                国税局や公認会計士による**不正監査の実務（フォレンジック・アカウンティング）**において、標準的なスクリーニング手法として導入されています。
+            </p>
+            <p>
+                何百万件もの領収書データを人間の手で一枚ずつ確認するのは不可能です。
+                しかし、ベンフォードの法則を使って全体の数値を走査すれば、統計的に明らかに不自然な動きをしている業者や部門を絞り込むことができます。
+                かつて世界を揺るがした米エンロン社の粉飾決算事件や、身近な不正経費の計上なども、この法則をベースにしたデータ分析が決定打となりました。
+            </p>
+
+            <h3 class="section-header">まとめ</h3>
+            <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 20px; font-size: 15px; line-height: 1.8;">
+                人間が「ランダムで自然だ」と思い込んでいる分布と、数学が示す「真に自然な分布」には明確なズレが存在します。
+                ビジネスにおけるリスクやデータの真実性を評価する際は、人間の主観的な思い込みを配し、ベンフォードの法則のような冷徹な数理フィルターを用いて監査することが極めて重要なのです。
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- シミュレーション制御スクリプト -->
+    <script>
+        // 理論値定義 (1〜9)
+        const BENFORD_THEORY = [30.1, 17.6, 12.5, 9.7, 7.9, 6.7, 5.8, 5.1, 4.6];
+
+        // 各データセット
+        const datasets = {
+            A: [
+                1540, 1120, 2400, 3100, 190, 480, 1050, 2800, 1420, 1890,
+                2900, 380, 520, 120, 16000, 4200, 950, 1300, 210, 1700,
+                3050, 2200, 1150, 1380, 2450, 3890, 680, 1200, 5100, 780,
+                110, 230, 1990, 1430, 290, 410, 850, 1120, 1630, 350,
+                1080, 2240, 1500, 1250, 3300, 620, 750, 160, 440, 1900,
+                2100, 1350, 3200, 4800, 12500, 980, 1050, 1750, 2950, 340
+            ],
+            B: [
+                9540, 8820, 7460, 6300, 5250, 4120, 3350, 2900, 1850, 9100,
+                8200, 7300, 6400, 5100, 4900, 3800, 2700, 1950, 9600, 8500,
+                7800, 6100, 5300, 4200, 3100, 2800, 1600, 9200, 8900, 7500,
+                6800, 5500, 4500, 3200, 2950, 1750, 9800, 8100, 7200, 6200,
+                5800, 4300, 3900, 2600, 1500, 9400, 8300, 7900, 6600, 5150
+            ],
+            C: [
+                6650, 6275, 6211, 5464, 4880, 4700, 4400, 4248, 4180, 4130,
+                3600, 3596, 2800, 2520, 2333, 2300, 1978, 1870, 1609, 1430,
+                1420, 1300, 1205, 1130, 1090, 978, 870, 750, 640, 520,
+                480, 430, 390, 350, 290, 230, 180, 140, 120, 95,
+                82, 74, 65, 53, 42, 38, 29, 21, 15, 11
+            ]
+        };
+
+        const rawDataArea = document.getElementById('raw-data-area');
+        const valPct1 = document.getElementById('val-pct-1');
+        const valPct9 = document.getElementById('val-pct-9');
+        const valAuditStatus = document.getElementById('val-audit-status');
+        const valChi2 = document.getElementById('val-chi2');
+        const pathTheory = document.getElementById('path-theory');
+
+        // 理論折れ線グラフと点の初期プロット
+        function initTheoryLine() {
+            const width = 300; // SVG仮想サイズ
+            const height = 240;
+            const paddingLeft = 30; // Y軸マージン (10%)
+            const paddingBottom = 24; // X軸マージン (10%)
+            
+            let dPath = '';
+            
+            for (let i = 1; i <= 9; i++) {
+                const theoryPct = BENFORD_THEORY[i - 1];
+                // x座標: 12%〜84% (各9%の間隔)
+                // y座標: 90%が0%, 10%が40%とする (実測最大が40%近くになるため)
+                const x = paddingLeft + (i - 1) * 27 + 10; // SVG内の物理座標
+                const y = 216 - (theoryPct / 40) * 192; // 240 * 0.9 = 216, 240 * 0.8 = 192
+
+                if (i === 1) {
+                    dPath = `M ${x} ${y}`;
+                } else {
+                    dPath += ` L ${x} ${y}`;
+                }
+                
+                // 点の座標を更新
+                const dot = document.getElementById(`dot-${i}`);
+                dot.setAttribute('cx', x);
+                dot.setAttribute('cy', y);
+            }
+            pathTheory.setAttribute('d', dPath);
+        }
+
+        // データセットの集計とグラフ更新
+        function loadDataset(type) {
+            // アクティブボタンの切り替え
+            ['A', 'B', 'C'].forEach(t => {
+                document.getElementById(`btn-data-${t}`).className = (t === type) ? 'dataset-btn active' : 'dataset-btn';
+            });
+
+            const data = datasets[type];
+            rawDataArea.value = data.join(', ');
+
+            // 先頭桁の集計
+            const counts = Array(10).fill(0);
+            data.forEach(val => {
+                const firstDigit = parseInt(val.toString().charAt(0));
+                if (firstDigit >= 1 && firstDigit <= 9) {
+                    counts[firstDigit]++;
+                }
+            });
+
+            const total = data.length;
+            const pcts = [];
+            for (let i = 1; i <= 9; i++) {
+                pcts.push((counts[i] / total) * 100);
+            }
+
+            // 確率の表示更新
+            valPct1.textContent = pcts[0].toFixed(1);
+            valPct9.textContent = pcts[8].toFixed(1);
+
+            // カイ二乗適合度検定の計算
+            // χ² = Σ ( (O_i - E_i)² / E_i )
+            let chi2Val = 0;
+            for (let i = 1; i <= 9; i++) {
+                const observed = counts[i]; // 実測度数
+                const expected = (BENFORD_THEORY[i - 1] / 100) * total; // 理論期待度数
+                if (expected > 0) {
+                    chi2Val += Math.pow(observed - expected, 2) / expected;
+                }
+            }
+            valChi2.textContent = chi2Val.toFixed(2);
+
+            // 判定基準 (自由度8、有意水準5%の境界値 χ² = 15.51)
+            const isWarn = chi2Val > 15.51;
+            if (isWarn) {
+                valAuditStatus.textContent = '警告（異常・捏造の疑い）';
+                valAuditStatus.className = 'res-val status-warn';
+            } else {
+                valAuditStatus.textContent = '適合（正常）';
+                valAuditStatus.className = 'res-val status-ok';
+            }
+
+            // 棒グラフ（SVG rect）の更新
+            const height = 240;
+            for (let i = 1; i <= 9; i++) {
+                const bar = document.getElementById(`bar-${i}`);
+                const pct = pcts[i - 1];
+                
+                // 高さ計算 (40%を192pxとする)
+                const barHeight = (pct / 40) * 192;
+                const barY = 216 - barHeight;
+
+                bar.setAttribute('height', barHeight);
+                bar.setAttribute('y', barY);
+
+                // 警告状態の場合は赤く染める
+                if (isWarn) {
+                    bar.classList.add('warn');
+                } else {
+                    bar.classList.remove('warn');
+                }
+            }
+        }
+
+        // 初期設定
+        initTheoryLine();
+        loadDataset('A'); // 初期読み込み
+    </script>
+</body>
+</html>

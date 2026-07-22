@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>素数と周期ゼミの謎 | Otona Math コラム</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .column-content {
+            background-color: var(--color-surface);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            margin-bottom: 40px;
+        }
+        .column-content p {
+            line-height: 2.1;
+            margin-bottom: 28px;
+        }
+        .section-header {
+            color: var(--color-brass);
+            margin-top: 40px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 10px;
+            font-size: 22px;
+        }
+        
+        /* Interactive Simulator Styles */
+        .interactive-simulator {
+            background-color: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        .simulator-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 15px;
+        }
+        .simulator-header h3 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            color: var(--color-ink);
+        }
+        .simulator-header p {
+            font-size: 14px;
+            color: var(--color-ink-soft);
+        }
+        
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        @media (max-width: 900px) {
+            .sim-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Sliders Panel */
+        .sliders-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .slider-group {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .slider-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--color-ink);
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .slider-label span.value-disp {
+            font-family: var(--font-mono);
+            color: var(--color-brass);
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .slider-group input[type="range"] {
+            width: 100%;
+            accent-color: var(--color-brass);
+            cursor: pointer;
+        }
+        .slider-desc {
+            font-size: 11px;
+            color: var(--color-ink-soft);
+            margin-top: 5px;
+            line-height: 1.4;
+        }
+        
+        /* Timeline Grid Container */
+        .timeline-box {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .timeline-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            color: var(--color-ink-soft);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .timeline-legend {
+            display: flex;
+            gap: 12px;
+            font-size: 11px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+            border: 1px solid var(--color-paper-line);
+        }
+        
+        .timeline-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 5px;
+            margin-top: 10px;
+        }
+        .timeline-cell {
+            aspect-ratio: 1;
+            background: var(--color-paper);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 4px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 9px;
+            font-family: var(--font-mono);
+            color: var(--color-ink-soft);
+            overflow: hidden;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .timeline-cell.semi-a::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 50%;
+            background-color: rgba(169, 120, 47, 0.6); /* 真鍮色 */
+        }
+        .timeline-cell.semi-b::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 0; right: 0; bottom: 0;
+            background-color: rgba(62, 80, 99, 0.6); /* インク色 */
+        }
+        .timeline-cell.overlap {
+            border-color: var(--color-red);
+            background-color: rgba(180, 67, 47, 0.15);
+            box-shadow: 0 0 6px rgba(180, 67, 47, 0.3);
+        }
+        .timeline-cell.overlap::before, .timeline-cell.overlap::after {
+            background-color: var(--color-red) !important;
+        }
+        
+        /* Results Board */
+        .results-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            background: var(--color-paper);
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        @media (max-width: 600px) {
+            .results-board {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+        .res-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .res-label {
+            font-size: 13px;
+            color: var(--color-ink-soft);
+            margin-bottom: 4px;
+        }
+        .res-val {
+            font-size: 24px;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            color: var(--color-ink);
+        }
+        .res-val.overlap-warn { color: var(--color-red); }
+        .res-val.overlap-safe { color: #10b981; }
+        
+        /* Target Board */
+        .target-board {
+            background: rgba(169, 120, 47, 0.05);
+            border: 1px solid rgba(169, 120, 47, 0.2);
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        @media (max-width: 600px) {
+            .target-board {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+        .target-left {
+            display: flex;
+            flex-direction: column;
+        }
+        .target-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .target-desc {
+            font-size: 12px;
+            color: var(--color-ink-soft);
+        }
+        .target-right {
+            display: flex;
+            align-items: center;
+        }
+        .target-stat-value {
+            font-family: var(--font-body);
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+
+        /* Formulas & Explanations */
+        .formula-box {
+            font-family: var(--font-mono);
+            background-color: var(--color-paper);
+            border: 1px solid var(--color-paper-line);
+            padding: 20px;
+            border-radius: 6px;
+            margin: 25px 0;
+            overflow-x: auto;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        .formula-line {
+            display: block;
+            margin-bottom: 8px;
+        }
+        .formula-line:last-child {
+            margin-bottom: 0;
+        }
+        .formula-inline {
+            font-family: var(--font-mono);
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 15px;
+        }
+        .text-highlight {
+            border-bottom: 2px dotted var(--color-brass);
+            font-weight: 500;
+        }
+
+        /* Common Button Style */
+        .sim-btn {
+            background: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            color: var(--color-ink);
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: var(--radius-btn);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .sim-btn:hover {
+            border-color: var(--color-ink);
+            background-color: #f7f7f7;
+        }
+        .prime-text {
+            color: #10b981;
+            font-weight: bold;
+        }
+        .composite-text {
+            color: var(--color-ink-soft);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="../index.html">数学と統計学</a></li>
+                    <li><a href="index.html">コラム</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">コラム</a> &gt; 素数と周期ゼミの謎
+        </div>
+
+        <article class="column-content">
+            <h2 style="font-size: 28px; margin-bottom: 30px; line-height: 1.4;">13年と17年の暗号：<br>進化の生存戦略として「素数」を選択したセミの謎</h2>
+            
+            <p>
+                北米大陸には、13年または17年に一度だけ、何百億匹という天文学的な数で一斉に羽化する**「周期ゼミ」**が生息しています。
+                彼らは人生のほとんどを暗い地中で過ごし、決まった年数が経つと一斉に地上へ現れます。
+            </p>
+            <p>
+                ここで不思議なのは、発生周期である**「13」と「17」**という数字です。
+                どちらも「1と自分自身でしか割り切れない数」、すなわち**「素数」**ですよね。
+                なぜ、12年や15年ではなく、素数の周期を持つセミだけが生き残ったのでしょうか。
+                この謎を解き明かすと、進化の歴史と数学が交差する、極めて合理的な生存戦略が見えてきます。
+            </p>
+
+            <h3 class="section-header">【体験】発生周期と交雑シミュレーター</h3>
+            <p>
+                異なる周期を持つセミが同時に羽化して交尾（交雑）すると、子供の発生周期が乱れてしまいます。
+                これは、種にとって致命的な弱点になります。
+                シミュレーターで、セミAとセミBの周期を動かし、**「今後100年間で、両者が同時に羽化してしまう年（重なる年）」**がどれくらい発生するか試してみましょう。
+            </p>
+
+            <!-- シミュレーター容器 -->
+            <div class="interactive-simulator">
+                <div class="simulator-header">
+                    <h3>周期ゼミ交雑シミュレーター</h3>
+                    <p>セミAとセミBの周期を変更し、100年間のタイムラインで重なる年（赤色のセル）を確認しましょう。</p>
+                </div>
+                
+                <div class="sim-grid">
+                    <!-- 左：操作パネル -->
+                    <div class="sliders-panel">
+                        <div class="slider-group">
+                            <div class="slider-label">
+                                <span>🌀 セミ A の発生周期</span>
+                                <span class="value-disp"><span id="lbl-semi-a">13</span>年 <span id="lbl-a-prime" class="prime-text">(素数)</span></span>
+                            </div>
+                            <input type="range" id="param-semi-a" min="2" max="20" step="1" value="13">
+                            <div class="slider-desc">セミAの羽化周期です。</div>
+                        </div>
+                        
+                        <div class="slider-group">
+                            <div class="slider-label">
+                                <span>🌀 セミ B の発生周期</span>
+                                <span class="value-disp"><span id="lbl-semi-b">17</span>年 <span id="lbl-b-prime" class="prime-text">(素数)</span></span>
+                            </div>
+                            <input type="range" id="param-semi-b" min="2" max="20" step="1" value="17">
+                            <div class="slider-desc">セミBの羽化周期です。</div>
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 10px;">
+                            <button class="sim-btn" onclick="setPreset(13, 17)">素数ペア (13年 & 17年)</button>
+                            <button class="sim-btn" onclick="setPreset(12, 16)">合成数ペア (12年 & 16年)</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 右：タイムライングリッド -->
+                    <div class="timeline-box">
+                        <div class="timeline-title">
+                            <span>📅 100年間の羽化スケジュール (年次)</span>
+                            <div class="timeline-legend">
+                                <span class="legend-item"><span class="legend-color" style="background: rgba(169, 120, 47, 0.6)"></span>A</span>
+                                <span class="legend-item"><span class="legend-color" style="background: rgba(62, 80, 99, 0.6)"></span>B</span>
+                                <span class="legend-item"><span class="legend-color" style="background: var(--color-red)"></span>重なり</span>
+                            </div>
+                        </div>
+                        
+                        <div id="timeline-container" class="timeline-grid">
+                            <!-- JSで100マス生成 -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 結果ボード -->
+                <div class="results-board">
+                    <div class="res-box">
+                        <div class="res-label">最小公倍数 (重なる周期)</div>
+                        <div class="res-val"><span id="val-lcm">221</span> 年ごと</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">100年間での同時発生回数</div>
+                        <div id="val-overlap-count-wrapper" class="res-val">
+                            <span id="val-overlap-count">0</span> 回
+                        </div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">交雑リスクの評価</div>
+                        <div id="val-risk-wrapper" class="res-val" style="font-size:16px;">
+                            <span id="val-risk">極めて安全</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 情報ボード -->
+                <div class="target-board">
+                    <div class="target-left">
+                        <div class="target-title">💡 最小公倍数 (LCM) の性質</div>
+                        <div class="target-desc">周期が互いに素（公約数が1のみ）であるとき、重なる周期はそれぞれの掛け算となり、最大化されます。</div>
+                    </div>
+                    <div class="target-right">
+                        <div class="target-stat-value">
+                            A × B = <span id="val-product">221</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-header">理由1：最小公倍数を最大化し、交雑を避ける</h3>
+            <p>
+                なぜこれほど重なる年を避ける必要があるのでしょうか。
+                それは、異なる周期のセミが同時に羽化して交尾すると、生まれる子供の発生周期が「15年」や「14年」など**中途半端な長さに乱れてしまう**からです。
+                周期が乱れてバラバラに羽化するようになると、後述する天敵対策が崩壊してしまいます。
+            </p>
+            <p>
+                ここで数学の**「最小公倍数（LCM）」**が登場します。
+                同時に羽化するタイミングは、それぞれの周期の最小公倍数の年ごとに訪れます。
+            </p>
+            <p>
+                たとえば、もしセミの周期が「12年」と「16年」のような合成数だったとしましょう。
+                この場合、12と16の最小公倍数は**48**となり、**48年ごとに同時羽化**が起きて交雑してしまいます。
+            </p>
+            <p>
+                しかし、素数である「13年」と「17年」の場合、共通の約数を持たないため、最小公倍数はそのまま掛け算した**221**になります。
+                なんと、**221年に1度**しか同時羽化が起きないのです。
+                素数を周期に選ぶだけで、他種と出会う確率を数学的に最小限に抑え、周期の純度を守っているのです。
+            </p>
+
+            <h3 class="section-header">理由2：天敵の発生サイクルとズラす</h3>
+            <p>
+                素数周期のもう一つの利点は、**「天敵の増殖サイクルと同調しない」**ことです。
+            </p>
+            <p>
+                鳥や小動物などの天敵も、数年周期で個体数が増減するバイオリズムを持っています。
+                もしセミの周期が「12年」のように約数が多い数字だと、2年、3年、4年、6年周期で増減するすべての天敵のピークと重なりやすくなってしまいます。
+            </p>
+            <p>
+                しかし、周期が「13年」や「17年」という素数であれば、天敵の周期が「13年」か「17年」でない限り、セミの大量発生と天敵の増加ピークが毎年重なることはありません。
+                自然界にこれほど長い正確な周期を持つ天敵はいないため、セミは天敵の待ち伏せを効果的に回避できているのです。
+            </p>
+
+            <h3 class="section-header">氷河期がもたらした進化の淘汰</h3>
+            <p>
+                このような特殊な進化の背景には、過酷な氷河期の環境がありました。
+            </p>
+            
+            <ul style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
+                <li><strong>成長スピードの低下</strong>: 氷河期の低温環境下では地中温度が下がり、成虫になるまで長い年月がかかるようになりました。</li>
+                <li><strong>一斉羽化の選択</strong>: 厳しい環境で配偶者を確実に見つけるため、毎年少しずつ羽化するのではなく、特定の年に全個体が一斉に羽化する戦略が有利になりました。</li>
+                <li><strong>捕食者飽和（食べ残し戦略）</strong>: 何百億匹が一斉に現れることで、天敵が食べきれない状況を作り出し、生き残る確率を高めました。</li>
+            </ul>
+            
+            <p>
+                一斉羽化を生き残るために、たまたま「素数」の周期を持っていた集団だけが、交雑による周期の崩壊や、天敵との同調を避けることができ、現代まで生き残ったと考えられています。
+            </p>
+
+            <h3 class="section-header">まとめ</h3>
+            <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 20px; font-size: 15px; line-height: 1.8;">
+                周期ゼミの存在は、進化の過程（自然淘汰）が、いかにして数学的に最適な「正解」を導き出すかを示す見事な実例です。
+                セミたちは数式を知りませんが、途方もない年月と犠牲を払った結果、最も生存確率の高い「素数」という暗号にたどり着いたのです。
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- シミュレーター制御スクリプト -->
+    <script>
+        const paramA = document.getElementById('param-semi-a');
+        const paramB = document.getElementById('param-semi-b');
+        
+        const lblA = document.getElementById('lbl-semi-a');
+        const lblB = document.getElementById('lbl-semi-b');
+        const lblAPrime = document.getElementById('lbl-a-prime');
+        const lblBPrime = document.getElementById('lbl-b-prime');
+        
+        const valLcm = document.getElementById('val-lcm');
+        const valOverlapCount = document.getElementById('val-overlap-count');
+        const valOverlapCountWrapper = document.getElementById('val-overlap-count-wrapper');
+        const valRisk = document.getElementById('val-risk');
+        const valRiskWrapper = document.getElementById('val-risk-wrapper');
+        const valProduct = document.getElementById('val-product');
+        
+        const timelineContainer = document.getElementById('timeline-container');
+
+        // 素数判定関数
+        function isPrime(num) {
+            if (num <= 1) return false;
+            for (let i = 2; i <= Math.sqrt(num); i++) {
+                if (num % i === 0) return false;
+            }
+            return true;
+        }
+
+        // 最大公約数 (GCD)
+        function gcd(a, b) {
+            return b === 0 ? a : gcd(b, a % b);
+        }
+
+        // 最小公倍数 (LCM)
+        function lcm(a, b) {
+            if (a === 0 || b === 0) return 0;
+            return (a * b) / gcd(a, b);
+        }
+
+        function setPreset(a, b) {
+            paramA.value = a;
+            paramB.value = b;
+            updateSimulation();
+        }
+
+        function updateSimulation() {
+            const periodA = parseInt(paramA.value);
+            const periodB = parseInt(paramB.value);
+
+            // ラベル表示更新
+            lblA.textContent = periodA;
+            lblB.textContent = periodB;
+
+            const isAPrime = isPrime(periodA);
+            const isBPrime = isPrime(periodB);
+
+            lblAPrime.textContent = isAPrime ? '(素数)' : '(合成数)';
+            lblAPrime.className = isAPrime ? 'prime-text' : 'composite-text';
+            
+            lblBPrime.textContent = isBPrime ? '(素数)' : '(合成数)';
+            lblBPrime.className = isBPrime ? 'prime-text' : 'composite-text';
+
+            // LCMの計算
+            const currentLcm = lcm(periodA, periodB);
+            valLcm.textContent = currentLcm.toLocaleString();
+            valProduct.textContent = (periodA * periodB).toLocaleString();
+
+            // タイムライン描画 (1年〜100年)
+            timelineContainer.innerHTML = '';
+            let overlapCount = 0;
+
+            for (let year = 1; year <= 100; year++) {
+                const cell = document.createElement('div');
+                cell.className = 'timeline-cell';
+                cell.textContent = year;
+
+                const isSemiA = (year % periodA === 0);
+                const isSemiB = (year % periodB === 0);
+
+                if (isSemiA) cell.classList.add('semi-a');
+                if (isSemiB) cell.classList.add('semi-b');
+                
+                if (isSemiA && isSemiB) {
+                    cell.classList.add('overlap');
+                    overlapCount++;
+                }
+
+                timelineContainer.appendChild(cell);
+            }
+
+            valOverlapCount.textContent = overlapCount;
+
+            // 評価と警告色
+            if (overlapCount === 0) {
+                valOverlapCountWrapper.className = 'res-val overlap-safe';
+                valRisk.textContent = '極めて安全';
+                valRiskWrapper.className = 'res-val overlap-safe';
+            } else if (overlapCount <= 2) {
+                valOverlapCountWrapper.className = 'res-val';
+                valRisk.textContent = '注意（低リスク）';
+                valRiskWrapper.className = 'res-val overlap-safe';
+                valRiskWrapper.style.color = 'var(--color-brass)';
+            } else {
+                valOverlapCountWrapper.className = 'res-val overlap-warn';
+                valRisk.textContent = '危険（高リスク）';
+                valRiskWrapper.className = 'res-val overlap-warn';
+                valRiskWrapper.style.color = '';
+            }
+        }
+
+        // イベント設定
+        [paramA, paramB].forEach(input => {
+            input.addEventListener('input', updateSimulation);
+        });
+
+        // 初回計算
+        updateSimulation();
+    </script>
+</body>
+</html>
