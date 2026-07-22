@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ベクトル間の距離（ユークリッド、マンハッタン、マハラノビス） | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+    <style>
+        .concept-box {
+            background-color: var(--color-paper);
+            border: 2px solid var(--color-brass);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .math-display {
+            font-size: 20px;
+            font-family: var(--font-mono);
+            color: var(--color-ink);
+            margin: 15px 0;
+            overflow-x: auto;
+            text-align: center;
+        }
+        .interactive-tool {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        .tool-header {
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: var(--color-ink);
+            text-align: center;
+        }
+        .canvas-container {
+            background-color: #fff;
+            border: 1px solid var(--color-paper-line);
+            border-radius: 6px;
+            padding: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            position: relative;
+            cursor: crosshair;
+        }
+        .stats-display {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            width: 100%;
+            max-width: 650px;
+            margin-top: 20px;
+        }
+        @media (max-width: 600px) {
+            .stats-display {
+                grid-template-columns: 1fr;
+            }
+        }
+        .stat-card {
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .stat-card.active-dist {
+            border-color: var(--color-brass);
+            background-color: #fcf9f2;
+        }
+        .stat-label {
+            font-size: 11px;
+            color: var(--color-ink-soft);
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .stat-val {
+            font-size: 22px;
+            font-weight: bold;
+            color: var(--color-ink);
+            font-family: var(--font-mono);
+            margin-top: 5px;
+        }
+        .stat-val.brass-text {
+            color: var(--color-brass);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math & Stats</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="../index.html">数学と統計学</a></li>
+                    <li><a href="../books.html">書籍紹介</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="lesson-container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">数学カリキュラム</a> &gt; 単元106
+        </div>
+
+        <article class="lesson-flow">
+            <section class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 08-06</span>
+                <h2 class="lesson-title">ベクトル間の距離（ユークリッド、マンハッタン、マハラノビス）</h2>
+                <p class="lesson-lead">データサイエンスにおいて、データ点同士の「近さ」を測る尺度はアルゴリズムの成否を決定づけます。最も直感的なユークリッド距離から、分布のばらつきと相関を考慮するマハラノビス距離まで、その数理と幾何学的意味を徹底比較します。</p>
+            </section>
+
+            <!-- Step 1 -->
+            <div class="lesson-step">
+                <span class="lesson-step-meta">Step 01</span>
+                <h4>数学における「距離」の定義と公理</h4>
+                <p>
+                    データ分析や機械学習において、「似たデータは近くに、異なるデータは遠くに存在する」という仮定は、分類やクラスタリングの根幹を支えています。
+                    この「近さ・遠さ」を定量化するために用いるのが<strong>「距離」</strong>です。
+                </p>
+                <p>
+                    数学的に、集合 $X$ 上の任意の2つの要素 $x, y$ に対して定義される実数値関数 $d(x, y)$ が「距離（距離関数）」であるためには、以下の4つの基本的な公理を満たさなければなりません。
+                </p>
+                <div class="math-box">
+                    <ol class="lesson-bullet-list" style="margin-left: 20px;">
+                        <li><strong>非負性</strong>：常に距離は 0 以上であり、同じ点同士の距離のみが 0 になります。
+                            <br>$d(x, y) \ge 0$ かつ $d(x, y) = 0 \iff x = y$
+                        </li>
+                        <li><strong>対称性</strong>：$x$ から $y$ への距離と、$y$ から $x$ への距離は等しくなります。
+                            <br>$d(x, y) = d(y, x)$
+                        </li>
+                        <li><strong>三角不等式</strong>：他の点 $z$ を経由する経路は、直接向かう経路よりも短くなることはありません。
+                            <br>$d(x, y) \le d(x, z) + d(z, y)$
+                        </li>
+                    </ol>
+                </div>
+                <p>
+                    これらの公理を満たす距離関数には、計算方法や前提とする空間の性質に応じていくつかの種類があります。
+                    実務で最も多用される「ユークリッド距離」「マンハッタン距離」「マハラノビス距離」の3つについて、それぞれの数理を順に見ていきます。
+                </p>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="lesson-step">
+                <span class="lesson-step-meta">Step 02</span>
+                <h4>ユークリッド距離とマンハッタン距離（L2ノルムとL1ノルム）</h4>
+                <p>
+                    最も馴染み深い距離が<strong>ユークリッド距離（Euclidean Distance）</strong>です。
+                    これはピタゴラスの定理を多次元空間に拡張したものであり、2つのデータ点を結ぶ「直線距離」を示します。
+                    $n$ 次元ベクトル $x = [x_1, x_2, \dots, x_n]^T$ と $y = [y_1, y_2, \dots, y_n]^T$ の間のユークリッド距離は、次のように定義されます。
+                </p>
+                <div class="math-display">
+                    $$d_E(x, y) = \sqrt{\sum_{i=1}^{n} (x_i - y_i)^2} = \sqrt{(x - y)^T (x - y)}$$
+                </div>
+                <p>
+                    ベクトル空間の言葉で表現すると、差ベクトル $x - y$ の<strong>L2ノルム（長さ）</strong>に相当します。
+                </p>
+                <p>
+                    これに対して、格子状の街路（碁盤の目）を曲がりながら進むときの道なり距離に対応するのが<strong>マンハッタン距離（Manhattan Distance）</strong>です。
+                    各次元の差の絶対値を単純に足し合わせて算出します。
+                </p>
+                <div class="math-display">
+                    $$d_M(x, y) = \sum_{i=1}^{n} |x_i - y_i|$$
+                </div>
+                <p>
+                    これは差ベクトルの<strong>L1ノルム</strong>に相当します。
+                    マンハッタン距離は、変数のスケールや性質が大きく異なり、対角線方向の直線距離に意味がない場合や、高次元のスパースデータを扱う場面（レコメンドシステムなど）でよく用いられます。
+                </p>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="lesson-step">
+                <span class="lesson-step-meta">Step 03</span>
+                <h4>データの相関を無視する「ユークリッド距離の限界」</h4>
+                <p>
+                    しかし、ユークリッド距離やマンハッタン距離には、実務データに適用する上で致命的な欠点が存在します。
+                    それは、<strong>「すべての変数が互いに独立で、かつ同じばらつき（分散）を持っている」と仮定している点</strong>です。
+                </p>
+                <p>
+                    例えば、身長と体重のデータについて考えます。
+                    身長と体重は強い正の相関関係にあります。
+                    「身長が高ければ、体重も重い傾向がある」という前提のもとでは、データの分布は右上に向かって細長く広がった楕円形になります。
+                    この空間において、データ群の平均点から同じユークリッド距離だけ離れた以下の2つの点を比較します。
+                </p>
+                <ul class="lesson-bullet-list">
+                    <li><strong>点A</strong>：相関の方向に沿って（右上方向に）離れた点</li>
+                    <li><strong>点B</strong>：相関の方向から外れて（左上方向に：身長が低いのに体重が著しく重い）離れた点</li>
+                </ul>
+                <p>
+                    ユークリッド空間では、どちらも同じ距離として判定されます。
+                    しかし、確率・統計的な観点から見ると、点A（相関に沿った点）は「よく見られる普通のデータ」であるのに対し、点Bは「確率的に極めて稀なデータ（異常値の候補）」です。
+                    データのばらつきや相関関係を完全に無視するユークリッド距離だけでは、この本質的な違いを見落としてしまいます。
+                </p>
+
+                <!-- SVG Diagram 1: Euclidean vs Mahalanobis -->
+                <div style="text-align: center; margin: 30px 0;">
+                    <svg viewBox="0 0 600 320" width="100%" height="auto" style="max-width: 600px; background-color: var(--color-surface); border: 1px solid var(--color-paper-line); border-radius: 6px;">
+                        <!-- グリッド背景 -->
+                        <rect width="600" height="320" fill="#fafafa" />
+                        
+                        <!-- データ分布（楕円形） -->
+                        <ellipse cx="300" cy="160" rx="180" ry="60" fill="none" stroke="#ddd" stroke-width="1.5" transform="rotate(-30, 300, 160)" />
+                        <ellipse cx="300" cy="160" rx="100" ry="33" fill="none" stroke="#eee" stroke-dasharray="3" transform="rotate(-30, 300, 160)" />
+                        
+                        <!-- 相関に沿ったデータ点のプロットイメージ -->
+                        <circle cx="300" cy="160" r="5" fill="var(--color-brass)" />
+                        <text x="290" y="180" font-size="11" fill="var(--color-brass)" font-weight="bold">平均点 μ</text>
+
+                        <!-- テスト点A (分布内) -->
+                        <circle cx="420" cy="90" r="6" fill="#10b981" />
+                        <line x1="300" y1="160" x2="420" y2="90" stroke="#10b981" stroke-width="2" />
+                        <text x="430" y="85" font-size="12" fill="#10b981" font-weight="bold">点A (分布に沿った移動)</text>
+
+                        <!-- テスト点B (分布外・外れ値) -->
+                        <circle cx="230" cy="70" r="6" fill="#ef4444" />
+                        <line x1="300" y1="160" x2="230" y2="70" stroke="#ef4444" stroke-width="2" />
+                        <text x="140" y="65" font-size="12" fill="#ef4444" font-weight="bold">点B (分布から外れた移動)</text>
+
+                        <!-- ユークリッド距離円（同じ半径） -->
+                        <circle cx="300" cy="160" r="138.9" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="4,4" />
+                        <text x="170" y="270" font-size="11" fill="#888">ユークリッド等距離円 (点A, Bは等距離)</text>
+                    </svg>
+                    <p style="font-size: 12px; color: var(--color-ink-soft); margin-top: 8px;">図1：同じユークリッド距離であっても、分布の方向によって確率的な特異性が異なる点を示す概念図</p>
+                </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="lesson-step">
+                <span class="lesson-step-meta">Step 04</span>
+                <h4>マハラノビス距離の数理（相関とばらつきの標準化）</h4>
+                <p>
+                    この問題を根本から解決するのが、インドの統計学者プラサンタ・チャンドラ・マハラノビスが考案した<strong>マハラノビス距離（Mahalanobis Distance）</strong>です。
+                    マハラノビス距離は、データの共分散行列を用いて空間自体を「標準化」し、ばらつきや相関関係を織り込んだ距離を算出します。
+                </p>
+                <p>
+                    中心点（平均ベクトル） $\mu$ と任意のデータ点 $x$ との間のマハラノビス距離 $d_{Mah}(x, \mu)$ は、データの共分散行列 $S$ を用いて次のように定義されます。
+                </p>
+                <div class="math-display">
+                    $$d_{Mah}(x, \mu) = \sqrt{(x - \mu)^T S^{-1} (x - \mu)}$$
+                </div>
+                <p>
+                    共分散行列 $S$ の逆行列 $S^{-1}$ が式の中央に挟み込まれている点が最大の特徴です。
+                    なぜ、逆行列 $S^{-1}$ を挟むことでばらつきや相関を補正できるのでしょうか。
+                </p>
+                <p>
+                    この数理的意味を理解するために、多次元データ空間を無相関化・標準化するプロセスとして分解します。
+                    共分散行列 $S$ は実対称行列であるため、固有値行列 $\Lambda$ と固有ベクトル行列 $U$ を用いて $S = U \Lambda U^T$ と対角化できます。
+                    これを利用して、座標変換を行うと、以下の本質が浮かび上がります。
+                </p>
+                <div class="math-box">
+                    <p>
+                        逆行列 $S^{-1}$ は次のように展開されます。
+                        $$S^{-1} = (U \Lambda U^T)^{-1} = U \Lambda^{-1} U^T$$
+                        これを距離の式に代入します。
+                        $$(x - \mu)^T S^{-1} (x - \mu) = (x - \mu)^T U \Lambda^{-1} U^T (x - \mu)$$
+                    </p>
+                    <p>
+                        ここで、座標の回転変換を表すベクトル $z = U^T (x - \mu)$ を定義します。
+                        $z$ の各成分 $z_i$ は、データの分布主軸（主成分）に沿った方向の座標値です。
+                        対角行列である $\Lambda^{-1}$（各対角成分は主成分方向の分散の逆数 $1/\sigma_i^2$）を適用すると、上の式は次のように簡潔な和の形に帰着します。
+                        $$\sum_{i=1}^{n} \frac{z_i^2}{\sigma_i^2}$$
+                    </p>
+                </div>
+                <p>
+                    これは、データを「ばらつきが最も大きい主成分軸の方向に一度回転させ、それぞれの軸の標準偏差 $\sigma_i$ で割り算をしてスケールを揃えた（標準化した）上で、ユークリッド距離を計算している」ことと数学的に完全に同値です。
+                    これにより、ばらつきが大きな方向へのズレは小さく評価され、ばらつきが小さな方向へのズレは大きく評価され、データの分布形状に左右されない真に均等な「確率的距離」が得られます。
+                </p>
+            </div>
+
+            <!-- Step 5: Interactive Simulator -->
+            <div class="lesson-step">
+                <span class="concept-box">
+                    <strong>💡 実務における使い分け：</strong><br>
+                    k-meansやk-NNなどの機械学習アルゴリズムでは通常ユークリッド距離が基本ですが、金融の異常検知、製造ラインの製品外れ値検出（マハラノビス・タグチメソッド：MT法）など、複数の変数が強い相関関係を持ちながらばらついている系では、マハラノビス距離が強力な検出エンジンとして威力を発揮します。
+                </span>
+
+                <div class="interactive-tool">
+                    <div class="tool-header">
+                        <strong>📊 3つの距離尺度（ユークリッド・マンハッタン・マハラノビス）視覚化ツール</strong>
+                        <p style="font-size: 13px; color: var(--color-ink-soft); margin-top: 5px;">画面内をクリックまたはドラッグしてテスト点を動かし、3種類の距離値の変化をリアルタイムで観察してください。</p>
+                    </div>
+
+                    <div class="canvas-container">
+                        <canvas id="dist-canvas" width="500" height="400"></canvas>
+                    </div>
+
+                    <div class="stats-display">
+                        <div class="stat-card">
+                            <div class="stat-label">ユークリッド距離 (L2)</div>
+                            <div id="stat-euclidean" class="stat-val">0.00</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">マンハッタン距離 (L1)</div>
+                            <div id="stat-manhattan" class="stat-val">0.00</div>
+                        </div>
+                        <div class="stat-card active-dist">
+                            <div class="stat-label" style="color: var(--color-brass)">マハラノビス距離 (相関考慮)</div>
+                            <div id="stat-mahalanobis" class="stat-val brass-text">0.00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 6 -->
+            <div class="lesson-step">
+                <span class="lesson-step-meta">Step 05</span>
+                <h4>まとめ</h4>
+                <p>
+                    ユークリッド距離は直線距離を、マンハッタン距離は軸に沿った経路距離を測る単純な手法であり、直感的に計算できますが、データ自体の持つ「ばらつきのスケール」や「変数間の相関」に対応できません。
+                    マハラノビス距離は、共分散行列の逆行列を用いることで、空間全体をデータのばらつきそのもので正規化する強力な数理アプローチです。
+                    データの構造特性に合わせて適切な距離尺度を選択することが、高度な機械学習モデルを構築するための第一歩となります。
+                </p>
+            </div>
+
+            <!-- 書籍紹介 -->
+            <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 25px; margin: 40px 0;">
+                <h4 style="margin-top: 0; margin-bottom: 15px; color: var(--color-brass); border-bottom: 1px solid var(--color-paper-line); padding-bottom: 8px;">📚 推薦書籍紹介</h4>
+                <p style="font-size: 13px; color: var(--color-ink-soft); margin-bottom: 20px;">多変量統計学におけるデータの距離や相関、分散の数理をさらに体系的に学ぶための書籍です。</p>
+                
+                <div style="display: flex; gap: 20px; flex-direction: column;">
+                    <!-- 書籍1 -->
+                    <div style="border-left: 3px solid var(--color-brass); padding-left: 15px;">
+                        <span style="font-size: 15px; font-weight: bold; color: var(--color-ink); display: block;">『パターン認識と機械学習 上』</span>
+                        <span style="font-size: 12px; color: #888; display: block; margin-top: 3px;">著者：C.M.ビショップ / 発行：丸善出版</span>
+                        <p style="font-size: 13px; margin: 8px 0 0 0; line-height: 1.6;">
+                            マハラノビス距離の基礎となる多次元ガウス分布（正弦分布）の数理的性質や共分散行列の逆行列の意味について、最も厳密かつ詳細に解説されている決定版です。
+                        </p>
+                        <a href="../books.html" style="font-size: 13px; font-weight: bold; color: var(--color-brass); text-decoration: none; display: inline-block; margin-top: 10px;">➔ 学部時代のバイブルとしての詳細書評を読む</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-footer-nav">
+                <a href="105.html" class="btn-secondary">&larr; 前の単元へ</a>
+                <a href="index.html" class="btn-secondary">目次に戻る</a>
+                <a href="#" class="btn btn-primary" style="opacity:0.5; cursor:not-allowed;">次の単元へ &rarr;</a>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math & Stats</div>
+                <p>大人のためのやり直し数理プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const canvas = document.getElementById('dist-canvas');
+        const ctx = canvas.getContext('2d');
+        const statEuc = document.getElementById('stat-euclidean');
+        const statMan = document.getElementById('stat-manhattan');
+        const statMah = document.getElementById('stat-mahalanobis');
+
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+
+        // 中心（平均点）
+        const mean = { x: centerX, y: centerY };
+
+        // 相関データ群を生成して定義 (斜め45度方向に強い正の相関)
+        const points = [
+            {x: -120, y: -60},
+            {x: -90, y: -45},
+            {x: -70, y: -25},
+            {x: -50, y: -30},
+            {x: -20, y: -10},
+            {x: 10, y: 5},
+            {x: 40, y: 15},
+            {x: 60, y: 35},
+            {x: 80, y: 35},
+            {x: 110, y: 55}
+        ];
+
+        // テスト点の初期位置
+        let testPoint = { x: centerX + 50, y: centerY - 80 };
+
+        // 共分散行列と逆行列の計算
+        // データの標準偏差・相関パラメータから共分散行列 S を直接設計する
+        // S = [[s_xx, s_xy], [s_xy, s_yy]]
+        // 相関の方向 (約30度回転させた楕円) に合わせた共分散を設定
+        const s_xx = 4500; 
+        const s_yy = 1500; 
+        const s_xy = 2000; // 正の相関
+
+        // 逆行列 S^-1 の手動計算 (行列式 D = s_xx * s_yy - s_xy^2)
+        const det = s_xx * s_yy - s_xy * s_xy;
+        const inv_xx = s_yy / det;
+        const inv_yy = s_xx / det;
+        const inv_xy = -s_xy / det;
+
+        // ドラッグ制御用のフラグ
+        let isDragging = false;
+
+        function getMousePos(evt) {
+            const rect = canvas.getBoundingClientRect();
+            return {
+                x: evt.clientX - rect.left,
+                y: evt.clientY - rect.top
+            };
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            const mousePos = getMousePos(e);
+            testPoint.x = mousePos.x;
+            testPoint.y = mousePos.y;
+            draw();
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                const mousePos = getMousePos(e);
+                testPoint.x = mousePos.x;
+                testPoint.y = mousePos.y;
+                draw();
+            }
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        function calculateDistances() {
+            const dx = testPoint.x - mean.x;
+            const dy = testPoint.y - mean.y; // canvasのY座標はそのまま差分として計算
+
+            // 1. ユークリッド距離
+            const euclidean = Math.sqrt(dx * dx + dy * dy);
+
+            // 2. マンハッタン距離
+            const manhattan = Math.abs(dx) + Math.abs(dy);
+
+            // 3. マハラノビス距離
+            // d = sqrt( dx^2 * inv_xx + 2 * dx * dy * inv_xy + dy^2 * inv_yy )
+            const mahalanobis = Math.sqrt(dx * dx * inv_xx + 2 * dx * dy * inv_xy + dy * dy * inv_yy);
+
+            // スケールを見やすく調整して出力
+            statEuc.textContent = (euclidean / 20).toFixed(2);
+            statMan.textContent = (manhattan / 20).toFixed(2);
+            statMah.textContent = (mahalanobis * 2.5).toFixed(2); // マハラノビスは統計スケールにマッチング
+        }
+
+        function drawEllipses() {
+            // 等マハラノビス距離線（楕円）を同心円状に描画
+            // マハラノビス距離値 d = 1, 2, 3 に対応する楕円
+            ctx.strokeStyle = 'rgba(212, 175, 55, 0.15)';
+            ctx.lineWidth = 1.5;
+
+            // 共分散行列の固有値分解を行い、楕円の長軸・短軸・回転角を求める
+            // S = [[s_xx, s_xy], [s_xy, s_yy]]
+            // トレース T = s_xx + s_yy、 行列式 D = s_xx * s_yy - s_xy^2
+            const trace = s_xx + s_yy;
+            const diff = s_xx - s_yy;
+            const root = Math.sqrt(diff * diff + 4 * s_xy * s_xy);
+            
+            const l1 = (trace + root) / 2; // 最大固有値
+            const l2 = (trace - root) / 2; // 最小固有値
+
+            // 回転角 theta = 0.5 * atan2(2 * s_xy, s_xx - s_yy)
+            const theta = 0.5 * Math.atan2(2 * s_xy, s_xx - s_yy);
+
+            const rx = Math.sqrt(l1);
+            const ry = Math.sqrt(l2);
+
+            [0.8, 1.6, 2.4].forEach(scale => {
+                ctx.beginPath();
+                ctx.ellipse(mean.x, mean.y, rx * scale, ry * scale, theta, 0, Math.PI * 2);
+                ctx.stroke();
+            });
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 背景グリッド
+            ctx.strokeStyle = '#f5f5f5';
+            ctx.lineWidth = 1;
+            for(let i = 40; i < canvas.width; i += 40) {
+                ctx.beginPath();
+                ctx.moveTo(i, 0);
+                ctx.lineTo(i, canvas.height);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(0, i);
+                ctx.lineTo(canvas.width, i);
+                ctx.stroke();
+            }
+
+            // 等マハラノビス軌道（ゴールドの同心楕円）の描画
+            drawEllipses();
+
+            // データ点群を描画
+            points.forEach(p => {
+                ctx.fillStyle = '#bbb';
+                ctx.beginPath();
+                ctx.arc(mean.x + p.x, mean.y + p.y, 4, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // 中心（平均点）
+            ctx.fillStyle = 'var(--color-ink)';
+            ctx.beginPath();
+            ctx.arc(mean.x, mean.y, 6, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.font = '11px sans-serif';
+            ctx.fillText('平均値 μ', mean.x - 20, mean.y - 12);
+
+            // テスト点
+            ctx.fillStyle = 'var(--color-brass)';
+            ctx.beginPath();
+            ctx.arc(testPoint.x, testPoint.y, 8, 0, Math.PI * 2);
+            ctx.fill();
+
+            // 距離測定の軌跡を描画
+            // ユークリッド距離：青い直線
+            ctx.strokeStyle = 'rgba(85, 85, 85, 0.4)';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(mean.x, mean.y);
+            ctx.lineTo(testPoint.x, testPoint.y);
+            ctx.stroke();
+
+            // マンハッタン距離：直角の経路（点線）
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.15)';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([3, 3]);
+            ctx.beginPath();
+            ctx.moveTo(mean.x, mean.y);
+            ctx.lineTo(testPoint.x, mean.y);
+            ctx.lineTo(testPoint.x, testPoint.y);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            calculateDistances();
+        }
+
+        draw();
+    </script>
+</body>
+</html>
