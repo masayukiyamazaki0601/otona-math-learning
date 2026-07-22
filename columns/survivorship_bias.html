@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生存者バイアス：「見えない失敗」が判断を狂わせる統計学 | Otona Math コラム</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <style>
+        .column-content {
+            background-color: var(--color-surface);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--color-paper-line);
+            margin-bottom: 40px;
+        }
+        .column-content p {
+            line-height: 2.1;
+            margin-bottom: 28px;
+        }
+        .section-header {
+            color: var(--color-brass);
+            margin-top: 40px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 10px;
+            font-size: 22px;
+        }
+        
+        /* Interactive Simulator Styles */
+        .interactive-simulator {
+            background-color: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        .simulator-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--color-paper-line);
+            padding-bottom: 15px;
+        }
+        .simulator-header h3 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            color: var(--color-ink);
+        }
+        .simulator-header p {
+            font-size: 14px;
+            color: var(--color-ink-soft);
+        }
+        
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 0.95fr 1.05fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        @media (max-width: 900px) {
+            .sim-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Control Panel */
+        .control-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .sim-state-card {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .sim-control-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--color-ink);
+            margin-bottom: 10px;
+        }
+        
+        /* Radio button styled options */
+        .strategy-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .strategy-opt {
+            border: 1px solid var(--color-paper-line);
+            padding: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            font-weight: bold;
+            background: #fff;
+        }
+        .strategy-opt:hover, .strategy-opt.active {
+            border-color: var(--color-brass);
+            background-color: rgba(169, 120, 47, 0.03);
+        }
+        .strategy-opt.active {
+            box-shadow: 0 0 0 1px var(--color-brass);
+        }
+        .opt-radio-dot {
+            width: 14px;
+            height: 14px;
+            border: 2px solid #ccc;
+            border-radius: 50%;
+            display: inline-block;
+            position: relative;
+            transition: all 0.2s;
+        }
+        .strategy-opt.active .opt-radio-dot {
+            border-color: var(--color-brass);
+        }
+        .strategy-opt.active .opt-radio-dot::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--color-brass);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* SVG Visualization Container */
+        .aircraft-viz-box {
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .aircraft-viz-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--color-ink-soft);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .aircraft-svg-container {
+            width: 100%;
+            height: 240px;
+            position: relative;
+        }
+        .aircraft-svg-container svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        /* Results Board */
+        .results-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            background: var(--color-paper);
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid var(--color-paper-line);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        @media (max-width: 600px) {
+            .results-board {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+        .res-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .res-label {
+            font-size: 13px;
+            color: var(--color-ink-soft);
+            margin-bottom: 4px;
+        }
+        .res-val {
+            font-size: 24px;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            color: var(--color-ink);
+        }
+        .res-val.status-warn { color: var(--color-red); }
+        .res-val.status-ok { color: #10b981; }
+
+        /* Status Board */
+        .status-board {
+            background: rgba(169, 120, 47, 0.05);
+            border: 1px solid rgba(169, 120, 47, 0.2);
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        .status-board.active-warning {
+            background: rgba(180, 67, 47, 0.06);
+            border-color: rgba(180, 67, 47, 0.3);
+        }
+        @media (max-width: 600px) {
+            .status-board {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+        .status-left {
+            display: flex;
+            flex-direction: column;
+        }
+        .status-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .status-board.active-warning .status-title {
+            color: var(--color-red);
+        }
+        .status-desc {
+            font-size: 12px;
+            color: var(--color-ink-soft);
+        }
+        .status-right {
+            display: flex;
+            align-items: center;
+        }
+        .status-stat-value {
+            font-family: var(--font-body);
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--color-brass);
+        }
+        .status-board.active-warning .status-stat-value {
+            color: var(--color-red);
+        }
+
+        /* SVG Element Styling */
+        .aircraft-body {
+            fill: #eef2f3;
+            stroke: var(--color-ink);
+            stroke-width: 1.5;
+            transition: all 0.3s;
+        }
+        .bullet-hole {
+            fill: var(--color-red);
+            stroke: none;
+            opacity: 0.8;
+        }
+        .armor-highlight {
+            fill: none;
+            stroke: #a9782f;
+            stroke-width: 3;
+            stroke-dasharray: 4 2;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .armor-highlight.show {
+            opacity: 0.9;
+        }
+        .viz-label {
+            font-family: var(--font-body);
+            font-size: 10px;
+            fill: var(--color-ink-soft);
+            text-anchor: middle;
+        }
+
+        /* Common Button Style */
+        .sim-btn {
+            background: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            color: var(--color-ink);
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: var(--radius-btn);
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+        }
+        .sim-btn:hover {
+            border-color: var(--color-ink);
+            background-color: #f7f7f7;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="../index.html">数学と統計学</a></li>
+                    <li><a href="index.html">コラム</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">コラム</a> &gt; 生存者バイアス
+        </div>
+
+        <article class="column-content">
+            <h2 style="font-size: 28px; margin-bottom: 30px; line-height: 1.4;">生存者バイアス：<br>「見えない失敗」がビジネスの判断を狂わせる統計学の罠</h2>
+            
+            <p>
+                ビジネスにおいて、「成功者の手法を模倣する」アプローチは極めて一般的な戦略として採用されています。
+                多くの企業が、成功した起業家の事例を研究し、ヒット商品の特性を分析して自社の事業に取り入れようと試みます。
+            </p>
+            <p>
+                しかし、統計学的な視点から評価すると、この分析方法には致命的な論理の欠陥が存在します。
+                これが「生存者バイアス（Survivorship Bias）」と呼ばれる統計の罠です。
+            </p>
+            <p>
+                生存者バイアスとは、特定の過酷な競争や条件を通過し、生き残った一部の成功事例のみに注目し、その背後で脱落していった大多数の失敗事例を分析対象から無視することで、偏った誤った結論を導き出してしまう現象を指します。
+            </p>
+
+            <h3 class="section-header">第1章：歴史的教訓「帰還した爆撃機の弾痕」</h3>
+            <p>
+                この生存者バイアスを示す有名な歴史的実例として、第二次世界大戦中のアメリカ軍における爆撃機の補強設計プロジェクトがあります。
+            </p>
+            <p>
+                軍の上層部は、戦地から無事に戻ってきた爆撃機の機体に刻まれた弾痕の分布を調査しました。
+                その結果、「主翼」と「尾翼」の部分に敵機や対空砲からの被弾痕が集中していることが判明しました。
+                このデータをもとに、上層部は「被弾の多い主翼と尾翼の装甲を優先的に強化すべきである」という設計判断を下そうとしました。
+            </p>
+            <p>
+                これに対し、軍の分析を支援していた統計学者エイブラハム・ウォールドは強く反対し、全く逆の提案を行いました。
+                それは、「弾痕がほとんど見当たらないエンジン部分こそを重点的に強化すべきである」という指摘でした。
+            </p>
+            <p>
+                軍の上層部は「無事に帰還できた飛行機（生存者）」のデータのみを評価していました。
+                主翼や尾翼に無数の傷を負いながらも帰還できた事実は、その部位が「撃たれても墜落には至らない比較的安全な場所」であることを示しています。
+                一方で、エンジン周辺に被弾した痕跡を持つ帰還機が皆無であった事実は、エンジン部分に直撃を受けた機体がすべて撃墜され、基地に戻れずにデータから欠落してしまったことを意味します。
+            </p>
+            <p>
+                強化すべき弱点は、生存機の傷跡ではなく、基地に帰れず観測されなかった墜落機の損壊箇所に隠されていました。
+            </p>
+
+            <h3 class="section-header">【体験】爆撃機装甲補強シミュレーター</h3>
+            <p>
+                プレイヤーは統計学者ウォールドの役割となり、帰還した爆撃機の被弾状況（赤いドット）を分析して補強装甲（黄金の枠線）を配備する箇所を指示します。
+                指示に基づき100機の新規テスト飛行（出撃シミュレーション）を行い、爆撃機の帰還率がどのように変化するかを確認してください。
+            </p>
+
+            <!-- シミュレーター容器 -->
+            <div class="interactive-simulator">
+                <div class="simulator-header">
+                    <h3>帰還機データに基づく装甲補強の選択</h3>
+                    <p>帰還機データには主翼と尾翼に被弾（赤ドット）が集中しています。補強方針を1つ選択して「出撃テスト」を行ってください。</p>
+                </div>
+                
+                <div class="sim-grid">
+                    <!-- 左：設定とコントロール -->
+                    <div class="control-panel">
+                        <div class="sim-state-card">
+                            <div class="sim-control-title">🛡️ 補強装甲の配備先</div>
+                            <div class="strategy-options">
+                                <div id="opt-wings" class="strategy-opt active" onclick="selectStrategy('wings')">
+                                    <span class="opt-radio-dot"></span>
+                                    <span>主翼・尾翼を補強（被弾の多い箇所）</span>
+                                </div>
+                                <div id="opt-engine" class="strategy-opt" onclick="selectStrategy('engine')">
+                                    <span class="opt-radio-dot"></span>
+                                    <span>エンジン・コックピットを補強（被弾のない箇所）</span>
+                                </div>
+                                <div id="opt-all" class="strategy-opt" onclick="selectStrategy('all')">
+                                    <span class="opt-radio-dot"></span>
+                                    <span>機体全体を均等に薄く補強</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <button id="btn-launch" class="sim-btn" onclick="runLaunchTest()">🚀 補強機100機を出撃テストする</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 右：SVG可視化 -->
+                    <div class="aircraft-viz-box">
+                        <div class="aircraft-viz-title">
+                            <span>✈️ 帰還機の被弾プロット</span>
+                            <span style="font-family:var(--font-mono); font-size:11px;">被弾部位: 主翼・尾翼に集中</span>
+                        </div>
+                        <div class="aircraft-svg-container">
+                            <svg id="svg-aircraft">
+                                <!-- 飛行機のアウトライン -->
+                                <!-- 胴体 -->
+                                <path d="M 100 30 L 120 30 L 120 180 L 100 200 Z" class="aircraft-body" />
+                                <!-- コックピット -->
+                                <ellipse cx="110" cy="50" rx="6" ry="12" fill="#a5d8ff" stroke="var(--color-ink)" stroke-width="1" />
+                                <!-- エンジン -->
+                                <rect x="90" y="80" width="10" height="25" fill="#adb5bd" stroke="var(--color-ink)" />
+                                <rect x="120" y="80" width="10" height="25" fill="#adb5bd" stroke="var(--color-ink)" />
+                                <!-- 主翼 -->
+                                <path d="M 100 80 L 20 120 L 20 140 L 100 110 Z" class="aircraft-body" />
+                                <path d="M 120 80 L 200 120 L 200 140 L 120 110 Z" class="aircraft-body" />
+                                <!-- 尾翼 -->
+                                <path d="M 100 170 L 60 190 L 60 198 L 100 185 Z" class="aircraft-body" />
+                                <path d="M 120 170 L 160 190 L 160 198 Z" class="aircraft-body" />
+                                
+                                <!-- 補強ハイライト（選択した戦略に応じて表示を切り替える） -->
+                                <path id="hl-wings" d="M 20 120 L 20 140 L 100 110 L 100 170 L 60 190 L 60 198 L 160 198 L 160 190 L 120 170 L 120 110 L 200 140 L 200 120 Z" class="armor-highlight" />
+                                <g id="hl-engine">
+                                    <ellipse cx="110" cy="50" rx="8" ry="14" class="armor-highlight" style="stroke-width:2;" />
+                                    <rect x="88" y="78" width="14" height="29" class="armor-highlight" style="stroke-width:2;" />
+                                    <rect x="118" y="78" width="14" height="29" class="armor-highlight" style="stroke-width:2;" />
+                                </g>
+                                <path id="hl-all" d="M 100 30 L 120 30 L 120 80 L 200 120 L 200 140 L 120 110 L 120 170 L 160 190 L 160 198 L 60 198 L 60 190 L 100 170 L 100 110 L 20 140 L 20 120 L 100 80 Z" class="armor-highlight" />
+
+                                <!-- 生存機の被弾弾痕（エンジンとコックピット以外にプロット） -->
+                                <circle cx="50" cy="128" r="3" class="bullet-hole" />
+                                <circle cx="70" cy="120" r="3" class="bullet-hole" />
+                                <circle cx="180" cy="132" r="3" class="bullet-hole" />
+                                <circle cx="150" cy="124" r="3" class="bullet-hole" />
+                                <circle cx="80" cy="180" r="3" class="bullet-hole" />
+                                <circle cx="140" cy="182" r="3" class="bullet-hole" />
+                                <circle cx="110" cy="150" r="3" class="bullet-hole" />
+                                <circle cx="110" cy="170" r="3" class="bullet-hole" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 結果ボード -->
+                <div class="results-board">
+                    <div class="res-box">
+                        <div class="res-label">選択した補強戦略</div>
+                        <div class="res-val" style="font-size:16px;" id="val-strategy">未選択</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">テスト出撃機数</div>
+                        <div class="res-val"><span id="val-tested-planes">0</span> 機</div>
+                    </div>
+                    <div class="res-box">
+                        <div class="res-label">無事に帰還した機数</div>
+                        <div class="res-val" style="color:var(--color-brass);"><span id="val-returned-planes">0</span> 機</div>
+                    </div>
+                </div>
+                
+                <!-- 判定ボード -->
+                <div id="sim-status-board" class="status-board">
+                    <div class="status-left">
+                        <div class="status-title">🚥 補強効果の分析診断</div>
+                        <div id="sim-status-desc" class="status-desc">補強したい方針を選んで、「出撃テスト」ボタンを押してください。</div>
+                    </div>
+                    <div class="status-right">
+                        <div id="sim-status-val" class="target-stat-value">未テスト</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-header">第2章：現代ビジネスにおける「成功法則」の嘘</h3>
+            <p>
+                この爆撃機の例に見られるデータ構造は、現代の起業戦略やビジネス分析の領域においても同様に存在しています。
+            </p>
+            <p>
+                一人の若者が起業を計画し、「成功したIT企業の創業者100人」の経歴や共通点を詳細に分析した状況を仮定します。
+                その結果、成功者の多くに共通する特徴として、以下のパターンが導き出されました。
+            </p>
+            <ul style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
+                <li>大学を途中で中退している。</li>
+                <li>事業計画を緻密に立てる前に、情熱のみで多額の資金調達（負債）を行った。</li>
+                <li>睡眠時間を1日3時間以下に削り、過酷な稼働を維持した。</li>
+            </ul>
+            <p>
+                この分析結果を信頼し、同じ無謀な条件で起業した若者の多くは、事業の継続に失敗し自己破産に陥ります。
+            </p>
+            <p>
+                この分析には「観測されない失敗事例（墜落した機体）」が完全に欠落しています。
+                成功を収めた一部の事例の陰には、「大学を中退し、多額の借金を背負い、睡眠不足で健康を崩して倒産した」数万人規模の失敗者が存在します。
+                一般の書店には、自己破産に至った当事者による詳細な分析記録はほとんど並びません。
+                ビジネスにおける無謀な行動の中から、「たまたま偶然生き残った極端な例外値」のみを収集し、それを「成功の方程式」と結論づける行為は、統計的に極めて重大なエラーをはらんでいます。
+            </p>
+
+            <h3 class="section-header">第3章：「顧客の声」が顧客満足度を低下させる矛盾</h3>
+            <p>
+                企業が日常業務で実施している「顧客満足度アンケート」も、生存者バイアスが生じやすい環境の代表例です。
+            </p>
+            <p>
+                ある店舗が、来店した顧客を対象にアンケート調査を行い、「回答者の90%が『非常に満足・再来店したい』と答えた」という高評価を得たと仮定します。
+                店舗経営者がこの数値を過信し、現状のサービス内容に満足して品質改善を止めてしまう場合、事業は急速に衰退へ向かいます。
+            </p>
+            <p>
+                アンケートに自主的に回答するのは、そもそもその店舗に対して一定以上の好意を維持している「生存している顧客」が中心です。
+                料理の品質や接客態度に深刻な不満を持ち、「二度とこの店は利用しない」と判断した顧客は、アンケートへの記入と提出に費やす時間を割きません。
+                不満を持つ顧客は、不満の意見を表明することなく無言のまま退店し、他店へと流出します。
+            </p>
+            <p>
+                アンケートに表れる「満足度90%」という数字は、すでに顧客関係が破綻した脱落者を除外した、一部のデータのみで計算された結果に過ぎません。
+                事業として真に改善すべき致命的な課題は、アンケート用紙の上ではなく、「無言で店舗を去り、データに記録されなかった不満足層」の動向に隠されています。
+            </p>
+
+            <h3 class="section-header">第4章：見えない失敗事例を捉える思考法</h3>
+            <p>
+                私たちは、目の前に明示された「目立つデータ」のみに基づいて物事を認識しようとする認知の傾向を持っています。
+                合理的な判断を下すためには、提示されたデータを分析する前に、必ず「ここから排除されているデータは何か」「観測対象にすらならなかった事例はなぜ消えたのか」という問いを立てる必要があります。
+            </p>
+            <p>
+                成功者の発言や手法をそのまま学習することには、偶然の運に左右されたノイズが多く含まれています。
+                ビジネスにおける意思決定の確度を高めるためには、表面的な成功者の言説以上に、無言で去った顧客や、市場から退場した多くの失敗事例が残した沈黙のデータの動きを正確に評価する姿勢が必要です。
+            </p>
+
+            <h3 class="section-header">まとめ</h3>
+            <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 20px; font-size: 15px; line-height: 1.8;">
+                生存者バイアスは、「生き残った一部のデータだけを見ることで、真の弱点を見落とす」という認知の誤りを示しています。
+                成功者の武勇伝を分析するのではなく、データとして現れない「見えない失敗者」の動向に注意を向け、冷静に不十分なデータを補完する姿勢こそが、変化の激しいビジネス環境において正しい判断を下すための鍵となります。
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math</div>
+                <p>大人のためのやり直し数学プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- シミュレーター制御スクリプト -->
+    <script>
+        // 選択された補強戦略
+        let activeStrategy = 'wings';
+
+        const lblStrategy = document.getElementById('val-strategy');
+        const lblTestedPlanes = document.getElementById('val-tested-planes');
+        const lblReturnedPlanes = document.getElementById('val-returned-planes');
+        
+        const statusBoard = document.getElementById('sim-status-board');
+        const statusDesc = document.getElementById('sim-status-desc');
+        const statusVal = document.getElementById('sim-status-val');
+
+        // 戦略の選択切り替え
+        function selectStrategy(strategy) {
+            activeStrategy = strategy;
+            
+            // UI上のアクティブ切り替え
+            document.querySelectorAll('.strategy-opt').forEach(opt => opt.classList.remove('active'));
+            document.getElementById(`opt-${strategy}`).classList.add('active');
+
+            // SVGハイライトの切り替え
+            document.getElementById('hl-wings').classList.remove('show');
+            document.getElementById('hl-engine').querySelectorAll('.armor-highlight').forEach(el => el.classList.remove('show'));
+            document.getElementById('hl-all').classList.remove('show');
+
+            if (strategy === 'wings') {
+                document.getElementById('hl-wings').classList.add('show');
+                lblStrategy.textContent = '主翼・尾翼を補強';
+            } else if (strategy === 'engine') {
+                document.getElementById('hl-engine').querySelectorAll('.armor-highlight').forEach(el => el.classList.add('show'));
+                lblStrategy.textContent = 'エンジン・コックピット';
+            } else if (strategy === 'all') {
+                document.getElementById('hl-all').classList.add('show');
+                lblStrategy.textContent = '全体を均等に補強';
+            }
+        }
+
+        // シミュレーション実行
+        function runLaunchTest() {
+            let totalPlanes = 100;
+            let returnedPlanes = 0;
+            let survivalRate = 0.0;
+
+            // 各戦略に基づく生存確率のシミュレーションモデル
+            // 主翼・尾翼を補強（被弾箇所）: 帰還率約35% (エンジンへの直撃で即墜落するため)
+            // エンジン・コックピットを補強 (被弾のなかった急所): 帰還率約88% (致命傷になる場所を保護できたため)
+            // 全体を均等に補強: 帰還率約55% (重量増による機動力低下＋強度が不十分なため)
+            
+            if (activeStrategy === 'wings') {
+                survivalRate = 0.35;
+            } else if (activeStrategy === 'engine') {
+                survivalRate = 0.88;
+            } else if (activeStrategy === 'all') {
+                survivalRate = 0.55;
+            }
+
+            // ランダム確率によるカウント
+            for (let i = 0; i < totalPlanes; i++) {
+                if (Math.random() < survivalRate) {
+                    returnedPlanes++;
+                }
+            }
+
+            // ボードの表示更新
+            lblTestedPlanes.textContent = totalPlanes;
+            lblReturnedPlanes.textContent = returnedPlanes;
+
+            // 診断ボードの文面更新
+            if (activeStrategy === 'wings') {
+                statusBoard.className = 'status-board active-warning';
+                statusVal.textContent = '生存者バイアスに陥っています';
+                statusDesc.textContent = `帰還した飛行機だけを見て「被弾の多い主翼」を補強した結果、エンジンを直撃された飛行機が全て墜落し、帰還率は【${returnedPlanes}%】に留まりました。`;
+            } else if (activeStrategy === 'engine') {
+                statusBoard.className = 'status-board';
+                statusVal.textContent = '統計学の勝利（最善設計）';
+                statusDesc.textContent = `「被弾のない箇所＝即撃墜される急所」と見抜き、エンジンとコックピットを守った結果、帰還率は【${returnedPlanes}%】に跳ね上がりました。`;
+            } else if (activeStrategy === 'all') {
+                statusBoard.className = 'status-board active-warning';
+                statusVal.textContent = '中途半端な均等配分';
+                statusDesc.textContent = `機体全体を薄く補強した結果、重量過多によって機動力（回避力）が下がり、装甲も薄いため致命的な部分を防ぎきれず、帰還率は【${returnedPlanes}%】となりました。`;
+            }
+        }
+
+        // 初期ロード
+        selectStrategy('wings');
+    </script>
+</body>
+</html>
