@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>次元削減（PCA）と固有値・固有ベクトルの幾何学的意味 | Otona Math</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;500&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css?v=3">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+    <style>
+        .concept-box {
+            background-color: var(--color-paper);
+            border: 2px solid var(--color-brass);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .math-display {
+            font-size: 20px;
+            font-family: var(--font-mono);
+            color: var(--color-ink);
+            margin: 15px 0;
+            overflow-x: auto;
+            text-align: center;
+        }
+        .interactive-tool {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-paper-line);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        .tool-header {
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: var(--color-ink);
+            text-align: center;
+        }
+        .control-panel {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+        }
+        .control-label {
+            font-size: 12px;
+            color: var(--color-ink-soft);
+            font-weight: bold;
+        }
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .tool-slider {
+            width: 200px;
+            accent-color: var(--color-brass);
+        }
+        .stats-display {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            width: 100%;
+            max-width: 500px;
+            margin-top: 20px;
+        }
+        .stat-card {
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .stat-val {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--color-brass);
+            font-family: var(--font-mono);
+            margin-top: 5px;
+        }
+        .canvas-container {
+            background-color: #fff;
+            border: 1px solid var(--color-paper-line);
+            border-radius: 6px;
+            padding: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner container">
+            <h1 class="logo"><a href="../index.html" style="color: inherit;">Otona Math & Stats</a></h1>
+            <nav class="nav">
+                <ul>
+                    <li><a href="../index.html">数学と統計学</a></li>
+                    <li><a href="../books.html">書籍紹介</a></li>
+                    <li><a href="../columns/index.html">コラム</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="lesson-container">
+        <div class="lesson-breadcrumbs">
+            <a href="../index.html">ホーム</a> &gt; <a href="index.html">数学カリキュラム</a> &gt; 単元105
+        </div>
+
+        <article class="lesson-flow">
+            <section class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 08-05</span>
+                <h2 class="lesson-title">次元削減（PCA）と固有値・固有ベクトルの幾何学的意味</h2>
+                <p class="lesson-lead">多次元の複雑なデータを、情報（ばらつき）を失わずに低次元へ要約する「主成分分析（PCA）」。その幾何学的な本質と、共分散行列の固有値問題へと帰着する数理の全貌を紐解きます。</p>
+            </section>
+
+            <!-- Step 1 -->
+            <div class="lesson-step">
+                <span class="lesson-step-meta">Step 01</span>
+                <h4>多次元データと「次元削減」の必要性</h4>
+                <p>
+                    現実のビジネスや科学研究で扱うデータは、非常に多くの変数（次元数）を持っています。
+                    顧客分析を例に取ると、購入金額、購入頻度、Webサイトの滞在時間、年齢、居住地域など、数十から数百の項目が同時に記録されます。
+                    このように次元数が多いデータをそのまま扱うとき、データ分析は2つの大きな困難に直面します。
+                </p>
+                <ul class="lesson-bullet-list">
+                    <li><strong>データの可視化が困難になる点</strong>：人間が視覚的に認識できる空間は3次元までです。それ以上の高次元データを直接グラフに描いてデータ構造を理解することは不可能です。</li>
+                    <li><strong>「次元の呪い」の発生</strong>：次元数が増えるにつれて、データを表現する空間の体積が指数関数的に増加します。その結果、データ点が空間内でスカスカにばらけて存在し、予測モデルの精度が低下する現象を「次元の呪い」と呼びます。</li>
+                </ul>
+                <p>
+                    これらの困難を解決する手法が<strong>「次元削減」</strong>です。
+                    次元削減は、データの元々持つ本質的な情報（ばらつき）をできる限り残しながら、変数の数をギュッと絞り込む作業を指します。
+                    その代表的な手法が、<strong>主成分分析（PCA: Principal Component Analysis）</strong>です。
+                </p>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="lesson-step">
+                <span class="lesson-step-meta">Step 02</span>
+                <h4>「情報の損失を最小化する」とはどういうことか</h4>
+                <p>
+                    2次元平面上のデータを、直線の1次元空間へ次元削減する場面を考えます。
+                    高次元のデータを低次元に射影（投影）するとき、どのような方向に射影すれば、データの情報を最も失わずに済むでしょうか。
+                    統計学において、データの「情報」とは<strong>「データのばらつき（分散）」</strong>を意味します。
+                    データが広く散らばっている方向ほど、データごとの違いを識別するための重要な情報が多く含まれていると考えられます。
+                </p>
+                <p>
+                    したがって、情報の損失を最小限にするための射影方向は、<strong>「射影後のデータの分散が最大になる方向」</strong>です。
+                    射影後のデータが最も大きく散らばる直線の向きを探し出すことが、PCAにおける最適化の目的となります。
+                </p>
+
+                <!-- SVG Diagram 1: PCA concept -->
+                <div style="text-align: center; margin: 30px 0;">
+                    <svg viewBox="0 0 600 300" width="100%" height="auto" style="max-width: 600px; background-color: var(--color-surface); border: 1px solid var(--color-paper-line); border-radius: 6px;">
+                        <!-- グリッド背景 -->
+                        <defs>
+                            <pattern id="grid-pca" width="30" height="30" patternUnits="userSpaceOnUse">
+                                <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#f0f0f0" stroke-width="1"/>
+                            </pattern>
+                        </defs>
+                        <rect width="600" height="300" fill="url(#grid-pca)" />
+
+                        <!-- 軸 -->
+                        <line x1="50" y1="250" x2="550" y2="250" stroke="#bbb" stroke-width="1.5"/>
+                        <line x1="50" y1="50" x2="50" y2="250" stroke="#bbb" stroke-width="1.5"/>
+                        <text x="540" y="270" font-size="12" fill="#888">変数 X1 (年齢など)</text>
+                        <text x="60" y="65" font-size="12" fill="#888">変数 X2 (購入額など)</text>
+
+                        <!-- データ群 -->
+                        <g id="data-points-pca">
+                            <circle cx="200" cy="180" r="5" fill="var(--color-ink-soft)" opacity="0.7"/>
+                            <circle cx="230" cy="160" r="5" fill="var(--color-ink-soft)" opacity="0.7"/>
+                            <circle cx="260" cy="150" r="5" fill="var(--color-ink-soft)" opacity="0.7"/>
+                            <circle cx="290" cy="120" r="5" fill="var(--color-ink-soft)" opacity="0.7"/>
+                            <circle cx="320" cy="110" r="5" fill="var(--color-ink-soft)" opacity="0.7"/>
+                            <circle cx="350" cy="90" r="5" fill="var(--color-ink-soft)" opacity="0.7"/>
+                            <circle cx="380" cy="80" r="5" fill="var(--color-ink-soft)" opacity="0.7"/>
+                            <circle cx="410" cy="60" r="5" fill="var(--color-ink-soft)" opacity="0.7"/>
+                        </g>
+
+                        <!-- 主成分軸 (第1主成分: 分散最大方向) -->
+                        <line x1="120" y1="210" x2="480" y2="30" stroke="var(--color-brass)" stroke-width="2.5"/>
+                        <text x="440" y="20" font-size="12" fill="var(--color-brass)" font-weight="bold">第1主成分軸 (第一固有ベクトル)</text>
+
+                        <!-- 第2主成分軸 (直交する方向: 分散最小方向) -->
+                        <line x1="250" y1="60" x2="350" y2="240" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4"/>
+                        <text x="360" y="220" font-size="11" fill="#ef4444" font-weight="bold">第2主成分軸 (第二固有ベクトル)</text>
+
+                        <!-- 各点からの垂線（射影）イメージ -->
+                        <line x1="290" y1="120" x2="310" y2="115" stroke="var(--color-brass)" stroke-width="1" stroke-dasharray="2"/>
+                        <line x1="350" y1="90" x2="362" y2="89" stroke="var(--color-brass)" stroke-width="1" stroke-dasharray="2"/>
+                    </svg>
+                    <p style="font-size: 12px; color: var(--color-ink-soft); margin-top: 8px;">図1：データが最も広く分布している方向（第1主成分軸）を見つけ出す概念図</p>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="lesson-step">
+                <span class="lesson-step-meta">Step 03</span>
+                <h4>射影されたデータの分散を表す数式モデル</h4>
+                <p>
+                    この問題を数式として構築します。
+                    まず、手元にあるデータ点を $x_i = [x_{i1}, x_{i2}, \dots, x_{id}]^T$ とし、あらかじめ中心化（平均を 0 に引く）処理を行っておきます。これにより、全体の平均ベクトルは $\mu = 0$ となります。
+                </p>
+                <p>
+                    このデータを、射影したい方向を表す単位ベクトル $u$（制約条件：$u^T u = ||u||^2 = 1$）に投影します。
+                    各データ点 $x_i$ を $u$ に射影した後の1次元の値 $y_i$ は、ベクトルの内積によって次のように表されます。
+                </p>
+                <div class="math-display">
+                    $$y_i = u^T x_i$$
+                </div>
+                <p>
+                    データの平均が 0 であるため、射影後の値 $y_i$ の平均も当然 0 になります。
+                    したがって、射影されたデータ群の分散 $V(y)$ は、二乗誤差の平均値として次のように展開されます。
+                </p>
+                <div class="math-box">
+                    $$V(y) = \frac{1}{N} \sum_{i=1}^{N} y_i^2 = \frac{1}{N} \sum_{i=1}^{N} (u^T x_i)^2$$
+                    ここで、$(u^T x_i)^2 = (u^T x_i)(u^T x_i)^T = u^T (x_i x_i^T) u$ と書き換えることができます。
+                    $$V(y) = u^T \left( \frac{1}{N} \sum_{i=1}^{N} x_i x_i^T \right) u$$
+                </div>
+                <p>
+                    ここで、丸括弧で囲まれた中身の式は、データのばらつき度合いを行列として表した<strong>「共分散行列（分散共分散行列）$S$」</strong>そのものです。
+                </p>
+                <div class="math-display">
+                    $$S = \frac{1}{N} \sum_{i=1}^{N} x_i x_i^T$$
+                </div>
+                <p>
+                    これを用いると、私たちが最大化したい射影後の分散 $V(y)$ は、驚くほどスッキリとした行列の二次形式にまとめることができます。
+                </p>
+                <div class="math-display">
+                    $$V(y) = u^T S u$$
+                </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="lesson-step">
+                <span class="lesson-step-meta">Step 04</span>
+                <h4>ラグランジュの未定乗数法と固有値問題への帰着</h4>
+                <p>
+                    これで解くべき数学的課題が明確になりました。
+                    <strong>「制約条件 $u^T u = 1$ の下で、二次形式 $u^T S u$ を最大化する単位ベクトル $u$ を求める」</strong>という最適化問題です。
+                    等式制約付き最適化問題を解くために、数学の強力なツールである<strong>ラグランジュの未定乗数法</strong>を使用します。
+                </p>
+                <p>
+                    未定乗数 $\lambda$ を導入し、ラグランジュ関数 $L(u, \lambda)$ を以下のように定義します。
+                </p>
+                <div class="math-display">
+                    $$L(u, \lambda) = u^T S u - \lambda(u^T u - 1)$$
+                </div>
+                <p>
+                    この関数を、求めたいベクトル $u$ で偏微分して 0 とおきます。
+                    ベクトルの微分公式 $\frac{\partial (u^T A u)}{\partial u} = 2Au$（$A$ が対称行列のとき）および $\frac{\partial (u^T u)}{\partial u} = 2u$ を用いて展開します。
+                </p>
+                <div class="math-box">
+                    $$\frac{\partial L}{\partial u} = 2Su - 2\lambda u = 0$$
+                    $$Su = \lambda u$$
+                </div>
+                <p>
+                    この式は、線形代数で最も重要な式の一つである<strong>「固有値方程式」</strong>そのものです。
+                    共分散行列 $S$ に対し、ベクトル $u$ に $S$ を作用させても向きが変わらず、長さが $\lambda$ 倍になるような特別な方向を示しています。
+                    この結果は、私たちが求める最適な射影方向 $u$ は、データの共分散行列 $S$ の<strong>固有ベクトル</strong>に他ならないことを意味します。
+                </p>
+                <p>
+                    さらに、このときの最大化された分散 $V(y)$ の大きさ自体を計算してみます。
+                    $$V(y) = u^T S u = u^T (\lambda u) = \lambda (u^T u)$$
+                    制約条件である $u^T u = 1$ を適用すると、驚くべき結果が得られます。
+                </p>
+                <div class="math-display">
+                    $$V(y) = \lambda$$
+                </div>
+                <p>
+                    射影後の分散の大きさは、共分散行列の<strong>固有値 $\lambda$ そのもの</strong>になります。
+                    したがって、分散を最も大きくする方向は、共分散行列の「最大の固有値 $\lambda_1$」に対応する「第1固有ベクトル $u_1$」の向きになります。
+                    これを「第1主成分（PC1）」と呼びます。
+                    次に分散が大きい直交する方向は、2番目に大きな固有値に対応する固有ベクトルとなり、これが「第2主成分（PC2）」となります。
+                </p>
+            </div>
+
+            <!-- Step 5: Interactive Simulator -->
+            <div class="lesson-step">
+                <span class="concept-box">
+                    <strong>💡 線形代数と統計学の融合：</strong><br>
+                    抽象的で何の役に立つのか分かりにくかった「固有値」や「固有ベクトル」という線形代数の概念が、共分散行列を介することで「データが最も広く分布する主軸の向き（固有ベクトル）」と「その主軸におけるばらつきの量（固有値）」という極めて具体的な意味として結びつきます。
+                </span>
+
+                <div class="interactive-tool">
+                    <div class="tool-header">
+                        <strong>📊 PCA（主成分分析）幾何学的シミュレーター</strong>
+                        <p style="font-size: 13px; color: var(--color-ink-soft); margin-top: 5px;">射影軸の角度を変えて、射影されたデータのばらつき（分散）が変化する様子を体験してください。</p>
+                    </div>
+
+                    <div class="control-panel">
+                        <div class="control-group">
+                            <span class="control-label">射影軸の回転角度 (&theta;)</span>
+                            <div class="slider-container">
+                                <input type="range" id="angle-slider" min="0" max="180" value="0" class="tool-slider">
+                                <span id="angle-val" font-family="var(--font-mono)">0&deg;</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="canvas-container">
+                        <canvas id="pca-canvas" width="400" height="400"></canvas>
+                    </div>
+
+                    <div class="stats-display">
+                        <div class="stat-card">
+                            <div class="control-label">射影後のデータ分散 V(y)</div>
+                            <div id="stat-variance" class="stat-val">0.00</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="control-label">目標：分散の最大化</div>
+                            <div id="stat-max-hint" style="font-size: 13px; font-weight: bold; margin-top: 10px; color: #888;">スライダーを動かそう</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 6 -->
+            <div class="lesson-step">
+                <span class="lesson-step-meta">Step 05</span>
+                <h4>実務におけるPCAの応用と「寄与率」</h4>
+                <p>
+                    主成分分析によって得られた各主成分が、元データの全情報をどれくらいカバーできているのかを示す指標を<strong>「寄与率」</strong>と呼びます。
+                    各固有値 $\lambda_j$ を用いて、第 $j$ 主成分の寄与率 $C_j$ は以下のように計算されます。
+                </p>
+                <div class="math-display">
+                    $$C_j = \frac{\lambda_j}{\sum_{k=1}^{d} \lambda_k}$$
+                </div>
+                <p>
+                    すべての固有値の合計（分母）に対する、着目する主成分の固有値（分子）の割合を意味します。
+                    例えば、第1主成分と第2主成分の寄与率の合計（累積寄与率）が 80% を超えている場合、元のデータが10個の変数を持っていたとしても、第1主成分と第2主成分の2つの合成変数に置き換えるだけで、全体の情報の8割を維持したまま2次元平面に綺麗に可視化することができます。
+                </p>
+                <p>
+                    実務においては、画像の圧縮処理（固有顔を用いた顔認識など）や、アンケート分析における類似する質問項目の集約、大量の財務指標をいくつかの総合スコアにまとめる場面などで、PCAが非常に重宝されています。
+                </p>
+            </div>
+
+            <!-- Step 7 -->
+            <div class="lesson-step">
+                <span class="lesson-step-meta">Step 06</span>
+                <h4>まとめ</h4>
+                <p>
+                    次元削減（PCA）は、情報の損失（分散の低下）を防ぎながらデータを要約するための幾何学的なアプローチです。
+                    分散を最大にする方向を探す等式制約付き最適化問題は、ラグランジュの未定乗数法によって、データの共分散行列の固有値方程式を解く問題へと美しく帰着します。
+                    線形代数の固有値・固有ベクトルの幾何学的意味を腹落ちさせることで、機械学習の次元削減アルゴリズムを数学的な自信を持って使いこなせるようになります。
+                </p>
+            </div>
+
+            <!-- 書籍紹介 -->
+            <div style="background-color: var(--color-paper); border: 1px solid var(--color-paper-line); border-radius: 6px; padding: 25px; margin: 40px 0;">
+                <h4 style="margin-top: 0; margin-bottom: 15px; color: var(--color-brass); border-bottom: 1px solid var(--color-paper-line); padding-bottom: 8px;">📚 推薦書籍紹介</h4>
+                <p style="font-size: 13px; color: var(--color-ink-soft); margin-bottom: 20px;">固有値や固有ベクトルの幾何学的イメージと次元削減をより深く学ぶための推薦書籍です。</p>
+                
+                <div style="display: flex; gap: 20px; flex-direction: column;">
+                    <!-- 書籍1 -->
+                    <div style="border-left: 3px solid var(--color-brass); padding-left: 15px;">
+                        <span style="font-size: 15px; font-weight: bold; color: var(--color-ink); display: block;">『プログラミングのための線形代数』</span>
+                        <span style="font-size: 12px; color: #888; display: block; margin-top: 3px;">著者：平岡和幸、堀玄 / 発行：オーム社</span>
+                        <p style="font-size: 13px; margin: 8px 0 0 0; line-height: 1.6;">
+                            固有値や固有ベクトルを「空間の写像（幾何学的イメージ）」として捉えるための最高の一冊です。PCAなどで使われる行列の直感的意味を養うことができます。
+                        </p>
+                        <a href="../books.html" style="font-size: 13px; font-weight: bold; color: var(--color-brass); text-decoration: none; display: inline-block; margin-top: 10px;">➔ 学部時代のバイブルとしての詳細書評を読む</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-footer-nav">
+                <a href="104.html" class="btn-secondary">&larr; 前の単元へ</a>
+                <a href="index.html" class="btn-secondary">目次に戻る</a>
+                <a href="#" class="btn btn-primary" style="opacity:0.5; cursor:not-allowed;">次の単元へ &rarr;</a>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <div class="footer-logo">Otona Math & Stats</div>
+                <p>大人のためのやり直し数理プラットフォーム</p>
+            </div>
+            <div class="footer-right">
+                <p class="copyright">&copy; 2026 Otona Math.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // サンプルデータ：正の相関を持つ2次元データ (中心化済み)
+        const data = [
+            {x: -90, y: -45},
+            {x: -70, y: -30},
+            {x: -50, y: -10},
+            {x: -30, y: -20},
+            {x: -10, y: 5},
+            {x: 10, y: -5},
+            {x: 30, y: 20},
+            {x: 50, y: 15},
+            {x: 70, y: 35},
+            {x: 90, y: 45}
+        ];
+
+        // データの分散共分散行列を手動計算
+        // S = [[s_xx, s_xy], [s_xy, s_yy]]
+        const N = data.length;
+        let s_xx = 0, s_yy = 0, s_xy = 0;
+        data.forEach(p => {
+            s_xx += p.x * p.x;
+            s_yy += p.y * p.y;
+            s_xy += p.x * p.y;
+        });
+        s_xx /= N;
+        s_yy /= N;
+        s_xy /= N;
+
+        const canvas = document.getElementById('pca-canvas');
+        const ctx = canvas.getContext('2d');
+        const slider = document.getElementById('angle-slider');
+        const angleVal = document.getElementById('angle-val');
+        const varDisplay = document.getElementById('stat-variance');
+        const hintDisplay = document.getElementById('stat-max-hint');
+
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 背景グリッドと軸
+            ctx.strokeStyle = '#f5f5f5';
+            ctx.lineWidth = 1;
+            for(let i = 40; i < canvas.width; i += 40) {
+                ctx.beginPath();
+                ctx.moveTo(i, 0);
+                ctx.lineTo(i, canvas.height);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(0, i);
+                ctx.lineTo(canvas.width, i);
+                ctx.stroke();
+            }
+
+            // X軸・Y軸
+            ctx.strokeStyle = '#ddd';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(0, centerY);
+            ctx.lineTo(canvas.width, centerY);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(centerX, 0);
+            ctx.lineTo(centerX, canvas.height);
+            ctx.stroke();
+
+            const angleDeg = parseFloat(slider.value);
+            const angleRad = (angleDeg * Math.PI) / 180;
+            angleVal.textContent = angleDeg + '°';
+
+            // 射影方向の単位ベクトル u
+            const ux = Math.cos(angleRad);
+            const uy = Math.sin(angleRad); // canvasのY座標は下向きなので描画時に考慮
+
+            // 射影軸の直線を描画
+            ctx.strokeStyle = 'var(--color-brass)';
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.moveTo(centerX - ux * 180, centerY - uy * 180);
+            ctx.lineTo(centerX + ux * 180, centerY + uy * 180);
+            ctx.stroke();
+
+            // 直交する第二主成分の軸を補助点線で描画
+            ctx.strokeStyle = '#ef4444';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath();
+            ctx.moveTo(centerX + uy * 120, centerY - ux * 120);
+            ctx.lineTo(centerX - uy * 120, centerY + ux * 120);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // 射影後のデータの分散を計算
+            // V(y) = u^T S u = s_xx * ux^2 + 2 * s_xy * ux * uy + s_yy * uy^2
+            const variance = s_xx * ux * ux + 2 * s_xy * ux * uy + s_yy * uy * uy;
+            varDisplay.textContent = (variance / 100).toFixed(2); // 見やすい桁数にスケール
+
+            // 評価評価ヒント
+            // 相関データなので、およそ26度付近で分散が最大になる
+            if (Math.abs(angleDeg - 26) < 4) {
+                hintDisplay.textContent = '🌟 最大値（第一主成分）！データのばらつきが最も広く表現されています。';
+                hintDisplay.style.color = '#10b981';
+            } else if (Math.abs(angleDeg - 116) < 4) {
+                hintDisplay.textContent = '🔒 最小値（第二主成分）！直交する最も情報の少ない方向です。';
+                hintDisplay.style.color = '#ef4444';
+            } else {
+                hintDisplay.textContent = 'スライダーを回して最大（約26度）を探してください。';
+                hintDisplay.style.color = '#888';
+            }
+
+            // データ点と、射影点の描画
+            data.forEach(p => {
+                const screenX = centerX + p.x;
+                const screenY = centerY + p.y; // canvas上は下方向がプラスなのでデータ自体をそのまま加算
+
+                // データ点から軸への射影点を計算
+                // 射影点の位置は (dot_product) * u
+                // 中心座標からのベクトルとして計算
+                const dot = p.x * ux + p.y * uy;
+                const projX = centerX + dot * ux;
+                const projY = centerY + dot * uy;
+
+                // 垂線（点線）
+                ctx.strokeStyle = '#bbb';
+                ctx.lineWidth = 1;
+                ctx.setLineDash([2, 2]);
+                ctx.beginPath();
+                ctx.moveTo(screenX, screenY);
+                ctx.lineTo(projX, projY);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                // 射影点 (小さなゴールドの点)
+                ctx.fillStyle = 'var(--color-brass)';
+                ctx.beginPath();
+                ctx.arc(projX, projY, 4, 0, Math.PI * 2);
+                ctx.fill();
+
+                // 元データ点 (青丸)
+                ctx.fillStyle = 'var(--color-ink-soft)';
+                ctx.beginPath();
+                ctx.arc(screenX, screenY, 6, 0, Math.PI * 2);
+                ctx.fill();
+            });
+        }
+
+        slider.addEventListener('input', draw);
+        draw();
+    </script>
+</body>
+</html>
