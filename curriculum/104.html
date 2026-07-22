@@ -179,139 +179,175 @@
             <a href="../index.html">ホーム</a> &gt; <a href="index.html">カリキュラム</a> &gt; 決定木と情報エントロピー
         </div>
 
-        <article class="lesson-article">
-            <h2 class="lesson-title">104 決定木モデルと情報エントロピー（乱雑さの定量化）</h2>
-            
-            <p>
-                機械学習において、データの分類や予測を行う最も直感的かつ強力なアルゴリズムの一つが「決定木（Decision Tree）」です。
-                決定木は、データが持つさまざまな特徴をもとに「もし〜なら」という条件分岐を繰り返し、樹木のようなツリー構造を作ってデータを分類していきます。
-            </p>
-            <p>
-                この分岐を行う際、コンピュータは「どの条件でデータを分ければ、最も綺麗に分類できるか」を数学的に計算しています。
-                その判断基準となるのが、データの乱雑さを表す「情報エントロピー（Shannon Entropy）」と、分岐によってどれだけデータが綺麗になったかを示す「情報獲得（Information Gain）」です。
-            </p>
+        <article class="lesson-container">
+            <header class="lesson-header">
+                <span class="lesson-chapter-label">Chapter 08 / Unit 104</span>
+                <h2 class="lesson-title">決定木モデルと情報エントロピー（乱雑さの定量化）</h2>
+            </header>
 
-            <div class="concept-box">
-                <h3 style="margin-top:0;">情報エントロピーの定義式</h3>
-                <p>
-                    あるデータセットにおいて、属するクラスの確率を $P(x_i)$ とするとき、情報エントロピー $H(X)$ は以下の数式で定義されます。
-                </p>
-                <div class="math-display">
-                    $$H(X) = - \sum_{i=1}^{n} P(x_i) \log_2 P(x_i)$$
-                </div>
-                <p>
-                    この値は、データセットが最も綺麗に整理されている（1つのクラスしかない）ときに「0」となり、最も乱雑に混ざり合っているときに最大値「1」をとります。
-                </p>
-            </div>
-
-            <h3 class="section-header">情報エントロピーの物理的意味</h3>
-            <p>
-                エントロピーは元々は物理学（熱力学）で用いられる「乱雑さ」を示す言葉ですが、情報理論の祖であるクロード・シャノンがこれを情報の不確実性を示す指標として導入しました。
-            </p>
-            <p>
-                例えば、袋の中に「赤いボールが5個、青いボールが5個」入っている状態を想定します。
-                この状態からボールを取り出すとき、どちらの色が出るかは最も予測しにくく、不確実性（エントロピー）は最大値の「1.0」になります。
-                一方で、袋の中が「赤いボール10個のみ」であれば、何を取り出すかは100%確実であり、不確実性は「0」になります。
-                決定木は、このエントロピーが「0」に近づくようにデータを左右のグループに分割していきます。
-            </p>
-
-            <h3 class="section-header">情報獲得（Information Gain）による評価</h3>
-            <p>
-                決定木は、データを分割する前（親ノード）のエントロピーから、分割した後（子ノード）のエントロピーの加重平均を差し引くことで、「情報獲得」を計算します。
-            </p>
-            <div class="math-display">
-                $$\text{情報獲得} = H(\text{親}) - \left( \frac{N_{\text{左}}}{N_{\text{親}}} H(\text{左}) + \frac{N_{\text{右}}}{N_{\text{親}}} H(\text{右}) \right)$$
-            </div>
-            <p>
-                この情報獲得の値が最も大きくなる分岐条件が、最適な分割条件として採用されます。
-            </p>
-
-            <div class="interactive-tool">
-                <div class="tool-header">
-                    <h4>決定木分割とエントロピー計算ツール</h4>
-                    <p style="font-size:13px; color:var(--color-ink-soft); margin-top:5px;">
-                        赤丸（R）と青四角（B）の混ざったデータを、条件で分割した際のエントロピーの変化を確認します。
+            <div class="lesson-flow">
+                <!-- Step 1 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 01</span>
+                    <h4>データの条件分岐モデル</h4>
+                    <p>
+                        機械学習において、データの分類や予測を行う最も直感的かつ強力なアルゴリズムの一つが「決定木（Decision Tree）」です。
+                        決定木は、データが持つさまざまな特徴をもとに「もし〜なら」という条件分岐を繰り返し、樹木のようなツリー構造を作ってデータを分類していきます。
+                    </p>
+                    <p>
+                        この分岐を行う際、コンピュータは「どの条件でデータを分ければ、最も綺麗に分類できるか」を数学的に計算しています。
+                        その判断基準となるのが、データの乱雑さを表す「情報エントロピー（Shannon Entropy）」と、分岐によってどれだけデータが綺麗になったかを示す「情報獲得（Information Gain）」です。
                     </p>
                 </div>
 
-                <div class="control-panel">
-                    <div class="control-group">
-                        <span class="control-label">分岐条件の選択</span>
-                        <div style="display:flex; gap:10px;">
-                            <button id="btn-split-color" class="tool-btn active" onclick="applySplit('color')">色で分ける（赤 vs 青）</button>
-                            <button id="btn-split-size" class="tool-btn" onclick="applySplit('size')">サイズで分ける（大 vs 小）</button>
-                            <button id="btn-split-random" class="tool-btn" onclick="applySplit('random')">無作為に分ける（ランダム）</button>
+                <!-- Step 2 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 02</span>
+                    <h4>情報エントロピーの定義と不確実性</h4>
+                    <div class="concept-box">
+                        <h5 style="margin-top:0;">情報エントロピーの定義式</h5>
+                        <p>
+                            あるデータセットにおいて、属するクラスの確率を $P(x_i)$ とするとき、情報エントロピー $H(X)$ は以下の数式で定義されます。
+                        </p>
+                        <div class="math-display">
+                            $$H(X) = - \sum_{i=1}^{n} P(x_i) \log_2 P(x_i)$$
+                        </div>
+                        <p style="font-size:13px; color:#666; margin-top:10px;">
+                            この値は、データセットが最も綺麗に整理されている（1つのクラスしかない）ときに「0」となり、最も乱雑に混ざり合っているときに最大値「1」をとります。
+                        </p>
+                    </div>
+                    <p>
+                        エントロピーは元々は物理学（熱力学）で用いられる「乱雑さ」を示す言葉ですが、情報理論の祖であるクロード・シャノンがこれを情報の不確実性を示す指標として導入しました。
+                    </p>
+                    <p>
+                        例えば、袋の中に「赤いボールが5個、青いボールが5個」入っている状態を想定します。
+                        この状態からボールを取り出すとき、どちらの色が出るかは最も予測しにくく、不確実性（エントロピー）は最大値の「1.0」になります。
+                        一方で、袋の中が「赤いボール10個のみ」であれば、何を取り出すかは100%確実であり、不確実性は「0」になります。
+                        決定木は、このエントロピーが「0」に近づくようにデータを左右のグループに分割していきます。
+                    </p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 03</span>
+                    <h4>情報獲得（Information Gain）による評価</h4>
+                    <p>
+                        決定木は、データを分割する前（親ノード）のエントロピーから、分割した後（子ノード）のエントロピーの加重平均を差し引くことで、「情報獲得」を計算します。
+                    </p>
+                    <div class="math-display">
+                        $$\text{情報獲得} = H(\text{親}) - \left( \frac{N_{\text{左}}}{N_{\text{親}}} H(\text{左}) + \frac{N_{\text{右}}}{N_{\text{親}}} H(\text{右}) \right)$$
+                    </div>
+                    <p>
+                        この情報獲得の値が最も大きくなる分岐条件が、最適な分割条件として採用されます。
+                    </p>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 04</span>
+                    <h4>決定木分割シミュレーター</h4>
+                    <div class="interactive-tool">
+                        <div class="tool-header">
+                            <h4>決定木分割とエントロピー計算ツール</h4>
+                            <p style="font-size:13px; color:var(--color-ink-soft); margin-top:5px;">
+                                赤丸（R）と青四角（B）の混ざったデータを、条件で分割した際のエントロピーの変化を確認します。
+                            </p>
+                        </div>
+
+                        <div class="control-panel">
+                            <div class="control-group">
+                                <span class="control-label">分岐条件の選択</span>
+                                <div style="display:flex; gap:10px;">
+                                    <button id="btn-split-color" class="tool-btn active" onclick="applySplit('color')">色で分ける（赤 vs 青）</button>
+                                    <button id="btn-split-size" class="tool-btn" onclick="applySplit('size')">サイズで分ける（大 vs 小）</button>
+                                    <button id="btn-split-random" class="tool-btn" onclick="applySplit('random')">無作為に分ける（ランダム）</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="split-container">
+                            <!-- 親ノード -->
+                            <div class="node-box" style="grid-column: 1 / -1;">
+                                <div class="node-title">🌳 親ノード (分割前)</div>
+                                <div id="parent-items" class="item-list"></div>
+                                <div>データ数: <span id="parent-count">10</span> 件</div>
+                                <div>不純度エントロピー: <span id="parent-entropy" class="entropy-val">1.000</span></div>
+                            </div>
+
+                            <!-- 子ノード（左） -->
+                            <div class="node-box">
+                                <div class="node-title">🌿 子ノード：左 (条件に合致)</div>
+                                <div id="left-items" class="item-list"></div>
+                                <div>データ数: <span id="left-count">0</span> 件</div>
+                                <div>エントロピー: <span id="left-entropy" class="entropy-val">0.000</span></div>
+                            </div>
+
+                            <!-- 子ノード（右） -->
+                            <div class="node-box">
+                                <div class="node-title">🌿 子ノード：右 (条件に非合致)</div>
+                                <div id="right-items" class="item-list"></div>
+                                <div>データ数: <span id="right-count">0</span> 件</div>
+                                <div>エントロピー: <span id="right-entropy" class="entropy-val">0.000</span></div>
+                            </div>
+
+                            <!-- 情報獲得 -->
+                            <div class="gain-box">
+                                <div style="font-size:13px; font-weight:bold; color:var(--color-ink-soft);">
+                                    📊 分割による「情報獲得（Information Gain）」
+                                </div>
+                                <div id="val-info-gain" class="gain-val">0.000</div>
+                                <p style="font-size:11px; color:var(--color-ink-soft); margin-top:8px;" id="lbl-split-eval">
+                                    分析中...
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="split-container">
-                    <!-- 親ノード -->
-                    <div class="node-box" style="grid-column: 1 / -1;">
-                        <div class="node-title">🌳 親ノード (分割前)</div>
-                        <div id="parent-items" class="item-list"></div>
-                        <div>データ数: <span id="parent-count">10</span> 件</div>
-                        <div>不純度エントロピー: <span id="parent-entropy" class="entropy-val">1.000</span></div>
-                    </div>
+                <!-- Step 5 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 05</span>
+                    <h4>コラム：機械学習における決定木モデルの実用的役割</h4>
+                    <p>
+                        単一の決定木は、直感的に分岐条件を理解しやすく、どのようなルールで分類されたかを人間が視覚的に追跡できる長所を持っています。
+                        しかし、実務の複雑なデータを分類しようとして木を深く成長させすぎると、手元の訓練データに過剰に適応する過学習（オーバーフィッティング）が生じ、新しいデータに対する予測能力が著しく低下する弱点を持っています。
+                    </p>
+                    <p>
+                        この課題を解決し、決定木モデルを現代の強力な予測アルゴリズムへと昇華させた手法が「アンサンブル学習（Ensemble Learning）」です。
+                        アンサンブル学習には、主に以下の2つの発展形が存在し、それぞれ異なる手法で決定木を組み合わせています。
+                    </p>
+                    <ul style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
+                        <li><strong>ランダムフォレスト（Random Forest）</strong>：<br>
+                            元のデータセットからランダムにサンプリングした複数の部分データと特徴量を用いて、独立した多数の小さな決定木（森）を作成します。
+                            予測を行う際は、すべての決定木の予測結果の多数決（または平均値）をとることで、個々の木の過学習を相殺し、安定した高い予測精度を達成します。
+                        </li>
+                        <li><strong>勾配ブースティング決定木（GBDT: Gradient Boosting Decision Tree）</strong>：<br>
+                            最初は極めて単純な決定木を作成し、その予測結果と正解との「残差（エラーの勾配）」を次の決定木が重点的に学習するプロセスを逐次的に繰り返します。
+                            少しずつ誤りを補正しながら決定木を順番に追加していくこの手法は、現代のテーブルデータ分析において最も高い精度を発揮するモデルの一つです。
+                        </li>
+                    </ul>
+                    <p>
+                        現在、実務のデータ分析で広く使用されている <strong>LightGBM</strong> や <strong>XGBoost</strong> といった機械学習ライブラリは、この勾配ブースティング決定木のアルゴリズムを高速化したシステムです。
+                        これらは、金融機関におけるローンの与信審査（貸し倒れ予測）や、Webサービスの顧客解約（チャーン）予測、医療診断のスクリーニング判定など、多くの実ビジネスの現場で予測モデルの主軸として稼働しています。
+                    </p>
+                </div>
 
-                    <!-- 子ノード（左） -->
-                    <div class="node-box">
-                        <div class="node-title">🌿 子ノード：左 (条件に合致)</div>
-                        <div id="left-items" class="item-list"></div>
-                        <div>データ数: <span id="left-count">0</span> 件</div>
-                        <div>エントロピー: <span id="left-entropy" class="entropy-val">0.000</span></div>
-                    </div>
-
-                    <!-- 子ノード（右） -->
-                    <div class="node-box">
-                        <div class="node-title">🌿 子ノード：右 (条件に非合致)</div>
-                        <div id="right-items" class="item-list"></div>
-                        <div>データ数: <span id="right-count">0</span> 件</div>
-                        <div>エントロピー: <span id="right-entropy" class="entropy-val">0.000</span></div>
-                    </div>
-
-                    <!-- 情報獲得 -->
-                    <div class="gain-box">
-                        <div style="font-size:13px; font-weight:bold; color:var(--color-ink-soft);">
-                            📊 分割による「情報獲得（Information Gain）」
-                        </div>
-                        <div id="val-info-gain" class="gain-val">0.000</div>
-                        <p style="font-size:11px; color:var(--color-ink-soft); margin-top:8px;" id="lbl-split-eval">
-                            分析中...
-                        </p>
-                    </div>
+                <!-- Step 6 -->
+                <div class="lesson-step">
+                    <span class="lesson-step-meta">Step 06</span>
+                    <h4>まとめ</h4>
+                    <p>
+                        決定木は、情報エントロピーという数学的な不確実性の指標を用いることで、データの性質を効率的かつ機械的に自動分類する仕組みを確立しました。
+                        一つの指標を追いかけて過剰に分割を繰り返すと、手元のデータに適合しすぎる過学習（Overfitting）が発生するため、実務においては木の深さを適正に制限する「剪定（Pruning）」という調整作業が行われます。
+                    </p>
                 </div>
             </div>
 
-            <h3 class="section-header">コラム：機械学習における決定木モデルの実用的役割</h3>
-            <p>
-                単一の決定木は、直感的に分岐条件を理解しやすく、どのようなルールで分類されたかを人間が視覚的に追跡できる長所を持っています。
-                しかし、実務の複雑なデータを分類しようとして木を深く成長させすぎると、手元の訓練データに過剰に適応する過学習（オーバーフィッティング）が生じ、新しいデータに対する予測能力が著しく低下する弱点を持っています。
-            </p>
-            <p>
-                この課題を解決し、決定木モデルを現代の強力な予測アルゴリズムへと昇華させた手法が「アンサンブル学習（Ensemble Learning）」です。
-                アンサンブル学習には、主に以下の2つの発展形が存在し、それぞれ異なる手法で決定木を組み合わせています。
-            </p>
-            <ul style="padding-left: 20px; line-height: 2.0; margin-bottom: 25px;">
-                <li><strong>ランダムフォレスト（Random Forest）</strong>：<br>
-                    元のデータセットからランダムにサンプリングした複数の部分データと特徴量を用いて、独立した多数の小さな決定木（森）を作成します。
-                    予測を行う際は、すべての決定木の予測結果の多数決（または平均値）をとることで、個々の木の過学習を相殺し、安定した高い予測精度を達成します。
-                </li>
-                <li><strong>勾配ブースティング決定木（GBDT: Gradient Boosting Decision Tree）</strong>：<br>
-                    最初は極めて単純な決定木を作成し、その予測結果と正解との「残差（エラーの勾配）」を次の決定木が重点的に学習するプロセスを逐次的に繰り返します。
-                    少しずつ誤りを補正しながら決定木を順番に追加していくこの手法は、現代のテーブルデータ分析において最も高い精度を発揮するモデルの一つです。
-                </li>
-            </ul>
-            <p>
-                現在、実務のデータ分析で広く使用されている <strong>LightGBM</strong> や <strong>XGBoost</strong> といった機械学習ライブラリは、この勾配ブースティング決定木のアルゴリズムを高速化したシステムです。
-                これらは、金融機関におけるローンの与信審査（貸し倒れ予測）や、Webサービスの顧客解約（チャーン）予測、医療診断のスクリーニング判定など、多くの実ビジネスの現場で予測モデルの主軸として稼働しています。
-            </p>
-
-            <h3 class="section-header">まとめ</h3>
-            <p>
-                決定木は、情報エントロピーという数学的な不確実性の指標を用いることで、データの性質を効率的かつ機械的に自動分類する仕組みを確立しました。
-                一つの指標を追いかけて過剰に分割を繰り返すと、手元のデータに適合しすぎる過学習（Overfitting）が発生するため、実務においては木の深さを適正に制限する「剪定（Pruning）」という調整作業が行われます。
-            </p>
+            <div class="lesson-footer-nav">
+                <a href="103.html" class="btn-secondary">&larr; 前の単元へ</a>
+                <a href="index.html" class="btn-secondary">目次に戻る</a>
+                <a href="#" class="btn btn-primary" style="opacity:0.5; cursor:not-allowed;">次の単元へ &rarr;</a>
+            </div>
         </article>
     </main>
 
